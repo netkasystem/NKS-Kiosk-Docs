@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "N-ThaiSmart-Web", "N-ThaiSmart-Web\N-ThaiSmart-Web.csproj", "{82919C7E-9597-41F9-BA4D-4816DF3A1697}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6516BFDF-7649-441A-B86E-70471BC56D66}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82919C7E-9597-41F9-BA4D-4816DF3A1697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82919C7E-9597-41F9-BA4D-4816DF3A1697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82919C7E-9597-41F9-BA4D-4816DF3A1697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82919C7E-9597-41F9-BA4D-4816DF3A1697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6516BFDF-7649-441A-B86E-70471BC56D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6516BFDF-7649-441A-B86E-70471BC56D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6516BFDF-7649-441A-B86E-70471BC56D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6516BFDF-7649-441A-B86E-70471BC56D66}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA858552-662F-465F-A80A-C9E6AD3848D6}
+	EndGlobalSection
+EndGlobal

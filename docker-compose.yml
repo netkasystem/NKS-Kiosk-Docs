@@ -1,0 +1,11 @@
+services:
+  n-thaismart-web:
+    image: ${DOCKER_REGISTRY-}nthaismartweb
+    build:
+      context: .
+      dockerfile: N-ThaiSmart-Web/Dockerfile
+    ports:
+      - "5201:5201"  # Host:Container
+    environment:
+      - ASPNETCORE_URLS=http://+:5201
+      - ASPNETCORE_ENVIRONMENT=Development
