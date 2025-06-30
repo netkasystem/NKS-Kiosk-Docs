@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace NThaiSmartWeb.EFModels;
+
+public partial class StaffLocation
+{
+    public uint Id { get; set; }
+
+    public uint StaffId { get; set; }
+
+    public decimal Lat { get; set; }
+
+    public decimal Lng { get; set; }
+
+    public DateTime UpdatedDate { get; set; }
+}

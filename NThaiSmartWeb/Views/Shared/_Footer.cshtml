@@ -1,0 +1,23 @@
+﻿<style>
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3.5emem; /* ปรับให้สั้นลงตามต้องการ */
+        line-height: 2.5em; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+        background-color: #f8f9fa;
+        color: #6c757d;
+        font-size: 0.85em;
+        text-align: center;
+        border-top: 1px solid #dee2e6;
+        z-index: 1030;
+    }
+</style>
+
+<footer class="footer bg-light border-top text-muted small py-2">
+    <div class="container text-center">
+        &copy; @ViewBag.BuildCreateProjYear - ThaiSmart Kiosk Powered By Netka System |
+        <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>

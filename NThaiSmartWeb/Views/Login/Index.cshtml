@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "SetupKioskModel";
+}
+<h1>@ViewData["Title"]</h1>
+
+<h1 class="text-xl font-bold mb-4">Kiosk Setup</h1>
+
+@{
+    ViewData["Title"] = "Setup Kiosk";
+}
+
+<div class="container mt-4">
+    <h2>Setup Kiosk Generator</h2>
+
+    <select id="kiosk-select" style="width: 100%"></select>
+
+    <form id="kioskForm" class="mb-4">
+        <div class="mb-3">
+            <label for="kioskId" class="form-label">Kiosk ID</label>
+            <input type="text" class="form-control" id="kioskId" required>
+        </div>
+        <div class="mb-3">
+            <label for="signalRHub" class="form-label">SignalR Hub URL</label>
+            <input type="text" class="form-control" id="signalRHub" required value="http://10.1.8.10:5201/NThaiSmartHub">
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" data-endpoint="/GenerateSetupKiosk">Generate Kiosk Script</button>
+            <button type="button" class="btn btn-secondary" id="generateDocker">Generate Docker Script</button>
+        </div>
+    </form>
+
+    <div id="scriptContainer" style="display:none">
+        <h4>Generated Script</h4>
+        <pre class="bg-light p-3"><code id="scriptOutput"></code></pre>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const form = document.getElementById("kioskForm");
+        const output = document.getElementById("scriptOutput");
+        const container = document.getElementById("scriptContainer");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const kioskId = document.getElementById("kioskId").value;
+            const signalRHub = document.getElementById("signalRHub").value;
+            const endpoint = e.submitter.getAttribute("data-endpoint");
+
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ kioskId, signalRHub })
+            });
+
+            if (res.ok) {
+                const text = await res.text();
+                output.textContent = text;
+                container.style.display = "block";
+            } else {
+                output.textContent = "❌ Error generating script.";
+                container.style.display = "block";
+            }
+        });
+
+        document.getElementById("generateDocker").addEventListener("click", async function () {
+            const kioskId = document.getElementById("kioskId").value;
+            const signalRHub = document.getElementById("signalRHub").value;
+
+            const res = await fetch("/GenerateSetupDocker", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ kioskId, signalRHub })
+            });
+
+            if (res.ok) {
+                const text = await res.text();
+                output.textContent = text;
+                container.style.display = "block";
+            } else {
+                output.textContent = "❌ Error generating docker script.";
+                container.style.display = "block";
+            }
+        });
+    </script>
+
+    <script>
+      $('#kiosk-select').select2({
+        ajax: {
+          url: '/api/select2kiosk',
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+              term: params.term, // คำที่ใช้ค้นหา
+              page: params.page || 1
+            };
+          },
+          processResults: function (data, params) {
+            return {
+              results: data.results,
+              pagination: {
+                more: data.pagination.more
+              }
+            };
+          }
+        },
+        placeholder: 'เลือกคีออส',
+        minimumInputLength: 1
+      });
+    </script>
+}

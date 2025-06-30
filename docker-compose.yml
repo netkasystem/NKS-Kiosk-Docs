@@ -3,7 +3,7 @@ services:
     image: ${DOCKER_REGISTRY-}nthaismartweb
     build:
       context: .
-      dockerfile: N-ThaiSmart-Web/Dockerfile
+      dockerfile: NThaiSmartWeb/Dockerfile
     ports:
       - "5201:5201"  # Host:Container
     environment:

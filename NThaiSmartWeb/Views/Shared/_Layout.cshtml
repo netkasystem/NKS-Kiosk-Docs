@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - N-ThaiSmart</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true" />
+    <link rel="icon" type="image/png" href="~/favicon.png" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Netka-ThaiSmart</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Login" asp-action="">🔐 Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Kiosk" asp-action="Configure">🛠️ Setup Kiosk</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Kiosk" asp-action="CardReader">🪪 Card Reader & Identify</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Kiosk" asp-action="List">🖥️ Kiosk List</a>
+                        </li>
+
+                        <!-- เพิ่มเมนูอื่น ๆ ตามต้องการ -->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+    </div>
+
+    @await Html.PartialAsync("_Footer")
+
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select2/js/select2.js"></script>
+    <script src="~/lib/face-api/face-api.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script defer src="~/js/face-recognition.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder().withUrl("/NThaiSmartHub").withAutomaticReconnect().build();
+        connection.start().then(() => {
+            console.log("✅ Web Connected");
+
+            if(SignalRInit) SignalRInit();
+        }).catch(err => console.error("❌ SignalR error: ", err));
+         
+        connection.onreconnected(() => {
+            console.log("🔁 Reconnected");
+
+            if (SignalRReconnect) SignalRReconnect();
+        });
+    </script>
+</body>
+</html>
