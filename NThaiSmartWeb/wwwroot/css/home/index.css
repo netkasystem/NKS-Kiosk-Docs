@@ -1,5 +1,5 @@
 /* ===== Container & Layout ===== */
-#citizen-card, #recog-card {
+#citizen-card {
     background-color: #f8f9fa;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
@@ -21,44 +21,9 @@
         flex: 1 1 300px;
     }
 
-/* ===== Layout: Recognition Card (กล้อง + overlay + ปุ่ม) ===== */
-#recog-card {
-    flex-direction: column;
-    align-items: center;
-    height: 85vh;
-}
-
-/* 🎯 ปุ่มและ Canvas */
-#recog-card button,
-#recog-card canvas {
-    max-width: 240px;
-    width: 100%;
-}
-
-/* 🟢 สถานะยืนยันตัวตน */
-#identity-status {
-    margin-top: 10px;
-    font-weight: 600;
-    font-size: 1.2rem;
-    text-align: center;
-}
-
-    #identity-status.match {
-        color: green;
-    }
-
-    #identity-status.no-match {
-        color: red;
-    }
-
-    #identity-status.pending {
-        color: #ffc107;
-    }
-
 /* ===== Responsive Layout ===== */
 @media (max-width: 768px) {
-    #citizen-card,
-    #recog-card {
+    #citizen-card {
         flex-direction: column;
         align-items: center;
     }
@@ -66,22 +31,21 @@
         #citizen-card > div:last-child {
             flex: 1 1 100%;
         }
-
-    #recog-card button,
-    #recog-card canvas {
-        width: 70vw;
-    }
 }
 
 .video-wrapper {
     position: relative;
+    aspect-ratio: 16 / 9; /* คุมสัดส่วนไว้ */
     width: 100%;
+    height: 83vh;
     border-radius: 12px;
     overflow: hidden;
-    height:100%
 }
 
-    .video-wrapper video {
+    .video-wrapper video, #faceCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -139,3 +103,34 @@
     height: 100%;
     display: block;
 }
+
+/* 🟢 สถานะยืนยันตัวตน */
+#scanResult {
+    text-align: center;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    pointer-events: none;
+    z-index: 5;
+    /* ป้องกันขึ้นบรรทัดใหม่ */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* ถ้าต้องการให้ขึ้น ... เมื่อยาวเกิน */
+}
+
+    #scanResult.match {
+        color: green;
+    }
+
+    #scanResult.no-match {
+        color: red;
+    }
+
+    #scanResult.pending {
+        color: #ffc107;
+    }

@@ -208,97 +208,132 @@ function isFacingForward(landmarks) {
 
 let newCard;
 let hasCapture;
+
 const video = document.getElementById("videoInput");
 const canvas = document.getElementById("faceCanvas");
-const captureBtn = document.getElementById("captureFace");
-const statusElem = document.getElementById("identity-status");
+const statusElem = document.getElementById("scanResult");
+
+let faceDetectorLoaded = false;
+let faceDetected = false;
 
 async function startFaceRecognition() {
     if (!video) return;
 
-    let faceDetectorLoaded = false;
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+    faceDetectorLoaded = true;
 
-    // โหลดโมเดล
-    Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('/models')
-    ]).then(() => {
-        faceDetectorLoaded = true;
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            }).catch(err => {
-                statusElem.innerText = "❌ ไม่สามารถเปิดกล้องได้: " + err;
-            });
-    });
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+    } catch (err) {
+        showError("❌ ไม่สามารถเปิดกล้องได้: " + err);
+        return;
+    }
 
-    captureBtn.addEventListener("click", async () => {
-        if (!faceDetectorLoaded) {
-            statusElem.innerText = "⏳ กำลังโหลดโมเดล...";
-            return;
-        }
+    detectLoop();
+}
+let stableSince = null;
 
-        const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions());
+async function detectLoop() {
+    if (!faceDetectorLoaded || faceDetected || video.paused || video.ended) {
+        requestAnimationFrame(detectLoop);
+        return;
+    }
 
-        if (!detection) {
-            statusElem.innerText = "❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง";
-            statusElem.classList.remove("text-success");
-            statusElem.classList.add("text-danger");
-            return;
-        }
+    const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions());
 
-        
+    if (!detection) {
+        showError("❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง");
+        stableSince = null;
+        requestAnimationFrame(detectLoop);
+        return;
+    }
 
-        const box = detection.box;
-        const { width: vw, height: vh } = video.getBoundingClientRect();
+    const box = detection.box;
+    const { width: vw, height: vh } = video.getBoundingClientRect();
+    const faceArea = box.width * box.height;
+    const screenArea = vw * vh;
+    const faceRatio = faceArea / screenArea;
+    const faceCenterX = box.x + box.width / 2;
+    const faceCenterY = box.y + box.height / 2;
 
-        // 🔍 เงื่อนไข:
-        const faceArea = box.width * box.height;
-        const screenArea = vw * vh;
+    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.75 && faceCenterY > vh * 0.25 && faceCenterY < vh * 0.75);
+    const isBigEnough = faceRatio > 0.05;
 
-        const faceRatio = faceArea / screenArea;
-        const faceCenterX = box.x + box.width / 2;
-        const faceCenterY = box.y + box.height / 2;
+    // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
+    const tempCanvas = document.createElement('canvas');
+    const ctx = tempCanvas.getContext('2d');
+    tempCanvas.width = video.videoWidth;
+    tempCanvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
-        const isCentered = (
-            faceCenterX > vw * 0.25 && faceCenterX < vw * 0.75 &&
-            faceCenterY > vh * 0.25 && faceCenterY < vh * 0.75
-        );
+    const isSharp = isImageSharpEnough(tempCanvas);
 
-        const isBigEnough = faceRatio > 0.05; // 5% ของจอขึ้นไป
-
-        if (!isCentered || !isBigEnough) {
+    if (!isCentered || !isBigEnough || !isSharp) {
+        if (!isSharp) {
+            showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");
+        } else {
             showError("⚠️ กรุณาให้ใบหน้าอยู่กลางจอและใกล้กล้องมากขึ้น");
-            return;
         }
+        stableSince = null;
+        requestAnimationFrame(detectLoop);
+        return;
+    }
 
-        // ✅ แสดงภาพนิ่ง
-        const context = canvas.getContext("2d");
+    // เริ่มจับเวลา
+    const now = Date.now();
+    if (!stableSince) stableSince = now;
+
+    const elapsed = now - stableSince;
+    const remaining = 3000 - elapsed;
+
+    if (remaining > 0) {
+        const secondsLeft = Math.ceil(remaining / 1000);
+        showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
+    } else {
+        faceDetected = true;
+
+        // แสดงภาพนิ่ง
+        const canvas = document.getElementById("faceCanvas");
+        const cctx = canvas.getContext("2d");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        cctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         video.style.display = "none";
         canvas.style.display = "block";
-        captureBtn.style.display = "none";
 
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
-    });
+    }
+
+    requestAnimationFrame(detectLoop);
 }
 
-function captureFrame(video) {
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+function isImageSharpEnough(canvas, threshold = 20) {
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const gray = [];
 
-    const dataUrl = canvas.toDataURL('image/png');
-    console.log('Captured image (base64):', dataUrl);
-    hasCapture = true;
-    newCard = false;
-    // ทำอะไรต่อ เช่น แสดงรูป, ส่ง server, save ฯลฯ
+    // แปลงเป็น grayscale
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const avg = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
+        gray.push(avg);
+    }
+
+    // คำนวณความแตกต่างของ pixel เพื่อนิยามความชัด (ความแปรปรวน)
+    let sum = 0, sumSq = 0;
+    for (const g of gray) {
+        sum += g;
+        sumSq += g * g;
+    }
+    const mean = sum / gray.length;
+    const variance = sumSq / gray.length - mean * mean;
+
+    return variance > threshold; // ยิ่งมากยิ่งชัด
 }
 
+
+// ฟังก์ชันแสดงผล
 function showError(msg) {
     statusElem.innerText = msg;
     statusElem.classList.remove("text-success");
