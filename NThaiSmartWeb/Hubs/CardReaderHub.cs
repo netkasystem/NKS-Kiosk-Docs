@@ -17,31 +17,35 @@ public class CardReaderHub : Hub
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
 
     // ให้ client สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง (เช่นหน้าบ้านติดตาม kiosk เดียว)
-    public async Task SubscribeKiosk(string kioskId) => await Groups.AddToGroupAsync(Context.ConnectionId, $"kiosk:{kioskId}");
+    public async Task SubscribeKiosk(string KioskCode = "")
+    {
+        if (string.IsNullOrEmpty(KioskCode)) KioskCode = NSDXSession.Get<string>(NSDXSessionKey.KioskCode) ?? "";
+        await Groups.AddToGroupAsync(Context.ConnectionId, $"kiosk:{KioskCode}");
+    }
 
     private List<KioskStatusDto> GetKioskList() => _kioskConnections.Values.ToList();
 
     // ฟังก์ชันที่ตู้ kiosk ส่งข้อมูลบัตรมา แล้วกระจายข้อมูลให้กับ client ที่สมัครอยู่ใน group นั้น
-    public async Task BroadcastKioskMessage(string kioskId, PersonalPhoto cardData)
+    public async Task BroadcastKioskMessage(string KioskCode, PersonalPhoto cardData)
     {
         Console.WriteLine("🔥 Broadcast KioskMessage: " + cardData.FullNameTH);
-        _kioskConnections[kioskId].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
-        await Clients.Group($"kiosk:{kioskId}").SendAsync("KioskMessage", cardData);
+        _kioskConnections[KioskCode].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
+        await Clients.Group($"kiosk:{KioskCode}").SendAsync("KioskMessage", cardData);
     }
 
     // kiosk ส่งสถานะปัจจุบัน (เช่น ready, card_detected ฯลฯ) ไปยังหน้าบ้าน
     public async Task BroadcastKioskStatus(KioskStatusDto status)
     {
-        Console.WriteLine($"🔥 {status.Timestamp:HH:mm:ss} - [{status.KioskId}] {status.StatusCode}: {status.StatusText}");
-        _kioskConnections[status.KioskId].LastUpdateTime = DateTime.Now; // บันทึกเวลาสุดท้ายที่ kiosk ยังออนไลน์
-        await Clients.Group($"kiosk:{status.KioskId}").SendAsync("KioskStatus", status);
+        Console.WriteLine($"🔥 {status.Timestamp:HH:mm:ss} - [{status.KioskCode}] {status.StatusCode}: {status.StatusText}");
+        _kioskConnections[status.KioskCode].LastUpdateTime = DateTime.Now; // บันทึกเวลาสุดท้ายที่ kiosk ยังออนไลน์
+        await Clients.Group($"kiosk:{status.KioskCode}").SendAsync("KioskStatus", status);
     }
 
     // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-    public async Task RegisterKiosk(string kioskId)
+    public async Task RegisterKiosk(string KioskCode)
     {
-        var status = new KioskStatusDto { KioskId = kioskId, StatusCode = "ready", StatusText = "✅ พร้อมใช้งาน", Timestamp = DateTime.Now, LastUpdateTime = DateTime.Now };
-        _kioskConnections[kioskId] = status;
+        var status = new KioskStatusDto { KioskCode = KioskCode, StatusCode = "ready", StatusText = "✅ พร้อมใช้งาน", Timestamp = DateTime.Now, LastUpdateTime = DateTime.Now };
+        _kioskConnections[KioskCode] = status;
         await Clients.All.SendAsync("KioskList", GetKioskList());
     }
 
@@ -51,10 +55,10 @@ public class CardReaderHub : Hub
     {
         lock (_lock)
         {
-            if (_connectionToKioskMap.TryGetValue(Context.ConnectionId, out var kioskId))
+            if (_connectionToKioskMap.TryGetValue(Context.ConnectionId, out var KioskCode))
             {
                 // ❗ ไม่ลบออกจาก _kioskConnections ทันที เพื่อให้ฝั่ง web ยังเห็นว่าหลุด (Disconnected)
-                Console.WriteLine($"⚠️ Kiosk [{kioskId}] disconnected");
+                Console.WriteLine($"⚠️ Kiosk [{KioskCode}] disconnected");
 
                 _connectionToKioskMap.Remove(Context.ConnectionId);
 

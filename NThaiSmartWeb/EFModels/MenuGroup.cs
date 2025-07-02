@@ -27,5 +27,7 @@ public partial class MenuGroup
 
     public virtual ICollection<MenuGroup> InverseMenuGroupParentNavigation { get; set; } = new List<MenuGroup>();
 
+    public virtual ICollection<Menu> Menu { get; set; } = new List<Menu>();
+
     public virtual MenuGroup? MenuGroupParentNavigation { get; set; }
 }

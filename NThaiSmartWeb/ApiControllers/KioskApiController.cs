@@ -4,11 +4,11 @@ using NThaiSmartWeb.EFModels;
 
 [ApiController]
 [Route("api/[controller]")]
-public class KioskController : ControllerBase
+public class KioskApiController : ControllerBase
 {
     private readonly KioskContext _context;
 
-    public KioskController(KioskContext context)
+    public KioskApiController(KioskContext context)
     {
         _context = context;
     }
@@ -26,7 +26,7 @@ public class KioskController : ControllerBase
 
             return new
             {
-                KioskId = kvp.Key,
+                KioskCode = kvp.Key,
                 Status = isOnline ? status.StatusCode : "offline",
                 StatusText = isOnline ? status.StatusText : "❌ ไม่ตอบสนอง",
                 LastSeen = status.Timestamp
@@ -36,33 +36,42 @@ public class KioskController : ControllerBase
         return Ok(list);
     }
 
-    public JObject GetScriptDetail(uint Id)
+    public JObject GetScriptDetail()
     {
-        var KiosId = _context.KioskArea.FirstOrDefault(_ka => _ka.Id == Id);
+        string username = NSDXSession.Get<string>(NSDXSessionKey.LoggedInUser);
+        uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
+        var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
+
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "SignalRHubPath")?.Value ?? "";
-        var req = new JObject { KiosId, SignalRHub };
-        return req;
+        var res = JObject.FromObject(new { oKiosk.KioskCode, SignalRHub });
+        return res;
     }
 
     [HttpPost("DownloadSetupKiosk")]
-    public IActionResult SetupKiosk([FromBody] uint Id)
+    public IActionResult SetupKiosk()
     {
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == "setup-kiosk.sh");
+        string filename = "setup-kiosk.sh";
+        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
         if (script == null) return NotFound("Script not found.");
 
-        var req = GetScriptDetail(Id);
-        string result = script.ScriptContent.ReplaceByObject(req);
-        return Ok(result);
+        JObject req = GetScriptDetail();
+        string content = script.ScriptContent.ReplaceByObject(req);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+
+        return File(bytes, "application/x-sh", filename);
     }
 
     [HttpPost("DownloadSetupDocker")]
-    public IActionResult SetupDocker([FromBody] uint Id)
+    public IActionResult SetupDocker()
     {
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == "setup-docker.sh");
+        string filename = "setup-docker.sh";
+        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
         if (script == null) return NotFound("Script not found.");
 
-        var req = GetScriptDetail(Id);
+        JObject req = GetScriptDetail();
         string result = script.ScriptContent.ReplaceByObject(req);
-        return Ok(result);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(result);
+
+        return File(bytes, "application/x-sh", filename);
     }
 }

@@ -80,4 +80,6 @@ public partial class User
     public string LdapName { get; set; } = null!;
 
     public uint Useraccountcontrol { get; set; }
+
+    public uint? KioskId { get; set; }
 }

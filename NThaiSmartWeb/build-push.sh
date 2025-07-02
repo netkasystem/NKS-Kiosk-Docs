@@ -15,7 +15,7 @@ fi
 
 ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
 IMAGE_NAME=netkaofficialhub/nthaismartweb:$TAG
-PROJECT_NAME="N-ThaiSmart-Web"
+PROJECT_NAME="NThaiSmartWeb"
 
 # สร้างไฟล์ BuildVersion.cs (ถ้าต้องใช้)
 echo "public static class BuildVersion {

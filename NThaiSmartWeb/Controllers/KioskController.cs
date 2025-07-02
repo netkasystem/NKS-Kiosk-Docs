@@ -1,26 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
-public class HomeController : Controller
+public class KioskController : BaseController
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<BaseController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public KioskController(ILogger<BaseController> logger) : base(logger)
     {
         _logger = logger;
     }
 
-    public IActionResult Index() => View();
+    public IActionResult Index() => List();
 
-    public IActionResult Privacy() => View();
+    public IActionResult CardReader() => View();
 
-    public IActionResult SetupKiosk() => View();
+    public IActionResult Setup() => View();
 
-    public IActionResult FaceRecognition() => View();
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
+    public IActionResult List() => View();
 }

@@ -60,4 +60,6 @@ public partial class Staff
     public uint BisHourProfileId { get; set; }
 
     public byte InactiveChatbot { get; set; }
+
+    public virtual Prefix? Prefix { get; set; }
 }

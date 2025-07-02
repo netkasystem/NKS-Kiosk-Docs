@@ -18,4 +18,6 @@ public partial class BusinessHoursProfile
     public string CreatedBy { get; set; } = null!;
 
     public virtual ICollection<BusinessHour> BusinessHour { get; set; } = new List<BusinessHour>();
+
+    public virtual ICollection<Holiday> Holiday { get; set; } = new List<Holiday>();
 }

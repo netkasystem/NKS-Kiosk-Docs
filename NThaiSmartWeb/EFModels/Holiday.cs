@@ -17,5 +17,5 @@ public partial class Holiday
 
     public uint ProfileId { get; set; }
 
-    public virtual BusinessHour Profile { get; set; } = null!;
+    public virtual BusinessHoursProfile Profile { get; set; } = null!;
 }

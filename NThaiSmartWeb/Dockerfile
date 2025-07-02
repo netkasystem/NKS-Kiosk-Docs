@@ -10,19 +10,19 @@ EXPOSE 5201
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["N-ThaiSmart-Web/N-ThaiSmart-Web.csproj", "N-ThaiSmart-Web/"]
-RUN dotnet restore "./N-ThaiSmart-Web/N-ThaiSmart-Web.csproj"
+COPY ["NThaiSmartWeb/NThaiSmartWeb.csproj", "NThaiSmartWeb/"]
+RUN dotnet restore "./NThaiSmartWeb/NThaiSmartWeb.csproj"
 COPY . .
-WORKDIR "/src/N-ThaiSmart-Web"
-RUN dotnet build "./N-ThaiSmart-Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/NThaiSmartWeb"
+RUN dotnet build "./NThaiSmartWeb.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./N-ThaiSmart-Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./NThaiSmartWeb.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "N-ThaiSmart-Web.dll"]
+ENTRYPOINT ["dotnet", "NThaiSmartWeb.dll"]

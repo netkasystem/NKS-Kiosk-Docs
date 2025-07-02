@@ -10,10 +10,10 @@
         margin-bottom: 6px;
     }
 
-    #kiosk-list .list-group-item.active {
-        background-color: #0d6efd;
-        color: white;
-    }
+        #kiosk-list .list-group-item.active {
+            background-color: #0d6efd;
+            color: white;
+        }
 </style>
 
 <div class="container-fluid mt-4">
@@ -45,86 +45,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    let selectedKioskId = null;
-
-    function SignalRInit(){
-        connection.invoke("RequestKioskList");
-        setInterval(() => {
-            if (connection.state === signalR.HubConnectionState.Connected) {
-                connection.invoke("RequestKioskList");
-            }
-        }, 2 * 60 * 1000);
-    }
-    
-    function SignalRReconnect(){
-        connection.onreconnected(() => {
-            console.log("🔁 Reconnected");
-            connection.invoke("RequestKioskList");
-        });
-    }
-
-    
-    // รับสถานะเครื่องอ่าน เช่น .card_removed, .ready
-    connection.on("KioskStatus", (data) => {
-        // 🎯 อัปเดตเครื่องที่เลือกอยู่ (ถ้ามี)
-        if (selectedKioskId && data.kioskId === selectedKioskId) {
-            console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
-            console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
-            document.getElementById("kiosk-status-time").innerText = new Date(data.timestamp).toLocaleTimeString();
-            document.getElementById("kiosk-status-text").innerText = data.statusText;
-
-            const iconElem = document.getElementById("kiosk-status-icon");
-            iconElem.className = "status-icon"; // reset
-            iconElem.classList.add(data.statusCode); // เพิ่มสถานะใหม่
-
-            if (data.statusCode === "card_removed") clearCardInfo();
-        }
-    });
-
-    // รับรายการ kiosk ทั้งหมดที่เชื่อมอยู่
-    connection.on("KioskList", (data) => { renderKioskList(data); });
-    function renderKioskList(kioskArray) {
-        const kioskList = document.getElementById("kiosk-list");
-        kioskList.innerHTML = "";
-
-        // เรียงให้ Connected อยู่ข้างบน
-        kioskArray.sort((a, b) => b.connected - a.connected);
-
-        kioskArray.forEach(kiosk => {
-            const btn = document.createElement("button");
-            btn.className = "list-group-item list-group-item-action d-flex justify-content-between align-items-center";
-
-            // กำหนดสถานะเชื่อมต่อ
-            let connectionStatus = `<small class="text-success">🟢</small>`;
-            if (!kiosk.connected) {
-                connectionStatus = `<small class="text-danger">🔴</small>`;
-                btn.classList.add("border-danger");
-            }
-
-            btn.innerHTML = `
-                        <div class="w-100">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span>🖥️ ${connectionStatus} ${kiosk.kioskId}</span>
-                                <small class="text-body-secondary text-end" style="font-size: 0.75rem;">${timeAgo(kiosk.lastUpdateTime)}</small>
-                            </div>
-                        </div>`;
-
-            btn.onclick = () => selectKiosk(kiosk.kioskId);
-
-            kioskList.appendChild(btn);
-        });
-    }
-
-    function timeAgo(dateString) {
-        const now = new Date();
-        const updated = new Date(dateString);
-        const diff = Math.floor((now - updated) / 1000); // วินาที
-
-        if (diff < 60) return `${diff} วินาทีที่แล้ว`;
-        if (diff < 3600) return `${Math.floor(diff / 60)} นาทีที่แล้ว`;
-        if (diff < 86400) return `${Math.floor(diff / 3600)} ชั่วโมงที่แล้ว`;
-        return updated.toLocaleString();
-    }
-</script>

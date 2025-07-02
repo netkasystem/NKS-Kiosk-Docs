@@ -17,7 +17,5 @@ public partial class BusinessHour
 
     public uint ProfileId { get; set; }
 
-    public virtual ICollection<Holiday> Holiday { get; set; } = new List<Holiday>();
-
     public virtual BusinessHoursProfile Profile { get; set; } = null!;
 }

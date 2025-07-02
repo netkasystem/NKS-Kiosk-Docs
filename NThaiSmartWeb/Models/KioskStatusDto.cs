@@ -1,6 +1,6 @@
 ﻿public class KioskStatusDto
 {
-    public string KioskId { get; set; }
+    public string KioskCode { get; set; }
     public string StatusCode { get; set; }
     public string StatusText { get; set; }
     public DateTime Timestamp { get; set; }       // client ส่งมา

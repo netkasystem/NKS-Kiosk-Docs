@@ -1,4 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper Html
+@functions {
+    public string IsActive(string controller, string action = "")
+    {
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+        if (controller == currentController && (string.IsNullOrEmpty(action) || action == currentAction))
+        {
+            return "active";
+        }
+
+        return "";
+    }
+}
+
+<!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="utf-8" />
@@ -10,7 +26,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true" />
     <link rel="icon" type="image/png" href="~/favicon.png" />
-
 </head>
 <body>
     <header>
@@ -22,17 +37,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav ms-auto">
+
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Login" asp-action="">🔐 Login</a>
+                            <a class="nav-link @IsActive("Kiosk", "List")" asp-controller="Kiosk" asp-action="List">🖥️ Kiosk List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Kiosk" asp-action="Configure">🛠️ Setup Kiosk</a>
+                            <a class="nav-link @IsActive("Kiosk", "Setup")" asp-controller="Kiosk" asp-action="Setup">🛠️ Setup Kiosk</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Kiosk" asp-action="CardReader">🪪 Card Reader & Identify</a>
+                            <a class="nav-link @IsActive("Kiosk", "CardReader")" asp-controller="Kiosk" asp-action="CardReader">🪪 Card Reader & Identify</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Kiosk" asp-action="List">🖥️ Kiosk List</a>
+                            <a href="#" id="logout" class="nav-link">👋 Logout</a>
                         </li>
 
                         <!-- เพิ่มเมนูอื่น ๆ ตามต้องการ -->
@@ -55,24 +72,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/select2/js/select2.js"></script>
     <script src="~/lib/face-api/face-api.min.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script defer src="~/js/face-recognition.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-
-    <script>
-        const connection = new signalR.HubConnectionBuilder().withUrl("/NThaiSmartHub").withAutomaticReconnect().build();
-        connection.start().then(() => {
-            console.log("✅ Web Connected");
-
-            if(SignalRInit) SignalRInit();
-        }).catch(err => console.error("❌ SignalR error: ", err));
-         
-        connection.onreconnected(() => {
-            console.log("🔁 Reconnected");
-
-            if (SignalRReconnect) SignalRReconnect();
-        });
-    </script>
+    <script src="~/js/face-recognition.js"></script>
+    <script src="~/js/kiosk-script.js"></script>
 </body>
 </html>

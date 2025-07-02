@@ -52,7 +52,7 @@
 
 @section Scripts {
     <script>
-        let selectedKioskId = null;
+        let selectedKioskCode = null;
 
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/NThaiSmartHub") // Endpoint ของ Hub ใน ASP.NET Core
@@ -80,7 +80,7 @@
         // รับสถานะเครื่องอ่าน เช่น .card_removed, .ready
         connection.on("KioskStatus", (data) => {
             // 🎯 อัปเดตเครื่องที่เลือกอยู่ (ถ้ามี)
-            if (selectedKioskId && data.kioskId === selectedKioskId) {
+            if (selectedKioskCode && data.KioskCode === selectedKioskCode) {
                 console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
                 console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
                 document.getElementById("kiosk-status-time").innerText = new Date(data.timestamp).toLocaleTimeString();
@@ -95,13 +95,12 @@
         });
 
         // รับข้อมูลบัตร
-        connection.on("KioskMessage", (data) => { if (selectedKioskId) { showCardInfo(data); } });
+        connection.on("KioskMessage", (data) => { if (selectedKioskCode) { showCardInfo(data); } });
         function showCardInfo(data) {
 
             const img = document.getElementById("photo");
             img.onload = async () => {
                 try {
-                    idCardDescriptor = await getIdCardDescriptor();
                     console.log("🟢 โหลดรูปบัตรสำเร็จ");
                     newCard = true;
                 } catch (err) {
@@ -160,12 +159,12 @@
                 btn.innerHTML = `
                             <div class="w-100">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span>🖥️ ${connectionStatus} ${kiosk.kioskId}</span>
+                                    <span>🖥️ ${connectionStatus} ${kiosk.KioskCode}</span>
                                     <small class="text-body-secondary text-end" style="font-size: 0.75rem;">${timeAgo(kiosk.lastUpdateTime)}</small>
                                 </div>
                             </div>`;
 
-                btn.onclick = () => selectKiosk(kiosk.kioskId);
+                btn.onclick = () => selectKiosk(kiosk.KioskCode);
 
                 kioskList.appendChild(btn);
             });
@@ -174,13 +173,13 @@
         // เรียกใช้เมื่อคลิก "เลือกตู้"
         function selectKiosk(id) {
             document.getElementById("kiosk-no").innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
-            selectedKioskId = id;
-            localStorage.setItem('selectedKioskId', id);
+            selectedKioskCode = id;
+            localStorage.setItem('selectedKioskCode', id);
             connection.invoke("SubscribeKiosk", id);
         }
 
         function loadSelectedKiosk() {
-          const savedId = localStorage.getItem('selectedKioskId');
+          const savedId = localStorage.getItem('selectedKioskCode');
           if (savedId) {
               selectKiosk(savedId);
           }

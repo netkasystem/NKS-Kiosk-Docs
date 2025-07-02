@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace NThaiSmartWeb.EFModels;
 
-public class DBContext<TContext> : DbContext where TContext : DbContext
+public partial class DBContext : DbContext
 {
-    public DBContext(DbContextOptions<TContext> options) : base(options)
+    public DBContext(DbContextOptions<KioskContext> options) : base(options)
     {
     }
 
@@ -65,8 +65,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
     public virtual DbSet<AuthenticationSource> AuthenticationSource { get; set; }
 
     public virtual DbSet<AutoReportSetting> AutoReportSetting { get; set; }
-
-    public virtual DbSet<AzureApiConfig> AzureApiConfig { get; set; }
 
     public virtual DbSet<BooleanTranslate> BooleanTranslate { get; set; }
 
@@ -296,7 +294,11 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
 
     public virtual DbSet<ItemStatus> ItemStatus { get; set; }
 
-    public virtual DbSet<KioskArea> KioskArea { get; set; }
+    public virtual DbSet<Kiosk> Kiosk { get; set; }
+
+    public virtual DbSet<KioskConsented> KioskConsented { get; set; }
+
+    public virtual DbSet<KioskConsentedImage> KioskConsentedImage { get; set; }
 
     public virtual DbSet<KioskSetup> KioskSetup { get; set; }
 
@@ -321,12 +323,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
     public virtual DbSet<LoginOtp> LoginOtp { get; set; }
 
     public virtual DbSet<LoginSpr> LoginSpr { get; set; }
-
-    public virtual DbSet<MAzureSubscription> MAzureSubscription { get; set; }
-
-    public virtual DbSet<MAzureUriEndpoint> MAzureUriEndpoint { get; set; }
-
-    public virtual DbSet<MSccmDataSource> MSccmDataSource { get; set; }
 
     public virtual DbSet<MandatoryFieldConfig> MandatoryFieldConfig { get; set; }
 
@@ -377,8 +373,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
     public virtual DbSet<NotificationTaskContact> NotificationTaskContact { get; set; }
 
     public virtual DbSet<NpsPercentage> NpsPercentage { get; set; }
-
-    public virtual DbSet<NpsSurveyResult> NpsSurveyResult { get; set; }
 
     public virtual DbSet<NsdFunction> NsdFunction { get; set; }
 
@@ -450,8 +444,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
 
     public virtual DbSet<Region> Region { get; set; }
 
-    public virtual DbSet<Replacement> Replacement { get; set; }
-
     public virtual DbSet<ReportExportLog> ReportExportLog { get; set; }
 
     public virtual DbSet<ReportViewLog> ReportViewLog { get; set; }
@@ -477,10 +469,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
     public virtual DbSet<RiskLevel> RiskLevel { get; set; }
 
     public virtual DbSet<RiskMitigation> RiskMitigation { get; set; }
-
-    public virtual DbSet<RiskQuestion> RiskQuestion { get; set; }
-
-    public virtual DbSet<RiskQuestions> RiskQuestions { get; set; }
 
     public virtual DbSet<Role> Role { get; set; }
 
@@ -558,28 +546,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
 
     public virtual DbSet<SurveyAssetSentView> SurveyAssetSentView { get; set; }
 
-    public virtual DbSet<SurveyForm> SurveyForm { get; set; }
-
-    public virtual DbSet<SurveyLog> SurveyLog { get; set; }
-
-    public virtual DbSet<SurveyManualLog> SurveyManualLog { get; set; }
-
-    public virtual DbSet<SurveyManualLogEmail> SurveyManualLogEmail { get; set; }
-
-    public virtual DbSet<SurveyManualResult> SurveyManualResult { get; set; }
-
-    public virtual DbSet<SurveyManualResultDetail> SurveyManualResultDetail { get; set; }
-
-    public virtual DbSet<SurveyModule> SurveyModule { get; set; }
-
-    public virtual DbSet<SurveyResult> SurveyResult { get; set; }
-
-    public virtual DbSet<SurveyResultDetail> SurveyResultDetail { get; set; }
-
-    public virtual DbSet<SurveySentForm> SurveySentForm { get; set; }
-
-    public virtual DbSet<SurveySentFormDetail> SurveySentFormDetail { get; set; }
-
     public virtual DbSet<SurveyTimesRpt> SurveyTimesRpt { get; set; }
 
     public virtual DbSet<SymptomType> SymptomType { get; set; }
@@ -608,15 +574,9 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
 
     public virtual DbSet<UserControl> UserControl { get; set; }
 
-    public virtual DbSet<UsoPersonList> UsoPersonList { get; set; }
-
     public virtual DbSet<Variables> Variables { get; set; }
 
     public virtual DbSet<Vendor> Vendor { get; set; }
-
-    public virtual DbSet<VmWareUemApi> VmWareUemApi { get; set; }
-
-    public virtual DbSet<VmWareUemAssetInfo> VmWareUemAssetInfo { get; set; }
 
     public virtual DbSet<Watcher> Watcher { get; set; }
 
@@ -1446,29 +1406,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
             entity.Property(e => e.Value)
                 .HasMaxLength(2000)
                 .HasColumnName("value");
-        });
-
-        modelBuilder.Entity<AzureApiConfig>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("azure_api_config");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.ApiType)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("''")
-                .HasColumnName("api_type");
-            entity.Property(e => e.PathName)
-                .HasMaxLength(100)
-                .HasDefaultValueSql("''")
-                .HasColumnName("path_name");
-            entity.Property(e => e.PathUrl)
-                .HasMaxLength(500)
-                .HasDefaultValueSql("''")
-                .HasColumnName("path_url");
         });
 
         modelBuilder.Entity<BooleanTranslate>(entity =>
@@ -5356,11 +5293,11 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasColumnName("item_status_title");
         });
 
-        modelBuilder.Entity<KioskArea>(entity =>
+        modelBuilder.Entity<Kiosk>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToTable("kiosk_area");
+                .ToTable("kiosk");
 
             entity.HasIndex(e => e.Id, "id_UNIQUE").IsUnique();
 
@@ -5421,6 +5358,63 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasComment("วันที่อัพเดตล่าสุด")
                 .HasColumnType("timestamp")
                 .HasColumnName("updated_at");
+        });
+
+        modelBuilder.Entity<KioskConsented>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("kiosk_consented");
+
+            entity.HasIndex(e => e.Idcard, "kiosk_consented_idcard_IDX");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.ConsentedBy)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("consented_by");
+            entity.Property(e => e.ConsentedDate)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("consented_date");
+            entity.Property(e => e.Description)
+                .HasDefaultValueSql("''")
+                .HasColumnType("text")
+                .HasColumnName("description");
+            entity.Property(e => e.Idcard)
+                .HasMaxLength(13)
+                .HasDefaultValueSql("''")
+                .HasColumnName("idcard");
+            entity.Property(e => e.KioskAreaId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_area_id");
+            entity.Property(e => e.UpdatedBy)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("updated_by");
+            entity.Property(e => e.UpdatedDate)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("updated_date");
+        });
+
+        modelBuilder.Entity<KioskConsentedImage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("kiosk_consented_image");
+
+            entity.HasIndex(e => e.KioskConsentedId, "kiosk_consented_image_kiosk_consented_id_IDX");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.FaceCapture).HasColumnName("face_capture");
+            entity.Property(e => e.FaceIdcard).HasColumnName("face_idcard");
+            entity.Property(e => e.KioskConsentedId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_consented_id");
         });
 
         modelBuilder.Entity<KioskSetup>(entity =>
@@ -5769,140 +5763,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasColumnName("username");
         });
 
-        modelBuilder.Entity<MAzureSubscription>(entity =>
-        {
-            entity.HasKey(e => e.AzureId).HasName("PRIMARY");
-
-            entity.ToTable("m_azure_subscription");
-
-            entity.HasIndex(e => e.AzureSubscriptionName, "azure_subscription_name").IsUnique();
-
-            entity.Property(e => e.AzureId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_id");
-            entity.Property(e => e.AzureSubscriptionClientId)
-                .HasMaxLength(500)
-                .HasColumnName("azure_subscription_client_id");
-            entity.Property(e => e.AzureSubscriptionClientSecret)
-                .HasMaxLength(500)
-                .HasColumnName("azure_subscription_client_secret");
-            entity.Property(e => e.AzureSubscriptionCreatedBy)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_subscription_created_by");
-            entity.Property(e => e.AzureSubscriptionCreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("azure_subscription_created_date");
-            entity.Property(e => e.AzureSubscriptionGrantType)
-                .HasMaxLength(100)
-                .HasDefaultValueSql("'client_credentials'")
-                .HasColumnName("azure_subscription_grant_type");
-            entity.Property(e => e.AzureSubscriptionId)
-                .HasMaxLength(500)
-                .HasColumnName("azure_subscription_id");
-            entity.Property(e => e.AzureSubscriptionLastCheckedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("azure_subscription_last_checked_date");
-            entity.Property(e => e.AzureSubscriptionName)
-                .HasMaxLength(100)
-                .HasColumnName("azure_subscription_name");
-            entity.Property(e => e.AzureSubscriptionResource)
-                .HasMaxLength(500)
-                .HasColumnName("azure_subscription_resource");
-            entity.Property(e => e.AzureSubscriptionTenantId)
-                .HasMaxLength(500)
-                .HasColumnName("azure_subscription_tenant_id");
-            entity.Property(e => e.AzureSubscriptionUpdatedBy)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_subscription_updated_by");
-            entity.Property(e => e.AzureSubscriptionUpdatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("azure_subscription_updated_date");
-        });
-
-        modelBuilder.Entity<MAzureUriEndpoint>(entity =>
-        {
-            entity.HasKey(e => e.AzureUriEndpointId).HasName("PRIMARY");
-
-            entity.ToTable("m_azure_uri_endpoint");
-
-            entity.HasIndex(e => e.AzureUriEndpointName, "azure_uri_endpoint_name").IsUnique();
-
-            entity.Property(e => e.AzureUriEndpointId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_uri_endpoint_id");
-            entity.Property(e => e.AzureUriEndpointAction)
-                .HasMaxLength(100)
-                .HasDefaultValueSql("'GET'")
-                .HasColumnName("azure_uri_endpoint_action");
-            entity.Property(e => e.AzureUriEndpointCreatedBy)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_uri_endpoint_created_by");
-            entity.Property(e => e.AzureUriEndpointCreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("azure_uri_endpoint_created_date");
-            entity.Property(e => e.AzureUriEndpointInactive)
-                .HasDefaultValueSql("b'0'")
-                .HasColumnType("bit(1)")
-                .HasColumnName("azure_uri_endpoint_inactive");
-            entity.Property(e => e.AzureUriEndpointIntervalMinutes)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_uri_endpoint_interval_minutes");
-            entity.Property(e => e.AzureUriEndpointName)
-                .HasMaxLength(100)
-                .HasColumnName("azure_uri_endpoint_name");
-            entity.Property(e => e.AzureUriEndpointParentId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_uri_endpoint_parent_id");
-            entity.Property(e => e.AzureUriEndpointType)
-                .HasMaxLength(255)
-                .HasColumnName("azure_uri_endpoint_type");
-            entity.Property(e => e.AzureUriEndpointUpdatedBy)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("azure_uri_endpoint_updated_by");
-            entity.Property(e => e.AzureUriEndpointUpdatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("azure_uri_endpoint_updated_date");
-            entity.Property(e => e.AzureUriEndpointUri)
-                .HasMaxLength(500)
-                .HasColumnName("azure_uri_endpoint_uri");
-            entity.Property(e => e.MAzureSubscriptionAzureId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("m_azure_subscription_azure_id");
-        });
-
-        modelBuilder.Entity<MSccmDataSource>(entity =>
-        {
-            entity.HasKey(e => e.SccmId).HasName("PRIMARY");
-
-            entity.ToTable("m_sccm_data_source");
-
-            entity.HasIndex(e => e.SccmName, "name").IsUnique();
-
-            entity.Property(e => e.SccmId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("sccm_id");
-            entity.Property(e => e.SccmDatabaseName)
-                .HasMaxLength(50)
-                .HasColumnName("sccm_database_name");
-            entity.Property(e => e.SccmInactive)
-                .HasColumnType("bit(1)")
-                .HasColumnName("sccm_inactive");
-            entity.Property(e => e.SccmIpAddress)
-                .HasMaxLength(50)
-                .HasColumnName("sccm_ip_address");
-            entity.Property(e => e.SccmName).HasColumnName("sccm_name");
-            entity.Property(e => e.SccmPassword)
-                .HasMaxLength(500)
-                .HasColumnName("sccm_password");
-            entity.Property(e => e.SccmPort)
-                .HasDefaultValueSql("'1433'")
-                .HasColumnType("smallint(5) unsigned")
-                .HasColumnName("sccm_port");
-            entity.Property(e => e.SccmUsername)
-                .HasMaxLength(50)
-                .HasColumnName("sccm_username");
-        });
-
         modelBuilder.Entity<MandatoryFieldConfig>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -5992,6 +5852,15 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
             entity.Property(e => e.ParentMenuId)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("parent_menu_id");
+
+            entity.HasOne(d => d.MenuGroup).WithMany(p => p.Menu)
+                .HasForeignKey(d => d.MenuGroupId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_menu_menu_group");
+
+            entity.HasOne(d => d.ParentMenu).WithMany(p => p.InverseParentMenu)
+                .HasForeignKey(d => d.ParentMenuId)
+                .HasConstraintName("FK_menu_menu");
         });
 
         modelBuilder.Entity<MenuApiPath>(entity =>
@@ -6710,48 +6579,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
             entity
                 .HasNoKey()
                 .ToView("nps_percentage");
-
-            entity.Property(e => e.Sattify)
-                .HasPrecision(27, 4)
-                .HasColumnName("sattify");
-            entity.Property(e => e.Total)
-                .HasColumnType("bigint(21)")
-                .HasColumnName("total");
-            entity.Property(e => e.UnSattify)
-                .HasPrecision(27, 4)
-                .HasColumnName("un_sattify");
-        });
-
-        modelBuilder.Entity<NpsSurveyResult>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("nps_survey_result");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.CaseId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("case_id");
-            entity.Property(e => e.ModuleId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("module_id");
-            entity.Property(e => e.NpsScore)
-                .HasColumnType("int(10)")
-                .HasColumnName("nps_score");
-            entity.Property(e => e.Reason)
-                .HasMaxLength(255)
-                .HasColumnName("reason");
-            entity.Property(e => e.Score)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("score");
-            entity.Property(e => e.Timestamp)
-                .HasColumnType("datetime")
-                .HasColumnName("timestamp");
-            entity.Property(e => e.Username)
-                .HasMaxLength(100)
-                .HasColumnName("username");
         });
 
         modelBuilder.Entity<NsdFunction>(entity =>
@@ -7852,42 +7679,11 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
                 .HasColumnName("region_title");
-        });
 
-        modelBuilder.Entity<Replacement>(entity =>
-        {
-            entity.HasKey(e => e.ReplacementId).HasName("PRIMARY");
-
-            entity.ToTable("replacement");
-
-            entity.HasIndex(e => e.AssetId, "asset_id");
-
-            entity.HasIndex(e => e.CaseId, "case_id");
-
-            entity.HasIndex(e => e.SpareId, "spare_id");
-
-            entity.Property(e => e.ReplacementId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("replacement_id");
-            entity.Property(e => e.AssetId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("asset_id");
-            entity.Property(e => e.CaseId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("case_id");
-            entity.Property(e => e.Comment)
-                .HasColumnType("text")
-                .HasColumnName("comment");
-            entity.Property(e => e.Date)
-                .HasDefaultValueSql("'0000-00-00'")
-                .HasColumnName("date");
-            entity.Property(e => e.SpareId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("spare_id");
-            entity.Property(e => e.Time)
-                .HasDefaultValueSql("'00:00:00'")
-                .HasColumnType("time")
-                .HasColumnName("time");
+            entity.HasOne(d => d.Customer).WithMany(p => p.Region)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_region_customer");
         });
 
         modelBuilder.Entity<ReportExportLog>(entity =>
@@ -8182,71 +7978,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasColumnName("task");
         });
 
-        modelBuilder.Entity<RiskQuestion>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("risk_question");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.A)
-                .HasMaxLength(500)
-                .HasColumnName("a");
-            entity.Property(e => e.B)
-                .HasMaxLength(500)
-                .HasColumnName("b");
-            entity.Property(e => e.C)
-                .HasMaxLength(500)
-                .HasColumnName("c");
-            entity.Property(e => e.D)
-                .HasMaxLength(500)
-                .HasColumnName("d");
-            entity.Property(e => e.Question)
-                .HasMaxLength(500)
-                .HasColumnName("question");
-            entity.Property(e => e.QuestionJson).HasColumnName("question_json");
-            entity.Property(e => e.Sequence)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("sequence");
-            entity.Property(e => e.ServiceCatalogId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("service_catalog_id");
-        });
-
-        modelBuilder.Entity<RiskQuestions>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("risk_questions");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.A)
-                .HasMaxLength(500)
-                .HasColumnName("a");
-            entity.Property(e => e.B)
-                .HasMaxLength(500)
-                .HasColumnName("b");
-            entity.Property(e => e.C)
-                .HasMaxLength(500)
-                .HasColumnName("c");
-            entity.Property(e => e.D)
-                .HasMaxLength(500)
-                .HasColumnName("d");
-            entity.Property(e => e.Question)
-                .HasMaxLength(500)
-                .HasColumnName("question");
-            entity.Property(e => e.Sequence)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("sequence");
-            entity.Property(e => e.ServiceCatalogId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("service_catalog_id");
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("PRIMARY");
@@ -8405,6 +8136,11 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
                 .HasColumnName("section_title");
+
+            entity.HasOne(d => d.Department).WithMany(p => p.Section)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("department_id");
         });
 
         modelBuilder.Entity<Sector>(entity =>
@@ -9176,6 +8912,10 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasMaxLength(100)
                 .HasDefaultValueSql("''")
                 .HasColumnName("team_id");
+
+            entity.HasOne(d => d.Prefix).WithMany(p => p.Staff)
+                .HasForeignKey(d => d.PrefixId)
+                .HasConstraintName("fk_prefix_id");
         });
 
         modelBuilder.Entity<StaffLocation>(entity =>
@@ -9521,302 +9261,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
             entity.Property(e => e.RecipientName)
                 .HasColumnType("int(1)")
                 .HasColumnName("recipient_name");
-        });
-
-        modelBuilder.Entity<SurveyForm>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("survey_form");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.CaseTypeId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("case_type_id");
-            entity.Property(e => e.Inactive)
-                .HasColumnType("tinyint(1) unsigned")
-                .HasColumnName("inactive");
-            entity.Property(e => e.ModuleId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("module_id");
-            entity.Property(e => e.SurveyFormData).HasColumnName("survey_form_data");
-            entity.Property(e => e.SurveyName)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("survey_name");
-        });
-
-        modelBuilder.Entity<SurveyLog>(entity =>
-        {
-            entity.HasKey(e => e.CaseLogId).HasName("PRIMARY");
-
-            entity.ToTable("survey_log");
-
-            entity.Property(e => e.CaseLogId)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("case_log_id");
-            entity.Property(e => e.Key)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("key");
-            entity.Property(e => e.Password)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("password");
-        });
-
-        modelBuilder.Entity<SurveyManualLog>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("survey_manual_log");
-
-            entity.Property(e => e.ContactId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("contact_id");
-            entity.Property(e => e.Date)
-                .HasDefaultValueSql("'0000-00-00'")
-                .HasColumnName("date");
-            entity.Property(e => e.Key)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("key");
-            entity.Property(e => e.Password)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("password");
-            entity.Property(e => e.Time)
-                .HasDefaultValueSql("'00:00:00'")
-                .HasColumnType("time")
-                .HasColumnName("time");
-        });
-
-        modelBuilder.Entity<SurveyManualLogEmail>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("survey_manual_log_email");
-
-            entity.HasIndex(e => e.ContactId, "contact_id");
-
-            entity.Property(e => e.ContactId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("contact_id");
-            entity.Property(e => e.Date)
-                .HasDefaultValueSql("'0000-00-00'")
-                .HasColumnName("date");
-            entity.Property(e => e.Email)
-                .HasColumnType("text")
-                .HasColumnName("email");
-            entity.Property(e => e.Remark)
-                .HasColumnType("text")
-                .HasColumnName("remark");
-            entity.Property(e => e.Status)
-                .HasMaxLength(1)
-                .HasDefaultValueSql("''")
-                .IsFixedLength()
-                .HasColumnName("status");
-            entity.Property(e => e.Time)
-                .HasDefaultValueSql("'00:00:00'")
-                .HasColumnType("time")
-                .HasColumnName("time");
-        });
-
-        modelBuilder.Entity<SurveyManualResult>(entity =>
-        {
-            entity.HasKey(e => e.ContactId).HasName("PRIMARY");
-
-            entity.ToTable("survey_manual_result");
-
-            entity.HasIndex(e => e.ContactId, "case_id");
-
-            entity.HasIndex(e => e.Date, "date");
-
-            entity.Property(e => e.ContactId)
-                .ValueGeneratedNever()
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("contact_id");
-            entity.Property(e => e.Date).HasColumnName("date");
-            entity.Property(e => e.ScoreEarned).HasColumnName("score_earned");
-            entity.Property(e => e.ScoreGrade)
-                .HasMaxLength(10)
-                .HasColumnName("score_grade");
-            entity.Property(e => e.ScoreTotal)
-                .HasColumnType("smallint(5) unsigned")
-                .HasColumnName("score_total");
-            entity.Property(e => e.Suggestion)
-                .HasColumnType("text")
-                .HasColumnName("suggestion");
-            entity.Property(e => e.Time)
-                .HasColumnType("time")
-                .HasColumnName("time");
-        });
-
-        modelBuilder.Entity<SurveyManualResultDetail>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("survey_manual_result_detail");
-
-            entity.HasIndex(e => e.ContactId, "case_id");
-
-            entity.Property(e => e.Answer)
-                .HasMaxLength(45)
-                .HasColumnName("answer");
-            entity.Property(e => e.ContactId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("contact_id");
-            entity.Property(e => e.Flag)
-                .HasColumnType("smallint(5) unsigned")
-                .HasColumnName("flag");
-            entity.Property(e => e.QuestionId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("question_id");
-        });
-
-        modelBuilder.Entity<SurveyModule>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("survey_module");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.ModuleId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("module_id");
-            entity.Property(e => e.TableName)
-                .HasMaxLength(100)
-                .HasDefaultValueSql("''")
-                .HasColumnName("table_name");
-        });
-
-        modelBuilder.Entity<SurveyResult>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("survey_result");
-
-            entity.HasIndex(e => e.CaseId, "case_id");
-
-            entity.HasIndex(e => e.Date, "date");
-
-            entity.Property(e => e.CaseId)
-                .HasMaxLength(20)
-                .HasColumnName("case_id");
-            entity.Property(e => e.Date).HasColumnName("date");
-            entity.Property(e => e.ScoreEarned).HasColumnName("score_earned");
-            entity.Property(e => e.ScoreGrade)
-                .HasMaxLength(10)
-                .HasColumnName("score_grade");
-            entity.Property(e => e.ScoreTotal)
-                .HasColumnType("smallint(5) unsigned")
-                .HasColumnName("score_total");
-            entity.Property(e => e.Suggestion)
-                .HasColumnType("text")
-                .HasColumnName("suggestion");
-            entity.Property(e => e.Time)
-                .HasColumnType("time")
-                .HasColumnName("time");
-        });
-
-        modelBuilder.Entity<SurveyResultDetail>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("survey_result_detail");
-
-            entity.HasIndex(e => e.CaseId, "case_id");
-
-            entity.Property(e => e.Answer)
-                .HasMaxLength(45)
-                .HasColumnName("answer");
-            entity.Property(e => e.CaseId)
-                .HasMaxLength(20)
-                .HasColumnName("case_id");
-            entity.Property(e => e.Flag)
-                .HasColumnType("smallint(5) unsigned")
-                .HasColumnName("flag");
-            entity.Property(e => e.QuestionId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("question_id");
-        });
-
-        modelBuilder.Entity<SurveySentForm>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("survey_sent_form");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.AssetTypeId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("asset_type_id");
-            entity.Property(e => e.CaseTypeId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("case_type_id");
-            entity.Property(e => e.EmailMessage)
-                .HasDefaultValueSql("''")
-                .HasColumnType("text")
-                .HasColumnName("email_message");
-            entity.Property(e => e.EmailSubject)
-                .HasDefaultValueSql("''")
-                .HasColumnType("text")
-                .HasColumnName("email_subject");
-            entity.Property(e => e.ModuleId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("module_id");
-            entity.Property(e => e.StaffId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("staff_id");
-            entity.Property(e => e.Status)
-                .HasComment("0 = Draft, 1 = opening, 2 = close")
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("status");
-            entity.Property(e => e.SurveyFormId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("survey_form_id");
-            entity.Property(e => e.SurveySendName)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("survey_send_name");
-        });
-
-        modelBuilder.Entity<SurveySentFormDetail>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("survey_sent_form_detail");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.KeyReferId)
-                .HasComment("Asset = asset_id")
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("key_refer_id");
-            entity.Property(e => e.RecipientEmail)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("recipient_email");
-            entity.Property(e => e.RecipientName)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("recipient_name");
-            entity.Property(e => e.Status)
-                .HasComment("0 = Draft, 1 = Requested, 2 = Responded")
-                .HasColumnType("tinyint(1) unsigned")
-                .HasColumnName("status");
-            entity.Property(e => e.SurveyAnswerData).HasColumnName("survey_answer_data");
-            entity.Property(e => e.SurveySentFormId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("survey_sent_form_id");
         });
 
         modelBuilder.Entity<SurveyTimesRpt>(entity =>
@@ -10195,6 +9639,10 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasDefaultValueSql("b'1'")
                 .HasColumnType("bit(1)")
                 .HasColumnName("in_progress_case");
+            entity.Property(e => e.KioskId)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_id");
             entity.Property(e => e.LdapName)
                 .HasMaxLength(500)
                 .HasDefaultValueSql("''")
@@ -10294,52 +9742,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasColumnName("nav");
         });
 
-        modelBuilder.Entity<UsoPersonList>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("uso_person_list");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.District)
-                .HasMaxLength(255)
-                .HasColumnName("district");
-            entity.Property(e => e.Firstname)
-                .HasMaxLength(255)
-                .HasColumnName("firstname");
-            entity.Property(e => e.HCode).HasColumnName("h_code");
-            entity.Property(e => e.Lastname)
-                .HasMaxLength(255)
-                .HasColumnName("lastname");
-            entity.Property(e => e.Mobile)
-                .HasMaxLength(45)
-                .HasColumnName("mobile");
-            entity.Property(e => e.Moo)
-                .HasMaxLength(45)
-                .HasColumnName("moo");
-            entity.Property(e => e.Network)
-                .HasMaxLength(255)
-                .HasColumnName("network");
-            entity.Property(e => e.No)
-                .HasMaxLength(45)
-                .HasColumnName("no");
-            entity.Property(e => e.PId).HasColumnName("p_id");
-            entity.Property(e => e.Prefix)
-                .HasMaxLength(45)
-                .HasColumnName("prefix");
-            entity.Property(e => e.Province)
-                .HasMaxLength(255)
-                .HasColumnName("province");
-            entity.Property(e => e.SubDistrict)
-                .HasMaxLength(255)
-                .HasColumnName("sub_district");
-            entity.Property(e => e.ZipCode)
-                .HasMaxLength(45)
-                .HasColumnName("zip_code");
-        });
-
         modelBuilder.Entity<Variables>(entity =>
         {
             entity.HasKey(e => e.Name).HasName("PRIMARY");
@@ -10394,67 +9796,6 @@ public class DBContext<TContext> : DbContext where TContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
                 .HasColumnName("vendor_name");
-        });
-
-        modelBuilder.Entity<VmWareUemApi>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("vm_ware_uem_api");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.ApiType)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("''")
-                .HasColumnName("api_type");
-            entity.Property(e => e.PathName)
-                .HasMaxLength(100)
-                .HasDefaultValueSql("''")
-                .HasColumnName("path_name");
-            entity.Property(e => e.PathUrl)
-                .HasMaxLength(500)
-                .HasDefaultValueSql("''")
-                .HasColumnName("path_url");
-        });
-
-        modelBuilder.Entity<VmWareUemAssetInfo>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("vm_ware_uem_asset_info");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.AssetId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("asset_id");
-            entity.Property(e => e.DeviceId)
-                .HasMaxLength(200)
-                .HasColumnName("device_id");
-            entity.Property(e => e.Imei)
-                .HasMaxLength(200)
-                .HasColumnName("imei");
-            entity.Property(e => e.Info)
-                .HasDefaultValueSql("''")
-                .HasColumnType("text")
-                .HasColumnName("info");
-            entity.Property(e => e.MacAddress)
-                .HasMaxLength(200)
-                .HasColumnName("mac_address");
-            entity.Property(e => e.SerialNumber)
-                .HasMaxLength(500)
-                .HasColumnName("serial_number");
-            entity.Property(e => e.Udid)
-                .HasMaxLength(200)
-                .HasColumnName("udid");
-            entity.Property(e => e.UpdatedDate)
-                .ValueGeneratedOnAddOrUpdate()
-                .HasDefaultValueSql("current_timestamp()")
-                .HasColumnType("datetime")
-                .HasColumnName("updated_date");
         });
 
         modelBuilder.Entity<Watcher>(entity =>

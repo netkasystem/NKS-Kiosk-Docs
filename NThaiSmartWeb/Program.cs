@@ -6,14 +6,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Add Services
 // ======================
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AuthorizationFilter>(); // ✅ เช็ค session login
+});
+
 builder.Services.AddSignalR();
-builder.Services.AddEndpointsApiExplorer();  // สำหรับ Endpoint API
-builder.Services.AddSwaggerGen();           // สำหรับ Swagger UI
 
-builder.Configuration.AddEnvironmentVariables();
+// สำหรับ Endpoint API
+builder.Services.AddEndpointsApiExplorer(); 
+// สำหรับ Swagger UI
+builder.Services.AddSwaggerGen();  
+// Register IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();   
 
-builder.Services.AddDbContext<KioskContext>(options => DbContextConfigHelper.ConfigureFromEnvOrAppSettings(options, builder.Configuration));
+// ✅ เพิ่มบรรทัดนี้
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = "NetkaKiosk";
+});
+
+builder.Services.AddDbContext<KioskContext>(options => options.ConfigureFromEnvOrAppSettings(builder.Configuration));
 
 // CORS Policy แบบเปิดทุก origin (ระวังใช้ใน Production ควรระบุ origin ให้เจาะจง)
 builder.Services.AddCors(options =>
@@ -28,6 +44,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Configuration.AddEnvironmentVariables();
+
 // 🔧 Print build version
 Console.WriteLine($"🔧 Build Version: {BuildVersion.Value}");
 
@@ -38,6 +56,9 @@ var app = builder.Build();
 
 // ✅ ตรงนี้คือ log ตอนเริ่มต้น runtime
 Console.WriteLine($"🌐 Starting N-ThaiSmartWeb {BuildVersion.Value} @ {DateTime.Now} on {Environment.MachineName}");
+
+var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
+NSDXHttpContextHelpers.HttpContextAccessor = httpContextAccessor;
 
 // ======================
 // Middleware Pipeline
@@ -58,6 +79,9 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseRouting();
 app.UseCors("DynamicOriginPolicy");
+
+// ✅ เปิดใช้งาน session ก่อน UseEndpoints
+app.UseSession();
 
 app.UseAuthorization();
 

@@ -10,4 +10,6 @@ public partial class Department
     public string DepartmentTitle { get; set; } = null!;
 
     public uint DepartmentSequence { get; set; }
+
+    public virtual ICollection<Section> Section { get; set; } = new List<Section>();
 }

@@ -29,5 +29,11 @@ public partial class Menu
 
     public uint? ModuleId { get; set; }
 
+    public virtual ICollection<Menu> InverseParentMenu { get; set; } = new List<Menu>();
+
+    public virtual MenuGroup MenuGroup { get; set; } = null!;
+
     public virtual ICollection<MenuTutorialMapping> MenuTutorialMapping { get; set; } = new List<MenuTutorialMapping>();
+
+    public virtual Menu? ParentMenu { get; set; }
 }

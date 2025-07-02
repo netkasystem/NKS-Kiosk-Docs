@@ -10,4 +10,6 @@ public partial class Section
     public string SectionTitle { get; set; } = null!;
 
     public uint DepartmentId { get; set; }
+
+    public virtual Department Department { get; set; } = null!;
 }

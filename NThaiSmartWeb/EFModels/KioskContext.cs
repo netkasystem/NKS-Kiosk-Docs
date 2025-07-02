@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 
 namespace NThaiSmartWeb.EFModels
 {
-    public class KioskContext : DBContext<KioskContext>
+    public class KioskContext : DBContext
     {
         private readonly IConfiguration _configuration;
 
