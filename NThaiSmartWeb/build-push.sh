@@ -28,6 +28,7 @@ echo "public static class BuildVersion {
 echo "📂 Working dir: $ROOT_DIR"
 echo "🔧 กำลัง build Docker image: $IMAGE_NAME"
 
+# docker build -f NThaiSmartWeb/Dockerfile -t netkaofficialhub/nthaismartweb:latest.dev .
 docker build -f "$ROOT_DIR/$PROJECT_NAME/Dockerfile" -t $IMAGE_NAME "$ROOT_DIR"
 if [ $? -ne 0 ]; then
   echo "❌ Docker build ล้มเหลว"
