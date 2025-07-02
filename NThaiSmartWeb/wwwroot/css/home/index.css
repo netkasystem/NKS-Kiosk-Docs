@@ -1,13 +1,11 @@
-/* Container & Layout */
+/* ===== Container & Layout ===== */
 #citizen-card, #recog-card {
     background-color: #f8f9fa;
     border-radius: 12px;
-    padding: 20px;
     box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
-    margin-top: 20px;
 }
 
-/* ปรับ layout รูป+ข้อมูล ให้จัดแนวนอน */
+/* ===== Layout: Citizen Card (รูปบัตร + ข้อมูล) ===== */
 #citizen-card {
     display: flex;
     gap: 30px;
@@ -23,33 +21,26 @@
         flex: 1 1 300px;
     }
 
-/* กล้องและรูปบัตร ในกล่องเดียวกัน */
+/* ===== Layout: Recognition Card (กล้อง + overlay + ปุ่ม) ===== */
 #recog-card {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 63vh
+    height: 85vh;
 }
 
-    #recog-card video, #recog-card img {
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
-        max-width: 360px;
-        width: 100%;
-        height: auto%;
-    }
+/* 🎯 ปุ่มและ Canvas */
+#recog-card button,
+#recog-card canvas {
+    max-width: 240px;
+    width: 100%;
+}
 
-    #recog-card img {
-        display: block; /* เปลี่ยนตามสถานะ */
-    }
-
-/* สถานะยืนยันตัวตน */
+/* 🟢 สถานะยืนยันตัวตน */
 #identity-status {
-    margin-top: 15px;
+    margin-top: 10px;
     font-weight: 600;
     font-size: 1.2rem;
+    text-align: center;
 }
 
     #identity-status.match {
@@ -60,15 +51,91 @@
         color: red;
     }
 
-/* Responsive */
+    #identity-status.pending {
+        color: #ffc107;
+    }
+
+/* ===== Responsive Layout ===== */
 @media (max-width: 768px) {
-    #citizen-card, #recog-card {
+    #citizen-card,
+    #recog-card {
         flex-direction: column;
         align-items: center;
-        
     }
 
         #citizen-card > div:last-child {
             flex: 1 1 100%;
         }
+
+    #recog-card button,
+    #recog-card canvas {
+        width: 70vw;
+    }
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    height:100%
+}
+
+    .video-wrapper video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+/* 🧊 Overlay ขาวขุ่นรอบนอก เจาะกลาง */
+.glass-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5); /* ขุ่น */
+    backdrop-filter: blur(2px); /* ถ้าอยากเบลอ */
+    -webkit-mask-image: radial-gradient(circle at center, transparent 50%, black 50%);
+    mask-image: radial-gradient(circle at center, transparent 50%, black 50%);
+    mask-mode: alpha;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 100% 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 🟩 กรอบ SVG 4 มุม */
+.focus-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* 🟢 Overlay รูปเงาคน */
+.face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* 📷 รูปถ่ายหรือภาพอื่นๆ (ยกเว้น overlay) */
+#recog-card img:not(.face-overlay) {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
+    width: 100%;
+    height: 100%;
+    display: block;
 }
