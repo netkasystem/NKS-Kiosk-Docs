@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
+using System.Security.Cryptography;
+using System.Text;
+using static AesEcb;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -38,7 +42,7 @@ public class KioskApiController : ControllerBase
 
     public JObject GetScriptDetail()
     {
-        string username = NSDXSession.Get<string>(NSDXSessionKey.LoggedInUser);
+        string username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
 
@@ -48,22 +52,40 @@ public class KioskApiController : ControllerBase
     }
 
     [HttpPost("DownloadFile")]
-    public IActionResult DownloadFile(string fileCode)
+    public IActionResult DownloadFile([FromQuery] string fileCode)
     {
-        if (string.IsNullOrEmpty(fileCode)) return NotFound();
+        if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
 
-        var script = _context.KioskSetup
-            .Where(s => s.Code.StartsWith(fileCode) && (s.IsActive ?? false))
-            .Where(s => !string.IsNullOrEmpty(s.Version) && s.Version.StartsWith("v"))
-            .OrderByDescending(s => Version.Parse(s.Version!.TrimStart('v')))
-            .FirstOrDefault();
+        var script = _context.KioskSetup.Where(k => k.Code.StartsWith(fileCode) && (k.IsActive ?? false))
+                                        .Where(k => !string.IsNullOrEmpty(k.Version) && k.Version.StartsWith("v"))
+                                        .AsEnumerable()
+                                        .OrderByDescending(k => Version.Parse(k.Version.TrimStart('v')))
+                                        .FirstOrDefault();
 
         if (script == null) return NotFound("Script not found.");
 
         JObject req = GetScriptDetail();
-        string content = script.ScriptContent.ReplaceByObject(req);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+        string result = script.ScriptContent.ReplaceByObject(req);
+        var bytes = Encoding.UTF8.GetBytes(result);
 
         return File(bytes, "application/x-sh", script.Filename);
+    }
+
+    [HttpPost("SaveNationalCardData")]
+    public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
+    {
+        string jsondata = Decrypt(payload.EncrypString);
+        var data = JsonConvert.DeserializeObject<NationalCardPayload>(jsondata);
+        if (data != null)
+        {
+            data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
+
+            var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+            {
+                KioskAreaId = data.KioskId
+            };
+        }
+
+        return Ok(new { message = "✅ success" });
     }
 }
