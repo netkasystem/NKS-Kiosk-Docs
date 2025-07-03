@@ -285,7 +285,7 @@ async function detectLoop() {
     if (!stableSince) stableSince = now;
 
     const elapsed = now - stableSince;
-    const remaining = 3000 - elapsed;
+    const remaining = 1000 - elapsed;
 
     if (remaining > 0) {
         const secondsLeft = Math.ceil(remaining / 1000);
@@ -304,6 +304,8 @@ async function detectLoop() {
         canvas.style.display = "block";
 
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.style.display = "inline-block";
     }
 
     requestAnimationFrame(detectLoop);
@@ -332,6 +334,108 @@ function isImageSharpEnough(canvas, threshold = 20) {
     return variance > threshold; // ยิ่งมากยิ่งชัด
 }
 
+document.getElementById("submitBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+    const canvas = document.getElementById("faceCanvas");
+    if (!canvas) {
+        console.error("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ");
+        return;
+    }
+
+    // --- Resize ---
+    const resizedCanvas = document.createElement("canvas");
+    const targetWidth = 300;
+    const targetHeight = 300;
+    resizedCanvas.width = targetWidth;
+    resizedCanvas.height = targetHeight;
+
+    const resizedCtx = resizedCanvas.getContext("2d");
+    resizedCtx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+
+    const dataUrl = resizedCanvas.toDataURL("image/jpeg", 0.7);
+    const base64Image = dataUrl.split(',')[1];
+
+    // --- คำนวณขนาดภาพ base64 ---
+    const getBase64Size = (b64) => {
+        const padding = (b64.endsWith("==") ? 2 : b64.endsWith("=") ? 1 : 0);
+        return Math.round(((b64.length * 3 / 4) - padding));
+    };
+
+    const imageSizeInBytes = getBase64Size(base64Image);
+    const imageSizeInKB = (imageSizeInBytes / 1024).toFixed(2);
+    console.log(`📏 ขนาดภาพ base64: ${imageSizeInKB} KB`);
+
+    // --- เช็คขนาดเกินกำหนดไหม (เช่น 500KB) ---
+    const maxSizeKB = 500;
+    if (imageSizeInBytes > maxSizeKB * 1024) {
+        alert(`❌ ขนาดภาพ (${imageSizeInKB} KB) เกินขนาดที่กำหนด (${maxSizeKB} KB)`);
+        return;
+    }
+
+
+     
+
+    // --- ส่งต่อ ---
+    // information จาก บัตรประชาชน
+    const encryptedData = encrypt({
+        KioskCode: document.getElementById("kiosk-no").innerText,
+        citizenID: document.getElementById("citizenID").innerText,
+        fullNameTH: document.getElementById("fullNameTH").innerText,
+        fullNameEN: document.getElementById("fullNameEN").innerText,
+        dateOfBirth: document.getElementById("dob").innerText,
+        issueDate: document.getElementById("issueDate").innerText,
+        expireDate: document.getElementById("expireDate").innerText,
+        address: document.getElementById("address").innerText,
+        issuer: document.getElementById("issuer").innerText,
+        face_capture: base64Image 
+    });
+
+    try {
+        const response = await fetch('/api/KioskApi/SaveNationalCardData', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ EncrypString: encryptedData })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText);
+        }
+
+        const result = await response.json();
+        console.log("✅ ส่งภาพสำเร็จ:", result);
+        alert("📸 ภาพถูกส่งไปยังเซิร์ฟเวอร์แล้ว");
+    } catch (error) {
+        console.error("❌ ส่งภาพไม่สำเร็จ:", error);
+        alert("❌ ส่งภาพไม่สำเร็จ: " + error.message);
+    }
+});
+
+
+
+
+
+// encrypt/decrypt data 
+
+const key = CryptoJS.enc.Utf8.parse("Netk@Sy$temKi0sk"); // 16-byte key
+function encrypt(payload) {
+    const jsonString = JSON.stringify(payload);
+    const encrypted = CryptoJS.AES.encrypt(jsonString, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return encrypted.toString(); // Base64 string
+}
+
+function decrypt(ciphertextBase64) {
+    const decrypted = CryptoJS.AES.decrypt(ciphertextBase64, key, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
 
 // ฟังก์ชันแสดงผล
 function showError(msg) {

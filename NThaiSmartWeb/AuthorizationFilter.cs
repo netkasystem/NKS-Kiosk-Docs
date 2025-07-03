@@ -8,6 +8,7 @@ public class AuthorizationFilter : IAuthorizationFilter
         "/api/kioskapi/downloadsetupdocker",
         "/api/auth/login",
         "/api/auth/logout",
+        "/api/kioskapi/savenationalcarddata",
     };
 
     public void OnWebApiRequest(AuthorizationFilterContext context)

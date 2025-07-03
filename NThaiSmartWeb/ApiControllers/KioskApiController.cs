@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
+using System.Security.Cryptography;
+using System.Text;
+using static AesEcb;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -60,6 +64,7 @@ public class KioskApiController : ControllerBase
 
         return File(bytes, "application/x-sh", filename);
     }
+     
 
     [HttpPost("DownloadSetupDocker")]
     public IActionResult SetupDocker()
@@ -73,5 +78,39 @@ public class KioskApiController : ControllerBase
         var bytes = System.Text.Encoding.UTF8.GetBytes(result);
 
         return File(bytes, "application/x-sh", filename);
+    }
+
+  
+    public class NationalCardPayload
+    {
+        public uint KioskId { get; set; }
+        public string KioskCode { get; set; }
+        public string citizenID { get; set; }
+        public string fullNameTH { get; set; }
+        public string fullNameEN { get; set; }
+        public string dateOfBirth { get; set; }
+        public string issueDate { get; set; }
+        public string expireDate { get; set; }
+        public string address { get; set; }
+        public string issuer { get; set; }
+        public string face_capture { get; set; } 
+    }
+
+    [HttpPost("SaveNationalCardData")]
+    public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
+    {
+        string jsondata = Decrypt(payload.EncrypString);
+        var data = JsonConvert.DeserializeObject<NationalCardPayload>(jsondata);
+        if (data != null)
+        {
+            data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
+
+            var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+            {
+                KioskAreaId = data.KioskId
+            };
+        }
+
+        return Ok(new { message = "✅ success" });
     }
 }
