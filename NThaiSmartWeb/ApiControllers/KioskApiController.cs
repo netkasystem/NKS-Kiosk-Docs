@@ -68,11 +68,7 @@ public class KioskApiController : ControllerBase
         JObject req = GetScriptDetail();
         string result = script.ScriptContent.ReplaceByObject(req);
         var bytes = Encoding.UTF8.GetBytes(result);
-
-        return File(bytes, "application/x-sh", script.Filename);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(result);
-
-        return File(bytes, "application/x-sh", filename);
+        return File(bytes, "application/x-sh", script.Filename); 
     }
 
   
