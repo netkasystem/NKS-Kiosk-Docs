@@ -1,7 +1,15 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using NThaiSmartWeb.EFModels;
 
 public class CardReaderHub : Hub
 {
+    private readonly KioskContext _dbContext;
+
+    public CardReaderHub(KioskContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     // เก็บสถานะของแต่ละ kiosk โดยใช้ kioskId เป็น key
     private static readonly Dictionary<string, KioskStatusDto> _kioskConnections = new();
 
@@ -42,11 +50,15 @@ public class CardReaderHub : Hub
     }
 
     // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-    public async Task RegisterKiosk(string KioskCode)
+    public async Task<string> RegisterKiosk(string KioskCode)
     {
+        var chkActive = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode && _k.Inactive == 0).Any();
+        if (!chkActive) return "";
+
         var status = new KioskStatusDto { KioskCode = KioskCode, StatusCode = "ready", StatusText = "✅ พร้อมใช้งาน", Timestamp = DateTime.Now, LastUpdateTime = DateTime.Now };
         _kioskConnections[KioskCode] = status;
         await Clients.All.SendAsync("KioskList", GetKioskList());
+        return "";
     }
 
     // เรียกอัตโนมัติเมื่อ client (kiosk หรือ web) หลุดการเชื่อมต่อ

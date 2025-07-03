@@ -43,39 +43,33 @@ public class KioskApiController : ControllerBase
 
     public JObject GetScriptDetail()
     {
-        string username = NSDXSession.Get<string>(NSDXSessionKey.LoggedInUser);
+        string username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
 
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "SignalRHubPath")?.Value ?? "";
-        var res = JObject.FromObject(new { oKiosk.KioskCode, SignalRHub });
+        var res = JObject.FromObject(new { KIOSK_CODE = oKiosk?.KioskCode ?? "", URL = SignalRHub });
         return res;
     }
 
-    [HttpPost("DownloadSetupKiosk")]
-    public IActionResult SetupKiosk()
+    [HttpPost("DownloadFile")]
+    public IActionResult DownloadFile([FromQuery] string fileCode)
     {
-        string filename = "setup-kiosk.sh";
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
-        if (script == null) return NotFound("Script not found.");
+        if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
 
-        JObject req = GetScriptDetail();
-        string content = script.ScriptContent.ReplaceByObject(req);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+        var script = _context.KioskSetup.Where(k => k.Code.StartsWith(fileCode) && (k.IsActive ?? false))
+                                        .Where(k => !string.IsNullOrEmpty(k.Version) && k.Version.StartsWith("v"))
+                                        .AsEnumerable()
+                                        .OrderByDescending(k => Version.Parse(k.Version.TrimStart('v')))
+                                        .FirstOrDefault();
 
-        return File(bytes, "application/x-sh", filename);
-    }
-     
-
-    [HttpPost("DownloadSetupDocker")]
-    public IActionResult SetupDocker()
-    {
-        string filename = "setup-docker.sh";
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
         if (script == null) return NotFound("Script not found.");
 
         JObject req = GetScriptDetail();
         string result = script.ScriptContent.ReplaceByObject(req);
+        var bytes = Encoding.UTF8.GetBytes(result);
+
+        return File(bytes, "application/x-sh", script.Filename);
         var bytes = System.Text.Encoding.UTF8.GetBytes(result);
 
         return File(bytes, "application/x-sh", filename);

@@ -23,8 +23,8 @@ namespace NThaiSmartWeb.EFModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var envConn = Environment.GetEnvironmentVariable("MYSQL_CONNECTION_STRING");
-                var configConn = configuration.GetConnectionString("DefaultConnection");
+                var envConn = Environment.GetEnvironmentVariable("NSDX_CONNECTION_ENV");
+                var configConn = configuration.GetConnectionString("NSDXConnectionString");
                 var connectionString = !string.IsNullOrWhiteSpace(envConn) ? envConn : configConn;
 
                 if (string.IsNullOrWhiteSpace(connectionString))
