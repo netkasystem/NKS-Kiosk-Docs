@@ -7,11 +7,11 @@ public partial class KioskConsented
 {
     public uint Id { get; set; }
 
-    public uint KioskAreaId { get; set; }
+    public uint KioskId { get; set; }
 
     public string Idcard { get; set; } = null!;
 
-    public string Description { get; set; } = null!;
+    public string JsonData { get; set; } = null!;
 
     public DateTime ConsentedDate { get; set; }
 

@@ -337,10 +337,7 @@ function isImageSharpEnough(canvas, threshold = 20) {
 document.getElementById("submitBtn").addEventListener("click", async (e) => {
     e.preventDefault();
     const canvas = document.getElementById("faceCanvas");
-    if (!canvas) {
-        console.error("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ");
-        return;
-    }
+    if (!canvas) { alert("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ");  return; }
 
     // --- Resize ---
     const resizedCanvas = document.createElement("canvas");
@@ -354,31 +351,11 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
 
     const dataUrl = resizedCanvas.toDataURL("image/jpeg", 0.7);
     const base64Image = dataUrl.split(',')[1];
-
-    // --- คำนวณขนาดภาพ base64 ---
-    const getBase64Size = (b64) => {
-        const padding = (b64.endsWith("==") ? 2 : b64.endsWith("=") ? 1 : 0);
-        return Math.round(((b64.length * 3 / 4) - padding));
-    };
-
-    const imageSizeInBytes = getBase64Size(base64Image);
-    const imageSizeInKB = (imageSizeInBytes / 1024).toFixed(2);
-    console.log(`📏 ขนาดภาพ base64: ${imageSizeInKB} KB`);
-
-    // --- เช็คขนาดเกินกำหนดไหม (เช่น 500KB) ---
-    const maxSizeKB = 500;
-    if (imageSizeInBytes > maxSizeKB * 1024) {
-        alert(`❌ ขนาดภาพ (${imageSizeInKB} KB) เกินขนาดที่กำหนด (${maxSizeKB} KB)`);
-        return;
-    }
-
-
      
-
     // --- ส่งต่อ ---
     // information จาก บัตรประชาชน
     const encryptedData = encrypt({
-        KioskCode: document.getElementById("kiosk-no").innerText,
+        KioskCode: selectedKioskCode,
         citizenID: document.getElementById("citizenID").innerText,
         fullNameTH: document.getElementById("fullNameTH").innerText,
         fullNameEN: document.getElementById("fullNameEN").innerText,
@@ -393,9 +370,7 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
     try {
         const response = await fetch('/api/KioskApi/SaveNationalCardData', {
             method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json", },
             body: JSON.stringify({ EncrypString: encryptedData })
         });
 
@@ -403,12 +378,8 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
             const errorText = await response.text();
             throw new Error(errorText);
         }
-
-        const result = await response.json();
-        console.log("✅ ส่งภาพสำเร็จ:", result);
-        alert("📸 ภาพถูกส่งไปยังเซิร์ฟเวอร์แล้ว");
-    } catch (error) {
-        console.error("❌ ส่งภาพไม่สำเร็จ:", error);
+        alert(response.message);
+    } catch (error) { 
         alert("❌ ส่งภาพไม่สำเร็จ: " + error.message);
     }
 });
