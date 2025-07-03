@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using static AesEcb;
@@ -74,18 +75,34 @@ public class KioskApiController : ControllerBase
     [HttpPost("SaveNationalCardData")]
     public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
     {
-        string jsondata = Decrypt(payload.EncrypString);
-        var data = JsonConvert.DeserializeObject<NationalCardPayload>(jsondata);
-        if (data != null)
+        try
         {
-            data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
-
-            var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+            string jsondata = Decrypt(payload.EncrypString);
+            var data = JsonConvert.DeserializeObject<NationalCardPayload>(jsondata);
+            if (data != null)
             {
-                KioskAreaId = data.KioskId
-            };
-        }
+                data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
 
-        return Ok(new { message = "✅ success" });
+                var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+                {
+                    KioskId = data.KioskId,
+                    Idcard = data.citizenID,
+                    JsonData = payload.EncrypString
+                };
+                _context.KioskConsented.Add(newKioskConsented);
+                _context.SaveChanges();
+                return Ok(new { message = "✅ บันทึกสำเร็จ" });
+            }
+            else
+            {
+                return BadRequest(new { message = "❌ บันทึกไม่สำเร็จ" });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = "❌ บันทึกไม่สำเร็จ" });
+        } 
+
     }
 }
