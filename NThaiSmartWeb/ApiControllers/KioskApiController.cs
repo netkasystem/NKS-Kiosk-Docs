@@ -82,7 +82,7 @@ public class KioskApiController : ControllerBase
     }
 
   
-    public class NationalCardPayload
+    public class NationalCardModel
     {
         public uint KioskId { get; set; }
         public string KioskCode { get; set; }
@@ -94,6 +94,7 @@ public class KioskApiController : ControllerBase
         public string expireDate { get; set; }
         public string address { get; set; }
         public string issuer { get; set; }
+        public string photo { get; set; }
         public string face_capture { get; set; } 
     }
 
@@ -103,7 +104,7 @@ public class KioskApiController : ControllerBase
         try
         {
             string jsondata = Decrypt(payload.EncrypString);
-            var data = JsonConvert.DeserializeObject<NationalCardPayload>(jsondata);
+            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsondata);
             if (data != null)
             {
                 data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
@@ -116,17 +117,17 @@ public class KioskApiController : ControllerBase
                 };
                 _context.KioskConsented.Add(newKioskConsented);
                 _context.SaveChanges();
-                return Ok(new { message = "✅ บันทึกสำเร็จ" });
+                return Ok("✅ บันทึกสำเร็จ");
             }
             else
             {
-                return BadRequest(new { message = "❌ บันทึกไม่สำเร็จ" });
+                return BadRequest("❌ บันทึกไม่สำเร็จ");
             }
 
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = "❌ บันทึกไม่สำเร็จ" });
+            return BadRequest("❌ บันทึกไม่สำเร็จ");
         } 
 
     }

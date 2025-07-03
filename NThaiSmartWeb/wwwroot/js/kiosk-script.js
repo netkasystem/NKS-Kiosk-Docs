@@ -1,4 +1,5 @@
 ﻿let selectedKioskCode = null;
+let cardData = null;
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/NThaiSmartHub").withAutomaticReconnect().build();
 connection.start().then(() => {
@@ -39,6 +40,7 @@ connection.on("KioskStatus", (data) => {
 // รับข้อมูลบัตร
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
+    cardData = data;
     const img = document.getElementById("photo");
     img.onload = async () => {
         try {
@@ -70,6 +72,7 @@ function showCardInfo(data) {
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร
 function clearCardInfo() {
+    cardData = null;
     document.getElementById("photo").src = "/images/icons/id-card-icon.png";
     document.getElementById("citizenID").innerText = "";
     document.getElementById("fullNameTH").innerText = "";
@@ -336,6 +339,8 @@ function isImageSharpEnough(canvas, threshold = 20) {
 
 document.getElementById("submitBtn").addEventListener("click", async (e) => {
     e.preventDefault();
+    if (cardData == null) alert("ไม่พบข้อมูลบัตรประชาชน");
+
     const canvas = document.getElementById("faceCanvas");
     if (!canvas) { alert("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ");  return; }
 
@@ -354,33 +359,28 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
      
     // --- ส่งต่อ ---
     // information จาก บัตรประชาชน
-    const encryptedData = encrypt({
-        KioskCode: selectedKioskCode,
-        citizenID: document.getElementById("citizenID").innerText,
-        fullNameTH: document.getElementById("fullNameTH").innerText,
-        fullNameEN: document.getElementById("fullNameEN").innerText,
-        dateOfBirth: document.getElementById("dob").innerText,
-        issueDate: document.getElementById("issueDate").innerText,
-        expireDate: document.getElementById("expireDate").innerText,
-        address: document.getElementById("address").innerText,
-        issuer: document.getElementById("issuer").innerText,
-        face_capture: base64Image 
-    });
+
+    cardData.face_capture = base64Image;
+    cardData.KioskCode =selectedKioskCode;
+    const encrypCardData = encrypt(cardData);
 
     try {
         const response = await fetch('/api/KioskApi/SaveNationalCardData', {
             method: 'POST',
             headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ EncrypString: encryptedData })
+            body: JSON.stringify({ EncrypString: encrypCardData })
         });
 
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(errorText);
         }
-        alert(response.message);
+        else {
+            const message = await response.text();
+            alert(message);
+        }
     } catch (error) { 
-        alert("❌ ส่งภาพไม่สำเร็จ: " + error.message);
+        alert(error.message);
     }
 });
 
