@@ -1,5 +1,13 @@
 ﻿let selectedKioskCode = null;
 
+const urlParams = new URLSearchParams(window.location.search);
+const kioskId = urlParams.get("kioskId");
+if (!kioskId) {
+    alert("❌ ไม่พบ kioskId");
+} else {
+    console.log("ตู้นี้คือ:", kioskId);
+}
+
 const connection = new signalR.HubConnectionBuilder().withUrl("/NThaiSmartHub").withAutomaticReconnect().build();
 connection.start().then(() => {
     console.log("✅ Web Connected");
@@ -142,11 +150,8 @@ function timeAgo(dateString) {
     return updated.toLocaleString();
 }
 
-generateSetupKiosk = async () => {
-    await DownloadFileKiosk({ api: "/api/KioskApi/DownloadSetupKiosk", method: "POST" });
-}
-generateDocker = async () => {
-    await DownloadFileKiosk({ api: "/api/KioskApi/DownloadSetupDocker", method: "POST" });
+downloadFileSetup = async (code) => {
+    await DownloadFile({ api: `/api/KioskApi/DownloadFile?fileCode={code}`, method: "POST" });
 }
 
 window.DownloadFileKiosk = async function (req) {
@@ -331,7 +336,6 @@ function isImageSharpEnough(canvas, threshold = 20) {
 
     return variance > threshold; // ยิ่งมากยิ่งชัด
 }
-
 
 // ฟังก์ชันแสดงผล
 function showError(msg) {
