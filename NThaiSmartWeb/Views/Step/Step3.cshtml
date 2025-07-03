@@ -1,7 +1,45 @@
 ﻿@{
     ViewData["Title"] = "Step3";
-}
+}  
+<body>
+    <div class="terms-page-wrapper">
+        <div class="terms-white-box">
+            < <header class="page-header">
+                <h1>ข้อตกลงและเงื่อนไข</h1>
+            </header>
 
-<div>
-</div>
+            <div class="terms-content-box">
+                <b>ข้อตกลง</b><br>
+                ข้าพเจ้าขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตน พิสูจน์ตน ณ จุดลงทะเบียน...<br><br>
+                <b>เงื่อนไข</b><br>
+                ข้าพเจ้าขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตนไว้ในการยืนยันตัวตนนี้เป็นความจริง...<br><br>
+                ...เนื้อหาท้ายยาว ๆ เพื่อให้เกิด Scroll...
+                ข้าพเจ้าขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตนไว้ในการยืนยันตัวตนนี้เป็นความจริง...<br><br>
+                ...เนื้อหาท้ายยาว ๆ เพื่อให้เกิด Scroll...
+                ข้าพเจ้าขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตนไว้ในการยืนยันตัวตนนี้เป็นความจริง...<br><br>
+                ...เนื้อหาท้ายยาว ๆ เพื่อให้เกิด Scroll...
+                ข้าพเจ้าขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตนไว้ในการยืนยันตัวตนนี้เป็นความจริง...<br><br>
+                ...เนื้อหาท้ายยาว ๆ เพื่อให้เกิด Scroll...
+                <br><br><br><br><br><br><br><br><br><br><br>
+            </div>
 
+            <div class="terms-footer-fixed">
+                <label class="terms-checkbox-group">
+                    <input type="checkbox" id="acceptCheckbox" onchange="toggleSubmit()">
+                    <span class="custom-checkbox"></span>  ข้าพเจ้ายอมรับข้อตกลงเงื่อนไข
+                </label>
+                 <a asp-controller="Step" asp-action="Step4" class="card-link" style="text-decoration: none;">
+                <button class="terms-submit-button" id="submitButton" disabled>ยืนยัน</button>
+                    </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSubmit() {
+          const checkbox = document.getElementById('acceptCheckbox');
+          const button = document.getElementById('submitButton');
+          button.disabled = !checkbox.checked;
+        }
+    </script>
+
+</body>

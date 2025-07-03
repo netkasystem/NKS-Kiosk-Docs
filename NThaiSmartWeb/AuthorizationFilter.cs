@@ -8,38 +8,19 @@ public class AuthorizationFilter : IAuthorizationFilter
         "/api/kioskapi/downloadsetupdocker",
         "/api/auth/login",
         "/api/auth/logout",
-        "/api/kioskapi/savenationalcarddata",
     };
-
-    public List<string> AllowPageList = new List<string>{
-        "/login",
-        "/account/login",
-        "/account/logout",
-    };
-
-    public void OnAuthorization(AuthorizationFilterContext context)
-    {
-        if (context.HttpContext.Request.Path.Value.ToLower().StartsWith("/api/"))
-        {
-            // API Here
-            OnWebApiRequest(context);
-        }
-        else
-        {
-            // Page Here
-            OnWebPageRequest(context);
-        }
-    }
 
     public void OnWebApiRequest(AuthorizationFilterContext context)
     {
         var path = context.HttpContext.Request.Path.Value?.ToLower();
         // ⛔ อนุญาตเฉพาะ API ที่คุณ whitelist ไว้ (หรือสลับเป็น Blacklist ถ้าส่วนใหญ่ปิดหมด)
         if (AllowApiList.Contains(path))
-            return;
-
-        if (NSDXSession.GetCurrentUser == null)
         {
+            // ✅ API พวกนี้ต้อง login → ดำเนินต่อไป
+        }
+        else if (path.StartsWith("/api/"))
+        {
+            // ❌ ไม่อนุญาตเรียก API อื่นถ้าไม่มี session
             context.Result = new UnauthorizedResult();
             return;
         }
@@ -49,11 +30,13 @@ public class AuthorizationFilter : IAuthorizationFilter
     {
         var path = context.HttpContext.Request.Path.Value?.ToLower();
         // ✅ Allowlist สำหรับ Web UI และ Swagger
-        if (AllowPageList.Contains(path) || path.StartsWith("/swagger") || path.StartsWith("/favicon"))
+        if (path.Contains("/login") || path.Contains("/account/login") || path.Contains("/account/logout") || path.StartsWith("/swagger") || path.StartsWith("/favicon"))
+        {
             return;
+        }
 
         // ✅ เช็ค session login
-        var user = context.HttpContext.Session.GetString(NSDXSessionKey.CurrentUser);
+        var user = context.HttpContext.Session.GetString(NSDXSessionKey.LoggedInUser);
         if (string.IsNullOrEmpty(user))
         {
             // 🔁 ถ้าเป็น Web → Redirect
@@ -70,6 +53,22 @@ public class AuthorizationFilter : IAuthorizationFilter
                 // 🔒 ถ้าเป็น API → 401 Unauthorized
                 context.Result = new UnauthorizedResult();
             }
+        }
+    }
+
+    public void OnAuthorization(AuthorizationFilterContext context)
+    {
+        if (context.HttpContext.Request.Path.Value.ToLower().StartsWith("/api/"))
+        {
+            Console.WriteLine(DateTime.Now + " >> api >> " + context.HttpContext.Request.Path.Value);
+            // API Here
+            OnWebApiRequest(context);
+        }
+        else
+        {
+            Console.WriteLine(DateTime.Now + " >> api >> " + context.HttpContext.Request.Path.Value);
+            // Page Here
+            OnWebPageRequest(context);
         }
     }
 }

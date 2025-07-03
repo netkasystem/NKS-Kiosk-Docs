@@ -6,18 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add Services
 // ======================
 
-builder.Services
-    .AddControllersWithViews(options => { options.Filters.Add<AuthorizationFilter>(); })
-    .AddNewtonsoftJson();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AuthorizationFilter>(); // ✅ เช็ค session login
+});
 
 builder.Services.AddSignalR();
 
 // สำหรับ Endpoint API
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer(); 
 // สำหรับ Swagger UI
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();  
 // Register IHttpContextAccessor
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();   
 
 // ✅ เพิ่มบรรทัดนี้
 builder.Services.AddSession(options =>

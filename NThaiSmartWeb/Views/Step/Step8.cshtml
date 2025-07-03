@@ -1,7 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Step8";
 }
+<body class="green-background">
 
-<div>
-</div>
+    <header class="page-header">
+        <div class="scan_fail">
+            <img src="/images/icons/scan_pass.svg" class="scan_fail" />
+        </div>
+        <h1>สแกนเสร็จสิ้น</h1>
+    </header>
+    <div class="page-center">
+        <img src="/images/icons/Thai_id_pass.svg" class="id-card-image-pass" />
+        <h2>
+            กรุณาเสียบบัตรประชาชนไว้จนกว่าจะดำเนินการสำเร็จ
+        </h2>
+    </div>
+    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)">
+        <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px; width:50%;">
+            ขั้นตอนต่อไป
+        </button>
+    </form>
+</body>
 

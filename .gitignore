@@ -26,5 +26,3 @@ bld/
 .vs/
 /NSDX.Web/Properties/PublishProfiles/registry.*.pubxml
 /NSDX.Web/Properties/PublishProfiles/registry.*.pubxml.user
-*.pubxml
-*.user

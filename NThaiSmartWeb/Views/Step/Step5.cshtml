@@ -1,7 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Step5";
 }
+    <a asp-controller="Step" asp-action="Step6" class="card-link" style="text-decoration: none;">
 
-<div>
+<div class="page-container">
+
+    <header class="page-header top-header">
+        <div class="loader"></div>
+        <h1>กำลังอ่านบัตร</h1>
+    </header>
+
+    <div class="scanning">
+        <img src="/images/icons/font_card_id.svg" class="scan-image image-a active" />
+        <img src="/images/icons/scan_font.svg" class="scan-image image-b" />
+        <div class="scan-line"></div>
+    </div>
+
+    <header class="page-header bottom-header">
+        <h2>กรุณารอสักครู่</h2>
+    </header>
+
 </div>
-
+</a>

@@ -1,7 +1,30 @@
 ﻿@{
     ViewData["Title"] = "Step7";
 }
+<body class="red-background">
 
-<div>
-</div>
+    <header class="page-header">
+        <div class="scan_fail">
+            <img src="/images/icons/scan_fail.svg" class="scan_fail" />
+        </div>
+        <h1>กรุณาลองใหม่</h1>
+</header>
 
+    <div class="page-center">
+
+        <img src="/images/icons/font_card_id.svg" class="id-card-image-fail" />
+
+        <h2>
+            บัตรประชาชนของท่าน
+            <span class="expired-word">หมดอายุการใช้งาน</span><br>
+            กรุณาติดต่อเจ้าหน้าที่
+        </h2>
+
+    </div>
+
+    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)" >
+        <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px;width:50%;">
+            ย้อนกลับ
+        </button>
+    </form>
+    </body>

@@ -11,6 +11,7 @@ public static class NSDXSessionKey
     public static string AdHocModuleByLicense = "_AdHocModuleByLicense";
     public static string APIGetIncident = "APIGetIncident";
 
+    public static string LoggedInUser = "LoggedInUser";
     public static string KioskCode = "KioskCode";
 }
 
@@ -54,6 +55,4 @@ public static class NSDXSession
         }
         return _default;
     }
-
-    public static string GetCurrentUser => Get<string>(NSDXSessionKey.CurrentUser);
 }

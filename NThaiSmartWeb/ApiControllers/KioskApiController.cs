@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
-using System;
-using System.Security.Cryptography;
-using System.Text;
-using static AesEcb;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -43,82 +38,40 @@ public class KioskApiController : ControllerBase
 
     public JObject GetScriptDetail()
     {
-        string username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
+        string username = NSDXSession.Get<string>(NSDXSessionKey.LoggedInUser);
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
 
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "SignalRHubPath")?.Value ?? "";
-        var res = JObject.FromObject(new { KIOSK_CODE = oKiosk?.KioskCode ?? "", URL = SignalRHub });
+        var res = JObject.FromObject(new { oKiosk.KioskCode, SignalRHub });
         return res;
     }
 
-    [HttpPost("DownloadFile")]
-    public IActionResult DownloadFile([FromQuery] string fileCode)
+    [HttpPost("DownloadSetupKiosk")]
+    public IActionResult SetupKiosk()
     {
-        if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
+        string filename = "setup-kiosk.sh";
+        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
+        if (script == null) return NotFound("Script not found.");
 
-        var script = _context.KioskSetup.Where(k => k.Code.StartsWith(fileCode) && (k.IsActive ?? false))
-                                        .Where(k => !string.IsNullOrEmpty(k.Version) && k.Version.StartsWith("v"))
-                                        .AsEnumerable()
-                                        .OrderByDescending(k => Version.Parse(k.Version.TrimStart('v')))
-                                        .FirstOrDefault();
+        JObject req = GetScriptDetail();
+        string content = script.ScriptContent.ReplaceByObject(req);
+        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
 
+        return File(bytes, "application/x-sh", filename);
+    }
+
+    [HttpPost("DownloadSetupDocker")]
+    public IActionResult SetupDocker()
+    {
+        string filename = "setup-docker.sh";
+        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
         if (script == null) return NotFound("Script not found.");
 
         JObject req = GetScriptDetail();
         string result = script.ScriptContent.ReplaceByObject(req);
-        var bytes = Encoding.UTF8.GetBytes(result);
-        return File(bytes, "application/x-sh", script.Filename); 
-    }
+        var bytes = System.Text.Encoding.UTF8.GetBytes(result);
 
-  
-    public class NationalCardModel
-    {
-        public uint KioskId { get; set; }
-        public string KioskCode { get; set; }
-        public string citizenID { get; set; }
-        public string fullNameTH { get; set; }
-        public string fullNameEN { get; set; }
-        public string dateOfBirth { get; set; }
-        public string issueDate { get; set; }
-        public string expireDate { get; set; }
-        public string address { get; set; }
-        public string issuer { get; set; }
-        public string photo { get; set; }
-        public string face_capture { get; set; } 
-    }
-
-    [HttpPost("SaveNationalCardData")]
-    public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
-    {
-        try
-        {
-            string jsondata = Decrypt(payload.EncrypString);
-            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsondata);
-            if (data != null)
-            {
-                data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
-
-                var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
-                {
-                    KioskId = data.KioskId,
-                    Idcard = data.citizenID,
-                    JsonData = payload.EncrypString
-                };
-                _context.KioskConsented.Add(newKioskConsented);
-                _context.SaveChanges();
-                return Ok("✅ บันทึกสำเร็จ");
-            }
-            else
-            {
-                return BadRequest("❌ บันทึกไม่สำเร็จ");
-            }
-
-        }
-        catch (Exception ex)
-        {
-            return BadRequest("❌ บันทึกไม่สำเร็จ");
-        } 
-
+        return File(bytes, "application/x-sh", filename);
     }
 }

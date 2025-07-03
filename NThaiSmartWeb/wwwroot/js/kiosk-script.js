@@ -1,5 +1,4 @@
 ﻿let selectedKioskCode = null;
-let cardData = null;
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/NThaiSmartHub").withAutomaticReconnect().build();
 connection.start().then(() => {
@@ -40,7 +39,6 @@ connection.on("KioskStatus", (data) => {
 // รับข้อมูลบัตร
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
-    cardData = data;
     const img = document.getElementById("photo");
     img.onload = async () => {
         try {
@@ -72,7 +70,6 @@ function showCardInfo(data) {
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร
 function clearCardInfo() {
-    cardData = null;
     document.getElementById("photo").src = "/images/icons/id-card-icon.png";
     document.getElementById("citizenID").innerText = "";
     document.getElementById("fullNameTH").innerText = "";
@@ -211,204 +208,97 @@ function isFacingForward(landmarks) {
 
 let newCard;
 let hasCapture;
-
 const video = document.getElementById("videoInput");
 const canvas = document.getElementById("faceCanvas");
-const statusElem = document.getElementById("scanResult");
-
-let faceDetectorLoaded = false;
-let faceDetected = false;
+const captureBtn = document.getElementById("captureFace");
+const statusElem = document.getElementById("identity-status");
 
 async function startFaceRecognition() {
     if (!video) return;
 
-    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-    faceDetectorLoaded = true;
+    let faceDetectorLoaded = false;
 
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-    } catch (err) {
-        showError("❌ ไม่สามารถเปิดกล้องได้: " + err);
-        return;
-    }
+    // โหลดโมเดล
+    Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri('/models')
+    ]).then(() => {
+        faceDetectorLoaded = true;
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            }).catch(err => {
+                statusElem.innerText = "❌ ไม่สามารถเปิดกล้องได้: " + err;
+            });
+    });
 
-    detectLoop();
-}
-let stableSince = null;
-
-async function detectLoop() {
-    if (!faceDetectorLoaded || faceDetected || video.paused || video.ended) {
-        requestAnimationFrame(detectLoop);
-        return;
-    }
-
-    const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions());
-
-    if (!detection) {
-        showError("❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง");
-        stableSince = null;
-        requestAnimationFrame(detectLoop);
-        return;
-    }
-
-    const box = detection.box;
-    const { width: vw, height: vh } = video.getBoundingClientRect();
-    const faceArea = box.width * box.height;
-    const screenArea = vw * vh;
-    const faceRatio = faceArea / screenArea;
-    const faceCenterX = box.x + box.width / 2;
-    const faceCenterY = box.y + box.height / 2;
-
-    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.75 && faceCenterY > vh * 0.25 && faceCenterY < vh * 0.75);
-    const isBigEnough = faceRatio > 0.05;
-
-    // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
-    const tempCanvas = document.createElement('canvas');
-    const ctx = tempCanvas.getContext('2d');
-    tempCanvas.width = video.videoWidth;
-    tempCanvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-
-    const isSharp = isImageSharpEnough(tempCanvas);
-
-    if (!isCentered || !isBigEnough || !isSharp) {
-        if (!isSharp) {
-            showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");
-        } else {
-            showError("⚠️ กรุณาให้ใบหน้าอยู่กลางจอและใกล้กล้องมากขึ้น");
+    captureBtn.addEventListener("click", async () => {
+        if (!faceDetectorLoaded) {
+            statusElem.innerText = "⏳ กำลังโหลดโมเดล...";
+            return;
         }
-        stableSince = null;
-        requestAnimationFrame(detectLoop);
-        return;
-    }
 
-    // เริ่มจับเวลา
-    const now = Date.now();
-    if (!stableSince) stableSince = now;
+        const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions());
 
-    const elapsed = now - stableSince;
-    const remaining = 1000 - elapsed;
+        if (!detection) {
+            statusElem.innerText = "❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง";
+            statusElem.classList.remove("text-success");
+            statusElem.classList.add("text-danger");
+            return;
+        }
 
-    if (remaining > 0) {
-        const secondsLeft = Math.ceil(remaining / 1000);
-        showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
-    } else {
-        faceDetected = true;
+        
 
-        // แสดงภาพนิ่ง
-        const canvas = document.getElementById("faceCanvas");
-        const cctx = canvas.getContext("2d");
+        const box = detection.box;
+        const { width: vw, height: vh } = video.getBoundingClientRect();
+
+        // 🔍 เงื่อนไข:
+        const faceArea = box.width * box.height;
+        const screenArea = vw * vh;
+
+        const faceRatio = faceArea / screenArea;
+        const faceCenterX = box.x + box.width / 2;
+        const faceCenterY = box.y + box.height / 2;
+
+        const isCentered = (
+            faceCenterX > vw * 0.25 && faceCenterX < vw * 0.75 &&
+            faceCenterY > vh * 0.25 && faceCenterY < vh * 0.75
+        );
+
+        const isBigEnough = faceRatio > 0.05; // 5% ของจอขึ้นไป
+
+        if (!isCentered || !isBigEnough) {
+            showError("⚠️ กรุณาให้ใบหน้าอยู่กลางจอและใกล้กล้องมากขึ้น");
+            return;
+        }
+
+        // ✅ แสดงภาพนิ่ง
+        const context = canvas.getContext("2d");
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        cctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         video.style.display = "none";
         canvas.style.display = "block";
+        captureBtn.style.display = "none";
 
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
-        const submitBtn = document.getElementById("submitBtn");
-        submitBtn.style.display = "inline-block";
-    }
-
-    requestAnimationFrame(detectLoop);
+    });
 }
 
-function isImageSharpEnough(canvas, threshold = 20) {
+function captureFrame(video) {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     const ctx = canvas.getContext('2d');
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const gray = [];
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // แปลงเป็น grayscale
-    for (let i = 0; i < imageData.data.length; i += 4) {
-        const avg = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
-        gray.push(avg);
-    }
-
-    // คำนวณความแตกต่างของ pixel เพื่อนิยามความชัด (ความแปรปรวน)
-    let sum = 0, sumSq = 0;
-    for (const g of gray) {
-        sum += g;
-        sumSq += g * g;
-    }
-    const mean = sum / gray.length;
-    const variance = sumSq / gray.length - mean * mean;
-
-    return variance > threshold; // ยิ่งมากยิ่งชัด
+    const dataUrl = canvas.toDataURL('image/png');
+    console.log('Captured image (base64):', dataUrl);
+    hasCapture = true;
+    newCard = false;
+    // ทำอะไรต่อ เช่น แสดงรูป, ส่ง server, save ฯลฯ
 }
 
-document.getElementById("submitBtn").addEventListener("click", async (e) => {
-    e.preventDefault();
-    if (cardData == null) alert("ไม่พบข้อมูลบัตรประชาชน");
-
-    const canvas = document.getElementById("faceCanvas");
-    if (!canvas) { alert("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ");  return; }
-
-    // --- Resize ---
-    const resizedCanvas = document.createElement("canvas");
-    const targetWidth = 300;
-    const targetHeight = 300;
-    resizedCanvas.width = targetWidth;
-    resizedCanvas.height = targetHeight;
-
-    const resizedCtx = resizedCanvas.getContext("2d");
-    resizedCtx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
-
-    const dataUrl = resizedCanvas.toDataURL("image/jpeg", 0.7);
-    const base64Image = dataUrl.split(',')[1];
-     
-    // --- ส่งต่อ ---
-    // information จาก บัตรประชาชน
-
-    cardData.face_capture = base64Image;
-    cardData.KioskCode =selectedKioskCode;
-    const encrypCardData = encrypt(cardData);
-
-    try {
-        const response = await fetch('/api/KioskApi/SaveNationalCardData', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ EncrypString: encrypCardData })
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText);
-        }
-        else {
-            const message = await response.text();
-            alert(message);
-        }
-    } catch (error) { 
-        alert(error.message);
-    }
-});
-
-
-
-
-
-// encrypt/decrypt data 
-
-const key = CryptoJS.enc.Utf8.parse("Netk@Sy$temKi0sk"); // 16-byte key
-function encrypt(payload) {
-    const jsonString = JSON.stringify(payload);
-    const encrypted = CryptoJS.AES.encrypt(jsonString, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-    });
-    return encrypted.toString(); // Base64 string
-}
-
-function decrypt(ciphertextBase64) {
-    const decrypted = CryptoJS.AES.decrypt(ciphertextBase64, key, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-    });
-    return decrypted.toString(CryptoJS.enc.Utf8);
-}
-
-// ฟังก์ชันแสดงผล
 function showError(msg) {
     statusElem.innerText = msg;
     statusElem.classList.remove("text-success");
