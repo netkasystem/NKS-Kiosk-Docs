@@ -37,29 +37,28 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainNavbar">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step1")" asp-controller="Step" asp-action="Step1">Step 1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step2")" asp-controller="Step" asp-action="Step2">Step 2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step3")" asp-controller="Step" asp-action="Step3">Step 3</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step4")" asp-controller="Step" asp-action="Step4">Step 4</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step5")" asp-controller="Step" asp-action="Step5">Step 5</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step6")" asp-controller="Step" asp-action="Step6">Step 6</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step7")" asp-controller="Step" asp-action="Step7">Step 7</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @IsActive("Step", "Step8")" asp-controller="Step" asp-action="Step8">Step 8</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="stepsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                🚶 Steps
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="stepsDropdown">
+                                <li><a class="dropdown-item @IsActive("Step", "Step1")" asp-controller="Step" asp-action="Step1">Step 1</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step2")" asp-controller="Step" asp-action="Step2">Step 2</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step3")" asp-controller="Step" asp-action="Step3">Step 3</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step4")" asp-controller="Step" asp-action="Step4">Step 4</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step5")" asp-controller="Step" asp-action="Step5">Step 5</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step6")" asp-controller="Step" asp-action="Step6">Step 6</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step7")" asp-controller="Step" asp-action="Step7">Step 7</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step8")" asp-controller="Step" asp-action="Step8">Step 8</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step9")" asp-controller="Step" asp-action="Step9">Step 9</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step10")" asp-controller="Step" asp-action="Step10">Step 10</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step11")" asp-controller="Step" asp-action="Step11">Step 11</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step12")" asp-controller="Step" asp-action="Step12">Step 12</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step13")" asp-controller="Step" asp-action="Step13">Step 13</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step14")" asp-controller="Step" asp-action="Step14">Step 14</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step15")" asp-controller="Step" asp-action="Step15">Step 15</a></li>
+                                <li><a class="dropdown-item @IsActive("Step", "Step16")" asp-controller="Step" asp-action="Step16">Step 16</a></li>
+                            </ul>
                         </li>
 
                         <li class="nav-item">
