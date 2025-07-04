@@ -1,4 +1,336 @@
 ﻿@{
     ViewData["Title"] = "Step12";
 }
+<body>
+    <header class="page-header" style="margin-bottom: 0px;">
+        <h1 >ยืนยันข้อมูล</h1>
+    </header>
+    <div class="grid-container">
+        <div class="grid-item top-box">
+            <div class="info-header">
+                <h2 >ข้อมูลบัตรประชาชน</h2>
+                <div class="action-buttons">
+                    <button class="icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+            </div>
+            <div class="info-grid">
+                <div class="info-field">
+                    <label>เลขบัตรประชาชน</label>
+                    <div class="info-value" data-full-value="1-1043-44043-34-0">1-****-*****-34-0</div>
+                    <button class="local-icon-button" style="width:100%;">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
 
+                <div class="info-field">
+                    <label>วันเกิด</label>
+                    <div class="info-value" data-full-value="21 มีนาคม 2545">21 ****** 2545</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+
+                <div class="info-field">
+                    <label>ชื่อ</label>
+                    <div class="info-value" data-full-value="นาย เมธา">นาย เมธา</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+                <div class="info-field">
+                    <label>นามสกุล</label>
+                    <div class="info-value" data-full-value="ฟ้าแวบแวบ">ฟ้าแวบแวบ</div>
+                    <button class="local-icon-button" >
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+                <div class="info-field">
+                    <label>เพศ</label>
+                    <div class="info-value" data-full-value="ชาย">ชาย</div>
+                    <button class="local-icon-button" >
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+                <div class="info-field">
+                    <label>ศาสนา</label>
+                    <div class="info-value" data-full-value="พุทธ">พุทธ</div>
+                    <button class="local-icon-button" >
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+
+                <div class="info-field full-width">
+                    <label>ที่อยู่</label>
+                    <div class="info-value" data-full-value="999/99 เขต มีนบุรี ซอยวัดแสนสุข แขวงมีนบุรี กรุงเทพมหานคร 10520">
+                        ***/** เขต มีนบุรี ซอย*** แขวง*** กรุงเทพมหานคร ****
+                    </div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+                <div class="info-field">
+                    <label>วันออกบัตร</label>
+                    <div class="info-value" data-full-value="29 มี.ค. 2562">** มี.ค. 25**</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+
+                <div class="info-field">
+                    <label>วันหมดอายุบัตร</label>
+                    <div class="info-value" data-full-value="29 มี.ค. 2571">** มี.ค. 25**</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+               
+            </div>
+            </div>
+        <div class="grid-item bottom-left-1">
+            <div class="image-container">
+                <img src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
+            </div>
+            <h3>รูปบัตรประชาชน</h3>
+        </div>
+        <div class="grid-item bottom-left-2">
+            <div class="image-container">
+                <img src="/images/icons/Profile.jpg" alt="รูปโปรไฟล์ที่ถ่าย" />
+            </div>
+            <h3>รูปจากการแสกนใบหน้า</h3>
+            </div>
+            <div class="row-button">
+        </div>
+            <div class="row-button">
+                <button type="submit" class="edit-button">
+                    แก้ไขข้อมูล
+                </button>
+                <button type="submit" class="confirm-button">
+                    ยืนยันข้อมูล
+                </button>
+        </div>
+    </div>
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2>แก้ไขข้อมูล</h2>
+                <span class="close-button">&times;</span>
+            </div>
+
+            <form id="edit-form">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="input-id-number">เลขบัตรประชาชน</label>
+                        <div class="input-wrapper">
+                            <span class="old-data-placeholder"></span> <input type="text" id="input-id-number" data-source-field="id_number">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="input-birthdate">วันเกิด</label>
+                        <input type="text" id="input-birthdate" data-source-field="birthdate">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-first-name">ชื่อ</label>
+                        <input type="text" id="input-first-name" data-source-field="first_name">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-last-name">นามสกุล</label>
+                        <input type="text" id="input-last-name" data-source-field="last_name">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-gender">เพศ</label>
+                        <input type="text" id="input-gender" data-source-field="gender">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-religion">ศาสนา</label>
+                        <input type="text" id="input-religion" data-source-field="religion">
+                    </div>
+
+                    <div class="form-field full-width">
+                        <label for="input-address">ที่อยู่</label>
+                        <textarea id="input-address" rows="3" data-source-field="address"></textarea>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-issue-date">วันออกบัตร</label>
+                        <input type="text" id="input-issue-date" data-source-field="issue_date">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-expiry-date">วันหมดอายุบัตร</label>
+                        <input type="text" id="input-expiry-date" data-source-field="expiry_date">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button">ยกเลิก</button>
+                    <button type="submit" class="save-button">บันทึกข้อมูล</button>
+                </div>
+            </form>
+            <div id="confirmation-modal" class="modal-overlay">
+    <div class="modal-confirm">
+        <p>คุณแน่ใจหรือไม่ว่าต้องการบันทึกข้อมูลนี้?</p>
+        <div class="modal-footer">
+            <button id="cancel-confirm-button" class="cancel-button">ยกเลิก</button>
+            <button id="confirm-save-button" class="save-button">ยืนยัน</button>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ---  ควบคุมปุ่มแสดงผลทั้งหมด (ใน Header) ---
+            const mainToggleButton = document.querySelector('.info-header .icon-button');
+            const allInfoValues = document.querySelectorAll('.info-value');
+
+            if (mainToggleButton) {
+                const mainEyeIcon = mainToggleButton.querySelector('img');
+                let isAllDataVisible = false;
+
+                mainToggleButton.addEventListener('click', function() {
+                    isAllDataVisible = !isAllDataVisible;
+
+                    allInfoValues.forEach(element => {
+                        const fullValue = element.dataset.fullValue;
+                        const maskedValueKey = 'data-masked-value';
+
+                        if (isAllDataVisible) {
+                            if (!element.hasAttribute(maskedValueKey)) {
+                                element.setAttribute(maskedValueKey, element.textContent);
+                            }
+                            element.textContent = fullValue;
+                        } else {
+                            if (element.hasAttribute(maskedValueKey)) {
+                                element.textContent = element.getAttribute(maskedValueKey);
+                            }
+                        }
+                    });
+
+                    // อัปเดตไอคอนของปุ่มทั้งหมดและปุ่มแยกให้อยู่ในสถานะเดียวกัน
+                    updateAllIcons(isAllDataVisible);
+                });
+            }
+
+            // ---  ควบคุมปุ่มแสดงผลแยกแต่ละช่อง ---
+            const localToggleButtons = document.querySelectorAll('.local-icon-button');
+
+            localToggleButtons.forEach(button => {
+                const infoField = button.closest('.info-field');
+                const infoValueElement = infoField.querySelector('.info-value');
+                const maskedValue = infoValueElement.textContent;
+                let isDataVisible = false; // สถานะของแต่ละปุ่ม
+
+                button.addEventListener('click', function() {
+                    isDataVisible = !isDataVisible;
+
+                    const eyeIcon = button.querySelector('img');
+                    const fullValue = infoValueElement.dataset.fullValue;
+
+                    if (isDataVisible) {
+                        infoValueElement.textContent = fullValue;
+                        eyeIcon.src = '/images/icons/eye.svg';
+                        eyeIcon.alt = 'ซ่อนข้อมูล';
+                    } else {
+                        infoValueElement.textContent = maskedValue;
+                        eyeIcon.src = '/images/icons/vision.svg';
+                        eyeIcon.alt = 'ดูข้อมูล';
+                    }
+                });
+            });
+
+            // --- ฟังก์ชันเสริม: อัปเดตไอคอนทั้งหมด ---
+            function updateAllIcons(isVisible) {
+                const allIcons = document.querySelectorAll('.icon-button img, .local-icon-button img');
+                allIcons.forEach(icon => {
+                    if (isVisible) {
+                        icon.src = '/images/icons/eye.svg';
+                        icon.alt = 'ซ่อนข้อมูล';
+                    } else {
+                        icon.src = '/images/icons/vision.svg';
+                        icon.alt = 'ดูข้อมูล';
+                    }
+                });
+            }
+
+
+            // --- 3. ควบคุมการทำงานของ Modal แก้ไขข้อมูล  ---
+            const editButton = document.querySelector('.edit-button');
+            const editModal = document.getElementById('edit-modal');
+            const confirmModal = document.getElementById('confirmation-modal');
+
+            if (editModal && confirmModal) {
+                const closeEditModalButton = editModal.querySelector('.close-button');
+                const cancelEditButton = editModal.querySelector('.cancel-button');
+                const editForm = document.getElementById('edit-form');
+                const infoValuesOnPage = document.querySelectorAll('.info-value');
+                const confirmSaveBtn = document.getElementById('confirm-save-button');
+                const cancelConfirmBtn = document.getElementById('cancel-confirm-button');
+
+                function openEditModal() {
+                    infoValuesOnPage.forEach(infoDiv => {
+                        const fieldName = infoDiv.dataset.fieldName;
+                        const fullValue = infoDiv.dataset.fullValue;
+                        const inputTarget = editModal.querySelector(`[data-source-field="${fieldName}"]`);
+                        if (inputTarget) {
+                            const wrapper = inputTarget.closest('.input-wrapper');
+                            if (wrapper) {
+                                const placeholderTarget = wrapper.querySelector('.old-data-placeholder');
+                                if (placeholderTarget) {
+                                    placeholderTarget.textContent = fullValue;
+                                }
+                            }
+                            inputTarget.value = fullValue;
+                        }
+                    });
+                    editModal.style.display = 'flex';
+                }
+
+                function closeEditModal() {
+                    editModal.style.display = 'none';
+                }
+
+                function closeConfirmModal() {
+                    confirmModal.style.display = 'none';
+                }
+
+                function saveChanges() {
+                    const updatedData = {};
+                    editForm.querySelectorAll('[data-source-field]').forEach(input => {
+                        const fieldName = input.dataset.sourceField;
+                        updatedData[fieldName] = input.value;
+                    });
+                    console.log('ข้อมูลที่จะส่งไปบันทึก:', updatedData);
+                    alert('บันทึกข้อมูลเรียบร้อย! (จำลอง)');
+                    infoValuesOnPage.forEach(infoDiv => {
+                        const fieldName = infoDiv.dataset.fieldName;
+                        if (updatedData[fieldName]) {
+                            infoDiv.dataset.fullValue = updatedData[fieldName];
+                        }
+                    });
+                    closeEditModal();
+                    closeConfirmModal();
+                }
+
+                editForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    confirmModal.style.display = 'flex';
+                });
+
+                if (editButton) editButton.addEventListener('click', openEditModal);
+                if (closeEditModalButton) closeEditModalButton.addEventListener('click', closeEditModal);
+                if (cancelEditButton) cancelEditButton.addEventListener('click', closeEditModal);
+                if (cancelConfirmBtn) cancelConfirmBtn.addEventListener('click', closeConfirmModal);
+                if (confirmSaveBtn) confirmSaveBtn.addEventListener('click', saveChanges);
+            }
+        });
+    </script>
+</body>
