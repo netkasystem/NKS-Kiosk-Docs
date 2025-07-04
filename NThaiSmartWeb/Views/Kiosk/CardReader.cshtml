@@ -2,28 +2,19 @@
     ViewData["Title"] = "สถานะการอ่านบัตรประชาชน";
 }
 
-
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- ซ้าย: รายการตู้ Kiosk -->
-        <div class="col-lg-3 col-12 border-end" style="max-height: 80vh; overflow-y: auto;">
-            <!-- กล้องและรูปบัตรสำหรับเปรียบเทียบ -->
-            <div id="recog-card">
-                <video id="videoInput" autoplay muted playsinline style="display: none;"></video>
+        <div class="col-12">
+            <div class="video-wrapper" style="position: relative;">
+                <video id="videoInput" autoplay muted playsinline></video>
+                <canvas id="faceCanvas" style="display: none;"></canvas>
 
-                <div class="mt-3 text-center">
-                    <button class="btn btn-success" id="captureFace" style="display: none;">📸 Capture ใบหน้า</button>
-                </div>
-
-                <div class="mt-3 text-center">
-                    <canvas id="faceCanvas" style="display: none;"></canvas>
-                </div>
-
-                <div id="identity-status" class="mt-3 fw-bold text-center text-info"></div>
+                <div class="glass-overlay"></div>
+                <img src="/images/icons/focus.svg" class="focus-frame" alt="frame">
+                <div id="scanResult">กำลังรอการตรวจจับใบหน้า...</div>
             </div>
         </div>
 
-        <!-- ขวา: ข้อมูลบัตรและกล้อง -->
         <div class="col-lg-9 col-12">
             <h3>สถานะการอ่านบัตรประชาชน</h3>
             <p id="kiosk-no" class="fw-bold text-primary"></p>
@@ -50,6 +41,14 @@
                 </div>
 
             </div>
+        </div>
+
+        <div class="col-lg-3 col-12">
+            <img id="previewImg" style="max-width: 100%; margin-top: 10px;" />
+        </div>
+
+        <div class="col-lg-9 col-12">
+            <button id="submitBtn" style="display: none;">Submit</button>
         </div>
     </div>
 </div>

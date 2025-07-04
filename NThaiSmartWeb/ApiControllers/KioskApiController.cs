@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
+using System.Text;
+using static AesEcb;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -38,40 +41,63 @@ public class KioskApiController : ControllerBase
 
     public JObject GetScriptDetail()
     {
-        string username = NSDXSession.Get<string>(NSDXSessionKey.LoggedInUser);
+        string username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
 
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "SignalRHubPath")?.Value ?? "";
-        var res = JObject.FromObject(new { oKiosk.KioskCode, SignalRHub });
+        var res = JObject.FromObject(new { KIOSK_CODE = oKiosk?.KioskCode ?? "", URL = SignalRHub });
         return res;
     }
 
-    [HttpPost("DownloadSetupKiosk")]
-    public IActionResult SetupKiosk()
+    [HttpPost("DownloadFile")]
+    public IActionResult DownloadFile([FromQuery] string fileCode)
     {
-        string filename = "setup-kiosk.sh";
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
-        if (script == null) return NotFound("Script not found.");
+        if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
 
-        JObject req = GetScriptDetail();
-        string content = script.ScriptContent.ReplaceByObject(req);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+        var script = _context.KioskSetup.Where(k => k.Code.StartsWith(fileCode) && (k.IsActive ?? false))
+                                        .Where(k => !string.IsNullOrEmpty(k.Version) && k.Version.StartsWith("v"))
+                                        .AsEnumerable()
+                                        .OrderByDescending(k => Version.Parse(k.Version.TrimStart('v')))
+                                        .FirstOrDefault();
 
-        return File(bytes, "application/x-sh", filename);
-    }
-
-    [HttpPost("DownloadSetupDocker")]
-    public IActionResult SetupDocker()
-    {
-        string filename = "setup-docker.sh";
-        var script = _context.KioskSetup.FirstOrDefault(s => s.Filename == filename);
         if (script == null) return NotFound("Script not found.");
 
         JObject req = GetScriptDetail();
         string result = script.ScriptContent.ReplaceByObject(req);
-        var bytes = System.Text.Encoding.UTF8.GetBytes(result);
+        var bytes = Encoding.UTF8.GetBytes(result);
+        return File(bytes, "application/x-sh", script.Filename);
+    }
 
-        return File(bytes, "application/x-sh", filename);
+    [HttpPost("SaveNationalCardData")]
+    public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
+    {
+        try
+        {
+            string jsondata = Decrypt(payload.EncrypString);
+            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsondata);
+            if (data != null)
+            {
+                data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
+
+                var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+                {
+                    KioskId = data.KioskId,
+                    Idcard = data.citizenID,
+                    JsonData = payload.EncrypString
+                };
+                _context.KioskConsented.Add(newKioskConsented);
+                _context.SaveChanges();
+                return Ok("✅ บันทึกสำเร็จ");
+            }
+            else
+            {
+                return BadRequest("❌ บันทึกไม่สำเร็จ");
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("❌ บันทึกไม่สำเร็จ");
+        }
     }
 }

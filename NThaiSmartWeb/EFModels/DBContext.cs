@@ -5378,17 +5378,17 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("consented_date");
-            entity.Property(e => e.Description)
+            entity.Property(e => e.JsonData)
                 .HasDefaultValueSql("''")
                 .HasColumnType("text")
-                .HasColumnName("description");
+                .HasColumnName("json_data");
             entity.Property(e => e.Idcard)
                 .HasMaxLength(13)
                 .HasDefaultValueSql("''")
                 .HasColumnName("idcard");
-            entity.Property(e => e.KioskAreaId)
+            entity.Property(e => e.KioskId)
                 .HasColumnType("int(10) unsigned")
-                .HasColumnName("kiosk_area_id");
+                .HasColumnName("kiosk_id");
             entity.Property(e => e.UpdatedBy)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("updated_by");

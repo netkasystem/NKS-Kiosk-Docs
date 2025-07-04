@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
 
 [ApiController]
@@ -13,27 +14,43 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login([FromForm] string username, [FromForm] string password, [FromForm] string rememberMe = "off")
+    public IActionResult Login([FromBody] JObject data)
     {
-        var user = _context.User.FirstOrDefault(u => u.Username == username);
-        if (user != null || PasswordHelper.VerifyPassword(password, user.Password))
-        {
-            NSDXSession.Set(NSDXSessionKey.LoggedInUser, username);
-            if (rememberMe == "on")
-            {
-                // กำหนด cookie ให้อยู่นานขึ้น
-                Response.Cookies.Append("LoggedInUser", username, new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddDays(7), // อยู่ได้ 7 วัน
-                    IsEssential = true,
-                    HttpOnly = true
-                });
-            }
+        var username = data["username"]?.ToString();
+        var password = data["password"]?.ToString();
+        var rememberMe = data["rememberMe"]?.ToString() ?? "off";
+        var kioskCode = data["KioskCode"]?.ToString();
 
-            string KioskCode = _context.Kiosk.FirstOrDefault(_k => _k.Id == user.KioskId)?.KioskCode ?? "";
-            return Ok(new { message = "✅ Login success", username , KioskCode });
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            return BadRequest(new { message = "กรุณาระบุชื่อผู้ใช้และรหัสผ่าน" });
+
+        var userQuery = _context.User.AsQueryable();
+        userQuery = userQuery.Where(u => u.Username == username);
+
+        if (!string.IsNullOrEmpty(kioskCode))
+            userQuery = userQuery.Where(u => _context.Kiosk.Any(k => k.Id == u.KioskId && k.KioskCode == kioskCode));
+
+        var user = userQuery.FirstOrDefault();
+        if (user == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
+
+        //if (!PasswordHelper.VerifyPassword(password, user.Password))
+        //    return Unauthorized(new { message = "❌ Invalid credentials" });
+
+        // ✅ Login สำเร็จ
+        NSDXSession.Set(NSDXSessionKey.CurrentUser, username);
+
+        if (rememberMe == "on")
+        {
+            Response.Cookies.Append("CurrentUser", username, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(7),
+                IsEssential = true,
+                HttpOnly = true
+            });
         }
-        return Unauthorized(new { message = "❌ Invalid credentials" });
+
+        string kioskCodeFromDb = _context.Kiosk.FirstOrDefault(k => k.Id == user.KioskId)?.KioskCode ?? "";
+        return Ok(new { message = "✅ Login success", username, KioskCode = kioskCodeFromDb });
     }
 
     [HttpPost("reset")]
