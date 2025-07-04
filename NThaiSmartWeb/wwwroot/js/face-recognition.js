@@ -138,7 +138,7 @@ function isImageSharpEnough(canvas, threshold = 20) {
     return variance > threshold; // ยิ่งมากยิ่งชัด
 }
 
-submitBtn.addEventListener("click", async (e) => {
+submitBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
     if (cardData == null) alert("ไม่พบข้อมูลบัตรประชาชน");
 

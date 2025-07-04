@@ -7,7 +7,7 @@ if (!KioskCode) {
 }
 
 const form = document.getElementById("loginForm");
-form.addEventListener("submit", async (e) => {
+form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const data = {
@@ -28,7 +28,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 const logoutBtn = document.getElementById("logout");
-logoutBtn.addEventListener("click", async (e) => {
+logoutBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
 
     const response = await fetch('/api/auth/logout', {
