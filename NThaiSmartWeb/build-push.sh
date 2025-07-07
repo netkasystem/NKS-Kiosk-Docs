@@ -46,4 +46,4 @@ fi
 #echo "🚀 Push เสร็จสิ้น: $IMAGE_NAME"
 
 echo "🚀 Docker image พร้อมใช้งาน: $IMAGE_NAME"
-read -p "🟢 เสร็จสิ้น กด Enter เพื่อปิดหน้าต่าง..."
+echo "🟢 เสร็จสิ้น"
