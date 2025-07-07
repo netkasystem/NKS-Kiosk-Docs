@@ -87,8 +87,8 @@
             @RenderBody()
         </main>
     </div>
-    <footer>
-        <button class="footer-button" id="back-button">
+   @*  <footer>
+        <button class="footer-button">
             <img src="/images/icons/back_icon.svg" class="footer_icon">
         </button>
         <button class="footer-button">
@@ -99,23 +99,18 @@
         </button>
     </footer>
     <script>
-           document.addEventListener('DOMContentLoaded', function () {
-            const backButton = document.getElementById('back-button');
+        document.addEventListener('DOMContentLoaded', function() {
             const refreshButton = document.getElementById('refresh-button');
 
-            if (backButton) {
-                backButton.addEventListener('click', function () {
-                    window.location.href = '/Step/Step1'; // ✅ ไปหน้า Step1
-                });
-            }
-
             if (refreshButton) {
-                refreshButton.addEventListener('click', function () {
-                    location.reload(); // รีเฟรชหน้านี้
+
+                refreshButton.addEventListener('click', function() {
+
+                    location.reload();
                 });
             }
         });
-    </script>
+    </script> *@
     @await Html.PartialAsync("_Footer")
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>

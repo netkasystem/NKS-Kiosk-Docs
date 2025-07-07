@@ -61,8 +61,9 @@ async function detectLoop() {
     const faceCenterX = box.x + box.width / 2;
     const faceCenterY = box.y + box.height / 2;
 
-    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.75 && faceCenterY > vh * 0.25 && faceCenterY < vh * 0.75);
-    const isBigEnough = faceRatio > 0.05;
+    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.3 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
+    console.log()
+    const isBigEnough = faceRatio > 0.014;
 
     // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
     const tempCanvas = document.createElement('canvas');
@@ -72,7 +73,6 @@ async function detectLoop() {
     ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
     const isSharp = isImageSharpEnough(tempCanvas);
-
     if (!isCentered || !isBigEnough || !isSharp) {
         if (!isSharp) {
             showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");

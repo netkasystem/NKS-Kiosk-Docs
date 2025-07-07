@@ -2,12 +2,26 @@
     ViewData["Title"] = "Step10";
 }
 <a asp-controller="Step" asp-action="Step11" class="card-link" style="text-decoration: none;">
-    <body class="background">
-    <header class="page-header" style="margin-bottom:0px;">
-        <h1>กล้อง</h1>
-    </header>
-
+    <body class="grey-background">
+        <div class="fullscreen-overlay">
+            <div class="video-wrapper">
+                <video id="videoInput" autoplay muted playsinline></video>
+                <canvas id="faceCanvas" style="display: none;"></canvas>
+                <div class="glass-overlay"></div>
+                @* <img src="/images/icons/focus.svg" class="focus-frame" alt="frame"> *@
+            </div>
+            <div id="scanResult">กำลังรอการตรวจจับใบหน้า...</div>
+            <div class="row-button" style="display:none;" id="submitBtn">
+                <button type="submit" class="scan-button" style="margin-top:4px; padding: 40px 0px; width:45%; color:red; margin-left:90px; left:0;">
+                ถ่ายใหม่อีกครั้ง
+            </button>
+            <button type="submit" class="scan-button" style="margin-top:4px;  padding: 40px 0px; width:45%; "  >
+                ยืนยันข้อมูล
+            </button>
+            </div>
+        </div>
 </body>
  
 </a>
 
+            
