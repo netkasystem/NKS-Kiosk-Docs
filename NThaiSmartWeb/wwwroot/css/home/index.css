@@ -590,11 +590,12 @@ body, html {
 }
 
 .instruction-list {
-    font-size: 2rem;
+    font-size: 2.5rem;
     line-height: 1.7;
     padding-left: 40px;
     color: white;
     text-align: left;
+    padding: 0px 90px;
 }
 
     .instruction-list li {
@@ -762,7 +763,6 @@ body, html {
 }
 
 .page-center {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -1383,10 +1383,9 @@ h2 {
     text-shadow: 0 0 5px rgba(0,0,0,0.7);
     pointer-events: none;
     z-index: 5;
-    /* ป้องกันขึ้นบรรทัดใหม่ */
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* ถ้าต้องการให้ขึ้น ... เมื่อยาวเกิน */
+    text-overflow: ellipsis; 
 }
 
     #scanResult.match {
@@ -1400,3 +1399,30 @@ h2 {
     #scanResult.pending {
         color: #ffc107;
     }
+
+footer {
+    position: fixed; 
+    bottom: 51px; 
+    left: 0;
+    width: 100%; 
+    padding: 25px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footer-button {
+    background: none;
+    border: none; 
+    padding: 0px;
+    cursor: pointer;
+    border-radius: 50%; 
+    transition: background-color 0.2s ease;
+}
+
+
+.footer_icon {
+    width: 100%;
+    height: auto;
+    display: block; 
+}

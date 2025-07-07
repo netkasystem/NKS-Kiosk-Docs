@@ -87,7 +87,30 @@
             @RenderBody()
         </main>
     </div>
+    <footer>
+        <button class="footer-button">
+            <img src="/images/icons/back_icon.svg" class="footer_icon">
+        </button>
+        <button class="footer-button">
+            <img src="/images/icons/Setting.svg" class="footer_icon">
+        </button>
+        <button class="footer-button">
+            <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
+        </button>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const refreshButton = document.getElementById('refresh-button');
 
+            if (refreshButton) {
+
+                refreshButton.addEventListener('click', function() {
+
+                    location.reload();
+                });
+            }
+        });
+    </script>
     @await Html.PartialAsync("_Footer")
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
