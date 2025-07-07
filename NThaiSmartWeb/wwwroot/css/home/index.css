@@ -139,6 +139,17 @@ body, html {
         font-family: 'Notosansthai', sans-serif;
         overflow: hidden;
     }
+    body.grey-background {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #C5C3C3 32%, #636262 81%);
+        background-position: bottom;
+        background-size: contain;
+        font-family: 'Notosansthai', sans-serif;
+        overflow: hidden;
+    }
 
 .main {
     align-items: center;
@@ -1321,57 +1332,7 @@ h2 {
         }
 }
 
-.video-wrapper {
-    position: relative;
-    aspect-ratio: 16 / 9; /* คุมสัดส่วนไว้ */
-    width: 100%;
-    height: 83vh;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-    .video-wrapper video, #faceCanvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-/* 🧊 Overlay ขาวขุ่นรอบนอก เจาะกลาง */
-.glass-overlay {
-    position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.5); /* ขุ่น */
-    backdrop-filter: blur(2px); /* ถ้าอยากเบลอ */
-    -webkit-mask-image: radial-gradient(circle at center, transparent 50%, black 50%);
-    mask-image: radial-gradient(circle at center, transparent 50%, black 50%);
-    mask-mode: alpha;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: 100% 100%;
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* 🟩 กรอบ SVG 4 มุม */
-.focus-frame {
-    position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 3;
-}
-
-/* 🟢 สถานะยืนยันตัวตน */
-#scanResult {
+/*#scanResult {
     text-align: center;
     position: absolute;
     top: 8%;
@@ -1385,7 +1346,99 @@ h2 {
     z-index: 5;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
+    border: 1px solid red;
+}
+
+    #scanResult.match {
+        color: green;
+    }
+
+    #scanResult.no-match {
+        color: red;
+    }
+
+    #scanResult.pending {
+        color: #ffc107;
+    }*/
+
+/*.video-wrapper {
+    width: 100%;
+    border: 1px solid red;
+}
+
+#videoInput {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid red;
+}*/
+/*.fullscreen-overlay {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    left: 0;
+    margin-top: 100%
+}*/
+
+.video-wrapper {
+    margin-top: 15%;
+    position: relative;
+    aspect-ratio: 16 / 9; /* คุมสัดส่วนไว้ */
+    width: 100%;
+    height: 76vh;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+    .video-wrapper video, #faceCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+     
+.glass-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 75%;
+    border-radius: 20px; 
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.70);
+    z-index: 2;
+    pointer-events: none;
+}
+ 
+/* 🟩 กรอบ SVG 4 มุม */
+.focus-frame {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+
+#scanResult {
+    text-align: center;
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 2.3rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
     #scanResult.match {
@@ -1401,10 +1454,10 @@ h2 {
     }
 
 footer {
-    position: fixed; 
-    bottom: 51px; 
+    position: fixed;
+    bottom: 51px;
     left: 0;
-    width: 100%; 
+    width: 100%;
     padding: 25px 0;
     display: flex;
     justify-content: space-around;
