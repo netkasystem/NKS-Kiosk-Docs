@@ -1,12 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Step4";
 }
+    <a asp-controller="Step" asp-action="Step5" class="card-link" style="text-decoration: none;">
+
  <header class="page-header">
     <div class="step-number" style="margin-bottom:60px;">1</div>
     <h1>กรุณาใส่บัตรประชาชน</h1>
     </header>
 <div class="mainCard-container">
-
     <div class="left-column">
 
         <div class="reader-slot">
@@ -34,11 +35,12 @@
                     <li>กรุณาสอดบัตรไว้จนกว่าจะสิ้นสุดกระบวนการ</li>
                 </ol>
             </div>
-            <form asp-controller="Step" asp-action="Step5" method="get" class="button-section" onsubmit="return handleScan(this)">
+          @*   <form asp-controller="Step" asp-action="Step5" method="get" class="button-section" onsubmit="return handleScan(this)">
                 <button type="submit" class="scan-button">เริ่มสแกน</button>
-            </form>
+            </form> *@
     </div>
 </div>
+</a>
 
 
 

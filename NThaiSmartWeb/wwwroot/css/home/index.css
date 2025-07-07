@@ -279,7 +279,7 @@ body, html {
     font-size: 48px;
     line-height: 1.6;
     border-radius: 70px 70px 0 0;
-    max-height: 1500px;
+    max-height: 1750px;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -294,7 +294,7 @@ body, html {
     left: 0;
     width: 100%;
     background-color: #ffffff;
-    padding: 16px 24px;
+    padding: 50px 24px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -467,7 +467,7 @@ body, html {
 }
 
 .left-column {
-    gap: 400px;
+    gap: 766px;
 }
 
 @keyframes move-up-and-hold {
@@ -477,11 +477,25 @@ body, html {
     }
 
     50% {
-        transform: translateY(-450px);
+        transform: translateY(-800px);
     }
 
     100% {
-        transform: translateY(-450px);
+        transform: translateY(-800px);
+    }
+}
+@keyframes move-down-and-hold {
+    /* 0% คือจุดเริ่มต้น */
+    0% {
+        transform: translateY(-800px);
+    }
+
+    50% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(0px);
     }
 }
 
@@ -516,6 +530,14 @@ body, html {
         max-width: 650px;
         animation: move-up-and-hold 4s ease-in-out infinite;
     }
+.hand-out-card {
+    position: relative;
+}
+
+    .hand-out-card img {
+        max-width: 650px;
+        animation: move-down-and-hold 4s ease-in-out infinite;
+    }
 
 .right-column {
     display: flex;
@@ -529,6 +551,16 @@ body, html {
     -webkit-backdrop-filter: blur(15px);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.right-column-success {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    gap: 5px;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
 }
 
 .top-section,
@@ -553,12 +585,12 @@ body, html {
 .id-card-image {
     max-height: 90%;
     max-width: 90%;
-    width: auto;
+    width: 90%;
     height: auto;
 }
 
 .instruction-list {
-    font-size: 1.8rem;
+    font-size: 2rem;
     line-height: 1.7;
     padding-left: 40px;
     color: white;
@@ -978,6 +1010,7 @@ h2 {
     background-color: #FFFFFF;
     color: #021B79;
     border: none;
+    height: 100%;
 }
 
     .confirm-button:hover {

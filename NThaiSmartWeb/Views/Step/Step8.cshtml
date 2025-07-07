@@ -11,8 +11,11 @@
     </header>
     <div class="page-center">
         <img src="/images/icons/Thai_id_pass.svg" class="id-card-image-pass" style="width:50%;"/>
+     
         <h2>
-            กรุณาเสียบบัตรประชาชนไว้จนกว่าจะดำเนินการสำเร็จ
+            กรุณา
+            <span class="expired-word">เสียบบัตรประชาชน</span> ของท่านไว้<br>
+            จนกว่าจะดำเนินการสำเร็จ
         </h2>
     </div>
     <form asp-controller="Step" asp-action="Step9" method="get" class="button-section" onsubmit="return handleScan(this)">

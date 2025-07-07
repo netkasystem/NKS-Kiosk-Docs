@@ -1,8 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Step6";
 }
+    <a asp-controller="Step" asp-action="Step7" class="card-link" style="text-decoration: none;">
+
 <body class="red-background">
-    <
     <header class="page-header">
         <div class="scan_fail" style="margin-bottom:40px;">
             <img src="/images/icons/scan_fail.svg" class="scan_fail" />
@@ -38,10 +39,11 @@
                     <li>กรุณาสอดบัตรไว้จนกว่าจะสิ้นสุดกระบวนการ</li>
                 </ol>
             </div>
-            <form asp-controller="Step" asp-action="Step7" method="get" class="button-section" onsubmit="return handleScan(this)">
+          @*   <form asp-controller="Step" asp-action="Step7" method="get" class="button-section" onsubmit="return handleScan(this)">
                 <button type="submit" class="scan-button">เริ่มสแกน</button>
-            </form>
+            </form> *@
         </div>
     </div>
 
 </body>
+</a>

@@ -18,7 +18,7 @@
             <div class="info-grid">
                 <div class="info-field">
                     <label>เลขบัตรประชาชน</label>
-                    <div class="info-value" data-full-value="1-1043-44043-34-0">1-****-*****-34-0</div>
+                    <div class="info-value" data-field-name="id_number" data-full-value="1-1043-44043-34-0">1-****-*****-34-0</div>
                     <button class="local-icon-button" style="width:100%;">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -26,7 +26,7 @@
 
                 <div class="info-field">
                     <label>วันเกิด</label>
-                    <div class="info-value" data-full-value="21 มีนาคม 2545">21 ****** 2545</div>
+                    <div class="info-value" data-field-name="birthdate" data-full-value="21 มีนาคม 2545">21 ****** 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -34,28 +34,28 @@
 
                 <div class="info-field">
                     <label>ชื่อ</label>
-                    <div class="info-value" data-full-value="นาย เมธา">นาย เมธา</div>
+                    <div class="info-value" data-field-name="first_name" data-full-value="นาย เมธา">นาย เมธา</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>นามสกุล</label>
-                    <div class="info-value" data-full-value="ฟ้าแวบแวบ">ฟ้าแวบแวบ</div>
+                    <div class="info-value" data-field-name="last_name" data-full-value="ฟ้าแวบแวบ"> ฟ้าแวบแวบ</div>
                     <button class="local-icon-button" >
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>เพศ</label>
-                    <div class="info-value" data-full-value="ชาย">ชาย</div>
+                    <div class="info-value" data-field-name="gender" data-full-value="ชาย"> ***</div>
                     <button class="local-icon-button" >
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>ศาสนา</label>
-                    <div class="info-value" data-full-value="พุทธ">พุทธ</div>
+                    <div class="info-value" data-field-name="religion" data-full-value="พุทธ">***</div>
                     <button class="local-icon-button" >
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -63,7 +63,7 @@
 
                 <div class="info-field full-width">
                     <label>ที่อยู่</label>
-                    <div class="info-value" data-full-value="999/99 เขต มีนบุรี ซอยวัดแสนสุข แขวงมีนบุรี กรุงเทพมหานคร 10520">
+                    <div class="info-value" data-field-name="address" data-full-value="999/99 เขต มีนบุรี ซอยวัดแสนสุข แขวงมีนบุรี กรุงเทพมหานคร 10520">
                         ***/** เขต มีนบุรี ซอย*** แขวง*** กรุงเทพมหานคร ****
                     </div>
                     <button class="local-icon-button">
@@ -72,7 +72,7 @@
                 </div>
                 <div class="info-field">
                     <label>วันออกบัตร</label>
-                    <div class="info-value" data-full-value="29 มี.ค. 2562">** มี.ค. 25**</div>
+                    <div class="info-value" data-field-name="issue_date" data-full-value="29 มี.ค. 2562">** มี.ค. 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -80,7 +80,7 @@
 
                 <div class="info-field">
                     <label>วันหมดอายุบัตร</label>
-                    <div class="info-value" data-full-value="29 มี.ค. 2571">** มี.ค. 25**</div>
+                    <div class="info-value" data-field-name="expiry_date" data-full-value="29 มี.ค. 2571">** มี.ค. 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -106,9 +106,11 @@
                 <button type="submit" class="edit-button">
                     แก้ไขข้อมูล
                 </button>
+                  <form asp-controller="Step" asp-action="Step13" method="get">
                 <button type="submit" class="confirm-button">
                     ยืนยันข้อมูล
                 </button>
+            </form>
         </div>
     </div>
     <div id="edit-modal" class="modal-overlay">
@@ -171,7 +173,9 @@
 
                 <div class="modal-footer">
                     <button type="button" class="cancel-button">ยกเลิก</button>
+                  
                     <button type="submit" class="save-button">บันทึกข้อมูล</button>
+              
                 </div>
             </form>
             <div id="confirmation-modal" class="modal-overlay">
