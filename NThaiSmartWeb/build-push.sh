@@ -36,14 +36,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "✅ Docker build สำเร็จ กำลัง push ไป Docker Hub..."
-docker push "$IMAGE_NAME"
-if [ $? -ne 0 ]; then
-  echo "❌ Docker push ล้มเหลว"
-  read -p "กด Enter เพื่อปิดหน้าต่าง..."
-  exit 1
-fi
-echo "🚀 Push เสร็จสิ้น: $IMAGE_NAME"
+#echo "✅ Docker build สำเร็จ กำลัง push ไป Docker Hub..."
+#docker push "$IMAGE_NAME"
+#if [ $? -ne 0 ]; then
+#  echo "❌ Docker push ล้มเหลว"
+#  read -p "กด Enter เพื่อปิดหน้าต่าง..."
+#  exit 1
+#fi
+#echo "🚀 Push เสร็จสิ้น: $IMAGE_NAME"
 
 echo "🚀 Docker image พร้อมใช้งาน: $IMAGE_NAME"
 read -p "🟢 เสร็จสิ้น กด Enter เพื่อปิดหน้าต่าง..."
