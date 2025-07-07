@@ -15,8 +15,10 @@ public static class StringExtensions
             string key = match.Groups[1].Value; // ดึง key ภายใน {...}
             var token = values.SelectToken(key, false); // หา key ใน JObject (ไม่ case-sensitive)
 
-            // ถ้าพบ key และไม่ null ให้แทนที่ด้วยค่า string, ถ้าไม่เจอให้แทนที่เป็นค่าว่าง
-            return token != null ? token.ToString() : "";
+            // ถ้าพบ key และไม่ null ให้แทนที่ด้วยค่า string,
+            // ถ้าไม่เจอ ให้คืนข้อความเดิมที่จับมา เช่น {key}
+            return token != null ? token.ToString() : match.Value;
+
         });
 
         return result;
