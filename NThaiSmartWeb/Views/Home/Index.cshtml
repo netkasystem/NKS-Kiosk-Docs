@@ -179,7 +179,7 @@
         }
 
         function loadSelectedKiosk() {
-          const savedId = localStorage.getItem('selectedKioskCode');
+          const savedId = GetKioskCode();
           if (savedId) {
               selectKiosk(savedId);
           }

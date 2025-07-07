@@ -90,13 +90,16 @@
 
     @await Html.PartialAsync("_Footer")
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/select2/js/select2.js"></script>
     <script src="~/lib/face-api/face-api.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/common-script.js"></script>
+    <script src="~/js/signalr-config.js"></script>
+    <script src="~/js/login.js" asp-append-version="true"></script>
     <script src="~/js/face-recognition.js"></script>
-    <script src="~/js/kiosk-script.js"></script>
 </body>
 </html>

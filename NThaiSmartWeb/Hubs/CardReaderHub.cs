@@ -1,7 +1,15 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using NThaiSmartWeb.EFModels;
 
 public class CardReaderHub : Hub
 {
+    private readonly KioskContext _dbContext;
+
+    public CardReaderHub(KioskContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     // เก็บสถานะของแต่ละ kiosk โดยใช้ kioskId เป็น key
     private static readonly Dictionary<string, KioskStatusDto> _kioskConnections = new();
 
@@ -15,6 +23,18 @@ public class CardReaderHub : Hub
 
     // รับคำขอจาก client เพื่อดึง kiosk list ปัจจุบัน (ใช้ในการแสดง UI)
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
+
+    // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
+    public async Task<string> RegisterKiosk(string KioskCode)
+    {
+        var chkActive = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode && _k.Inactive == 0).Any();
+        if (!chkActive) return "";
+
+        var kioskDetail = new KioskStatusDto { KioskCode = KioskCode, StatusCode = "ready", StatusText = "✅ พร้อมใช้งาน", Timestamp = DateTime.Now, LastUpdateTime = DateTime.Now };
+        _kioskConnections[KioskCode] = kioskDetail;
+        await Clients.All.SendAsync("KioskList", GetKioskList());
+        return "";
+    }
 
     // ให้ client สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง (เช่นหน้าบ้านติดตาม kiosk เดียว)
     public async Task SubscribeKiosk(string KioskCode = "")
@@ -39,14 +59,6 @@ public class CardReaderHub : Hub
         Console.WriteLine($"🔥 {status.Timestamp:HH:mm:ss} - [{status.KioskCode}] {status.StatusCode}: {status.StatusText}");
         _kioskConnections[status.KioskCode].LastUpdateTime = DateTime.Now; // บันทึกเวลาสุดท้ายที่ kiosk ยังออนไลน์
         await Clients.Group($"kiosk:{status.KioskCode}").SendAsync("KioskStatus", status);
-    }
-
-    // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-    public async Task RegisterKiosk(string KioskCode)
-    {
-        var status = new KioskStatusDto { KioskCode = KioskCode, StatusCode = "ready", StatusText = "✅ พร้อมใช้งาน", Timestamp = DateTime.Now, LastUpdateTime = DateTime.Now };
-        _kioskConnections[KioskCode] = status;
-        await Clients.All.SendAsync("KioskList", GetKioskList());
     }
 
     // เรียกอัตโนมัติเมื่อ client (kiosk หรือ web) หลุดการเชื่อมต่อ
