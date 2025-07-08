@@ -148,8 +148,8 @@ body, html {
         background-position: bottom;
         background-size: contain;
         font-family: 'Notosansthai', sans-serif;
-        overflow: hidden;
-    }
+/*        overflow: hidden;
+*/    }
     body.linear-blue-background {
         width: 100%;
         height: 100%;
@@ -1343,7 +1343,6 @@ h2 {
             flex: 1 1 100%;
         }
 }
-
 /*#scanResult {
     text-align: center;
     position: absolute;
@@ -1391,13 +1390,12 @@ h2 {
     left: 0;
     margin-top: 100%
 }*/
-
 .video-wrapper {
     margin-top: 15%;
     position: relative;
-    aspect-ratio: 16 / 9; /* คุมสัดส่วนไว้ */
+   /* aspect-ratio: 16 / 9;*/ /* คุมสัดส่วนไว้ */
     width: 100%;
-    height: 76vh;
+    height: 73vh;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -1418,20 +1416,19 @@ h2 {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
-    height: 75%;
-    border-radius: 20px; 
+    height: 80%;
+    border-radius: 10px; 
     box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.70);
     z-index: 2;
     pointer-events: none;
 }
- 
 /* 🟩 กรอบ SVG 4 มุม */
 .focus-frame {
     position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: auto;
     pointer-events: none;
     z-index: 3;
 }
@@ -1464,6 +1461,7 @@ h2 {
     #scanResult.pending {
         color: #ffc107;
     }
+
 
 footer {
     position: fixed;

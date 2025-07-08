@@ -7,19 +7,25 @@
             <div class="video-wrapper">
                 <video id="videoInput" autoplay muted playsinline></video>
                 <canvas id="faceCanvas" style="display: none;"></canvas>
+
                 <div class="glass-overlay"></div>
+             
                 @* <img src="/images/icons/focus.svg" class="focus-frame" alt="frame"> *@
+                <img src="/images/icons/normal_fogus.svg" class="focus-frame" alt="frame" id="normal-frame">
+                <img src="/images/icons/danger_fogus.svg" class="focus-frame" alt="frame" id="danger-frame" style="display: none;">
+                <img src="/images/icons/sucess_fogus.svg" class="focus-frame" alt="frame" id="success-frame" style="display: none;">
             </div>
             <div id="scanResult">กำลังรอการตรวจจับใบหน้า...</div>
             <div class="row-button" style="display:none;" id="submitBtn">
-                <button type="submit" class="scan-button" style="margin-top:4px; padding: 40px 0px; width:45%; color:red; margin-left:90px; left:0;">
+                <button type="submit" class="scan-button" style="width:45%; color:red;  left:0;">
                 ถ่ายใหม่อีกครั้ง
             </button>
-            <button type="submit" class="scan-button" style="margin-top:4px;  padding: 40px 0px; width:45%; "  >
+            <button type="submit" class="scan-button" style="margin-top:4px;  width:45%; "  >
                 ยืนยันข้อมูล
             </button>
             </div>
         </div>
+
 </body>
  
 </a>
