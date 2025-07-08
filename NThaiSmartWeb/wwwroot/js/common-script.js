@@ -43,3 +43,6 @@ window.decrypt = function (ciphertextBase64) {
 }
 
 window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
+
+setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
+getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? "{}");

@@ -41,33 +41,33 @@ connection.on("KioskStatus", (data) => {
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
     cardData = data;
-    const img = document.getElementById("photo");
-    img.onload = async () => {
-        try {
-            console.log("🟢 โหลดรูปบัตรสำเร็จ");
-            newCard = true;
+    //const img = document.getElementById("photo");
+    //img.onload = async () => {
+    //    try {
+    //        console.log("🟢 โหลดรูปบัตรสำเร็จ");
+    //        newCard = true;
 
-            const videoInput = document.getElementById("videoInput");
-            if (videoInput) videoInput.style.display = "block";
-            const captureBtn = document.getElementById("captureFace");
-            if (captureBtn) captureBtn.style.display = "block";
-        } catch (err) {
-            console.error("🔴 โหลดรูปบัตรล้มเหลว:", err.message);
-        }
-    };
-    img.src = data.photo;
+    //        const videoInput = document.getElementById("videoInput");
+    //        if (videoInput) videoInput.style.display = "block";
+    //        const captureBtn = document.getElementById("captureFace");
+    //        if (captureBtn) captureBtn.style.display = "block";
+    //    } catch (err) {
+    //        console.error("🔴 โหลดรูปบัตรล้มเหลว:", err.message);
+    //    }
+    //};
+    //img.src = data.photo;
 
-    document.getElementById("citizenID").innerText = data.citizenID;
-    document.getElementById("fullNameTH").innerText = data.fullNameTH;
-    document.getElementById("fullNameEN").innerText = data.fullNameEN;
-    document.getElementById("dob").innerText = new Date(data.dateOfBirth).toLocaleDateString("th-TH");
-    document.getElementById("issueDate").innerText = new Date(data.issueDate).toLocaleDateString("th-TH");
-    document.getElementById("expireDate").innerText = new Date(data.expireDate).toLocaleDateString("th-TH");
+    //document.getElementById("citizenID").innerText = data.citizenID;
+    //document.getElementById("fullNameTH").innerText = data.fullNameTH;
+    //document.getElementById("fullNameEN").innerText = data.fullNameEN;
+    //document.getElementById("dob").innerText = new Date(data.dateOfBirth).toLocaleDateString("th-TH");
+    //document.getElementById("issueDate").innerText = new Date(data.issueDate).toLocaleDateString("th-TH");
+    //document.getElementById("expireDate").innerText = new Date(data.expireDate).toLocaleDateString("th-TH");
 
-    const addr = data.addressInfo;
-    const fullAddr = `${addr.houseNo} ${addr.villageNo} ${addr.lane} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province}`.replace(/\s+/g, ' ').trim();
-    document.getElementById("address").innerText = fullAddr;
-    document.getElementById("issuer").innerText = data.issuer.trim();
+    //const addr = data.addressInfo;
+    //const fullAddr = `${addr.houseNo} ${addr.villageNo} ${addr.lane} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province}`.replace(/\s+/g, ' ').trim();
+    //document.getElementById("address").innerText = fullAddr;
+    //document.getElementById("issuer").innerText = data.issuer.trim();
 }
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร
@@ -119,8 +119,10 @@ function renderKioskList(kioskArray) {
 // เรียกใช้เมื่อคลิก "เลือกตู้"
 function selectKiosk(id) {
     var kioskNo = document.getElementById("kiosk-no");
-    if (!kioskNo) return;
-    kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
+    if (kioskNo) {
+        kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
+    }
+
     //สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง
     connection.invoke("SubscribeKiosk", id);
 }
