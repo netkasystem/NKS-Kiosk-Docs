@@ -25,7 +25,6 @@ public class CardReaderHub : Hub
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
 
     // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-
     public async Task<KioskStatusDto> RegisterKiosk(string KioskCode)
     {
         var chkActive = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode && _k.Inactive == 0).Any();
@@ -51,9 +50,12 @@ public class CardReaderHub : Hub
         };
 
         _kioskConnections[KioskCode] = kioskDetail;
+
         await Clients.All.SendAsync("KioskList", GetKioskList());
+
         return kioskDetail;
     }
+
 
     // ให้ client สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง (เช่นหน้าบ้านติดตาม kiosk เดียว)
     public async Task SubscribeKiosk(string KioskCode = "")
