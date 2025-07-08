@@ -12,6 +12,7 @@ public partial class CustomForm
     public uint ServiceCatalogId { get; set; }
 
     public string FormFieldJson { get; set; } = null!;
+    public string ProfileName { get; set; } = null!;
 
     public string CreatedBy { get; set; } = null!;
 
