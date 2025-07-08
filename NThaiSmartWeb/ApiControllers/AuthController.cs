@@ -19,22 +19,23 @@ public class AuthController : ControllerBase
         var username = data["username"]?.ToString();
         var password = data["password"]?.ToString();
         var rememberMe = data["rememberMe"]?.ToString() ?? "off";
-        var kioskCode = data["KioskCode"]?.ToString();
+        var kioskCode = data["kioskCode"]?.ToString();
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return BadRequest(new { message = "กรุณาระบุชื่อผู้ใช้และรหัสผ่าน" });
 
-        var userQuery = _context.User.AsQueryable();
-        userQuery = userQuery.Where(u => u.Username == username);
-
-        if (!string.IsNullOrEmpty(kioskCode))
-            userQuery = userQuery.Where(u => _context.Kiosk.Any(k => k.Id == u.KioskId && k.KioskCode == kioskCode));
-
-        var user = userQuery.FirstOrDefault();
-        if (user == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
+        var findUser = _context.User.Where(u => u.Username == username).FirstOrDefault();
+        if (findUser == null) return BadRequest(new { message = "❌ User not found" });
 
         //if (!PasswordHelper.VerifyPassword(password, user.Password))
         //    return Unauthorized(new { message = "❌ Invalid credentials" });
+
+        var oKiosk = new Kiosk();
+        if (!string.IsNullOrEmpty(kioskCode))
+        {
+            oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId && k.KioskCode == kioskCode).FirstOrDefault();
+            if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
+        }
 
         // ✅ Login สำเร็จ
         NSDXSession.Set(NSDXSessionKey.CurrentUser, username);
@@ -49,8 +50,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        string kioskCodeFromDb = _context.Kiosk.FirstOrDefault(k => k.Id == user.KioskId)?.KioskCode ?? "";
-        return Ok(new { message = "✅ Login success", username, KioskCode = kioskCodeFromDb });
+        return Ok(new { message = "✅ Login success", username, oKiosk.KioskCode });
     }
 
     [HttpPost("reset")]

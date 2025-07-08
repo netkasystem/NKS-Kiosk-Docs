@@ -1,12 +1,4 @@
-﻿const urlParams = new URLSearchParams(window.location.search);
-const KioskCode = urlParams.get("KioskCode");
-if (!KioskCode) {
-    console.log("❌ ไม่พบ KioskCode");
-} else {
-    console.log("ตู้นี้คือ:", KioskCode);
-}
-
-const form = document.getElementById("loginForm");
+﻿const form = document.getElementById("loginForm");
 form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
