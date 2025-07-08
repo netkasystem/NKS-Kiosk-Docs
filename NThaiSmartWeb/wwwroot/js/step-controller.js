@@ -10,10 +10,10 @@ window.Step3 = {
             const checkbox = document.getElementById('acceptCheckbox');
             if (checkbox.checked) {
                 setConsent();
-                if (getCardData != null) {
-                    next_page("/Step/Step5", 1.5);
-                } else {
+                if (getCardData() == null) {
                     next_page("/Step/Step4", 1.5);
+                } else {
+                    next_page("/Step/Step5", 1.5);
                 }
             }
         });
@@ -72,7 +72,7 @@ window.Step8 = {
 window.Step9 = {
     init: () => {
         console.log("Step 9: Recommend scanning");
-        next_page("/Step/Step10",5);
+        next_page("/Step/Step10", 5);
     }
 };
 

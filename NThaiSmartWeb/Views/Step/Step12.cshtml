@@ -3,12 +3,12 @@
 }
 <body>
     <header class="page-header" style="margin-bottom: 0px;">
-        <h1 >ยืนยันข้อมูล</h1>
+        <h1>ยืนยันข้อมูล</h1>
     </header>
     <div class="grid-container">
         <div class="grid-item top-box">
             <div class="info-header">
-                <h2 >ข้อมูลบัตรประชาชน</h2>
+                <h2>ข้อมูลบัตรประชาชน</h2>
                 <div class="action-buttons">
                     <button class="icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
@@ -42,21 +42,21 @@
                 <div class="info-field">
                     <label>นามสกุล</label>
                     <div class="info-value" data-field-name="last_name" data-full-value="ฟ้าแวบแวบ"> ฟ้าแวบแวบ</div>
-                    <button class="local-icon-button" >
+                    <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>เพศ</label>
                     <div class="info-value" data-field-name="gender" data-full-value="ชาย"> ***</div>
-                    <button class="local-icon-button" >
+                    <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>ศาสนา</label>
                     <div class="info-value" data-field-name="religion" data-full-value="พุทธ">***</div>
-                    <button class="local-icon-button" >
+                    <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
@@ -85,28 +85,28 @@
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
-               
+
             </div>
-            </div>
+        </div>
         <div class="grid-item bottom-left-1">
             <div class="image-container">
-                <img src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
+                <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
             </div>
             <h3>รูปบัตรประชาชน</h3>
         </div>
         <div class="grid-item bottom-left-2">
             <div class="image-container">
-                <img src="/images/icons/Profile.jpg" alt="รูปโปรไฟล์ที่ถ่าย" />
+                <img id="capturePhoto" src="/images/icons/Profile.jpg" alt="รูปโปรไฟล์ที่ถ่าย" />
             </div>
             <h3>รูปจากการแสกนใบหน้า</h3>
-            </div>
-            <div class="row-button">
         </div>
-            <div class="row-button">
-                <button type="submit" class="edit-button">
-                    แก้ไขข้อมูล
-                </button>
-                  <form asp-controller="Step" asp-action="Step13" method="get">
+        <div class="row-button">
+        </div>
+        <div class="row-button">
+            <button type="submit" class="edit-button">
+                แก้ไขข้อมูล
+            </button>
+            <form asp-controller="Step" asp-action="Step13" method="get">
                 <button type="submit" class="confirm-button">
                     ยืนยันข้อมูล
                 </button>
@@ -173,24 +173,25 @@
 
                 <div class="modal-footer">
                     <button type="button" class="cancel-button">ยกเลิก</button>
-                  
+
                     <button type="submit" class="save-button">บันทึกข้อมูล</button>
-              
+
                 </div>
             </form>
             <div id="confirmation-modal" class="modal-overlay">
-    <div class="modal-confirm">
-        <p>คุณแน่ใจหรือไม่ว่าต้องการบันทึกข้อมูลนี้?</p>
-        <div class="modal-footer">
-            <button id="cancel-confirm-button" class="cancel-button">ยกเลิก</button>
-            <button id="confirm-save-button" class="save-button">ยืนยัน</button>
-        </div>
-    </div>
-</div>
+                <div class="modal-confirm">
+                    <p>คุณแน่ใจหรือไม่ว่าต้องการบันทึกข้อมูลนี้?</p>
+                    <div class="modal-footer">
+                        <button id="cancel-confirm-button" class="cancel-button">ยกเลิก</button>
+                        <button id="confirm-save-button" class="save-button">ยืนยัน</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            let cardData = getCardData();
 
             // ---  ควบคุมปุ่มแสดงผลทั้งหมด (ใน Header) ---
             const mainToggleButton = document.querySelector('.info-header .icon-button');
@@ -312,14 +313,36 @@
                         const fieldName = input.dataset.sourceField;
                         updatedData[fieldName] = input.value;
                     });
+
                     console.log('ข้อมูลที่จะส่งไปบันทึก:', updatedData);
-                    alert('บันทึกข้อมูลเรียบร้อย! (จำลอง)');
+
+                    // ⬇️ อัปเดตค่าใน cardData (และเช็ค nested field ด้วยถ้ามี)
+                    for (let key in updatedData) {
+                        // 🔍 รองรับรูปแบบ key แบบ "thaiPersonalInfo.firstName"
+                        if (key.includes(".")) {
+                            const parts = key.split(".");
+                            let target = cardData;
+                            for (let i = 0; i < parts.length - 1; i++) {
+                                target = target[parts[i]];
+                            }
+                            target[parts[parts.length - 1]] = updatedData[key];
+                        } else {
+                            cardData[key] = updatedData[key];
+                        }
+                    }
+
+                    // ✅ Save กลับ sessionStorage
+                    setCardData(cardData);
+
                     infoValuesOnPage.forEach(infoDiv => {
                         const fieldName = infoDiv.dataset.fieldName;
                         if (updatedData[fieldName]) {
                             infoDiv.dataset.fullValue = updatedData[fieldName];
                         }
                     });
+
+                    alert('บันทึกข้อมูลเรียบร้อย!');
+
                     closeEditModal();
                     closeConfirmModal();
                 }
@@ -335,6 +358,71 @@
                 if (cancelConfirmBtn) cancelConfirmBtn.addEventListener('click', closeConfirmModal);
                 if (confirmSaveBtn) confirmSaveBtn.addEventListener('click', saveChanges);
             }
+
+            // ฟังก์ชันช่วย
+            function formatDateTH(dateStr) {
+                const monthTH = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+                    "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+                const d = new Date(dateStr);
+                const day = d.getDate();
+                const month = monthTH[d.getMonth() + 1];
+                const year = d.getFullYear() + 543;
+                return `${day} ${month} ${year}`;
+            }
+
+            function maskText(text, visible = 3) {
+                if (!text || text.length <= visible) return "*".repeat(text.length);
+                const hidden = "*".repeat(text.length - visible);
+                return hidden + text.slice(-visible);
+            }
+
+            function getGenderText(code) {
+                return code === "1" ? "ชาย" : (code === "2" ? "หญิง" : "***");
+            }
+
+            function getAddress(addr) {
+                return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
+            }
+
+            // 🎯 ใส่ข้อมูลทั้งหมดลง DOM
+            function populateCardData(data) {
+                const fields = {
+                    "id_number": data.citizenID,
+                    "birthdate": formatDateTH(data.dateOfBirth),
+                    "first_name": data.thaiPersonalInfo.firstName,
+                    "last_name": data.thaiPersonalInfo.lastName,
+                    "gender": getGenderText(data.sex),
+                    "religion": "***", // ยังไม่มีใน object
+                    "address": getAddress(data.addressInfo),
+                    "issue_date": formatDateTH(data.issueDate),
+                    "expiry_date": formatDateTH(data.expireDate)
+                };
+
+                if (data.photo?.startsWith("data:image")) {
+                    const photoImg = document.getElementById("idCardPhoto");
+                    if (photoImg) {
+                        photoImg.src = data.photo;
+                    }
+                }
+
+                var capture = getCapture();
+                if(capture){
+                const captureImg = document.getElementById("capturePhoto");
+                    if (captureImg) {
+                        captureImg.src = capture;
+                    }
+                }
+
+                Object.entries(fields).forEach(([key, value]) => {
+                    const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
+                    if (el) {
+                        el.setAttribute("data-full-value", value);
+                        el.textContent = maskText(value);
+                    }
+                });
+            }
+
+            populateCardData(cardData);
         });
     </script>
 </body>
