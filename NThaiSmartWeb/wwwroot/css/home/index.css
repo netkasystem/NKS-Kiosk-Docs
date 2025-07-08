@@ -150,6 +150,17 @@ body, html {
         font-family: 'Notosansthai', sans-serif;
         overflow: hidden;
     }
+    body.linear-blue-background {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #FFFFFF 32%, #989BFF 81%);
+        background-position: bottom;
+        background-size: contain;
+        font-family: 'Notosansthai', sans-serif;
+        overflow: hidden;
+    }
 
 .main {
     align-items: center;
@@ -595,8 +606,8 @@ body, html {
 
 .id-card-image {
     max-height: 90%;
-    max-width: 90%;
-    width: 90%;
+    max-width: 80%;
+    width: 80%;
     height: auto;
 }
 
@@ -981,7 +992,8 @@ h2 {
     display: flex;
     justify-content: center;
     gap: 40px;
-    padding: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     height: 7vh;
     width: 100%;
 }
@@ -1479,3 +1491,309 @@ footer {
     height: auto;
     display: block; 
 }
+
+.kiosk-container {
+    width: 100%; 
+    height: 90vh;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+.form-header {
+    background: linear-gradient(135deg, #021B79 0%, #3852A3 100%);
+    color: white;
+    text-align: center;
+    padding: 20px 25px;
+    border-bottom: 5px solid #3852A3;
+}
+
+    .form-header h4 {
+        margin: 0;
+        font-weight: 300;
+        font-size: 1.5em;
+    }
+
+    .form-header .heart-icon {
+        font-size: 3em;
+        margin: 10px 0;
+        opacity: 0.8;
+    }
+
+    .form-header h1 {
+        margin: 0;
+        font-size: 4em;
+        font-weight: 600;
+    }
+
+    .form-header p {
+        margin: 5px 0 0;
+        font-size: 1.5em;
+        opacity: 0.9;
+    }
+
+
+.form-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto; 
+    padding: 10px 30px 30px 30px;
+}
+
+    /* --- Custom Scrollbar --- */
+    .form-scroll-area::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .form-scroll-area::-webkit-scrollbar-track {
+        background: none;
+        border-radius: 0;
+    }
+
+    .form-scroll-area::-webkit-scrollbar-thumb {
+        background: rgba(2, 27, 121, 0.41);
+        border-radius: 10px;
+    }
+
+.form-section {
+    margin-bottom: 25px;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.personal-info {
+    background-color: var(--c-personal);
+    border-color: var(--c-personal-dark);
+}
+
+.location {
+    background-color: var(--c-location);
+    border-color: var(--c-location-dark);
+}
+
+.service-evaluation {
+    border-color: var(--c-evaluation-dark);
+    background-color: var(--c-location);
+    border-radius: 10px;
+}
+
+.rating {
+    background-color: var(--c-rating);
+    border-color: var(--c-rating-dark);
+}
+
+.recommendation {
+    background-color: var(--c-recommend);
+    border-color: var(--c-recommend-dark);
+}
+
+.additional-comments {
+    background-color: var(--c-comments);
+    border-color: var(--c-comments-dark);
+}
+
+
+.section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+}
+
+    .section-title .icon {
+        font-size: 2rem;
+        margin-right: 10px;
+    }
+
+    .section-title h2 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 0;
+        color: #021b79;
+    }
+
+/* --- Form Elements --- */
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    font-weight: 400;
+    color: #444;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: var(--primary-font);
+    background: #fff;
+}
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #764ba2;
+        box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+    }
+
+textarea {
+    resize: vertical;
+}
+
+/* --- Custom Radio & Checkbox --- */
+.radio-group-inline, .recommend-group {
+    display: flex;
+    gap: 15px;
+}
+
+    .radio-group-inline input[type="radio"],
+    .recommend-group input[type="radio"] {
+        display: none;
+    }
+
+    .radio-group-inline label,
+    .recommend-group label {
+        flex-grow: 1;
+        text-align: center;
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .radio-group-inline input[type="radio"]:checked + label,
+    .recommend-group input[type="radio"]:checked + label {
+        background-color: var(--c-evaluation);
+        border-color: var(--c-evaluation-dark);
+        color: var(--c-evaluation-dark);
+        font-weight: 600;
+    }
+
+/* Satisfaction Rating */
+.satisfaction-rating {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+    .satisfaction-rating input[type="radio"] {
+        display: none;
+    }
+
+    .satisfaction-rating label {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 5px;
+        border: 2px solid #ddd;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        font-size: 1.5rem;
+        color: #666;
+    }
+
+        .satisfaction-rating label:before {
+            content: attr(data-emoji);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .satisfaction-rating label p {
+            margin: 0;
+            line-height: 1.2;
+        }
+
+    .satisfaction-rating input[type="radio"]:checked + label {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: var(--shadow);
+        border-color: var(--c-evaluation-dark);
+        background-color: #fff;
+    }
+
+
+/* Checkbox Grid */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+    .checkbox-grid input[type="checkbox"] {
+        display: none;
+    }
+
+    .checkbox-grid label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 10px;
+        border: 2px solid #ddd;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 2.5rem; 
+    }
+
+        .checkbox-grid label p {
+            font-size: 1.5rem;
+            margin: 5px 0 0 0;
+            text-align: center;
+            color: #555;
+            font-weight: 400;
+        }
+
+    .checkbox-grid input[type="checkbox"]:checked + label {
+        border-color: var(--c-evaluation-dark);
+        background-color: #fff;
+        color: var(--c-evaluation-dark);
+        box-shadow: var(--shadow);
+    }
+
+        .checkbox-grid input[type="checkbox"]:checked + label p {
+            font-weight: 600;
+        }
+
+
+/* --- Submit Button --- */
+.submit-button {
+    width: 100%;
+    padding: 50px;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #021B79, #021B79);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+    .submit-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(22, 160, 133, 0.4);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+    }

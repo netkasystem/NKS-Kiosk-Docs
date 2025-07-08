@@ -1,5 +1,146 @@
 ﻿@{
-    ViewData["Title"] = "Step14";
+    ViewData["Title"] = "custom field form";
 }
+<body class="linear-blue-background">
+    <div class="kiosk-container">
+        <header class="form-header">
+            <h4>ระบบบันทึกความคิดเห็นของประชาชน</h4>
+            <div class="heart-icon">🤍</div>
+            <h1>แบบสำรวจความพึงพอใจ</h1>
+            <p>Customer Satisfaction Survey</p>
+        </header>
 
+        <div class="form-scroll-area">
+            <form action="#" method="post">
+
+                <section class="form-section personal-info">
+                    <div class="section-title">
+                        <span class="icon">👤</span>
+                        <h2>ข้อมูลส่วนตัว | Personal Information</h2>
+                    </div>
+                    <div class="input-group">
+                        <label for="fullname">ชื่อ-นามสกุล | Full Name</label>
+                        <input type="text" id="fullname" name="fullname">
+                    </div>
+                    <div class="input-group">
+                        <label for="idcard">เลขบัตรประชาชน | ID Card</label>
+                        <input type="text" id="idcard" name="idcard">
+                    </div>
+                    <div class="input-group">
+                        <label for="age">ช่วงอายุ | Age Range</label>
+                        <select id="age" name="age">
+                            <option value="">เลือกช่วงอายุ</option>
+                            <option value="18-25">18-25 ปี</option>
+                            <option value="26-35">26-35 ปี</option>
+                            <option value="36-45">36-45 ปี</option>
+                            <option value="46+">46 ปีขึ้นไป</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="display:grid">
+                        <label>เพศ | Gender</label>
+                        <div class="radio-group-inline">
+                            <input type="radio" id="male" name="gender" value="male">
+                            <label for="male">ชาย</label>
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">หญิง</label>
+                            <input type="radio" id="lgbtq" name="gender" value="lgbtq">
+                            <label for="lgbtq">LGBTQ+</label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section location">
+                    <div class="section-title">
+                        <span class="icon">📍</span>
+                        <h2>ที่อยู่ | Location</h2>
+                    </div>
+                    <div class="input-group">
+                        <label for="province">จังหวัด | Province</label>
+                        <select id="province" name="province">
+                            <option value="">เลือกจังหวัด</option>
+                            <option value="bkk">กรุงเทพมหานคร</option>
+                            <option value="chiangmai">เชียงใหม่</option>
+                            <option value="phuket">ภูเก็ต</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="form-section service-evaluation">
+                    <div class="section-title">
+                        <span class="icon">⭐</span>
+                        <h2>การประเมินบริการ | Service Evaluation</h2>
+                    </div>
+                    <label>ภาพรวมความพึงพอใจต่อการบริการ | Overall Satisfaction</label>
+                    <div class="satisfaction-rating">
+                        <input type="radio" id="s-very-dissatisfied" name="satisfaction" value="1">
+                        <label for="s-very-dissatisfied">😠<p>ไม่พอใจ<br>มากที่สุด</p></label>
+
+                        <input type="radio" id="s-dissatisfied" name="satisfaction" value="2">
+                        <label for="s-dissatisfied">😞<p>ไม่พอใจ</p></label>
+
+                        <input type="radio" id="s-neutral" name="satisfaction" value="3">
+                        <label for="s-neutral">😐<p>เฉยๆ</p></label>
+
+                        <input type="radio" id="s-satisfied" name="satisfaction" value="4">
+                        <label for="s-satisfied">😊<p>พอใจ</p></label>
+
+                        <input type="radio" id="s-very-satisfied" name="satisfaction" value="5">
+                        <label for="s-very-satisfied">😄<p>พอใจ<br>มากที่สุด</p></label>
+                    </div>
+
+                    <label>บริการที่เลือกใช้ (เลือกได้หลายข้อ) | Services Used</label>
+                    <div class="checkbox-grid">
+                        <input type="checkbox" id="service1" name="services" value="contact">
+                        <label for="service1">📝<p>ติดต่อราชการ</p></label>
+                        <input type="checkbox" id="service2" name="services" value="request">
+                        <label for="service2">📄<p>ยื่นคำร้อง</p></label>
+                        <input type="checkbox" id="service3" name="services" value="doc-check">
+                        <label for="service3">🔍<p>ตรวจสอบเอกสาร</p></label>
+                        <input type="checkbox" id="service4" name="services" value="payment">
+                        <label for="service4">💳<p>ชำระค่าบริการ</p></label>
+                        <input type="checkbox" id="service5" name="services" value="consult">
+                        <label for="service5">💬<p>ขอคำปรึกษา</p></label>
+                        <input type="checkbox" id="service6" name="services" value="other">
+                        <label for="service6">➕<p>อื่นๆ</p></label>
+                    </div>
+                </section>
+
+                <section class="form-section rating">
+                    <div class="section-title">
+                        <span class="icon">💯</span>
+                        <h2>คะแนนความพึงพอใจ | Rating</h2>
+                    </div>
+                    <label for="score">ให้คะแนนบริการ 1-10 | Rate our service (1-10)</label>
+                    <input type="number" id="score" name="score" min="1" max="10" placeholder="ใส่คะแนน (1-10)">
+                </section>
+
+                <section class="form-section recommendation">
+                    <div class="section-title">
+                        <span class="icon">👍</span>
+                        <h2>คำแนะนำ | Recommendation</h2>
+                    </div>
+                    <label>คุณจะแนะนำบริการนี้ให้เพื่อนหรือไม่ | Would you recommend our service?</label>
+                    <div class="recommend-group">
+                        <input type="radio" id="rec-yes" name="recommend" value="yes">
+                        <label for="rec-yes">👍 ใช่ แนะนำ</label>
+                        <input type="radio" id="rec-no" name="recommend" value="no">
+                        <label for="rec-no">👎 ไม่แนะนำ</label>
+                    </div>
+                </section>
+
+                <section class="form-section additional-comments">
+                    <div class="section-title">
+                        <span class="icon">💬</span>
+                        <h2>ข้อคิดเห็นเพิ่มเติม | Additional Comments</h2>
+                    </div>
+                    <label for="comments">ความคิดเห็นของคุณ | Your Feedback</label>
+                    <textarea id="comments" name="comments" rows="6" placeholder="พิมพ์ข้อเสนอแนะของคุณที่นี่..."></textarea>
+                </section>
+                <div class="terms-footer-fixed">
+                <button type="submit" class="submit-button">ส่งผลสำรวจ | Submit Survey</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
 
