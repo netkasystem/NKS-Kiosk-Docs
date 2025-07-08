@@ -110,6 +110,8 @@ async function detectLoop() {
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
         const submitBtn = document.getElementById("submitBtn");
         submitBtn.style.display = "inline-block";
+
+        window.Step10.capture_success();
     }
 
     requestAnimationFrame(detectLoop);

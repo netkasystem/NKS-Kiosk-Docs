@@ -44,5 +44,11 @@ window.decrypt = function (ciphertextBase64) {
 
 window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
 
-setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
-getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? "{}");
+const setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
+const getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? "{}");
+const removeCardData = () => sessionStorage.removeItem("cardData");
+
+const setConsent = () => sessionStorage.setItem("hasConsent", true);
+const getConsent = () => sessionStorage.getItem("hasConsent");
+
+const clearSessionStorage = () => sessionStorage.clear();

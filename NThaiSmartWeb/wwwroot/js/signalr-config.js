@@ -26,21 +26,28 @@ connection.on("KioskStatus", (data) => {
     if (selectedKioskCode && data.kioskCode === selectedKioskCode) {
         console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
         console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
-        document.getElementById("kiosk-status-time").innerText = new Date(data.timestamp).toLocaleTimeString();
-        document.getElementById("kiosk-status-text").innerText = data.statusText;
+        //document.getElementById("kiosk-status-time").innerText = new Date(data.timestamp).toLocaleTimeString();
+        //document.getElementById("kiosk-status-text").innerText = data.statusText;
 
-        const iconElem = document.getElementById("kiosk-status-icon");
-        iconElem.className = "status-icon"; // reset
-        iconElem.classList.add(data.statusCode); // เพิ่มสถานะใหม่
+        //const iconElem = document.getElementById("kiosk-status-icon");
+        //iconElem.className = "status-icon"; // reset
+        //iconElem.classList.add(data.statusCode); // เพิ่มสถานะใหม่
 
-        if (data.statusCode === "card_removed") clearCardInfo();
+        if (data.statusCode === "card_detected") {
+            onCardInserted();
+        }
+        if (data.statusCode === "card_removed") {
+            clearCardInfo();
+            withoutCard();
+        }
     }
 });
 
 // รับข้อมูลบัตร
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
-    cardData = data;
+    setCardData(data);
+    //cardData = data;
     //const img = document.getElementById("photo");
     //img.onload = async () => {
     //    try {
@@ -72,16 +79,17 @@ function showCardInfo(data) {
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร
 function clearCardInfo() {
-    cardData = null;
-    document.getElementById("photo").src = "/images/icons/id-card-icon.png";
-    document.getElementById("citizenID").innerText = "";
-    document.getElementById("fullNameTH").innerText = "";
-    document.getElementById("fullNameEN").innerText = "";
-    document.getElementById("dob").innerText = "";
-    document.getElementById("issueDate").innerText = "";
-    document.getElementById("expireDate").innerText = "";
-    document.getElementById("address").innerText = "";
-    document.getElementById("issuer").innerText = "";
+    removeCardData();
+    //cardData = null;
+    //document.getElementById("photo").src = "/images/icons/id-card-icon.png";
+    //document.getElementById("citizenID").innerText = "";
+    //document.getElementById("fullNameTH").innerText = "";
+    //document.getElementById("fullNameEN").innerText = "";
+    //document.getElementById("dob").innerText = "";
+    //document.getElementById("issueDate").innerText = "";
+    //document.getElementById("expireDate").innerText = "";
+    //document.getElementById("address").innerText = "";
+    //document.getElementById("issuer").innerText = "";
 }
 
 // รับรายการ kiosk ทั้งหมดที่เชื่อมอยู่
@@ -122,7 +130,7 @@ function selectKiosk(id) {
     if (kioskNo) {
         kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
     }
-
+    selectedKioskCode = id;
     //สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง
     connection.invoke("SubscribeKiosk", id);
 }
