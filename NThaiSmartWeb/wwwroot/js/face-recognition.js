@@ -9,6 +9,9 @@ let stableSince = null;
 const video = document.getElementById("videoInput");
 const canvas = document.getElementById("faceCanvas");
 const statusElem = document.getElementById("scanResult");
+const normalFrame = document.getElementById("normal-frame");
+const dangerFrame = document.getElementById("danger-frame");
+const successFrame = document.getElementById("success-frame");
 var submitBtn = document.getElementById("submitBtn");
 
 function isFacingForward(landmarks) {
@@ -61,9 +64,9 @@ async function detectLoop() {
     const faceCenterX = box.x + box.width / 2;
     const faceCenterY = box.y + box.height / 2;
 
-    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.3 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
+    const isCentered = (faceCenterX > vw * 0.32 && faceCenterX < vw * 0.35 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
     console.log()
-    const isBigEnough = faceRatio > 0.014;
+    const isBigEnough = faceRatio > 0.020;
 
     // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
     const tempCanvas = document.createElement('canvas');
@@ -79,6 +82,7 @@ async function detectLoop() {
         } else {
             showError("⚠️ กรุณาให้ใบหน้าอยู่กลางจอและใกล้กล้องมากขึ้น");
         }
+        showFrame("danger");
         stableSince = null;
         requestAnimationFrame(detectLoop);
         return;
@@ -89,14 +93,17 @@ async function detectLoop() {
     if (!stableSince) stableSince = now;
 
     const elapsed = now - stableSince;
-    const remaining = 1000 - elapsed;
+    const remaining = 3000 - elapsed;
 
     if (remaining > 0) {
         const secondsLeft = Math.ceil(remaining / 1000);
         showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
+        showFrame("success");
     } else {
         faceDetected = true;
-
+        normalFrame.style.display = "none";
+    dangerFrame.style.display = "none";
+    successFrame.style.display = "none";
         // แสดงภาพนิ่ง
         const canvas = document.getElementById("faceCanvas");
         const cctx = canvas.getContext("2d");
@@ -116,7 +123,11 @@ async function detectLoop() {
 
     requestAnimationFrame(detectLoop);
 }
-
+function showFrame(type) {
+    normalFrame.style.display = type === 'normal' ? 'block' : 'none';
+    dangerFrame.style.display = type === 'danger' ? 'block' : 'none';
+    successFrame.style.display = type === 'success' ? 'block' : 'none';
+}
 function isImageSharpEnough(canvas, threshold = 20) {
     const ctx = canvas.getContext('2d');
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
