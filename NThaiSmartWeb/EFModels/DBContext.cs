@@ -2741,13 +2741,13 @@ public partial class DBContext : DbContext
 
             entity.ToTable("custom_form");
 
-            entity.HasIndex(e => e.FunctionId, "function_id");
-
-            entity.HasIndex(e => e.ServiceCatalogId, "service_type_id");
-
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("id");
+            entity.Property(e => e.ProfileName)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("''")
+                .HasColumnName("profile_name");
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
@@ -2757,12 +2757,8 @@ public partial class DBContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created_date");
             entity.Property(e => e.FormFieldJson).HasColumnName("form_field_json");
-            entity.Property(e => e.FunctionId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("function_id");
-            entity.Property(e => e.ServiceCatalogId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("service_catalog_id");
+            
+        
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
@@ -2771,16 +2767,7 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_date");
-
-            entity.HasOne(d => d.Function).WithMany(p => p.CustomForm)
-                .HasForeignKey(d => d.FunctionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_custom_form_nsd_function");
-
-            entity.HasOne(d => d.ServiceCatalog).WithMany(p => p.CustomForm)
-                .HasForeignKey(d => d.ServiceCatalogId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_custom_form_case_type");
+           
         });
 
         modelBuilder.Entity<CustomFormField>(entity =>
