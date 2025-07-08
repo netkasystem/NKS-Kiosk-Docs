@@ -87,17 +87,22 @@
             @RenderBody()
         </main>
     </div>
-    <footer>
-        <button class="footer-button" id="back-button">
-            <img src="/images/icons/back_icon.svg" class="footer_icon">
-        </button>
-        <button class="footer-button">
-            <img src="/images/icons/Setting.svg" class="footer_icon">
-        </button>
-        <button class="footer-button">
-            <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
-        </button>
-    </footer>
+
+    @if (!(ViewBag.HideFooter is true))
+    {
+        <footer>
+            <button class="footer-button" id="back-button">
+                <img src="/images/icons/back_icon.svg" class="footer_icon">
+            </button>
+            <button class="footer-button">
+                <img src="/images/icons/Setting.svg" class="footer_icon">
+            </button>
+            <button class="footer-button">
+                <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
+            </button>
+        </footer>
+    }
+
     <script>
            document.addEventListener('DOMContentLoaded', function () {
             const backButton = document.getElementById('back-button');
@@ -129,5 +134,6 @@
     <script src="~/js/signalr-config.js"></script>
     <script src="~/js/login.js" asp-append-version="true"></script>
     <script src="~/js/face-recognition.js"></script>
+    <script src="~/js/step-controller.js"></script>
 </body>
 </html>
