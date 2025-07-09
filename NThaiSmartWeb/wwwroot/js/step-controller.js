@@ -126,6 +126,24 @@ window.Step11 = {
 window.Step12 = {
     init: () => {
         console.log("Step 12: Editing card data and confirmation");
+
+        try {
+            const response = fetch('/api/KioskApi/GetCustomForm', {
+                method: 'GET',
+                headers: { "Content-Type": "application/json", } 
+            }).then(response => {
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                return response.json();
+            }).then(data => {
+                if (data.length > 0) {
+                    sessionStorage.setItem("CustomField", data); 
+                }
+                     
+            })
+
+        } catch (error) {
+            alert(error.message);
+        }
     }
 };
 
@@ -133,6 +151,14 @@ window.Step13 = {
     init: () => {
         console.log("Step 13: Success (without card)");
         next_page("/Step/Step1", 8);
+    }
+};
+
+window.Step14 = {
+    init: () => {
+        console.log("Step 14: Customfield");
+        const getCustomfield = sessionStorage.getItem("CustomField");
+        console.log(getCustomfield);
     }
 };
 

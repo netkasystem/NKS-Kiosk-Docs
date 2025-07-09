@@ -106,11 +106,9 @@
             <button type="submit" class="edit-button">
                 แก้ไขข้อมูล
             </button>
-            <form asp-controller="Step" asp-action="Step13" method="get">
-                <button type="submit" class="confirm-button">
-                    ยืนยันข้อมูล
-                </button>
-            </form>
+            <button type="button" class="confirm-button" id="confirm-btn">
+                ยืนยันข้อมูล
+            </button>
         </div>
     </div>
     <div id="edit-modal" class="modal-overlay">
@@ -335,6 +333,7 @@
                     setCardData(cardData);
 
                     infoValuesOnPage.forEach(infoDiv => {
+                        
                         const fieldName = infoDiv.dataset.fieldName;
                         if (updatedData[fieldName]) {
                             infoDiv.dataset.fullValue = updatedData[fieldName];
@@ -422,7 +421,22 @@
                 });
             }
 
-            populateCardData(cardData);
+            if(cardData)populateCardData(cardData);
+
+
+                const  ConfirmBtn = document.getElementById('confirm-btn');
+
+                if (ConfirmBtn) ConfirmBtn.addEventListener('click', ConfirmData);
+
+                 function ConfirmData() {
+                     const getCustomfieldRaw = sessionStorage.getItem("CustomField");
+                    const getCustomfield = JSON.parse(getCustomfieldRaw);
+                    if(getCustomfield != null)
+                      window.location.href = "/Step/Step14";
+                    else
+                      window.location.href = "/Step/Step13";
+                }
+             
         });
     </script>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>

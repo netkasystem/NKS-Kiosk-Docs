@@ -25,24 +25,39 @@ public class CardReaderHub : Hub
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
 
     // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-    public async Task<KioskStatusDto> RegisterKiosk(string KioskCode)
+    public async Task<KioskStatusDto> RegisterKiosk(string KioskCode, string KioskToken)
     {
-        var chkActive = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode && _k.Inactive == 0).Any();
+        var findKiosk = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode).FirstOrDefault();
 
-        if (!chkActive)
-        {
+        if (findKiosk == null)
             return new KioskStatusDto
             {
                 KioskCode = KioskCode,
                 StatusCode = "error",
-                StatusText = "❌ Kiosk นี้ยังไม่ได้เปิดใช้งาน"
+                StatusText = "❌ Kiosk ไม่มีในระบบ"
             };
-        }
+
+        if (findKiosk.Inactive == 1)
+            return new KioskStatusDto
+            {
+                KioskCode = KioskCode,
+                StatusCode = "error",
+                StatusText = "❌ Kiosk นี้ยังไม่ได้เปิดใช้งาน กรุณาติดต่อเจ้าหน้าที่"
+            };
+
+        if (findKiosk.KioskToken != KioskToken)
+            return new KioskStatusDto
+            {
+                KioskCode = KioskCode,
+                StatusCode = "error",
+                StatusText = "❌ Kiosk ไม่ถูกต้องกรุณาติดตั้งใหม่อีกครั้ง"
+            };
 
         // Register สำเร็จ
         var kioskDetail = new KioskStatusDto
         {
             KioskCode = KioskCode,
+            KioskToken = KioskToken,
             StatusCode = "ready",
             StatusText = "✅ พร้อมใช้งาน",
             Timestamp = DateTime.Now,
@@ -50,12 +65,9 @@ public class CardReaderHub : Hub
         };
 
         _kioskConnections[KioskCode] = kioskDetail;
-
         await Clients.All.SendAsync("KioskList", GetKioskList());
-
         return kioskDetail;
     }
-
 
     // ให้ client สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง (เช่นหน้าบ้านติดตาม kiosk เดียว)
     public async Task SubscribeKiosk(string KioskCode = "")

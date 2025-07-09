@@ -55,3 +55,20 @@ const setConsent = () => sessionStorage.setItem("hasConsent", true);
 const getConsent = () => sessionStorage.getItem("hasConsent");
 
 const clearSessionStorage = () => sessionStorage.clear();
+
+
+const logoutBtn = document.getElementById("logout");
+logoutBtn?.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/auth/logout', {
+        method: 'POST'
+    });
+
+    if (response.ok) {
+        window.location.href = '/login'; // หรือ '/'; แล้วแต่คุณออกแบบ
+    } else {
+        const res = await response.json();
+        alert(res.message || 'Logout failed');
+    }
+});

@@ -29,13 +29,3 @@
         </div>
     </form>
 </div>
-
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const KioskCode = urlParams.get("KioskCode");
-    if (!KioskCode) {
-        console.log("❌ ไม่พบ KioskCode");
-    } else {
-        console.log("ตู้นี้คือ:", KioskCode);
-    }
-</script>

@@ -13,6 +13,28 @@ public class AuthController : ControllerBase
         _context = context;
     }
 
+    [HttpPost("sso")]
+    public IActionResult SSO([FromBody] JObject data)
+    {
+        var kioskCode = data["kioskCode"]?.ToString();
+        var token = data["token"]?.ToString();
+        var oKiosk = _context.Kiosk.Where(k => k.KioskCode == kioskCode && k.Inactive == 0 && k.KioskToken == token).FirstOrDefault();
+
+        if (oKiosk != null)
+        {
+            var user = _context.User.Where(_u => _u.KioskId == oKiosk.Id).FirstOrDefault();
+            if (user != null)
+            {
+                data["username"] = user.Username;
+                data["password"] = user.Password;
+            }
+            return Login(data);
+        }
+        else
+            return BadRequest(new { message = "SSO ไม่สำเร็จ" });
+
+    }
+
     [HttpPost("login")]
     public IActionResult Login([FromBody] JObject data)
     {

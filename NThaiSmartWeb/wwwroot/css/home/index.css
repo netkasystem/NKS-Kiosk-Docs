@@ -811,8 +811,13 @@ body, html {
 .id-card-image-pass {
     margin-bottom: 12%;
     margin-top: 6%;
+    width: 45%;
 }
-
+.id-card-scan-pass {
+    margin-bottom: 23%;
+    margin-top: 20%;
+    width: 50%;
+}
 h2 {
     color: #fff;
     font-size: 48px;

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
 
-public partial class Kiosk
+public partial class KioskView
 {
-    public uint Id { get; set; }
+    public uint? Id { get; set; }
 
     /// <summary>
     /// รหัสเครื่อง Kiosk
     /// </summary>
-    public string KioskCode { get; set; } = null!;
+    public string? KioskCode { get; set; }
 
     public string? KioskName { get; set; }
 
@@ -36,15 +36,18 @@ public partial class Kiosk
     /// <summary>
     /// วันที่สร้าง
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
     /// <summary>
     /// วันที่อัพเดตล่าสุด
     /// </summary>
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
-    /// <summary>
-    /// Permanent kiosk token for SSO / agent auth
-    /// </summary>
-    public string? KioskToken { get; set; }
+    public DateTime? Lastupdate { get; set; }
+
+    public long? MinAgo { get; set; }
+
+    public string? HealthTitle { get; set; }
+
+    public string? Color { get; set; }
 }
