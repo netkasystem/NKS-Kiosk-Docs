@@ -301,10 +301,10 @@ body, html {
     padding: 60px;
     background-color: #ffffff;
     width: 100%;
-    font-size: 48px;
+    font-size: 35px;
     line-height: 1.6;
     border-radius: 70px 70px 0 0;
-    max-height: 1750px;
+    max-height: 1286px;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -313,6 +313,23 @@ body, html {
         display: none;
     }
 
+.terms-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
+    padding: 0px;
+    margin-left: 0px;
+}
+.policy-box {
+    margin-bottom: 90px;
+}
+.policy-text {
+    text-align: justify;
+    text-indent: 3.5em;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
 .terms-footer-fixed {
     position: fixed;
     bottom: 50px;
@@ -324,6 +341,7 @@ body, html {
     flex-direction: column;
     gap: 16px;
     z-index: 1000;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .terms-checkbox-group {
