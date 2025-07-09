@@ -28,8 +28,11 @@
     <link rel="icon" type="image/png" href="~/favicon.png" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    
+    @if (!(ViewBag.HideHeader is true))
+    {
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
             <div class="container">
                 <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Netka-ThaiSmart</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +84,7 @@
             </div>
         </nav>
     </header>
-
+    }
     <div class="container mt-4">
         <main role="main" class="pb-5">
             @RenderBody()
