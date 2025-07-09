@@ -28,7 +28,6 @@ async function startFaceRecognition() {
     if (!video) return;
 
     await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-    await faceapi.nets.faceLandmark68TinyNet.loadFromUri('/models'); // สำหรับ landmark แบบไวและเบา
     faceDetectorLoaded = true;
 
     try {
@@ -48,9 +47,7 @@ async function detectLoop() {
         return;
     }
 
-    const detection = await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks(true);
+    const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions());
 
     if (!detection) {
         showError("❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง");
@@ -59,77 +56,17 @@ async function detectLoop() {
         return;
     }
 
-    const bounds = video.getBoundingClientRect();
-
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
-
-    const videoRatio = videoWidth / videoHeight;
-    const containerRatio = bounds.width / bounds.height;
-
-    // คำนวณขนาดวิดีโอจริง (หลัง object-fit: cover)
-    let displayWidth, displayHeight, offsetX = 0, offsetY = 0;
-
-    if (containerRatio > videoRatio) {
-        // หน้าจอกว้างกว่าวิดีโอ → ครอปบน/ล่าง
-        displayWidth = bounds.width;
-        displayHeight = bounds.width / videoRatio;
-        offsetY = (displayHeight - bounds.height) / 2;
-    } else {
-        // หน้าจอสูงกว่าวิดีโอ → ครอปซ้าย/ขวา
-        displayHeight = bounds.height;
-        displayWidth = bounds.height * videoRatio;
-        offsetX = (displayWidth - bounds.width) / 2;
-    }
-
-    // สัดส่วน scaling (จาก video พิกเซล → DOM พิกเซล)
-    const scaleX = displayWidth / videoWidth;
-    const scaleY = displayHeight / videoHeight;
-
-
-    // ✅ NEW: ใช้ landmark หาจุดกลางหน้าแทน box
-    const landmarks = detection.landmarks;
-    const leftEye = landmarks.getLeftEye();
-    const rightEye = landmarks.getRightEye();
-
-    // จุดกลางระหว่างตาซ้าย–ขวา (index 0 กับ 3)
-    const rawCenterX = (leftEye[0].x + rightEye[3].x) / 2;
-    const rawCenterY = (leftEye[0].y + rightEye[3].y) / 2;
-
-    // สเกลตามขนาดหน้าจอจริง
-    const faceCenterX = rawCenterX * scaleX;
-    const faceCenterY = rawCenterY * scaleY;
-
-    // ✅ คำนวณจาก box เหมือนเดิมเพื่อวัดขนาดใบหน้า
-    const box = detection.alignedRect.box; // ✅ ใช้ box จาก alignedRect
-    const boxX = box.x * scaleX;
-    const boxY = box.y * scaleY;
-    const boxWidth = box.width * scaleX;
-    const boxHeight = box.height * scaleY;
-
-    //const faceCenterX = boxX + boxWidth / 2;
-    //const faceCenterY = boxY + boxHeight / 2;
-
-    const faceArea = boxWidth * boxHeight;
-    const screenArea = bounds.width * bounds.height;
+    const box = detection.box;
+    const { width: vw, height: vh } = video.getBoundingClientRect();
+    const faceArea = box.width * box.height;
+    const screenArea = vw * vh;
     const faceRatio = faceArea / screenArea;
+    const faceCenterX = box.x + box.width / 2;
+    const faceCenterY = box.y + box.height / 2;
 
-    const centerX = bounds.width / 2;
-    const centerY = bounds.height / 2;
-    const maxOffsetX = bounds.width * 0.45;
-    const maxOffsetY = bounds.height * 0.45;
-
-    isCentered = (Math.abs(faceCenterX - centerX) < maxOffsetX && Math.abs(faceCenterY - centerY) < maxOffsetY);
-    isBigEnough = faceRatio > 0.01; // เดิม 0.020
-
-    console.log("Scaled boxX:", boxX.toFixed(1), "boxY:", boxY.toFixed(1));
-    console.log("Scaled center:", faceCenterX.toFixed(1), faceCenterY.toFixed(1));
-    console.log("FaceCenter:", faceCenterX.toFixed(1), faceCenterY.toFixed(1));
-    console.log("Center:", centerX.toFixed(1), centerY.toFixed(1));
-    console.log("OffsetX:", Math.abs(faceCenterX - centerX).toFixed(1));
-    console.log("OffsetY:", Math.abs(faceCenterY - centerY).toFixed(1));
-    console.log("Allowed Max:", maxOffsetX.toFixed(1), maxOffsetY.toFixed(1));
-    console.log(`new check isCentered - ${isCentered}, isBigEnough - ${isBigEnough}`);
+    const isCentered = (faceCenterX > vw * 0.2 && faceCenterX < vw * 0.35 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
+    console.log()
+    const isBigEnough = faceRatio > 0.020;
 
     // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
     const tempCanvas = document.createElement('canvas');
@@ -165,8 +102,8 @@ async function detectLoop() {
     } else {
         faceDetected = true;
         normalFrame.style.display = "none";
-        dangerFrame.style.display = "none";
-        successFrame.style.display = "none";
+    dangerFrame.style.display = "none";
+    successFrame.style.display = "none";
         // แสดงภาพนิ่ง
         const canvas = document.getElementById("faceCanvas");
         const cctx = canvas.getContext("2d");
@@ -180,8 +117,6 @@ async function detectLoop() {
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
         const submitBtn = document.getElementById("submitBtn");
         submitBtn.style.display = "inline-block";
-
-        window.Step10.capture_success();
     }
 
     requestAnimationFrame(detectLoop);

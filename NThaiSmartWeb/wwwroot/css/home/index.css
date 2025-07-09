@@ -1390,17 +1390,6 @@ h2 {
     left: 0;
     margin-top: 100%
 }*/
-
-#faceCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 2;
-}
-
 .video-wrapper {
     margin-top: 15%;
     position: relative;
@@ -1420,30 +1409,21 @@ h2 {
         object-fit: cover;
         display: block;
     }
-
-    .video-wrapper video {
-        z-index: 1;
-    }
-
-#faceCanvas {
-    z-index: 2;
-}
-
+     
 .glass-overlay {
     position: absolute;
-    z-index: 3;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    border-radius: 10px; 
     box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.70);
-    z-index: 3;
+    z-index: 2;
     pointer-events: none;
 }
-
 /* 🟩 กรอบ SVG 4 มุม */
-/*.focus-frame {
+.focus-frame {
     position: absolute;
     top: 25%;
     left: 25%;
@@ -1451,16 +1431,8 @@ h2 {
     height: auto;
     pointer-events: none;
     z-index: 3;
-}*/
-
-.focus-frame {
-    position: absolute;
-    z-index: 4;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%; 
 }
+
 
 #scanResult {
     text-align: center;
