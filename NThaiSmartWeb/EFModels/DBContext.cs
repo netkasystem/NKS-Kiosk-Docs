@@ -52,15 +52,9 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<Associated> Associated { get; set; }
 
-    public virtual DbSet<AssociatedCentral> AssociatedCentral { get; set; }
-
     public virtual DbSet<AssociatedMonitoring> AssociatedMonitoring { get; set; }
 
     public virtual DbSet<AttachmentType> AttachmentType { get; set; }
-
-    public virtual DbSet<AuditView> AuditView { get; set; }
-
-    public virtual DbSet<AuditViewBk> AuditViewBk { get; set; }
 
     public virtual DbSet<AuthenticationSource> AuthenticationSource { get; set; }
 
@@ -192,10 +186,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<EmailTemplateVariable> EmailTemplateVariable { get; set; }
 
-    public virtual DbSet<EventCaatReportView> EventCaatReportView { get; set; }
-
-    public virtual DbSet<EventSummayByMonth> EventSummayByMonth { get; set; }
-
     public virtual DbSet<FaqCategory> FaqCategory { get; set; }
 
     public virtual DbSet<FaqDetail> FaqDetail { get; set; }
@@ -252,8 +242,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<IncidentCircuit> IncidentCircuit { get; set; }
 
-    public virtual DbSet<IncidentCountByTimeReport14> IncidentCountByTimeReport14 { get; set; }
-
     public virtual DbSet<IncidentCreateSummary> IncidentCreateSummary { get; set; }
 
     public virtual DbSet<IncidentCustom> IncidentCustom { get; set; }
@@ -264,15 +252,9 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<IncidentDeleted> IncidentDeleted { get; set; }
 
-    public virtual DbSet<IncidentDetailViewDashboard> IncidentDetailViewDashboard { get; set; }
-
     public virtual DbSet<IncidentEscalationLog> IncidentEscalationLog { get; set; }
 
     public virtual DbSet<IncidentPending> IncidentPending { get; set; }
-
-    public virtual DbSet<IncidentPrioritySubReport1> IncidentPrioritySubReport1 { get; set; }
-
-    public virtual DbSet<IncidentRabbitmq> IncidentRabbitmq { get; set; }
 
     public virtual DbSet<IncidentRemainSummary> IncidentRemainSummary { get; set; }
 
@@ -280,11 +262,7 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<IncidentResolveSummary> IncidentResolveSummary { get; set; }
 
-    public virtual DbSet<IncidentSectionSubReport2> IncidentSectionSubReport2 { get; set; }
-
     public virtual DbSet<IncidentServiceReport> IncidentServiceReport { get; set; }
-
-    public virtual DbSet<IncidentSummaryByServiceEngineerReport9> IncidentSummaryByServiceEngineerReport9 { get; set; }
 
     public virtual DbSet<IncidentTemplate> IncidentTemplate { get; set; }
 
@@ -298,13 +276,15 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<KioskConsented> KioskConsented { get; set; }
 
-    public virtual DbSet<KioskConsentedImage> KioskConsentedImage { get; set; }
+    public virtual DbSet<KioskHealthStatus> KioskHealthStatus { get; set; }
+
+    public virtual DbSet<KioskHeartbeat> KioskHeartbeat { get; set; }
+
+    public virtual DbSet<KioskMonitoringPin> KioskMonitoringPin { get; set; }
 
     public virtual DbSet<KioskSetup> KioskSetup { get; set; }
 
-    public virtual DbSet<KnowledgeRpt> KnowledgeRpt { get; set; }
-
-    public virtual DbSet<KnowledgebaseSearchRpt> KnowledgebaseSearchRpt { get; set; }
+    public virtual DbSet<KioskView> KioskView { get; set; }
 
     public virtual DbSet<Level> Level { get; set; }
 
@@ -372,8 +352,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<NotificationTaskContact> NotificationTaskContact { get; set; }
 
-    public virtual DbSet<NpsPercentage> NpsPercentage { get; set; }
-
     public virtual DbSet<NsdFunction> NsdFunction { get; set; }
 
     public virtual DbSet<NsdImport> NsdImport { get; set; }
@@ -403,8 +381,6 @@ public partial class DBContext : DbContext
     public virtual DbSet<PartCodeScript> PartCodeScript { get; set; }
 
     public virtual DbSet<PartnerProjectRegister> PartnerProjectRegister { get; set; }
-
-    public virtual DbSet<PassFail> PassFail { get; set; }
 
     public virtual DbSet<PlaningAnalysis> PlaningAnalysis { get; set; }
 
@@ -458,10 +434,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<RiskAnalysis> RiskAnalysis { get; set; }
 
-    public virtual DbSet<RiskAssessmentViewBowtie> RiskAssessmentViewBowtie { get; set; }
-
-    public virtual DbSet<RiskAssessmentViewDashboard> RiskAssessmentViewDashboard { get; set; }
-
     public virtual DbSet<RiskCaseLogType> RiskCaseLogType { get; set; }
 
     public virtual DbSet<RiskCategory> RiskCategory { get; set; }
@@ -477,10 +449,6 @@ public partial class DBContext : DbContext
     public virtual DbSet<RootCause> RootCause { get; set; }
 
     public virtual DbSet<SaasCustomer> SaasCustomer { get; set; }
-
-    public virtual DbSet<SafetyFormRpt> SafetyFormRpt { get; set; }
-
-    public virtual DbSet<SatisfactionSurveyRpt> SatisfactionSurveyRpt { get; set; }
 
     public virtual DbSet<Section> Section { get; set; }
 
@@ -520,8 +488,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<SpareLog> SpareLog { get; set; }
 
-    public virtual DbSet<SpiSptConfigView> SpiSptConfigView { get; set; }
-
     public virtual DbSet<Staff> Staff { get; set; }
 
     public virtual DbSet<StaffLocation> StaffLocation { get; set; }
@@ -544,10 +510,6 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<SupplierContactProfile> SupplierContactProfile { get; set; }
 
-    public virtual DbSet<SurveyAssetSentView> SurveyAssetSentView { get; set; }
-
-    public virtual DbSet<SurveyTimesRpt> SurveyTimesRpt { get; set; }
-
     public virtual DbSet<SymptomType> SymptomType { get; set; }
 
     public virtual DbSet<Tambol> Tambol { get; set; }
@@ -557,8 +519,6 @@ public partial class DBContext : DbContext
     public virtual DbSet<Template> Template { get; set; }
 
     public virtual DbSet<TestStartFinish> TestStartFinish { get; set; }
-
-    public virtual DbSet<ThaiMonth> ThaiMonth { get; set; }
 
     public virtual DbSet<Tier> Tier { get; set; }
 
@@ -1252,13 +1212,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("updated_date");
         });
 
-        modelBuilder.Entity<AssociatedCentral>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("associated_central");
-        });
-
         modelBuilder.Entity<AssociatedMonitoring>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -1305,20 +1258,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
-        });
-
-        modelBuilder.Entity<AuditView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("audit_view");
-        });
-
-        modelBuilder.Entity<AuditViewBk>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("audit_view_bk");
         });
 
         modelBuilder.Entity<AuthenticationSource>(entity =>
@@ -2744,10 +2683,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("id");
-            entity.Property(e => e.ProfileName)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("''")
-                .HasColumnName("profile_name");
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
@@ -2757,8 +2692,10 @@ public partial class DBContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("created_date");
             entity.Property(e => e.FormFieldJson).HasColumnName("form_field_json");
-            
-        
+            entity.Property(e => e.ProfileName)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("''")
+                .HasColumnName("profile_name");
             entity.Property(e => e.UpdatedBy)
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
@@ -2767,7 +2704,6 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_date");
-           
         });
 
         modelBuilder.Entity<CustomFormField>(entity =>
@@ -3373,20 +3309,6 @@ public partial class DBContext : DbContext
                 .HasMaxLength(255)
                 .HasDefaultValueSql("''")
                 .HasColumnName("variable_name");
-        });
-
-        modelBuilder.Entity<EventCaatReportView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("event_caat_report_view");
-        });
-
-        modelBuilder.Entity<EventSummayByMonth>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("event_summay_by_month");
         });
 
         modelBuilder.Entity<FaqCategory>(entity =>
@@ -4321,32 +4243,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("circuit_id");
         });
 
-        modelBuilder.Entity<IncidentCountByTimeReport14>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_count_by_time_report_14");
-
-            entity.Property(e => e.IncidentCount)
-                .HasColumnType("bigint(21)")
-                .HasColumnName("incident_count");
-            entity.Property(e => e.MonthStr)
-                .HasMaxLength(37)
-                .HasColumnName("month_str");
-            entity.Property(e => e.StrMonth)
-                .HasMaxLength(37)
-                .HasColumnName("str_month");
-            entity.Property(e => e.TimeRank)
-                .HasMaxLength(21)
-                .HasColumnName("time_rank");
-            entity.Property(e => e.YMonth)
-                .HasMaxLength(7)
-                .HasColumnName("y_month");
-            entity.Property(e => e.YMonthTimeRank)
-                .HasMaxLength(32)
-                .HasColumnName("y_month_time_rank");
-        });
-
         modelBuilder.Entity<IncidentCreateSummary>(entity =>
         {
             entity
@@ -4678,13 +4574,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("vendor_case_id");
         });
 
-        modelBuilder.Entity<IncidentDetailViewDashboard>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_detail_view_dashboard");
-        });
-
         modelBuilder.Entity<IncidentEscalationLog>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -4754,97 +4643,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.PendingStopDate)
                 .HasColumnType("datetime")
                 .HasColumnName("pending_stop_date");
-        });
-
-        modelBuilder.Entity<IncidentPrioritySubReport1>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_priority_sub_report_1");
-
-            entity.Property(e => e.AssociateFromSd)
-                .HasMaxLength(3)
-                .HasColumnName("associate_from_sd");
-            entity.Property(e => e.AssociateToIm)
-                .HasMaxLength(3)
-                .HasColumnName("associate_to_im");
-            entity.Property(e => e.CaseId)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("case_id");
-            entity.Property(e => e.Child)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("child");
-            entity.Property(e => e.ChildType)
-                .HasMaxLength(2)
-                .HasDefaultValueSql("''")
-                .HasColumnName("child_type");
-            entity.Property(e => e.IncidentType)
-                .HasMaxLength(2)
-                .HasColumnName("incident_type");
-            entity.Property(e => e.Month)
-                .HasMaxLength(2)
-                .HasColumnName("MONTH");
-            entity.Property(e => e.MonthStr)
-                .HasMaxLength(37)
-                .HasColumnName("MONTH_STR");
-            entity.Property(e => e.Parent)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("parent");
-            entity.Property(e => e.ParentType)
-                .HasMaxLength(2)
-                .HasDefaultValueSql("''")
-                .HasColumnName("parent_type");
-            entity.Property(e => e.PriorityId)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("priority_id");
-            entity.Property(e => e.PriorityTitle)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("priority_title");
-            entity.Property(e => e.ResolvePass)
-                .HasColumnType("int(1)")
-                .HasColumnName("resolve_pass");
-            entity.Property(e => e.YMonth)
-                .HasMaxLength(7)
-                .HasColumnName("Y_MONTH");
-            entity.Property(e => e.YearStr)
-                .HasMaxLength(4)
-                .HasColumnName("YEAR_STR");
-        });
-
-        modelBuilder.Entity<IncidentRabbitmq>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_rabbitmq");
-
-            entity.Property(e => e.Actions)
-                .HasMaxLength(6)
-                .HasDefaultValueSql("''")
-                .HasColumnName("actions");
-            entity.Property(e => e.CreatedDt)
-                .HasColumnType("datetime")
-                .HasColumnName("createdDt");
-            entity.Property(e => e.Id)
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.Refid)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("refid");
-            entity.Property(e => e.Reftype)
-                .HasMaxLength(4)
-                .HasColumnName("reftype");
-            entity.Property(e => e.Status)
-                .HasMaxLength(6)
-                .HasDefaultValueSql("''")
-                .HasColumnName("status");
-            entity.Property(e => e.UpdatedDt)
-                .HasColumnType("datetime")
-                .HasColumnName("updatedDt");
         });
 
         modelBuilder.Entity<IncidentRemainSummary>(entity =>
@@ -4969,44 +4767,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("number_of_resolvedcase");
         });
 
-        modelBuilder.Entity<IncidentSectionSubReport2>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_section_sub_report_2");
-
-            entity.Property(e => e.CaseId)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("case_id");
-            entity.Property(e => e.IncidentType)
-                .HasMaxLength(2)
-                .HasColumnName("incident_type");
-            entity.Property(e => e.Month)
-                .HasMaxLength(2)
-                .HasColumnName("MONTH");
-            entity.Property(e => e.MonthStr)
-                .HasMaxLength(37)
-                .HasColumnName("MONTH_STR");
-            entity.Property(e => e.ResolvePass)
-                .HasColumnType("int(1)")
-                .HasColumnName("resolve_pass");
-            entity.Property(e => e.SectionId)
-                .HasDefaultValueSql("'0'")
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("section_id");
-            entity.Property(e => e.SectionTitle)
-                .HasMaxLength(45)
-                .HasDefaultValueSql("''")
-                .HasColumnName("section_title");
-            entity.Property(e => e.YMonth)
-                .HasMaxLength(7)
-                .HasColumnName("Y_MONTH");
-            entity.Property(e => e.YearStr)
-                .HasMaxLength(4)
-                .HasColumnName("YEAR_STR");
-        });
-
         modelBuilder.Entity<IncidentServiceReport>(entity =>
         {
             entity.HasKey(e => e.CaseId).HasName("PRIMARY");
@@ -5025,51 +4785,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.SolvingMethod)
                 .HasColumnType("text")
                 .HasColumnName("solving_method");
-        });
-
-        modelBuilder.Entity<IncidentSummaryByServiceEngineerReport9>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("incident_summary_by_service_engineer_report_9");
-
-            entity.Property(e => e.CaseTypeId)
-                .HasDefaultValueSql("'0'")
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("case_type_id");
-            entity.Property(e => e.CaseTypeTitle)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("''")
-                .HasColumnName("case_type_title");
-            entity.Property(e => e.EngineerName)
-                .HasMaxLength(78)
-                .HasDefaultValueSql("''")
-                .HasColumnName("engineer_name");
-            entity.Property(e => e.IncidentCount)
-                .HasDefaultValueSql("'0'")
-                .HasColumnType("bigint(21)")
-                .HasColumnName("incident_count");
-            entity.Property(e => e.MonthM)
-                .HasMaxLength(2)
-                .HasColumnName("MONTH_M");
-            entity.Property(e => e.MonthStr)
-                .HasMaxLength(37)
-                .HasColumnName("MONTH_STR");
-            entity.Property(e => e.MonthYm)
-                .HasMaxLength(7)
-                .HasColumnName("MONTH_YM");
-            entity.Property(e => e.RequestedDate)
-                .HasDefaultValueSql("current_timestamp()")
-                .HasColumnType("datetime")
-                .HasColumnName("requested_date");
-            entity.Property(e => e.Service)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("''")
-                .HasColumnName("service");
-            entity.Property(e => e.SummaryBy)
-                .HasMaxLength(22)
-                .HasDefaultValueSql("''")
-                .HasColumnName("summary_by");
         });
 
         modelBuilder.Entity<IncidentTemplate>(entity =>
@@ -5290,6 +5005,8 @@ public partial class DBContext : DbContext
 
             entity.HasIndex(e => e.KioskCode, "kiosk_area_unique").IsUnique();
 
+            entity.HasIndex(e => e.KioskToken, "kiosk_token").IsUnique();
+
             entity.Property(e => e.Address)
                 .HasMaxLength(500)
                 .HasDefaultValueSql("''")
@@ -5331,6 +5048,11 @@ public partial class DBContext : DbContext
                 .HasMaxLength(200)
                 .HasDefaultValueSql("''")
                 .HasColumnName("kiosk_name");
+            entity.Property(e => e.KioskToken)
+                .HasMaxLength(32)
+                .IsFixedLength()
+                .HasComment("Permanent kiosk token for SSO / agent auth")
+                .HasColumnName("kiosk_token");
             entity.Property(e => e.Latitude)
                 .HasMaxLength(20)
                 .HasDefaultValueSql("''")
@@ -5365,14 +5087,14 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime")
                 .HasColumnName("consented_date");
-            entity.Property(e => e.JsonData)
-                .HasDefaultValueSql("''")
-                .HasColumnType("text")
-                .HasColumnName("json_data");
             entity.Property(e => e.Idcard)
                 .HasMaxLength(13)
                 .HasDefaultValueSql("''")
                 .HasColumnName("idcard");
+            entity.Property(e => e.JsonData)
+                .HasDefaultValueSql("''")
+                .HasColumnType("text")
+                .HasColumnName("json_data");
             entity.Property(e => e.KioskId)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("kiosk_id");
@@ -5386,22 +5108,61 @@ public partial class DBContext : DbContext
                 .HasColumnName("updated_date");
         });
 
-        modelBuilder.Entity<KioskConsentedImage>(entity =>
+        modelBuilder.Entity<KioskHealthStatus>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("kiosk_consented_image");
-
-            entity.HasIndex(e => e.KioskConsentedId, "kiosk_consented_image_kiosk_consented_id_IDX");
+            entity.ToTable("kiosk_health_status");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("id");
-            entity.Property(e => e.FaceCapture).HasColumnName("face_capture");
-            entity.Property(e => e.FaceIdcard).HasColumnName("face_idcard");
-            entity.Property(e => e.KioskConsentedId)
+            entity.Property(e => e.Color)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'#000000'")
+                .HasColumnName("color");
+            entity.Property(e => e.HealthTitle)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("''")
+                .HasColumnName("health_title");
+            entity.Property(e => e.LassMin)
                 .HasColumnType("int(10) unsigned")
-                .HasColumnName("kiosk_consented_id");
+                .HasColumnName("lass_min");
+        });
+
+        modelBuilder.Entity<KioskHeartbeat>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("kiosk_heartbeat");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.KioskId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_id");
+            entity.Property(e => e.Lastupdate)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("lastupdate");
+        });
+
+        modelBuilder.Entity<KioskMonitoringPin>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("kiosk_monitoring_pin");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.KioskId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_id");
+            entity.Property(e => e.StaffId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("staff_id");
         });
 
         modelBuilder.Entity<KioskSetup>(entity =>
@@ -5465,18 +5226,81 @@ public partial class DBContext : DbContext
                 .HasColumnName("version");
         });
 
-        modelBuilder.Entity<KnowledgeRpt>(entity =>
+        modelBuilder.Entity<KioskView>(entity =>
         {
             entity
                 .HasNoKey()
-                .ToView("knowledge_rpt");
-        });
+                .ToView("kiosk_view");
 
-        modelBuilder.Entity<KnowledgebaseSearchRpt>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("knowledgebase_search_rpt");
+            entity.Property(e => e.Address)
+                .HasMaxLength(500)
+                .HasDefaultValueSql("''")
+                .HasColumnName("address");
+            entity.Property(e => e.Color)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'#000000'")
+                .HasColumnName("color");
+            entity.Property(e => e.ContactEmail)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("''")
+                .HasColumnName("contact_email");
+            entity.Property(e => e.ContactName)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("''")
+                .HasColumnName("contact_name");
+            entity.Property(e => e.ContactTel)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("''")
+                .HasColumnName("contact_tel");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasComment("วันที่สร้าง")
+                .HasColumnType("timestamp")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .HasComment("คำอธิบายเพิ่มเติม")
+                .HasColumnName("description");
+            entity.Property(e => e.HealthTitle)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("''")
+                .HasColumnName("health_title");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("tinyint(1) unsigned")
+                .HasColumnName("inactive");
+            entity.Property(e => e.KioskCode)
+                .HasMaxLength(50)
+                .HasComment("รหัสเครื่อง Kiosk")
+                .HasColumnName("kiosk_code");
+            entity.Property(e => e.KioskName)
+                .HasMaxLength(200)
+                .HasDefaultValueSql("''")
+                .HasColumnName("kiosk_name");
+            entity.Property(e => e.Lastupdate)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("lastupdate");
+            entity.Property(e => e.Latitude)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("''")
+                .HasColumnName("latitude");
+            entity.Property(e => e.Longitude)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("''")
+                .HasColumnName("longitude");
+            entity.Property(e => e.MinAgo)
+                .HasColumnType("bigint(21)")
+                .HasColumnName("min_ago");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasComment("วันที่อัพเดตล่าสุด")
+                .HasColumnType("timestamp")
+                .HasColumnName("updated_at");
         });
 
         modelBuilder.Entity<Level>(entity =>
@@ -6561,13 +6385,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("url");
         });
 
-        modelBuilder.Entity<NpsPercentage>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("nps_percentage");
-        });
-
         modelBuilder.Entity<NsdFunction>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -7034,20 +6851,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.ProjectName)
                 .HasMaxLength(255)
                 .HasColumnName("project_name");
-        });
-
-        modelBuilder.Entity<PassFail>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("pass_fail");
-
-            entity.Property(e => e.PassFailId)
-                .HasColumnType("int(1)")
-                .HasColumnName("pass_fail_id");
-            entity.Property(e => e.PassFailTitle)
-                .HasColumnType("int(1)")
-                .HasColumnName("pass_fail_title");
         });
 
         modelBuilder.Entity<PlaningAnalysis>(entity =>
@@ -7862,20 +7665,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("is_analysis");
         });
 
-        modelBuilder.Entity<RiskAssessmentViewBowtie>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("risk_assessment_view_bowtie");
-        });
-
-        modelBuilder.Entity<RiskAssessmentViewDashboard>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("risk_assessment_view_dashboard");
-        });
-
         modelBuilder.Entity<RiskCaseLogType>(entity =>
         {
             entity.HasKey(e => e.RiskCaseLogTypeId).HasName("PRIMARY");
@@ -8055,51 +7844,6 @@ public partial class DBContext : DbContext
                 .HasMaxLength(45)
                 .HasDefaultValueSql("''")
                 .HasColumnName("package");
-        });
-
-        modelBuilder.Entity<SafetyFormRpt>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("safety_form_rpt");
-        });
-
-        modelBuilder.Entity<SatisfactionSurveyRpt>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("satisfaction_survey_rpt");
-
-            entity.Property(e => e.CaseId)
-                .HasColumnType("int(1)")
-                .HasColumnName("case_id");
-            entity.Property(e => e.Id)
-                .HasColumnType("int(1)")
-                .HasColumnName("id");
-            entity.Property(e => e.ModuleId)
-                .HasColumnType("int(1)")
-                .HasColumnName("module_id");
-            entity.Property(e => e.ModuleName)
-                .HasColumnType("int(1)")
-                .HasColumnName("module_name");
-            entity.Property(e => e.Percentage)
-                .HasColumnType("int(1)")
-                .HasColumnName("percentage");
-            entity.Property(e => e.Remark)
-                .HasColumnType("int(1)")
-                .HasColumnName("remark");
-            entity.Property(e => e.RequestedDate)
-                .HasColumnType("int(1)")
-                .HasColumnName("requested_date");
-            entity.Property(e => e.Result)
-                .HasColumnType("int(1)")
-                .HasColumnName("result");
-            entity.Property(e => e.Score)
-                .HasColumnType("int(1)")
-                .HasColumnName("score");
-            entity.Property(e => e.ScoreTitle)
-                .HasColumnType("int(1)")
-                .HasColumnName("score_title");
         });
 
         modelBuilder.Entity<Section>(entity =>
@@ -8788,13 +8532,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("time");
         });
 
-        modelBuilder.Entity<SpiSptConfigView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("spi_spt_config_view");
-        });
-
         modelBuilder.Entity<Staff>(entity =>
         {
             entity.HasKey(e => e.StaffId).HasName("PRIMARY");
@@ -8899,10 +8636,6 @@ public partial class DBContext : DbContext
                 .HasMaxLength(100)
                 .HasDefaultValueSql("''")
                 .HasColumnName("team_id");
-
-            entity.HasOne(d => d.Prefix).WithMany(p => p.Staff)
-                .HasForeignKey(d => d.PrefixId)
-                .HasConstraintName("fk_prefix_id");
         });
 
         modelBuilder.Entity<StaffLocation>(entity =>
@@ -9230,59 +8963,6 @@ public partial class DBContext : DbContext
                 .HasColumnName("task_escalation_noti");
         });
 
-        modelBuilder.Entity<SurveyAssetSentView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("survey_asset_sent_view");
-
-            entity.Property(e => e.AssetCode)
-                .HasColumnType("int(1)")
-                .HasColumnName("asset_code");
-            entity.Property(e => e.AssetId)
-                .HasColumnType("int(1)")
-                .HasColumnName("asset_id");
-            entity.Property(e => e.RecipientEmail)
-                .HasColumnType("int(1)")
-                .HasColumnName("recipient_email");
-            entity.Property(e => e.RecipientName)
-                .HasColumnType("int(1)")
-                .HasColumnName("recipient_name");
-        });
-
-        modelBuilder.Entity<SurveyTimesRpt>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("survey_times_rpt");
-
-            entity.Property(e => e.AssetCode)
-                .HasColumnType("int(1)")
-                .HasColumnName("asset_code");
-            entity.Property(e => e.Lastupdate).HasColumnType("int(1)");
-            entity.Property(e => e.ModuleName)
-                .HasColumnType("int(1)")
-                .HasColumnName("module_name");
-            entity.Property(e => e.RecipientEmail)
-                .HasColumnType("int(1)")
-                .HasColumnName("recipient_email");
-            entity.Property(e => e.RecipientName)
-                .HasColumnType("int(1)")
-                .HasColumnName("recipient_name");
-            entity.Property(e => e.Sender)
-                .HasColumnType("int(1)")
-                .HasColumnName("sender");
-            entity.Property(e => e.SurveyName)
-                .HasColumnType("int(1)")
-                .HasColumnName("survey_name");
-            entity.Property(e => e.SurveySendName)
-                .HasColumnType("int(1)")
-                .HasColumnName("survey_send_name");
-            entity.Property(e => e.SurveyStatus)
-                .HasColumnType("int(1)")
-                .HasColumnName("survey_status");
-        });
-
         modelBuilder.Entity<SymptomType>(entity =>
         {
             entity.HasKey(e => e.SymptomTypeId).HasName("PRIMARY");
@@ -9418,20 +9098,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.DateStart)
                 .HasColumnType("datetime")
                 .HasColumnName("date_start");
-        });
-
-        modelBuilder.Entity<ThaiMonth>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("thai_month");
-
-            entity.Property(e => e.MonthName)
-                .HasColumnType("int(1)")
-                .HasColumnName("month_name");
-            entity.Property(e => e.MonthNumber)
-                .HasColumnType("int(1)")
-                .HasColumnName("month_number");
         });
 
         modelBuilder.Entity<Tier>(entity =>
