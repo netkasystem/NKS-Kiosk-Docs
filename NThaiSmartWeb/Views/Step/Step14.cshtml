@@ -1,146 +1,218 @@
 ﻿@{
     ViewData["Title"] = "custom field form";
 }
+ <style>
+    .sub-section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #444;
+        margin: 1rem 0 0.5rem;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0.25rem;
+    }
+ </style>
 <body class="linear-blue-background">
     <div class="kiosk-container">
-        <header class="form-header">
-            <h4>ระบบบันทึกความคิดเห็นของประชาชน</h4>
-            <div class="heart-icon">🤍</div>
-            <h1>แบบสำรวจความพึงพอใจ</h1>
-            <p>Customer Satisfaction Survey</p>
-        </header>
-
-        <div class="form-scroll-area">
-            <form action="#" method="post">
-
-                <section class="form-section personal-info">
-                    <div class="section-title">
-                        <span class="icon">👤</span>
-                        <h2>ข้อมูลส่วนตัว | Personal Information</h2>
-                    </div>
-                    <div class="input-group">
-                        <label for="fullname">ชื่อ-นามสกุล | Full Name</label>
-                        <input type="text" id="fullname" name="fullname">
-                    </div>
-                    <div class="input-group">
-                        <label for="idcard">เลขบัตรประชาชน | ID Card</label>
-                        <input type="text" id="idcard" name="idcard">
-                    </div>
-                    <div class="input-group">
-                        <label for="age">ช่วงอายุ | Age Range</label>
-                        <select id="age" name="age">
-                            <option value="">เลือกช่วงอายุ</option>
-                            <option value="18-25">18-25 ปี</option>
-                            <option value="26-35">26-35 ปี</option>
-                            <option value="36-45">36-45 ปี</option>
-                            <option value="46+">46 ปีขึ้นไป</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="display:grid">
-                        <label>เพศ | Gender</label>
-                        <div class="radio-group-inline">
-                            <input type="radio" id="male" name="gender" value="male">
-                            <label for="male">ชาย</label>
-                            <input type="radio" id="female" name="gender" value="female">
-                            <label for="female">หญิง</label>
-                            <input type="radio" id="lgbtq" name="gender" value="lgbtq">
-                            <label for="lgbtq">LGBTQ+</label>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="form-section location">
-                    <div class="section-title">
-                        <span class="icon">📍</span>
-                        <h2>ที่อยู่ | Location</h2>
-                    </div>
-                    <div class="input-group">
-                        <label for="province">จังหวัด | Province</label>
-                        <select id="province" name="province">
-                            <option value="">เลือกจังหวัด</option>
-                            <option value="bkk">กรุงเทพมหานคร</option>
-                            <option value="chiangmai">เชียงใหม่</option>
-                            <option value="phuket">ภูเก็ต</option>
-                        </select>
-                    </div>
-                </section>
-
-                <section class="form-section service-evaluation">
-                    <div class="section-title">
-                        <span class="icon">⭐</span>
-                        <h2>การประเมินบริการ | Service Evaluation</h2>
-                    </div>
-                    <label>ภาพรวมความพึงพอใจต่อการบริการ | Overall Satisfaction</label>
-                    <div class="satisfaction-rating">
-                        <input type="radio" id="s-very-dissatisfied" name="satisfaction" value="1">
-                        <label for="s-very-dissatisfied">😠<p>ไม่พอใจ<br>มากที่สุด</p></label>
-
-                        <input type="radio" id="s-dissatisfied" name="satisfaction" value="2">
-                        <label for="s-dissatisfied">😞<p>ไม่พอใจ</p></label>
-
-                        <input type="radio" id="s-neutral" name="satisfaction" value="3">
-                        <label for="s-neutral">😐<p>เฉยๆ</p></label>
-
-                        <input type="radio" id="s-satisfied" name="satisfaction" value="4">
-                        <label for="s-satisfied">😊<p>พอใจ</p></label>
-
-                        <input type="radio" id="s-very-satisfied" name="satisfaction" value="5">
-                        <label for="s-very-satisfied">😄<p>พอใจ<br>มากที่สุด</p></label>
-                    </div>
-
-                    <label>บริการที่เลือกใช้ (เลือกได้หลายข้อ) | Services Used</label>
-                    <div class="checkbox-grid">
-                        <input type="checkbox" id="service1" name="services" value="contact">
-                        <label for="service1">📝<p>ติดต่อราชการ</p></label>
-                        <input type="checkbox" id="service2" name="services" value="request">
-                        <label for="service2">📄<p>ยื่นคำร้อง</p></label>
-                        <input type="checkbox" id="service3" name="services" value="doc-check">
-                        <label for="service3">🔍<p>ตรวจสอบเอกสาร</p></label>
-                        <input type="checkbox" id="service4" name="services" value="payment">
-                        <label for="service4">💳<p>ชำระค่าบริการ</p></label>
-                        <input type="checkbox" id="service5" name="services" value="consult">
-                        <label for="service5">💬<p>ขอคำปรึกษา</p></label>
-                        <input type="checkbox" id="service6" name="services" value="other">
-                        <label for="service6">➕<p>อื่นๆ</p></label>
-                    </div>
-                </section>
-
-                <section class="form-section rating">
-                    <div class="section-title">
-                        <span class="icon">💯</span>
-                        <h2>คะแนนความพึงพอใจ | Rating</h2>
-                    </div>
-                    <label for="score">ให้คะแนนบริการ 1-10 | Rate our service (1-10)</label>
-                    <input type="number" id="score" name="score" min="1" max="10" placeholder="ใส่คะแนน (1-10)">
-                </section>
-
-                <section class="form-section recommendation">
-                    <div class="section-title">
-                        <span class="icon">👍</span>
-                        <h2>คำแนะนำ | Recommendation</h2>
-                    </div>
-                    <label>คุณจะแนะนำบริการนี้ให้เพื่อนหรือไม่ | Would you recommend our service?</label>
-                    <div class="recommend-group">
-                        <input type="radio" id="rec-yes" name="recommend" value="yes">
-                        <label for="rec-yes">👍 ใช่ แนะนำ</label>
-                        <input type="radio" id="rec-no" name="recommend" value="no">
-                        <label for="rec-no">👎 ไม่แนะนำ</label>
-                    </div>
-                </section>
-
-                <section class="form-section additional-comments">
-                    <div class="section-title">
-                        <span class="icon">💬</span>
-                        <h2>ข้อคิดเห็นเพิ่มเติม | Additional Comments</h2>
-                    </div>
-                    <label for="comments">ความคิดเห็นของคุณ | Your Feedback</label>
-                    <textarea id="comments" name="comments" rows="6" placeholder="พิมพ์ข้อเสนอแนะของคุณที่นี่..."></textarea>
-                </section>
-                <div class="terms-footer-fixed">
-                <button type="submit" class="submit-button">ส่งผลสำรวจ | Submit Survey</button>
-                </div>
+        <div id="dynamic-form" class="form-scroll-area" style="padding: 24px;">
+            <form id="dynamic-form-container" action="#" method="post">
+ 
             </form>
-        </div>
+        </div> 
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const getCustomfieldRaw = sessionStorage.getItem("CustomField");
+            const getCustomfield = JSON.parse(getCustomfieldRaw);
+            console.log("============ " + getCustomfield);
+
+
+            function generateForm(json, containerId) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = ''; // clear previous
+
+                // 🔧 Map คำในหัวข้อกับ emoji
+                const iconMap = [
+                    { keyword: "ข้อมูล", icon: "👤" },
+                    { keyword: "แนะนำ", icon: "👍" },
+                    { keyword: "คะแนน", icon: "💯" },
+                    { keyword: "ความคิดเห็น", icon: "💬" },
+                    { keyword: "เพิ่มเติม", icon: "📝" },
+                    { keyword: "เวล", icon: "⏰" },
+                    { keyword: "ติดตาม", icon: "👥" },
+                    { keyword: "พื้นที่", icon: "📍" },
+                    { keyword: "การศึกษา", icon: "🎓" }
+                ];
+
+                // 🔧 ฟังก์ชันหา emoji ที่เหมาะกับ label
+                const getIcon = (label) => {
+                    const found = iconMap.find(entry => label.includes(entry.keyword));
+                    return found ? found.icon : "🧩";
+                };
+
+                let currentSection = null;
+
+                json.Schema.sort((a, b) => a.index - b.index).forEach(field => {
+                    const value = json.Entries[field.id] ?? "";
+
+                    // ⬇️ ถ้าเจอ h1 => สร้าง Section ใหม่
+                    if (field.component === "h1") {
+                        currentSection = document.createElement("section");
+                        currentSection.className = "form-section";
+
+                        const sectionTitle = document.createElement("div");
+                        sectionTitle.className = "section-title";
+
+                        const iconSpan = document.createElement("span");
+                        iconSpan.className = "icon";
+                        iconSpan.textContent = getIcon(field.label);
+
+                        const h2 = document.createElement("h2");
+                        h2.textContent = field.label;
+
+                        sectionTitle.appendChild(iconSpan);
+                        sectionTitle.appendChild(h2);
+                        currentSection.appendChild(sectionTitle);
+
+                        container.appendChild(currentSection);
+                        return;
+                    }
+               
+                    // ⬇️ สร้าง wrapper form-field
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "form-field";
+
+                    switch (field.component) {
+                        case "h2":
+                            const subSectionTitle = document.createElement("h4");
+                            subSectionTitle.className = "sub-section-title";
+                            subSectionTitle.textContent = field.label;
+                            wrapper.appendChild(subSectionTitle);
+                            break;
+                        case "label":
+                            const labelOnly = document.createElement("h4");
+                            labelOnly.className = "sub-section-title";
+                            labelOnly.textContent = field.label;
+                            wrapper.appendChild(labelOnly);
+                            break;
+
+                        case "select":
+                            const selectLabel = document.createElement("label");
+                            selectLabel.textContent = field.label;
+                            selectLabel.setAttribute("for", field.id);
+
+                            const select = document.createElement("select");
+                            select.id = field.id;
+                            select.name = field.id;
+
+                            field.options.forEach((opt, i) => {
+                                const option = document.createElement("option");
+                                option.value = i;
+                                option.textContent = opt;
+                                if (String(i) === String(value)) {
+                                    option.selected = true;
+                                }
+                                select.appendChild(option);
+                            });
+
+                            wrapper.appendChild(selectLabel);
+                            wrapper.appendChild(select);
+                            break;
+
+                        case "textArea":
+                            const textAreaLabel = document.createElement("label");
+                            textAreaLabel.textContent = field.label;
+                            textAreaLabel.setAttribute("for", field.id);
+
+                            const textArea = document.createElement("textarea");
+                            textArea.id = field.id;
+                            textArea.name = field.id;
+                            textArea.placeholder = field.placeholder || "";
+                            textArea.value = value;
+
+                            wrapper.appendChild(textAreaLabel);
+                            wrapper.appendChild(textArea);
+                            break;
+
+                        case "textInput":
+                            const inputLabel = document.createElement("label");
+                            inputLabel.textContent = field.label;
+                            inputLabel.setAttribute("for", field.id);
+
+                            const input = document.createElement("input");
+                            input.type = "text";
+                            input.id = field.id;
+                            input.name = field.id;
+                            input.placeholder = field.placeholder || "";
+                            input.value = value;
+
+                            wrapper.appendChild(inputLabel);
+                            wrapper.appendChild(input);
+                            break;
+
+                        default:
+                            console.warn("ไม่รองรับ component:", field.component);
+                    }
+
+                    // ถ้ายังไม่มี section ให้สร้าง
+                    if (!currentSection) {
+                        currentSection = document.createElement("section");
+                        currentSection.className = "form-section";
+                        container.appendChild(currentSection);
+                    }
+
+                    currentSection.appendChild(wrapper);
+                });
+
+
+                // เพิ่มปุ่ม submit ท้ายฟอร์ม
+                const submitWrapper = document.createElement("div");
+                submitWrapper.className = "form-field"; // ใช้คลาสเดียวกับ input ทั่วไป
+
+                const submitBtn = document.createElement("button");
+                submitBtn.type = "submit";
+                submitBtn.className = "submit-button";
+                submitBtn.textContent = "ส่งแบบฟอร์ม | Submit Form";
+
+                submitWrapper.appendChild(submitBtn);
+                container.appendChild(submitWrapper);
+        
+            }
+
+            generateForm(getCustomfield, "dynamic-form-container");
+
+            // ⬇️ ดัก event การส่งฟอร์ม
+            document.getElementById("dynamic-form-container").addEventListener("submit", function (event) {
+                event.preventDefault(); // ป้องกันไม่ให้ reload หน้า
+
+                const form = event.target;
+                const formData = new FormData(form);
+                const data = {};
+
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+
+                const encrypCardData = encrypt(data);
+
+                //✅ สามารถส่งไปยัง API ได้แบบนี้
+                fetch('/api/KioskApi/SaveNationalCardData', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ EncrypString: encrypCardData })
+                }).then(response => response.json())
+                  .then(result => 
+                      {
+                          console.log('✅ สำเร็จ:', result);
+                          window.location.href = "/Step/Step13";
+                      })
+                  .catch(error => console.error('❌ ผิดพลาด:', error));
+
+
+            });
+        });
+
+
+    </script>
 </body>
 
