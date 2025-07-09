@@ -10,6 +10,11 @@
         border-bottom: 1px solid #ddd;
         padding-bottom: 0.25rem;
     }
+
+    .field-error {
+        border: 2px solid red !important;
+        background-color: #ffe6e6 !important;
+    }
  </style>
 <body class="linear-blue-background">
     <div class="kiosk-container">
@@ -30,32 +35,13 @@
             function generateForm(json, containerId) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = ''; // clear previous
-
-                // 🔧 Map คำในหัวข้อกับ emoji
-                const iconMap = [
-                    { keyword: "ข้อมูล", icon: "👤" },
-                    { keyword: "แนะนำ", icon: "👍" },
-                    { keyword: "คะแนน", icon: "💯" },
-                    { keyword: "ความคิดเห็น", icon: "💬" },
-                    { keyword: "เพิ่มเติม", icon: "📝" },
-                    { keyword: "เวล", icon: "⏰" },
-                    { keyword: "ติดตาม", icon: "👥" },
-                    { keyword: "พื้นที่", icon: "📍" },
-                    { keyword: "การศึกษา", icon: "🎓" }
-                ];
-
-                // 🔧 ฟังก์ชันหา emoji ที่เหมาะกับ label
-                const getIcon = (label) => {
-                    const found = iconMap.find(entry => label.includes(entry.keyword));
-                    return found ? found.icon : "🧩";
-                };
+  
 
                 let currentSection = null;
 
                 json.Schema.sort((a, b) => a.index - b.index).forEach(field => {
                     const value = json.Entries[field.id] ?? "";
 
-                    // ⬇️ ถ้าเจอ h1 => สร้าง Section ใหม่
                     if (field.component === "h1") {
                         currentSection = document.createElement("section");
                         currentSection.className = "form-section";
@@ -63,53 +49,49 @@
                         const sectionTitle = document.createElement("div");
                         sectionTitle.className = "section-title";
 
-                        const iconSpan = document.createElement("span");
-                        iconSpan.className = "icon";
-                        iconSpan.textContent = getIcon(field.label);
-
                         const h2 = document.createElement("h2");
                         h2.textContent = field.label;
 
-                        sectionTitle.appendChild(iconSpan);
                         sectionTitle.appendChild(h2);
                         currentSection.appendChild(sectionTitle);
 
                         container.appendChild(currentSection);
                         return;
                     }
-               
-                    // ⬇️ สร้าง wrapper form-field
+
                     const wrapper = document.createElement("div");
                     wrapper.className = "form-field";
 
                     switch (field.component) {
                         case "h2":
-                            const subSectionTitle = document.createElement("h4");
-                            subSectionTitle.className = "sub-section-title";
-                            subSectionTitle.textContent = field.label;
-                            wrapper.appendChild(subSectionTitle);
-                            break;
                         case "label":
-                            const labelOnly = document.createElement("h4");
-                            labelOnly.className = "sub-section-title";
-                            labelOnly.textContent = field.label;
-                            wrapper.appendChild(labelOnly);
+                            const subTitle = document.createElement("h4");
+                            subTitle.className = "sub-section-title";
+                            subTitle.textContent = field.label;
+                            wrapper.appendChild(subTitle);
                             break;
 
                         case "select":
                             const selectLabel = document.createElement("label");
-                            selectLabel.textContent = field.label;
+                            selectLabel.textContent = field.label + (field.required ? " *" : "");
                             selectLabel.setAttribute("for", field.id);
 
                             const select = document.createElement("select");
                             select.id = field.id;
                             select.name = field.id;
+                            if (field.required) select.required = true;
+
+                            // เพิ่ม default option
+                            const defaultOption = document.createElement("option");
+                            defaultOption.value = "";
+                            defaultOption.textContent = "-- โปรดเลือก --";
+                            select.appendChild(defaultOption);
 
                             field.options.forEach((opt, i) => {
                                 const option = document.createElement("option");
-                                option.value = i;
+                                option.value = opt;
                                 option.textContent = opt;
-                                if (String(i) === String(value)) {
+                                if (String(opt) === String(value)) {
                                     option.selected = true;
                                 }
                                 select.appendChild(option);
@@ -121,7 +103,7 @@
 
                         case "textArea":
                             const textAreaLabel = document.createElement("label");
-                            textAreaLabel.textContent = field.label;
+                            textAreaLabel.textContent = field.label + (field.required ? " *" : "");
                             textAreaLabel.setAttribute("for", field.id);
 
                             const textArea = document.createElement("textarea");
@@ -129,6 +111,7 @@
                             textArea.name = field.id;
                             textArea.placeholder = field.placeholder || "";
                             textArea.value = value;
+                            if (field.required) textArea.required = true;
 
                             wrapper.appendChild(textAreaLabel);
                             wrapper.appendChild(textArea);
@@ -136,7 +119,7 @@
 
                         case "textInput":
                             const inputLabel = document.createElement("label");
-                            inputLabel.textContent = field.label;
+                            inputLabel.textContent = field.label + (field.required ? " *" : "");
                             inputLabel.setAttribute("for", field.id);
 
                             const input = document.createElement("input");
@@ -145,6 +128,7 @@
                             input.name = field.id;
                             input.placeholder = field.placeholder || "";
                             input.value = value;
+                            if (field.required) input.required = true;
 
                             wrapper.appendChild(inputLabel);
                             wrapper.appendChild(input);
@@ -154,7 +138,6 @@
                             console.warn("ไม่รองรับ component:", field.component);
                     }
 
-                    // ถ้ายังไม่มี section ให้สร้าง
                     if (!currentSection) {
                         currentSection = document.createElement("section");
                         currentSection.className = "form-section";
@@ -164,10 +147,9 @@
                     currentSection.appendChild(wrapper);
                 });
 
-
-                // เพิ่มปุ่ม submit ท้ายฟอร์ม
+                // ปุ่ม Submit
                 const submitWrapper = document.createElement("div");
-                submitWrapper.className = "form-field"; // ใช้คลาสเดียวกับ input ทั่วไป
+                submitWrapper.className = "form-field";
 
                 const submitBtn = document.createElement("button");
                 submitBtn.type = "submit";
@@ -176,8 +158,8 @@
 
                 submitWrapper.appendChild(submitBtn);
                 container.appendChild(submitWrapper);
-        
             }
+
 
             generateForm(getCustomfield, "dynamic-form-container");
 
@@ -188,27 +170,58 @@
                 const form = event.target;
                 const formData = new FormData(form);
                 const data = {};
+                let hasError = false;
 
+                // ตรวจสอบฟิลด์ที่ required
+                getCustomfield.Schema.forEach(field => {
+                    const el = document.getElementById(field.id);
+                    if (el) el.classList.remove("field-error"); // ✅ ล้าง error เก่า
+
+                    if (field.required) {
+                        const value = formData.get(field.id)?.trim();
+
+                        if (field.component === "select") {
+                            if (value === "" || value === "0") {
+                                hasError = true;
+                                if (el) {
+                                    el.classList.add("field-error");
+                                    el.scrollIntoView({ behavior: "smooth", block: "center" });
+                                }
+                            }
+                        } else {
+                            if (!value) {
+                                hasError = true;
+                                if (el) {
+                                    el.classList.add("field-error");
+                                    el.scrollIntoView({ behavior: "smooth", block: "center" });
+                                }
+                            }
+                        }
+                    }
+                });
+
+                if (hasError) {
+                    alert("กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น (required)");
+                    return;
+                }
+
+                // ดึงค่าทั้งหมดไปใส่ object
                 for (let [key, value] of formData.entries()) {
                     data[key] = value;
                 }
 
                 const encrypCardData = encrypt(data);
 
-                //✅ สามารถส่งไปยัง API ได้แบบนี้
                 fetch('/api/KioskApi/SaveNationalCardData', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ EncrypString: encrypCardData })
                 }).then(response => response)
-                  .then(result => 
-                      {
-                          console.log('✅ สำเร็จ:', result);
-                          window.location.href = "/Step/Step13";
-                      })
+                  .then(result => {
+                      console.log('✅ สำเร็จ:', result);
+                      window.location.href = "/Step/Step13";
+                  })
                   .catch(error => console.error('❌ ผิดพลาด:', error));
-
-
             });
         });
 
