@@ -9,6 +9,7 @@ public class AuthorizationFilter : IAuthorizationFilter
         "/api/auth/login",
         "/api/auth/logout",
         "/api/kioskapi/savenationalcarddata",
+        "/api/kioskapi/getcustomform",
     };
 
     public List<string> AllowPageList = new List<string>{
