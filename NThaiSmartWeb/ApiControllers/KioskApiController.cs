@@ -50,7 +50,9 @@ public class KioskApiController : ControllerBase
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
         string KIOSK_TOKEN = GeneratePermanentToken;
+        
         oKiosk.KioskToken = KIOSK_TOKEN;
+        _context.SaveChanges();
 
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
         var detail = new

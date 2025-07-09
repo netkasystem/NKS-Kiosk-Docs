@@ -23,35 +23,43 @@ form?.addEventListener("submit", async (e) => {
 const urlParams = new URLSearchParams(window.location.search);
 const KioskCode = urlParams.get("kioskCode");
 const token = urlParams.get("token");
-SSOLogin = function () {
-    if (KioskCode && token) {
-        const data = {
-            rememberMe: formData.get("rememberMe") ?? "off",
-            kioskCode: KioskCode ?? "",
-            token: token ?? ""
-        };
 
-        const response = await fetch('/api/auth/sso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-        const res = await response.json();
-        if (response.ok) {
-            localStorage.setItem('selectedKioskCode', res.kioskCode);
-            window.location.href = '/Step/Step1';
-        }
-    }
+if (!KioskCode) {
+    console.log("❌ ไม่พบ KioskCode");
+} else {
+    console.log("ตู้นี้คือ:", KioskCode);
 }
 
-const logoutBtn = document.getElementById("logout");
-logoutBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
+if (KioskCode && token) SSOLogin();
 
-    const response = await fetch('/api/auth/logout', {
-        method: 'POST'
-    });
+SSOLogin = async function () {
+
+
+    const data = { kioskCode: KioskCode ?? "", token: token ?? "" };
 
     if (response.ok) {
-        window.location.href = '/login'; // หรือ '/'; แล้วแต่คุณออกแบบ
-    } else {
-        const res = await response.json();
-        alert(res.message || 'Logout failed');
+        localStorage.setItem('selectedKioskCode', res.kioskCode);
+        window.location.href = '/Step/Step1';
     }
-});
+
+    try {
+        const response = await fetch('/api/auth/sso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const res = await response.json();
+
+        if (response.ok) {
+            // ✅ เก็บ kioskCode ไว้ใช้ภายหลัง (เช่น redirect กลับ)
+            localStorage.setItem('selectedKioskCode', res.kioskCode);
+
+            // ✅ ไปขั้นตอนถัดไปหลัง SSO สำเร็จ
+            window.location.href = '/Step/Step1';
+        } else {
+            // ❌ กรณี token หรือ kioskCode ผิด
+            console.error("SSO Login Failed:", res.message || res.error || res);
+            alert("⚠️ ไม่สามารถเข้าสู่ระบบได้ กรุณาตรวจสอบ token หรือ kiosk");
+        }
+
+    } catch (err) {
+        console.error("❌ Error calling /api/auth/sso", err);
+        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
+    }
+}
