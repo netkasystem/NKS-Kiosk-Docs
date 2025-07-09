@@ -5,7 +5,7 @@
 
  <header class="page-header">
     <div class="step-number" style="margin-bottom:60px;">1</div>
-    <h1>กรุณาใส่บัตรประชาชน</h1>
+    <h1>กรุณาเสียบบัตรประชาชน</h1>
     </header>
 <div class="mainCard-container">
     <div class="left-column">
@@ -20,8 +20,7 @@
         </div>
 
     </div>
-
-    <div class="right-column">
+        <div class="right-column">
             <div class="top-section">
                 <img src="/images/icons/font_card_id.svg" class="id-card-image" />
             </div>
@@ -35,11 +34,21 @@
                     <li>กรุณาสอดบัตรไว้จนกว่าจะสิ้นสุดกระบวนการ</li>
                 </ol>
             </div>
-          @*   <form asp-controller="Step" asp-action="Step5" method="get" class="button-section" onsubmit="return handleScan(this)">
-                <button type="submit" class="scan-button">เริ่มสแกน</button>
-            </form> *@
-    </div>
+        </div>
+   
 </div>
+    <audio id="scan_card" src="/audio/Steap_scan_card.wav" ></audio>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("scan_card");
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(err => {
+                    console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+                });
+            }
+        });
+    </script>
 </a>
 
 

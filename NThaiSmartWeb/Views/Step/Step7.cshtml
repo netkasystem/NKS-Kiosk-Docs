@@ -3,7 +3,7 @@
 }
 <body class="red-background">
 
-    <header class="page-header">
+    <header class="page-header" style="padding-top:50px;">
         <div class="scan_fail">
             <img src="/images/icons/scan_fail.svg" class="scan_fail" />
         </div>
@@ -22,9 +22,23 @@
 
     </div>
 
-    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)" >
+    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)" id="cardLink">
         <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px;width:50%;">
             ย้อนกลับ
         </button>
     </form>
+    <audio id="scan_card" src="/audio/expire_card.wav"></audio>
+    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("scan_card");
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(err => {
+                    console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+                });
+            }
+        });
+    </script>
     </body>

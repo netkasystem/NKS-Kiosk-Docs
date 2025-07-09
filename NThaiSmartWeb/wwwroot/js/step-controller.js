@@ -1,6 +1,37 @@
 ﻿const next_page = (href, time_sec = 0) => {
     setTimeout(() => { window.location.href = href; }, time_sec * 1000);
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const audio = document.getElementById("click-sound");
+    const cardLink = document.getElementById("cardLink");
+
+    if (cardLink && audio) {
+        cardLink.addEventListener("click", function (e) {
+            e.preventDefault(); 
+            audio.currentTime = 0;
+            audio.play().then(() => {
+              
+                setTimeout(() => {
+                    window.location.href = cardLink.href;
+                }, 300); 
+            }).catch(err => {
+                console.warn("Sound error:", err);
+                window.location.href = cardLink.href; 
+            });
+        });
+    }
+
+ 
+    document.body.addEventListener("click", function (e) {
+        // ถ้าคลิกที่ cardLink → ไม่ต้องเล่นเสียงซ้ำ
+        if (e.target.closest("#cardLink")) return;
+
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(err => console.warn("Sound error:", err));
+        }
+    });
+});
 
 window.Step3 = {
     init: () => {

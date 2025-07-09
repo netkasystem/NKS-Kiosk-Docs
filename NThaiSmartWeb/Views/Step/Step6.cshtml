@@ -44,6 +44,17 @@
             </form> *@
         </div>
     </div>
-
+        <audio id="scan_card" src="/audio/Steap_scan_card.wav" ></audio>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const audio = document.getElementById("scan_card");
+                if (audio) {
+                    audio.currentTime = 0;
+                    audio.play().catch(err => {
+                        console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+                    });
+                }
+            });
+        </script>
 </body>
 </a>

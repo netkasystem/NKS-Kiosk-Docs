@@ -5,6 +5,7 @@ let hasCapture;
 let faceDetectorLoaded = false;
 let faceDetected = false;
 let stableSince = null;
+let canPlayFocusAudio = true;
 
 const video = document.getElementById("videoInput");
 const canvas = document.getElementById("faceCanvas");
@@ -12,6 +13,9 @@ const statusElem = document.getElementById("scanResult");
 const normalFrame = document.getElementById("normal-frame");
 const dangerFrame = document.getElementById("danger-frame");
 const successFrame = document.getElementById("success-frame");
+const audioFocus = document.getElementById("audio-focus"); // เสียงเมื่อไม่พบใบหน้า
+const audioLook = document.getElementById("audio-look"); // เสียงตอนนับถอยหลัง
+
 var submitBtn = document.getElementById("submitBtn");
 
 function isFacingForward(landmarks) {
@@ -52,8 +56,20 @@ async function detectLoop() {
     if (!detection) {
         showError("❌ ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง");
         stableSince = null;
+
+        audioLook.pause(); // หยุดเสียงนับถอยหลัง ถ้ากำลังเล่นอยู่
+        audioLook.currentTime = 0;
+
+        if (audioFocus.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
+            audioFocus.play(); // เล่นเสียง "ให้อยู่ในกรอบ"
+        }
+
         requestAnimationFrame(detectLoop);
         return;
+    }
+    if (!audioFocus.paused) {
+        audioFocus.pause();
+        audioFocus.currentTime = 0;
     }
 
     const box = detection.box;
@@ -77,6 +93,10 @@ async function detectLoop() {
 
     const isSharp = isImageSharpEnough(tempCanvas);
     if (!isCentered || !isBigEnough || !isSharp) {
+        if (!audioLook.paused) {
+            audioLook.pause();
+            audioLook.currentTime = 0;
+        }
         if (!isSharp) {
             showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");
         } else {
@@ -96,11 +116,18 @@ async function detectLoop() {
     const remaining = 3000 - elapsed;
 
     if (remaining > 0) {
+        // --- ส่วนที่แก้ไข: เมื่อเริ่มนับถอยหลัง ---
         const secondsLeft = Math.ceil(remaining / 1000);
         showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
         showFrame("success");
+
+        if (audioLook.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
+            audioLook.play(); // เล่นเสียง "มองกล้อง"
+        }
     } else {
         faceDetected = true;
+        audioLook.pause();
+        audioLook.currentTime = 0;
         normalFrame.style.display = "none";
         dangerFrame.style.display = "none";
         successFrame.style.display = "none";

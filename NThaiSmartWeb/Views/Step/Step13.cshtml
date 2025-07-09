@@ -19,14 +19,14 @@
             </div>
 
         </div>
-            <div class="right-column-success">
+            <div class="right-column-success" style="height:80%;">
                 <div class="top-section">
                     <img src="/images/icons/congratulations .svg" class="congratulations-image" />
                 </div>
 
-                <div class="bottom-section">
+                <div class="bottom-section" style="padding:0px;">
                     <h2>
-                        กรุณา
+                    กรุณา<br>
                         <span class="expired-word">ดึงบัตรประชาชนออก</span><br>
                         เพื่อสิ้นสุดขั้นตอน
                     </h2>
@@ -35,7 +35,21 @@
                 <button type="submit" class="scan-button">เสร็จสิ้น</button>
             </form>
             </div>
+
     </div>
+    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+    <audio id="scan_card" src="/audio/All_done.wav"></audio>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("scan_card");
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(err => {
+                    console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+                });
+            }
+        });
+    </script>
 </body>
 
 

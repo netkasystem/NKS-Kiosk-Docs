@@ -6,7 +6,7 @@
 <body>
     <div class="terms-page-wrapper">
         <div class="terms-white-box">
-            <header class="page-header">
+            <header class="page-header" style="padding-top:50px; padding-bottom:50px;">
                 <h1>ข้อตกลงและเงื่อนไข</h1>
             </header>
 
@@ -27,7 +27,7 @@
 
             <div class="terms-footer-fixed">
                 <label class="terms-checkbox-group">
-                    <input type="checkbox" id="acceptCheckbox" onchange="toggleSubmit()">
+                    <input type="checkbox" id="acceptCheckbox" onchange="toggleSubmit()" >
                     <span class="custom-checkbox"></span>  ข้าพเจ้ายอมรับข้อตกลงเงื่อนไข
                 </label>
                 <button class="terms-submit-button" id="submitButton" disabled>ยืนยัน</button>
@@ -41,5 +41,6 @@
           button.disabled = !checkbox.checked;
         }
     </script>
+    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
 
 </body>

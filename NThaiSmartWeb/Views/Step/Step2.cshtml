@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Step2";
 }
-    <a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;">
+<a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;" id="cardLink">
 
 <section class="main">
 <div class="header">
@@ -34,5 +34,6 @@
         </div>
     </div>
 </div>
-</section>
+        <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+    </section>
 </a>
