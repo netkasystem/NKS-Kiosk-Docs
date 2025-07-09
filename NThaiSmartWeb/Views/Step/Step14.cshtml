@@ -200,7 +200,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ EncrypString: encrypCardData })
-                }).then(response => response.json())
+                }).then(response => response)
                   .then(result => 
                       {
                           console.log('✅ สำเร็จ:', result);
