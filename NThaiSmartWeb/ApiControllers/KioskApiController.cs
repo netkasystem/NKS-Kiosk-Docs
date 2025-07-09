@@ -117,15 +117,8 @@ public class KioskApiController : ControllerBase
     [HttpGet("GetCustomForm")]
     public IActionResult GetCustomForm()
     {
-        var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v => v.Value).FirstOrDefault();
-        if (Convert.ToInt32(CustomFormId) > 0)
-        {
-            var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).FirstOrDefault();
-            return Ok(JsonForm);
-        }
-        else
-        {
-            return Ok("");
-        }
+        var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v=>v.Value).FirstOrDefault();
+        var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
+        return Ok(JsonForm);
     }
 }

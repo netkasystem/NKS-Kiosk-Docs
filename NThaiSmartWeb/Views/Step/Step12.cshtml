@@ -106,7 +106,7 @@
             <button type="submit" class="edit-button">
                 แก้ไขข้อมูล
             </button>
-            <form asp-controller="Step" asp-action="Step13" method="get">
+            <form asp-controller="Step" asp-action="Step14" method="get">
                 <button type="submit" class="confirm-button">
                     ยืนยันข้อมูล
                 </button>
@@ -335,6 +335,7 @@
                     setCardData(cardData);
 
                     infoValuesOnPage.forEach(infoDiv => {
+                        
                         const fieldName = infoDiv.dataset.fieldName;
                         if (updatedData[fieldName]) {
                             infoDiv.dataset.fullValue = updatedData[fieldName];
