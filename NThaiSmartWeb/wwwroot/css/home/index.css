@@ -612,12 +612,12 @@ body, html {
 }
 
 .instruction-list {
-    font-size: 2.5rem;
+    font-size: 2rem;
     line-height: 1.7;
     padding-left: 40px;
     color: white;
     text-align: left;
-    padding: 0px 90px;
+
 }
 
     .instruction-list li {
@@ -1650,7 +1650,6 @@ textarea {
     resize: vertical;
 }
 
-/* --- Custom Radio & Checkbox --- */
 .radio-group-inline, .recommend-group {
     display: flex;
     gap: 15px;
@@ -1680,7 +1679,6 @@ textarea {
         font-weight: 600;
     }
 
-/* Satisfaction Rating */
 .satisfaction-rating {
     display: flex;
     justify-content: space-between;
@@ -1726,7 +1724,6 @@ textarea {
     }
 
 
-/* Checkbox Grid */
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1771,7 +1768,6 @@ textarea {
         }
 
 
-/* --- Submit Button --- */
 .submit-button {
     width: 100%;
     padding: 50px;
@@ -1795,3 +1791,126 @@ textarea {
     .submit-button:active {
         transform: translateY(0);
     }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes gentleBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.four-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 63vh;
+    width: 100%;
+    left: -10px;
+    gap: 10px;
+    box-sizing: border-box;
+    position: fixed;
+}
+
+.icons-column {
+    display: flex;
+    flex-direction: column;
+    gap: 90px;
+    align-content: center;
+    justify-content: center;
+}
+
+.icon-row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    color: white;
+    padding-left: 60px;
+    padding-right: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    transform-origin: center;
+}
+
+    .icon-row:nth-child(1) {
+        animation-delay: 0.2s;
+    }
+
+    .icon-row:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+
+    .icon-row:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+
+    .icon-row img {
+        width: 20%;
+        height: auto;
+    }
+
+    .icon-row h3 {
+        font-size: 2rem;
+        font-weight: normal;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+.bottom-left img {
+    width: fit-content;
+    height: 100%;
+    object-fit: contain;
+}
+
+.top-righ img {
+    width: fit-content;
+    height: 100%;
+    object-fit: contain;
+}
+
+id-card-image2 {
+    width: fit-content;
+    height: 100%;
+    object-fit: contain;
+}
+
+.top-right img,
+.bottom-left img {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards, gentleBounce 2.5s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.top-right img {
+    animation-delay: 0.3s;
+}
+
+.bottom-left img {
+    animation-delay: 0.5s;
+}
