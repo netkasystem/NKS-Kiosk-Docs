@@ -102,7 +102,7 @@ public class KioskApiController : ControllerBase
     }
 
 
-    [HttpPost("GetCustomForm")]
+    [HttpGet("GetCustomForm")]
     public IActionResult GetCustomForm()
     {
         var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v=>v.Value).FirstOrDefault();
