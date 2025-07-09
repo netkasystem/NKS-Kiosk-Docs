@@ -9,7 +9,7 @@ public partial class CustomForm
 
     public string ProfileName { get; set; } = null!;
 
-    public string FormFieldJson { get; set; } = null!; 
+    public string FormFieldJson { get; set; } = null!;
 
     public string CreatedBy { get; set; } = null!;
 
@@ -17,5 +17,5 @@ public partial class CustomForm
 
     public string UpdatedBy { get; set; } = null!;
 
-    public DateTime UpdatedDate { get; set; } 
+    public DateTime UpdatedDate { get; set; }
 }

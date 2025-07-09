@@ -20,6 +20,4 @@ public partial class CaseType
     public string TeamId { get; set; } = null!;
 
     public uint OwnerId { get; set; }
-
-    public virtual ICollection<CustomForm> CustomForm { get; set; } = new List<CustomForm>();
 }

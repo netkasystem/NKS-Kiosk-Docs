@@ -10,6 +10,4 @@ public partial class NsdFunction
     public string FunctionName { get; set; } = null!;
 
     public string FunctionDescription { get; set; } = null!;
-
-    public virtual ICollection<CustomForm> CustomForm { get; set; } = new List<CustomForm>();
 }

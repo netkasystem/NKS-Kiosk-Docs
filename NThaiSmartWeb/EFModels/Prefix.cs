@@ -12,6 +12,4 @@ public partial class Prefix
     public uint PrefixSequence { get; set; }
 
     public virtual ICollection<Contact> Contact { get; set; } = new List<Contact>();
-
-    public virtual ICollection<Staff> Staff { get; set; } = new List<Staff>();
 }

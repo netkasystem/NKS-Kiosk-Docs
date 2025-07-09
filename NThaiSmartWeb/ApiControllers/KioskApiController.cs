@@ -39,19 +39,32 @@ public class KioskApiController : ControllerBase
         return Ok(list);
     }
 
-    public JObject GetScriptDetail()
+    // ตัวอย่าง: 4f0e3bc2381742e8b8a7dd1703ec2d3d
+    public string GeneratePermanentToken => Guid.NewGuid().ToString("N");
+
+    public JObject GetScriptDetail(string username = null)
     {
-        string username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
+        if (string.IsNullOrEmpty(username))
+            username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
+
         uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
         var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
+        string KIOSK_TOKEN = GeneratePermanentToken;
+        oKiosk.KioskToken = KIOSK_TOKEN;
 
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
-        var res = JObject.FromObject(new { KIOSK_CODE = oKiosk?.KioskCode ?? "", URL = SignalRHub });
-        return res;
+        var detail = new
+        {
+            KIOSK_CODE = oKiosk?.KioskCode ?? "",
+            URL = SignalRHub,
+            KIOSK_TOKEN
+        };
+
+        return JObject.FromObject(detail);
     }
 
     [HttpPost("DownloadFile")]
-    public IActionResult DownloadFile([FromQuery] string fileCode)
+    public IActionResult DownloadFile([FromQuery] string fileCode, string username = null)
     {
         if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
 
@@ -63,7 +76,7 @@ public class KioskApiController : ControllerBase
 
         if (script == null) return NotFound("Script not found.");
 
-        JObject req = GetScriptDetail();
+        JObject req = GetScriptDetail(username);
         string result = script.ScriptContent.ReplaceByObject(req);
         var bytes = Encoding.UTF8.GetBytes(result);
         return File(bytes, "application/x-sh", script.Filename);
@@ -100,7 +113,6 @@ public class KioskApiController : ControllerBase
             return BadRequest("❌ บันทึกไม่สำเร็จ");
         }
     }
-
 
     [HttpGet("GetCustomForm")]
     public IActionResult GetCustomForm()
