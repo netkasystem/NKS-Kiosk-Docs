@@ -20,11 +20,3 @@ html {
 body {
   margin-bottom: 60px;
 }
-
-#faceCanvas {
-    display: none;
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
