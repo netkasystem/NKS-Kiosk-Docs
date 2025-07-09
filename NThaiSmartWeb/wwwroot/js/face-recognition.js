@@ -64,9 +64,9 @@ async function detectLoop() {
     const faceCenterX = box.x + box.width / 2;
     const faceCenterY = box.y + box.height / 2;
 
-    const isCentered = (faceCenterX > vw * 0.32 && faceCenterX < vw * 0.35 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
+    const isCentered = (faceCenterX > vw * 0.25 && faceCenterX < vw * 0.3 && faceCenterY > vh * 0.15 && faceCenterY < vh * 0.25);
     console.log()
-    const isBigEnough = faceRatio > 0.020;
+    const isBigEnough = faceRatio > 0.010;
 
     // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
     const tempCanvas = document.createElement('canvas');
