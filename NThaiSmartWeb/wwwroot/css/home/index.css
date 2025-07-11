@@ -95,15 +95,55 @@
     }
 }
 
-@keyframes move {
+@keyframes blink {
+    50% {
+        border-color: transparent
+    }
+}
+.step {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeSlideIn 0.6s ease-out both;
+    will-change: opacity, transform;
+}
+
+.step-container {
+    perspective: 1000px;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+.step:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.step:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.step:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+.step:nth-child(4) {
+    animation-delay: 1.2s;
+}
+
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
     100% {
-        transform: translate3d(0, 0, 1px) rotate(360deg);
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
 body, html {
     width: 100%;
-    height: 100%;
+    height: 106%;
     margin: 0;
     padding: 0;
     background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #021B79 20%, #3852A3 81%);
@@ -116,7 +156,7 @@ body, html {
 
     body.red-background {
         width: 100%;
-        height: 100%;
+        height: 106%;
         margin: 0;
         padding: 0;
         background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #F6743E 32%, #D42525 81%);
@@ -129,7 +169,7 @@ body, html {
 
     body.green-background {
         width: 100%;
-        height: 100%;
+        height: 106%;
         margin: 0;
         padding: 0;
         background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #32BB71 32%, #2A9D8F 81%);
@@ -1207,7 +1247,8 @@ h2 {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 12px;
+   
 }
 
 .form-field.full-width {
@@ -1220,6 +1261,7 @@ h2 {
     font-size: 1.5rem;
     font-weight: bold;
     color: #555;
+    margin-top: 20px;
 }
 
 .form-field input[type="text"],
@@ -1233,20 +1275,21 @@ h2 {
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-around;
     gap: 10px;
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #eee;
+    border: none;
 }
 
     .modal-footer button {
-        padding: 12px 24px;
+        padding: 30px 50px;
         border: none;
         border-radius: 8px;
         font-size: 1.5rem;
         font-weight: bold;
         cursor: pointer;
+        width:48%;
     }
 
 .cancel-button {
@@ -1524,13 +1567,14 @@ footer {
 
 .kiosk-container {
     width: 100%;
-    height: 90vh;
+    height: 85vh;
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-top: 50px;
 }
 
 .form-header {
@@ -1588,7 +1632,7 @@ footer {
     }
 
 .form-section {
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     padding: 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -1630,6 +1674,7 @@ footer {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    margin-top: 15px;
 }
 
     .section-title .icon {
@@ -1663,7 +1708,7 @@ select,
 textarea {
     width: 100%;
     padding: 15px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-sizing: border-box;
@@ -1827,5 +1872,27 @@ textarea {
         transform: translateY(0);
     }
 .congratulations-image{
-    width: 50%;
+    width: 100%;
+}
+.confirmation-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0 0 0 / 69%);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-confirmation {
+    background-color: white;
+    width: 45vh;
+    padding: 60px 60px;
+    font-size: 48px;
+    height: auto;
+    text-align: center;
+    border-radius: 20px;
 }

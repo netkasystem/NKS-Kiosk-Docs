@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
  
     document.body.addEventListener("click", function (e) {
-        // ถ้าคลิกที่ cardLink → ไม่ต้องเล่นเสียงซ้ำ
         if (e.target.closest("#cardLink")) return;
 
         if (audio) {
@@ -32,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-
+/*
 window.Step3 = {
     init: () => {
         console.log("Step 3 read consent and check consent");
@@ -188,3 +187,4 @@ window.withoutCard = () => {
         }
     }
 })();
+*/

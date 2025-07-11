@@ -5,6 +5,7 @@ let hasCapture;
 let faceDetectorLoaded = false;
 let faceDetected = false;
 let stableSince = null;
+
 let canPlayFocusAudio = true;
 
 const video = document.getElementById("videoInput");
@@ -58,7 +59,7 @@ async function detectLoop() {
         stableSince = null;
 
         audioLook.pause(); // หยุดเสียงนับถอยหลัง ถ้ากำลังเล่นอยู่
-        audioLook.currentTime = 0;
+        audioLook.currentTime = 3000;
 
         if (audioFocus.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
             audioFocus.play(); // เล่นเสียง "ให้อยู่ในกรอบ"

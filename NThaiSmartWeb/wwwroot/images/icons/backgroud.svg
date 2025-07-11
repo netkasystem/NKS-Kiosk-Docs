@@ -1,6 +1,8 @@
+
 <svg width="1080" height="1400" viewBox="0 0 1080 1400" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g style="mix-blend-mode:overlay" opacity="0.3">
-<path d="M-1453.88 170.98C-563.747 -456.415 -449.358 2657.9 1403.86 40.6862" stroke="black" stroke-width="0.9758" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M-1453.88 170.98C-563.747 -456.415 -449.358 2657.9 1403.86 40.6862" stroke="black" stroke-width="0.9758" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>   <animate attributeName="stroke-dashoffset" from="2000" to="0" dur="2s" fill="freeze" />
+
 <path d="M-1451.9 214.53C-533.66 -498.902 -396.847 2628.16 1410.96 97.3361" stroke="black" stroke-width="0.9516" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M-1449.62 258.079C-503.288 -541.036 -343.767 2598.78 1418.62 153.631" stroke="black" stroke-width="0.9274" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M-1447.35 301.983C-473.2 -582.815 -290.688 2569.74 1426 210.635" stroke="black" stroke-width="0.9032" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
