@@ -34,9 +34,11 @@ public class AuthorizationFilter : IAuthorizationFilter
 
     public void OnWebApiRequest(AuthorizationFilterContext context)
     {
-        var path = context.HttpContext.Request.Path.Value?.ToLower();
+        var path = context.HttpContext.Request.Path.Value?.Replace("/api","")?.ToLower();
         // ⛔ อนุญาตเฉพาะ API ที่คุณ whitelist ไว้ (หรือสลับเป็น Blacklist ถ้าส่วนใหญ่ปิดหมด)
         if (AllowApiList.Contains(path))
+            return;
+        else if (NSDXSession.GetMenuApiPathAnonymous.Contains(path))
             return;
 
         if (NSDXSession.GetCurrentUser == null)

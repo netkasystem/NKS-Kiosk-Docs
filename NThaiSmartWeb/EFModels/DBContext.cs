@@ -162,7 +162,7 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<CustomerType> CustomerType { get; set; }
 
-    public virtual DbSet<DataProtectionKeys> DataProtectionKeys { get; set; }
+    public virtual DbSet<Dataprotectionkeys> Dataprotectionkeys { get; set; }
 
     public virtual DbSet<DatasourceConfig> DatasourceConfig { get; set; }
 
@@ -309,6 +309,8 @@ public partial class DBContext : DbContext
     public virtual DbSet<Menu> Menu { get; set; }
 
     public virtual DbSet<MenuApiPath> MenuApiPath { get; set; }
+
+    public virtual DbSet<MenuApiPathAnonymous> MenuApiPathAnonymous { get; set; }
 
     public virtual DbSet<MenuApiPathPhase2> MenuApiPathPhase2 { get; set; }
 
@@ -2941,9 +2943,11 @@ public partial class DBContext : DbContext
                 .HasColumnName("description");
         });
 
-        modelBuilder.Entity<DataProtectionKeys>(entity =>
+        modelBuilder.Entity<Dataprotectionkeys>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("dataprotectionkeys");
 
             entity.Property(e => e.Id).HasColumnType("int(11)");
         });
@@ -5663,15 +5667,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.ParentMenuId)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("parent_menu_id");
-
-            entity.HasOne(d => d.MenuGroup).WithMany(p => p.Menu)
-                .HasForeignKey(d => d.MenuGroupId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_menu_menu_group");
-
-            entity.HasOne(d => d.ParentMenu).WithMany(p => p.InverseParentMenu)
-                .HasForeignKey(d => d.ParentMenuId)
-                .HasConstraintName("FK_menu_menu");
         });
 
         modelBuilder.Entity<MenuApiPath>(entity =>
@@ -5691,6 +5686,31 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Path)
                 .HasMaxLength(200)
                 .HasColumnName("path");
+        });
+
+        modelBuilder.Entity<MenuApiPathAnonymous>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("menu_api_path_anonymous");
+
+            entity.HasIndex(e => e.Path, "menu_api_path_anonymous_unique").IsUnique();
+
+            entity.HasIndex(e => e.ModuleId, "menu_api_path_fk");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.ModuleId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("module_id");
+            entity.Property(e => e.Path)
+                .HasMaxLength(200)
+                .HasColumnName("path");
+
+            entity.HasOne(d => d.Module).WithMany(p => p.MenuApiPathAnonymous)
+                .HasForeignKey(d => d.ModuleId)
+                .HasConstraintName("menu_api_path_anonymous2_fk");
         });
 
         modelBuilder.Entity<MenuApiPathPhase2>(entity =>
@@ -5789,10 +5809,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.MenuGroupValue)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("menu_group_value");
-
-            entity.HasOne(d => d.MenuGroupParentNavigation).WithMany(p => p.InverseMenuGroupParentNavigation)
-                .HasForeignKey(d => d.MenuGroupParent)
-                .HasConstraintName("FK_menu_group_menu_group");
         });
 
         modelBuilder.Entity<MenuTutorialMapping>(entity =>

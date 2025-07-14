@@ -12,6 +12,7 @@ public static class NSDXSessionKey
     public static string APIGetIncident = "APIGetIncident";
 
     public static string KioskCode = "KioskCode";
+    public static string MenuApiPathAnonymous = "_MenuApiPathAnonymous";
 }
 
 public static class NSDXSession
@@ -56,4 +57,7 @@ public static class NSDXSession
     }
 
     public static string GetCurrentUser => Get<string>(NSDXSessionKey.CurrentUser);
+
+    public static List<string> GetMenuApiPathAnonymous => GetDefault(NSDXSessionKey.MenuApiPathAnonymous,
+                () => EntitiesHelpers.DatabaseContext.MenuApiPathAnonymous.Where(_m => !string.IsNullOrEmpty(_m.Path)).Select(_m => _m.Path.ToLower()).ToList());
 }

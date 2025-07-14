@@ -6,7 +6,7 @@ form?.addEventListener("submit", async (e) => {
         username: formData.get("username"),
         password: formData.get("password"),
         rememberMe: formData.get("rememberMe") ?? "off",
-        kioskCode: KioskCode ?? ""
+        kioskCode: kiosk_code ?? ""
     };
 
     const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
@@ -19,31 +19,20 @@ form?.addEventListener("submit", async (e) => {
     }
 });
 
-
 const urlParams = new URLSearchParams(window.location.search);
-const KioskCode = urlParams.get("kioskCode");
+const kiosk_code = urlParams.get("kiosk_code");
 const token = urlParams.get("token");
 
-if (!KioskCode) {
-    console.log("❌ ไม่พบ KioskCode");
-} else {
-    console.log("ตู้นี้คือ:", KioskCode);
-}
-
-if (KioskCode && token) SSOLogin();
-
-SSOLogin = async function () {
-
-
-    const data = { kioskCode: KioskCode ?? "", token: token ?? "" };
-
-    if (response.ok) {
-        localStorage.setItem('selectedKioskCode', res.kioskCode);
-        window.location.href = '/Step/Step1';
-    }
+async function SSOLogin() {
+    const data = { kiosk_code: kiosk_code ?? "", token: token ?? "" };
 
     try {
-        const response = await fetch('/api/auth/sso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const response = await fetch('/api/auth/sso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
         const res = await response.json();
 
         if (response.ok) {
@@ -63,3 +52,13 @@ SSOLogin = async function () {
         alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
     }
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+    if (!kiosk_code) {
+        console.log("❌ ไม่พบ KioskCode");
+    } else {
+        console.log("ตู้นี้คือ:", kiosk_code);
+    }
+
+    if (kiosk_code && token) SSOLogin();
+});

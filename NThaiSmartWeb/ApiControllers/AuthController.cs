@@ -16,7 +16,7 @@ public class AuthController : ControllerBase
     [HttpPost("sso")]
     public IActionResult SSO([FromBody] JObject data)
     {
-        var kioskCode = data["kioskCode"]?.ToString();
+        var kioskCode = data["kiosk_code"]?.ToString();
         var token = data["token"]?.ToString();
         var oKiosk = _context.Kiosk.Where(k => k.KioskCode == kioskCode && k.Inactive == 0 && k.KioskToken == token).FirstOrDefault();
 
