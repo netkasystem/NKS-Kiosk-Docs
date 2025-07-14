@@ -458,7 +458,7 @@ body, html {
 }
 
 .page-header {
-    padding-top: 0px;
+    padding-top: 50px;
     padding-bottom: 10px;
     text-align: center;
     color: white;
@@ -539,8 +539,8 @@ body, html {
     max-width: 1900px;
     height: 66vh;
     gap: 70px;
-    margin-top: 30px;
-}
+/*    margin-top: 30px;
+*/}
 
 .left-column, .right-column {
     display: flex;
@@ -627,7 +627,7 @@ body, html {
 .right-column {
     display: flex;
     flex-direction: column;
-    height: 90%;
+    height: 101%;
     width: 120%;
     gap: 5px;
     padding: 20px;
@@ -678,7 +678,7 @@ body, html {
 
 .instruction-list {
     font-size: 2rem;
-    line-height: 1;
+    line-height: 1.5;
     padding-left: 40px;
     color: white;
     text-align: left;
@@ -686,7 +686,7 @@ body, html {
 }
 
     .instruction-list li {
-        margin-bottom: 50px;
+        margin-bottom:36px;
         margin-left: 55px;
     }
 
