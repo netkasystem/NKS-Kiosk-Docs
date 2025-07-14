@@ -6,7 +6,8 @@ namespace NThaiSmartWeb.EFModels;
 
 public partial class DBContext : DbContext
 {
-    public DBContext(DbContextOptions<KioskContext> options) : base(options)
+    public DBContext(DbContextOptions<KioskContext> options)
+        : base(options)
     {
     }
 
@@ -283,8 +284,6 @@ public partial class DBContext : DbContext
     public virtual DbSet<KioskMonitoringPin> KioskMonitoringPin { get; set; }
 
     public virtual DbSet<KioskSetup> KioskSetup { get; set; }
-
-    public virtual DbSet<KioskView> KioskView { get; set; }
 
     public virtual DbSet<Level> Level { get; set; }
 
@@ -5001,16 +5000,15 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<Kiosk>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("kiosk");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.HasIndex(e => e.Id, "id_UNIQUE").IsUnique();
+            entity.ToTable("kiosk");
 
-            entity.HasIndex(e => e.KioskCode, "kiosk_area_unique").IsUnique();
+            entity.HasIndex(e => e.KioskCode, "kiosk_temp_unique").IsUnique();
 
-            entity.HasIndex(e => e.KioskToken, "kiosk_token").IsUnique();
-
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
             entity.Property(e => e.Address)
                 .HasMaxLength(500)
                 .HasDefaultValueSql("''")
@@ -5036,10 +5034,6 @@ public partial class DBContext : DbContext
                 .HasMaxLength(500)
                 .HasComment("คำอธิบายเพิ่มเติม")
                 .HasColumnName("description");
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
             entity.Property(e => e.Inactive)
                 .HasDefaultValueSql("'0'")
                 .HasColumnType("tinyint(1) unsigned")
@@ -5121,10 +5115,14 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("id");
-            entity.Property(e => e.Color)
+            entity.Property(e => e.BackgroundColor)
                 .HasMaxLength(20)
                 .HasDefaultValueSql("'#000000'")
-                .HasColumnName("color");
+                .HasColumnName("background_color");
+            entity.Property(e => e.FontColor)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'#000000'")
+                .HasColumnName("font_color");
             entity.Property(e => e.HealthTitle)
                 .HasMaxLength(200)
                 .HasDefaultValueSql("''")
@@ -5228,83 +5226,6 @@ public partial class DBContext : DbContext
                 .HasMaxLength(50)
                 .HasComment("เวอร์ชันของสคริปต์ เช่น v1.0.3 หรือ latest")
                 .HasColumnName("version");
-        });
-
-        modelBuilder.Entity<KioskView>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("kiosk_view");
-
-            entity.Property(e => e.Address)
-                .HasMaxLength(500)
-                .HasDefaultValueSql("''")
-                .HasColumnName("address");
-            entity.Property(e => e.Color)
-                .HasMaxLength(20)
-                .HasDefaultValueSql("'#000000'")
-                .HasColumnName("color");
-            entity.Property(e => e.ContactEmail)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("contact_email");
-            entity.Property(e => e.ContactName)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("''")
-                .HasColumnName("contact_name");
-            entity.Property(e => e.ContactTel)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("''")
-                .HasColumnName("contact_tel");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("current_timestamp()")
-                .HasComment("วันที่สร้าง")
-                .HasColumnType("timestamp")
-                .HasColumnName("created_at");
-            entity.Property(e => e.Description)
-                .HasMaxLength(500)
-                .HasComment("คำอธิบายเพิ่มเติม")
-                .HasColumnName("description");
-            entity.Property(e => e.HealthTitle)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("health_title");
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("'0'")
-                .HasColumnType("int(10) unsigned")
-                .HasColumnName("id");
-            entity.Property(e => e.Inactive)
-                .HasDefaultValueSql("'0'")
-                .HasColumnType("tinyint(1) unsigned")
-                .HasColumnName("inactive");
-            entity.Property(e => e.KioskCode)
-                .HasMaxLength(50)
-                .HasComment("รหัสเครื่อง Kiosk")
-                .HasColumnName("kiosk_code");
-            entity.Property(e => e.KioskName)
-                .HasMaxLength(200)
-                .HasDefaultValueSql("''")
-                .HasColumnName("kiosk_name");
-            entity.Property(e => e.Lastupdate)
-                .HasDefaultValueSql("current_timestamp()")
-                .HasColumnType("datetime")
-                .HasColumnName("lastupdate");
-            entity.Property(e => e.Latitude)
-                .HasMaxLength(20)
-                .HasDefaultValueSql("''")
-                .HasColumnName("latitude");
-            entity.Property(e => e.Longitude)
-                .HasMaxLength(20)
-                .HasDefaultValueSql("''")
-                .HasColumnName("longitude");
-            entity.Property(e => e.MinAgo)
-                .HasColumnType("bigint(21)")
-                .HasColumnName("min_ago");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("current_timestamp()")
-                .HasComment("วันที่อัพเดตล่าสุด")
-                .HasColumnType("timestamp")
-                .HasColumnName("updated_at");
         });
 
         modelBuilder.Entity<Level>(entity =>

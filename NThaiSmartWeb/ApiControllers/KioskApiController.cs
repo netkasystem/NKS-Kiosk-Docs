@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
@@ -40,28 +41,12 @@ public class KioskApiController : ControllerBase
     }
 
     // ตัวอย่าง: 4f0e3bc2381742e8b8a7dd1703ec2d3d
-    public string GeneratePermanentToken => Guid.NewGuid().ToString("N");
+    public string GeneratePermanentToken() => Guid.NewGuid().ToString("N");
 
     public JObject GetScriptDetail(string username = null)
     {
-        if (string.IsNullOrEmpty(username))
-            username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
-
-        uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
-        var oKiosk = _context.Kiosk.FirstOrDefault(_k => _k.Id == KioskId);
-        string KIOSK_TOKEN = GeneratePermanentToken;
-        
-        oKiosk.KioskToken = KIOSK_TOKEN;
-        _context.SaveChanges();
-
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
-        var detail = new
-        {
-            KIOSK_CODE = oKiosk?.KioskCode ?? "",
-            URL = SignalRHub,
-            KIOSK_TOKEN
-        };
-
+        var detail = new { URL = SignalRHub };
         return JObject.FromObject(detail);
     }
 
@@ -79,8 +64,24 @@ public class KioskApiController : ControllerBase
         if (script == null) return NotFound("Script not found.");
 
         JObject req = GetScriptDetail(username);
-        string result = script.ScriptContent.ReplaceByObject(req);
+        if (username == null)
+            username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
 
+        uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
+        var oKiosk = _context.Kiosk.Where(_k => _k.Id == KioskId).FirstOrDefault();
+
+        if (oKiosk != null && fileCode.StartsWith("setup-kiosk-config"))
+        {
+            var KIOSK_TOKEN = GeneratePermanentToken();
+
+            req["KIOSK_TOKEN"] = KIOSK_TOKEN;
+            req["KIOSK_CODE"] = oKiosk?.KioskCode ?? "";
+
+            oKiosk.KioskToken = KIOSK_TOKEN;
+            _context.SaveChanges();
+        }
+
+        string result = script.ScriptContent.ReplaceByObject(req);
         var unixScript = result.Replace("\r\n", "\n"); // 🔧 Convert Windows CRLF to Unix LF
 
         var bytes = Encoding.UTF8.GetBytes(unixScript);
@@ -122,7 +123,7 @@ public class KioskApiController : ControllerBase
     [HttpGet("GetCustomForm")]
     public IActionResult GetCustomForm()
     {
-        var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v=>v.Value).FirstOrDefault();
+        var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v => v.Value).FirstOrDefault();
         var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
     }

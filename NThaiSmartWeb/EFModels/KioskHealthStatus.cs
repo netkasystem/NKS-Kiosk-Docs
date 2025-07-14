@@ -11,5 +11,7 @@ public partial class KioskHealthStatus
 
     public string HealthTitle { get; set; } = null!;
 
-    public string Color { get; set; } = null!;
+    public string BackgroundColor { get; set; } = null!;
+
+    public string FontColor { get; set; } = null!;
 }
