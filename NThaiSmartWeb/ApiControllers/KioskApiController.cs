@@ -80,7 +80,10 @@ public class KioskApiController : ControllerBase
 
         JObject req = GetScriptDetail(username);
         string result = script.ScriptContent.ReplaceByObject(req);
-        var bytes = Encoding.UTF8.GetBytes(result);
+
+        var unixScript = result.Replace("\r\n", "\n"); // 🔧 Convert Windows CRLF to Unix LF
+
+        var bytes = Encoding.UTF8.GetBytes(unixScript);
         return File(bytes, "application/x-sh", script.Filename);
     }
 

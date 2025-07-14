@@ -6,7 +6,7 @@ form?.addEventListener("submit", async (e) => {
         username: formData.get("username"),
         password: formData.get("password"),
         rememberMe: formData.get("rememberMe") ?? "off",
-        kioskCode: KioskCode ?? ""
+        kioskCode: kiosk_code ?? ""
     };
 
     const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
