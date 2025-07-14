@@ -24,10 +24,4 @@ public partial class MenuGroup
     public DateTime MenuGroupCreateDate { get; set; }
 
     public DateTime MenuGroupUpdateDate { get; set; }
-
-    public virtual ICollection<MenuGroup> InverseMenuGroupParentNavigation { get; set; } = new List<MenuGroup>();
-
-    public virtual ICollection<Menu> Menu { get; set; } = new List<Menu>();
-
-    public virtual MenuGroup? MenuGroupParentNavigation { get; set; }
 }
