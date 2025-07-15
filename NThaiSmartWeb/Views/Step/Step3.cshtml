@@ -56,20 +56,13 @@
 
             <div class="terms-footer-fixed">
                 <label class="terms-checkbox-group">
-                    <input type="checkbox" id="acceptCheckbox" onchange="toggleSubmit()" >
+                    <input type="checkbox" id="acceptCheckbox">
                     <span class="custom-checkbox"></span>  ข้าพเจ้ายอมรับข้อตกลงเงื่อนไข
                 </label>
                 <button class="terms-submit-button" id="submitButton" disabled>ยืนยัน</button>
             </div>
         </div>
     </div>
-    <script>
-        function toggleSubmit() {
-          const checkbox = document.getElementById('acceptCheckbox');
-          const button = document.getElementById('submitButton');
-          button.disabled = !checkbox.checked;
-        }
-    </script>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
 
 </body>

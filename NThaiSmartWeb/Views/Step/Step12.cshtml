@@ -229,15 +229,15 @@
 
             localToggleButtons.forEach(button => {
                 const infoField = button.closest('.info-field');
-                const infoValueElement = infoField.querySelector('.info-value');
-                const maskedValue = infoValueElement.textContent;
                 let isDataVisible = false; // สถานะของแต่ละปุ่ม
 
                 button.addEventListener('click', function() {
                     isDataVisible = !isDataVisible;
 
+                    const infoValueElement = this.parentElement.querySelector('.info-value');
                     const eyeIcon = button.querySelector('img');
                     const fullValue = infoValueElement.dataset.fullValue;
+                    const maskedValue = infoValueElement.dataset.maskValue;
 
                     if (isDataVisible) {
                         infoValueElement.textContent = fullValue;
@@ -416,8 +416,10 @@
                 Object.entries(fields).forEach(([key, value]) => {
                     const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
                     if (el) {
+                        var maskVal = maskText(value);
                         el.setAttribute("data-full-value", value);
-                        el.textContent = maskText(value);
+                        el.setAttribute("data-mask-value", maskVal);
+                        el.textContent = maskVal;
                     }
                 });
             }

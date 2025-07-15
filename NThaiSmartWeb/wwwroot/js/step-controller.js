@@ -1,27 +1,22 @@
-﻿const next_page = (href, time_sec = 0) => {
-    setTimeout(() => { window.location.href = href; }, time_sec * 1000);
-}
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("click-sound");
     const cardLink = document.getElementById("cardLink");
 
     if (cardLink && audio) {
         cardLink.addEventListener("click", function (e) {
-            e.preventDefault(); 
+            e.preventDefault();
             audio.currentTime = 0;
             audio.play().then(() => {
-              
                 setTimeout(() => {
                     window.location.href = cardLink.href;
-                }, 300); 
+                }, 300);
             }).catch(err => {
                 console.warn("Sound error:", err);
-                window.location.href = cardLink.href; 
+                window.location.href = cardLink.href;
             });
         });
     }
 
- 
     document.body.addEventListener("click", function (e) {
         if (e.target.closest("#cardLink")) return;
 
@@ -31,20 +26,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-/*
+
 window.Step3 = {
     init: () => {
         console.log("Step 3 read consent and check consent");
 
-        document.getElementById("submitButton").addEventListener("click", () => {
-            const checkbox = document.getElementById('acceptCheckbox');
-            if (checkbox.checked) {
-                setConsent();
-                if (getCardData() == null) {
-                    next_page("/Step/Step4", 1.5);
-                } else {
-                    next_page("/Step/Step5", 1.5);
-                }
+        const checkbox = document.getElementById('acceptCheckbox');
+        const button = document.getElementById('submitButton');
+
+        checkbox.addEventListener('change', () => {
+            button.disabled = !checkbox.checked;
+        });
+
+        button.addEventListener("click", () => {
+            setConsent();
+            if (getCardData() == null) {
+                next_page("/Step/Step4", 0.5);
+            } else {
+                next_page("/Step/Step5", 0.5);
             }
         });
     }
@@ -129,17 +128,15 @@ window.Step12 = {
         try {
             const response = fetch('/api/KioskApi/GetCustomForm', {
                 method: 'GET',
-                headers: { "Content-Type": "application/json", } 
+                headers: { "Content-Type": "application/json", }
             }).then(response => {
                 if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
                 return response.json();
             }).then(data => {
                 if (data.length > 0) {
-                    sessionStorage.setItem("CustomField", data); 
+                    sessionStorage.setItem("CustomField", data);
                 }
-                     
             })
-
         } catch (error) {
             alert(error.message);
         }
@@ -171,7 +168,6 @@ window.withoutCard = () => {
     window.location.href = "/Step/Step1";
 }
 
-
 (function () {
     const currentPath = window.location.pathname;
     const match = currentPath.match(/^\/Step\/Step(\d+)$/);
@@ -187,4 +183,3 @@ window.withoutCard = () => {
         }
     }
 })();
-*/

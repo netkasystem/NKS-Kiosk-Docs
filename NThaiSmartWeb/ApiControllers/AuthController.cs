@@ -41,7 +41,6 @@ public class AuthController : ControllerBase
         var username = data["username"]?.ToString();
         var password = data["password"]?.ToString();
         var rememberMe = data["rememberMe"]?.ToString() ?? "off";
-        var kioskCode = data["kioskCode"]?.ToString();
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return BadRequest(new { message = "กรุณาระบุชื่อผู้ใช้และรหัสผ่าน" });
@@ -53,11 +52,8 @@ public class AuthController : ControllerBase
         //    return Unauthorized(new { message = "❌ Invalid credentials" });
 
         var oKiosk = new Kiosk();
-        if (!string.IsNullOrEmpty(kioskCode))
-        {
-            oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId && k.KioskCode == kioskCode).FirstOrDefault();
-            if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
-        }
+        oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
+        if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
 
         // ✅ Login สำเร็จ
         NSDXSession.Set(NSDXSessionKey.CurrentUser, username);

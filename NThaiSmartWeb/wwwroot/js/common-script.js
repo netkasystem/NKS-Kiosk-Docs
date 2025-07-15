@@ -43,6 +43,7 @@ window.decrypt = function (ciphertextBase64) {
 }
 
 window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
+window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
 
 const setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
 const getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? null);
@@ -55,7 +56,6 @@ const setConsent = () => sessionStorage.setItem("hasConsent", true);
 const getConsent = () => sessionStorage.getItem("hasConsent");
 
 const clearSessionStorage = () => sessionStorage.clear();
-
 
 const logoutBtn = document.getElementById("logout");
 logoutBtn?.addEventListener("click", async (e) => {
@@ -72,3 +72,7 @@ logoutBtn?.addEventListener("click", async (e) => {
         alert(res.message || 'Logout failed');
     }
 });
+
+const next_page = (href, time_sec = 0) => {
+    setTimeout(() => { window.location.href = href; }, time_sec * 1000);
+}

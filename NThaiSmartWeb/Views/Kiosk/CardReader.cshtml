@@ -5,14 +5,7 @@
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-12">
-            <div class="video-wrapper" style="position: relative;">
-                <video id="videoInput" autoplay muted playsinline></video>
-                <canvas id="faceCanvas" style="display: none;"></canvas>
-
-                <div class="glass-overlay"></div>
-                <img src="/images/icons/focus.svg" class="focus-frame" alt="frame">
-                <div id="scanResult">กำลังรอการตรวจจับใบหน้า...</div>
-            </div>
+            @Html.Partial("~/Views/Step/Step10.cshtml")
         </div>
 
         <div class="col-lg-9 col-12">

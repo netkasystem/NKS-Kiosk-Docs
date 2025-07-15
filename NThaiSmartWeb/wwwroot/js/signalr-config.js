@@ -10,8 +10,8 @@ connection.start().then(() => {
         }
     }, 2 * 60 * 1000);
 
-    const savedId = localStorage.getItem('selectedKioskCode');
-    if (savedId) selectKiosk(savedId);
+    const KioskCode = localStorage.getItem('selectedKioskCode');
+    if (KioskCode) selectKiosk(KioskCode);
 }).catch(err => console.error("❌ SignalR error: ", err));
 
 connection.onreconnected(() => {
@@ -23,23 +23,15 @@ connection.onreconnected(() => {
 // รับสถานะเครื่องอ่าน
 connection.on("KioskStatus", (data) => {
     // 🎯 อัปเดตเครื่องที่เลือกอยู่ (ถ้ามี)
-    if (selectedKioskCode && data.kioskCode === selectedKioskCode) {
-        console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
-        console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
-        //document.getElementById("kiosk-status-time").innerText = new Date(data.timestamp).toLocaleTimeString();
-        //document.getElementById("kiosk-status-text").innerText = data.statusText;
+    console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
+    console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
 
-        //const iconElem = document.getElementById("kiosk-status-icon");
-        //iconElem.className = "status-icon"; // reset
-        //iconElem.classList.add(data.statusCode); // เพิ่มสถานะใหม่
-
-        if (data.statusCode === "card_detected") {
-            onCardInserted();
-        }
-        if (data.statusCode === "card_removed") {
-            clearCardInfo();
-            withoutCard();
-        }
+    if (data.statusCode === "card_detected") {
+        onCardInserted();
+    }
+    if (data.statusCode === "card_removed") {
+        clearCardInfo();
+        withoutCard();
     }
 });
 
@@ -47,49 +39,11 @@ connection.on("KioskStatus", (data) => {
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
     setCardData(data);
-    //cardData = data;
-    //const img = document.getElementById("photo");
-    //img.onload = async () => {
-    //    try {
-    //        console.log("🟢 โหลดรูปบัตรสำเร็จ");
-    //        newCard = true;
-
-    //        const videoInput = document.getElementById("videoInput");
-    //        if (videoInput) videoInput.style.display = "block";
-    //        const captureBtn = document.getElementById("captureFace");
-    //        if (captureBtn) captureBtn.style.display = "block";
-    //    } catch (err) {
-    //        console.error("🔴 โหลดรูปบัตรล้มเหลว:", err.message);
-    //    }
-    //};
-    //img.src = data.photo;
-
-    //document.getElementById("citizenID").innerText = data.citizenID;
-    //document.getElementById("fullNameTH").innerText = data.fullNameTH;
-    //document.getElementById("fullNameEN").innerText = data.fullNameEN;
-    //document.getElementById("dob").innerText = new Date(data.dateOfBirth).toLocaleDateString("th-TH");
-    //document.getElementById("issueDate").innerText = new Date(data.issueDate).toLocaleDateString("th-TH");
-    //document.getElementById("expireDate").innerText = new Date(data.expireDate).toLocaleDateString("th-TH");
-
-    //const addr = data.addressInfo;
-    //const fullAddr = `${addr.houseNo} ${addr.villageNo} ${addr.lane} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province}`.replace(/\s+/g, ' ').trim();
-    //document.getElementById("address").innerText = fullAddr;
-    //document.getElementById("issuer").innerText = data.issuer.trim();
 }
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร
 function clearCardInfo() {
     removeCardData();
-    //cardData = null;
-    //document.getElementById("photo").src = "/images/icons/id-card-icon.png";
-    //document.getElementById("citizenID").innerText = "";
-    //document.getElementById("fullNameTH").innerText = "";
-    //document.getElementById("fullNameEN").innerText = "";
-    //document.getElementById("dob").innerText = "";
-    //document.getElementById("issueDate").innerText = "";
-    //document.getElementById("expireDate").innerText = "";
-    //document.getElementById("address").innerText = "";
-    //document.getElementById("issuer").innerText = "";
 }
 
 // รับรายการ kiosk ทั้งหมดที่เชื่อมอยู่
@@ -126,11 +80,16 @@ function renderKioskList(kioskArray) {
 
 // เรียกใช้เมื่อคลิก "เลือกตู้"
 function selectKiosk(id) {
-    var kioskNo = document.getElementById("kiosk-no");
-    if (kioskNo) {
-        kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
+    const kioskNo = document.getElementById("kiosk-no");
+    if (kioskNo) kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
+
+    const kioskElement = document.getElementById("connected-kiosk");
+    if (kioskElement) {
+        kioskElement.textContent = "❌ ไม่ได้เชื่อมต่อกับตู้";
+        if (id) kioskElement.textContent = `✅ ตู้: ${id}`;
     }
-    selectedKioskCode = id;
+
+    SetKioskCode(id);
     //สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง
     connection.invoke("SubscribeKiosk", id);
 }
