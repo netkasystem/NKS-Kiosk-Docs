@@ -11,5 +11,6 @@
     public string address { get; set; }
     public string issuer { get; set; }
     public string photo { get; set; }
-    public string face_capture { get; set; }
+    public string face_capture { get; set; } 
+    public string CustomData { get; set; } 
 }

@@ -42,6 +42,37 @@ window.decrypt = function (ciphertextBase64) {
     return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
+window.resizeImage = function (imgBase64, size) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const ratio = img.width / img.height;
+
+            if (img.width > img.height) {
+                canvas.width = size;
+                canvas.height = size / ratio;
+            } else {
+                canvas.height = size;
+                canvas.width = size * ratio;
+            }
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            const resizedBase64 = canvas.toDataURL("image/jpeg", 0.8);
+            resolve(resizedBase64);
+        };
+
+        img.onerror = function (err) {
+            reject(err);
+        };
+
+        img.src = imgBase64;
+    });
+};
+
 window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
 window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
 
@@ -79,3 +110,7 @@ const next_page = (href, time_sec = 0) => {
 
 const setCustomForm = (c) => sessionStorage.setItem("CustomForm", c);
 const getCustomForm = () => sessionStorage.getItem("CustomForm")
+
+const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
+const getCustomData = () => sessionStorage.getItem("CustomData")
+ 

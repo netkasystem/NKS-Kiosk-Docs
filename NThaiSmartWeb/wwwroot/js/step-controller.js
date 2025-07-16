@@ -133,7 +133,7 @@ window.Step12 = {
                 if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
                 return response.json();
             }).then(data => {
-                etCustomForm(data);
+                setCustomForm(data);
             })
         } catch (error) {
             alert(error.message);
@@ -157,7 +157,13 @@ window.Step14 = {
     save_consent: async () => {
         let cardData = getCardData();
         let capture = getCapture();
+        let resizeCapture = await window.resizeImage(capture, 300);
+        let CustomData = getCustomData();
+
+        
         cardData.KioskCode = GetKioskCode();
+        cardData.face_capture = resizeCapture;
+        cardData.CustomData = CustomData;
         const encrypCardData = encrypt(cardData);
 
         try {

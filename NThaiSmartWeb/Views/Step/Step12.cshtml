@@ -428,11 +428,15 @@
 
             function ConfirmData() {
                 const getCustomfieldRaw = getCustomForm();
-                const getCustomfield = JSON.parse(getCustomfieldRaw);
-                if (getCustomfield != null) window.location.href = "/Step/Step14";
-                else { 
-                    window.Step14.save_consent();
+                if(getCustomfieldRaw == "") window.Step14.save_consent();
+                else{
+                    const getCustomfield = JSON.parse(getCustomfieldRaw);
+                    if (getCustomfield != null) window.location.href = "/Step/Step14";
+                    else {
+                        window.Step14.save_consent();
+                    }
                 }
+                
             }
         });
 

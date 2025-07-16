@@ -27,7 +27,7 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const getCustomfieldRaw = sessionStorage.getItem("CustomField");
+            const getCustomfieldRaw = getCustomForm();
             const getCustomfield = JSON.parse(getCustomfieldRaw);
             console.log("============ " + getCustomfield);
 
@@ -209,19 +209,8 @@
                 for (let [key, value] of formData.entries()) {
                     data[key] = value;
                 }
-
-                const encrypCardData = encrypt(data);
-
-                fetch('/api/KioskApi/SaveNationalCardData', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ EncrypString: encrypCardData })
-                }).then(response => response)
-                  .then(result => {
-                      console.log('✅ สำเร็จ:', result);
-                      window.location.href = "/Step/Step13";
-                  })
-                  .catch(error => console.error('❌ ผิดพลาด:', error));
+                setCustomData(data); 
+                window.Step14.save_consent();
             });
         });
 
