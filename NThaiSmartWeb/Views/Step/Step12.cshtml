@@ -190,250 +190,253 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-          let cardData = getCardData();
+            let cardData = getCardData();
 
-          // ---  ควบคุมปุ่มแสดงผลทั้งหมด (ใน Header) ---
-          const mainToggleButton = document.querySelector(".info-header .icon-button");
-          const allInfoValues = document.querySelectorAll(".info-value");
+            // ---  ควบคุมปุ่มแสดงผลทั้งหมด (ใน Header) ---
+            const mainToggleButton = document.querySelector(".info-header .icon-button");
+            const allInfoValues = document.querySelectorAll(".info-value");
 
-          if (mainToggleButton) {
-            const mainEyeIcon = mainToggleButton.querySelector("img");
-            let isAllDataVisible = false;
+            if (mainToggleButton) {
+                const mainEyeIcon = mainToggleButton.querySelector("img");
+                let isAllDataVisible = false;
 
-            mainToggleButton.addEventListener("click", function () {
-              isAllDataVisible = !isAllDataVisible;
+                mainToggleButton.addEventListener("click", function () {
+                    isAllDataVisible = !isAllDataVisible;
 
-              allInfoValues.forEach((element) => {
-                const fullValue = element.dataset.fullValue;
-                const maskedValueKey = "data-masked-value";
+                    allInfoValues.forEach((element) => {
+                        const fullValue = element.dataset.fullValue;
+                        const maskedValueKey = "data-masked-value";
 
-                if (isAllDataVisible) {
-                  if (!element.hasAttribute(maskedValueKey)) {
-                    element.setAttribute(maskedValueKey, element.textContent);
+                        if (isAllDataVisible) {
+                            if (!element.hasAttribute(maskedValueKey)) {
+                                element.setAttribute(maskedValueKey, element.textContent);
+                            }
+                            element.textContent = fullValue;
+                        } else {
+                            if (element.hasAttribute(maskedValueKey)) {
+                                element.textContent = element.getAttribute(maskedValueKey);
+                            }
+                        }
+                    });
+
+                    // อัปเดตไอคอนของปุ่มทั้งหมดและปุ่มแยกให้อยู่ในสถานะเดียวกัน
+                    updateAllIcons(isAllDataVisible);
+                });
+            }
+
+            // ---  ควบคุมปุ่มแสดงผลแยกแต่ละช่อง ---
+            const localToggleButtons = document.querySelectorAll(".local-icon-button");
+
+            localToggleButtons.forEach((button) => {
+                const infoField = button.closest(".info-field");
+                let isDataVisible = false; // สถานะของแต่ละปุ่ม
+
+                button.addEventListener("click", function () {
+                  isDataVisible = !isDataVisible;
+
+                  const infoValueElement = this.parentElement.querySelector(".info-value");
+                  const eyeIcon = button.querySelector("img");
+                  const fullValue = infoValueElement.dataset.fullValue;
+                  const maskedValue = infoValueElement.dataset.maskValue;
+
+                  if (isDataVisible) {
+                    infoValueElement.textContent = fullValue;
+                    eyeIcon.src = "/images/icons/eye.svg";
+                    eyeIcon.alt = "ซ่อนข้อมูล";
+                  } else {
+                    infoValueElement.textContent = maskedValue;
+                    eyeIcon.src = "/images/icons/vision.svg";
+                    eyeIcon.alt = "ดูข้อมูล";
                   }
-                  element.textContent = fullValue;
-                } else {
-                  if (element.hasAttribute(maskedValueKey)) {
-                    element.textContent = element.getAttribute(maskedValueKey);
-                  }
+                });
+            });
+
+            // --- ฟังก์ชันเสริม: อัปเดตไอคอนทั้งหมด ---
+            function updateAllIcons(isVisible) {
+                const allIcons = document.querySelectorAll(".icon-button img, .local-icon-button img");
+                allIcons.forEach((icon) => {
+                    if (isVisible) {
+                        icon.src = "/images/icons/eye.svg";
+                        icon.alt = "ซ่อนข้อมูล";
+                    } else {
+                        icon.src = "/images/icons/vision.svg";
+                        icon.alt = "ดูข้อมูล";
+                    }
+                });
+            }
+
+            // --- 3. ควบคุมการทำงานของ Modal แก้ไขข้อมูล  ---
+            const editButton = document.querySelector(".edit-button");
+            const editModal = document.getElementById("edit-modal");
+            const confirmModal = document.getElementById("confirmation-modal");
+
+            if (editModal && confirmModal) {
+                const closeEditModalButton = editModal.querySelector(".close-button");
+                const cancelEditButton = editModal.querySelector(".cancel-button");
+                const editForm = document.getElementById("edit-form");
+                const infoValuesOnPage = document.querySelectorAll(".info-value");
+                const confirmSaveBtn = document.getElementById("confirm-save-button");
+                const cancelConfirmBtn = document.getElementById("cancel-confirm-button");
+
+                function openEditModal() {
+                  infoValuesOnPage.forEach((infoDiv) => {
+                    const fieldName = infoDiv.dataset.fieldName;
+                    const fullValue = infoDiv.dataset.fullValue;
+                    const inputTarget = editModal.querySelector(`[data-source-field="${fieldName}"]`);
+                    if (inputTarget) {
+                      const wrapper = inputTarget.closest(".input-wrapper");
+                      if (wrapper) {
+                        const placeholderTarget = wrapper.querySelector(".old-data-placeholder");
+                        if (placeholderTarget) {
+                          placeholderTarget.textContent = fullValue;
+                        }
+                      }
+                      inputTarget.value = fullValue;
+                    }
+                  });
+                  editModal.style.display = "flex";
                 }
-              });
 
-              // อัปเดตไอคอนของปุ่มทั้งหมดและปุ่มแยกให้อยู่ในสถานะเดียวกัน
-              updateAllIcons(isAllDataVisible);
-            });
-          }
+                function closeEditModal() {
+                  editModal.style.display = "none";
+                }
 
-          // ---  ควบคุมปุ่มแสดงผลแยกแต่ละช่อง ---
-          const localToggleButtons = document.querySelectorAll(".local-icon-button");
+                function closeConfirmModal() {
+                  confirmModal.style.display = "none";
+                }
 
-          localToggleButtons.forEach((button) => {
-            const infoField = button.closest(".info-field");
-            let isDataVisible = false; // สถานะของแต่ละปุ่ม
+                function saveChanges() {
+                  const updatedData = {};
+                  editForm.querySelectorAll("[data-source-field]").forEach((input) => {
+                    const fieldName = input.dataset.sourceField;
+                    updatedData[fieldName] = input.value;
+                  });
 
-            button.addEventListener("click", function () {
-              isDataVisible = !isDataVisible;
+                  console.log("ข้อมูลที่จะส่งไปบันทึก:", updatedData);
 
-              const infoValueElement = this.parentElement.querySelector(".info-value");
-              const eyeIcon = button.querySelector("img");
-              const fullValue = infoValueElement.dataset.fullValue;
-              const maskedValue = infoValueElement.dataset.maskValue;
-
-              if (isDataVisible) {
-                infoValueElement.textContent = fullValue;
-                eyeIcon.src = "/images/icons/eye.svg";
-                eyeIcon.alt = "ซ่อนข้อมูล";
-              } else {
-                infoValueElement.textContent = maskedValue;
-                eyeIcon.src = "/images/icons/vision.svg";
-                eyeIcon.alt = "ดูข้อมูล";
-              }
-            });
-          });
-
-          // --- ฟังก์ชันเสริม: อัปเดตไอคอนทั้งหมด ---
-          function updateAllIcons(isVisible) {
-            const allIcons = document.querySelectorAll(".icon-button img, .local-icon-button img");
-            allIcons.forEach((icon) => {
-              if (isVisible) {
-                icon.src = "/images/icons/eye.svg";
-                icon.alt = "ซ่อนข้อมูล";
-              } else {
-                icon.src = "/images/icons/vision.svg";
-                icon.alt = "ดูข้อมูล";
-              }
-            });
-          }
-
-          // --- 3. ควบคุมการทำงานของ Modal แก้ไขข้อมูล  ---
-          const editButton = document.querySelector(".edit-button");
-          const editModal = document.getElementById("edit-modal");
-          const confirmModal = document.getElementById("confirmation-modal");
-
-          if (editModal && confirmModal) {
-            const closeEditModalButton = editModal.querySelector(".close-button");
-            const cancelEditButton = editModal.querySelector(".cancel-button");
-            const editForm = document.getElementById("edit-form");
-            const infoValuesOnPage = document.querySelectorAll(".info-value");
-            const confirmSaveBtn = document.getElementById("confirm-save-button");
-            const cancelConfirmBtn = document.getElementById("cancel-confirm-button");
-
-            function openEditModal() {
-              infoValuesOnPage.forEach((infoDiv) => {
-                const fieldName = infoDiv.dataset.fieldName;
-                const fullValue = infoDiv.dataset.fullValue;
-                const inputTarget = editModal.querySelector(`[data-source-field="${fieldName}"]`);
-                if (inputTarget) {
-                  const wrapper = inputTarget.closest(".input-wrapper");
-                  if (wrapper) {
-                    const placeholderTarget = wrapper.querySelector(".old-data-placeholder");
-                    if (placeholderTarget) {
-                      placeholderTarget.textContent = fullValue;
+                  // ⬇️ อัปเดตค่าใน cardData (และเช็ค nested field ด้วยถ้ามี)
+                  for (let key in updatedData) {
+                    // 🔍 รองรับรูปแบบ key แบบ "thaiPersonalInfo.firstName"
+                    if (key.includes(".")) {
+                      const parts = key.split(".");
+                      let target = cardData;
+                      for (let i = 0; i < parts.length - 1; i++) {
+                        target = target[parts[i]];
+                      }
+                      target[parts[parts.length - 1]] = updatedData[key];
+                    } else {
+                      cardData[key] = updatedData[key];
                     }
                   }
-                  inputTarget.value = fullValue;
+
+                  // ✅ Save กลับ sessionStorage
+                  setCardData(cardData);
+
+                  infoValuesOnPage.forEach((infoDiv) => {
+                    const fieldName = infoDiv.dataset.fieldName;
+                    if (updatedData[fieldName]) {
+                      infoDiv.dataset.fullValue = updatedData[fieldName];
+                    }
+                  });
+
+                  alert("บันทึกข้อมูลเรียบร้อย!");
+
+                  closeEditModal();
+                  closeConfirmModal();
                 }
-              });
-              editModal.style.display = "flex";
+
+                editForm.addEventListener("submit", function (event) {
+                  event.preventDefault();
+                  confirmModal.style.display = "flex";
+                });
+
+                if (editButton) editButton.addEventListener("click", openEditModal);
+                if (closeEditModalButton) closeEditModalButton.addEventListener("click", closeEditModal);
+                if (cancelEditButton) cancelEditButton.addEventListener("click", closeEditModal);
+                if (cancelConfirmBtn) cancelConfirmBtn.addEventListener("click", closeConfirmModal);
+                if (confirmSaveBtn) confirmSaveBtn.addEventListener("click", saveChanges);
             }
 
-            function closeEditModal() {
-              editModal.style.display = "none";
+            // ฟังก์ชันช่วย
+            function formatDateTH(dateStr) {
+                const monthTH = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+                const d = new Date(dateStr);
+                const day = d.getDate();
+                const month = monthTH[d.getMonth() + 1];
+                const year = d.getFullYear() + 543;
+                return `${day} ${month} ${year}`;
             }
 
-            function closeConfirmModal() {
-              confirmModal.style.display = "none";
+            function maskText(text, visible = 3) {
+                if (!text || text.length <= visible) return "*".repeat(text.length);
+                const hidden = "*".repeat(text.length - visible);
+                return hidden + text.slice(-visible);
             }
 
-            function saveChanges() {
-              const updatedData = {};
-              editForm.querySelectorAll("[data-source-field]").forEach((input) => {
-                const fieldName = input.dataset.sourceField;
-                updatedData[fieldName] = input.value;
-              });
+            function getGenderText(code) {
+                return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "***";
+            }
 
-              console.log("ข้อมูลที่จะส่งไปบันทึก:", updatedData);
+            function getAddress(addr) {
+                return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
+            }
 
-              // ⬇️ อัปเดตค่าใน cardData (และเช็ค nested field ด้วยถ้ามี)
-              for (let key in updatedData) {
-                // 🔍 รองรับรูปแบบ key แบบ "thaiPersonalInfo.firstName"
-                if (key.includes(".")) {
-                  const parts = key.split(".");
-                  let target = cardData;
-                  for (let i = 0; i < parts.length - 1; i++) {
-                    target = target[parts[i]];
+              // 🎯 ใส่ข้อมูลทั้งหมดลง DOM
+            function populateCardData(data) {
+                const fields = {
+                  id_number: data.citizenID,
+                  birthdate: formatDateTH(data.dateOfBirth),
+                  first_name: data.thaiPersonalInfo.firstName,
+                  last_name: data.thaiPersonalInfo.lastName,
+                  gender: getGenderText(data.sex),
+                  religion: "***", // ยังไม่มีใน object
+                  address: getAddress(data.addressInfo),
+                  issue_date: formatDateTH(data.issueDate),
+                  expiry_date: formatDateTH(data.expireDate),
+                };
+
+                if (data.photo?.startsWith("data:image")) {
+                  const photoImg = document.getElementById("idCardPhoto");
+                  if (photoImg) {
+                    photoImg.src = data.photo;
                   }
-                  target[parts[parts.length - 1]] = updatedData[key];
-                } else {
-                  cardData[key] = updatedData[key];
                 }
-              }
 
-              // ✅ Save กลับ sessionStorage
-              setCardData(cardData);
+                Object.entries(fields).forEach(([key, value]) => {
+                  const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
+                  if (el) {
+                    var maskVal = maskText(value);
+                    el.setAttribute("data-full-value", value);
+                    el.setAttribute("data-mask-value", maskVal);
+                    el.textContent = maskVal;
+                  }
+                });
+            }
 
-              infoValuesOnPage.forEach((infoDiv) => {
-                const fieldName = infoDiv.dataset.fieldName;
-                if (updatedData[fieldName]) {
-                  infoDiv.dataset.fullValue = updatedData[fieldName];
+            var capture = getCapture();
+            if (capture) {
+                const captureImg = document.getElementById("capturePhoto");
+                if (captureImg) {
+                  captureImg.src = capture;
                 }
-              });
-
-              alert("บันทึกข้อมูลเรียบร้อย!");
-
-              closeEditModal();
-              closeConfirmModal();
             }
 
-            editForm.addEventListener("submit", function (event) {
-              event.preventDefault();
-              confirmModal.style.display = "flex";
-            });
+            if (cardData) populateCardData(cardData);
 
-            if (editButton) editButton.addEventListener("click", openEditModal);
-            if (closeEditModalButton) closeEditModalButton.addEventListener("click", closeEditModal);
-            if (cancelEditButton) cancelEditButton.addEventListener("click", closeEditModal);
-            if (cancelConfirmBtn) cancelConfirmBtn.addEventListener("click", closeConfirmModal);
-            if (confirmSaveBtn) confirmSaveBtn.addEventListener("click", saveChanges);
-          }
+            const ConfirmBtn = document.getElementById("confirm-btn");
+            if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
 
-          // ฟังก์ชันช่วย
-          function formatDateTH(dateStr) {
-            const monthTH = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-            const d = new Date(dateStr);
-            const day = d.getDate();
-            const month = monthTH[d.getMonth() + 1];
-            const year = d.getFullYear() + 543;
-            return `${day} ${month} ${year}`;
-          }
-
-          function maskText(text, visible = 3) {
-            if (!text || text.length <= visible) return "*".repeat(text.length);
-            const hidden = "*".repeat(text.length - visible);
-            return hidden + text.slice(-visible);
-          }
-
-          function getGenderText(code) {
-            return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "***";
-          }
-
-          function getAddress(addr) {
-            return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
-          }
-
-          // 🎯 ใส่ข้อมูลทั้งหมดลง DOM
-          function populateCardData(data) {
-            const fields = {
-              id_number: data.citizenID,
-              birthdate: formatDateTH(data.dateOfBirth),
-              first_name: data.thaiPersonalInfo.firstName,
-              last_name: data.thaiPersonalInfo.lastName,
-              gender: getGenderText(data.sex),
-              religion: "***", // ยังไม่มีใน object
-              address: getAddress(data.addressInfo),
-              issue_date: formatDateTH(data.issueDate),
-              expiry_date: formatDateTH(data.expireDate),
-            };
-
-            if (data.photo?.startsWith("data:image")) {
-              const photoImg = document.getElementById("idCardPhoto");
-              if (photoImg) {
-                photoImg.src = data.photo;
-              }
+            function ConfirmData() {
+                const getCustomfieldRaw = getCustomForm();
+                const getCustomfield = JSON.parse(getCustomfieldRaw);
+                if (getCustomfield != null) window.location.href = "/Step/Step14";
+                else { 
+                    window.Step14.save_consent();
+                }
             }
-
-            Object.entries(fields).forEach(([key, value]) => {
-              const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
-              if (el) {
-                var maskVal = maskText(value);
-                el.setAttribute("data-full-value", value);
-                el.setAttribute("data-mask-value", maskVal);
-                el.textContent = maskVal;
-              }
-            });
-          }
-
-          var capture = getCapture();
-          if (capture) {
-            const captureImg = document.getElementById("capturePhoto");
-            if (captureImg) {
-              captureImg.src = capture;
-            }
-          }
-
-          if (cardData) populateCardData(cardData);
-
-          const ConfirmBtn = document.getElementById("confirm-btn");
-
-          if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
-
-          function ConfirmData() {
-            const getCustomfieldRaw = sessionStorage.getItem("CustomField");
-            const getCustomfield = JSON.parse(getCustomfieldRaw);
-            if (getCustomfield != null) window.location.href = "/Step/Step14";
-            else window.location.href = "/Step/Step13";
-          }
         });
+
+        window.addEventListener("DOMContentLoaded", startFaceRecognition);
     </script>
 
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>

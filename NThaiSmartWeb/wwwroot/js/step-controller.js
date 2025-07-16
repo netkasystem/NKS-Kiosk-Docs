@@ -124,7 +124,7 @@ window.Step11 = {
 window.Step12 = {
     init: () => {
         console.log("Step 12: Editing card data and confirmation");
-
+        //get customform
         try {
             const response = fetch('/api/KioskApi/GetCustomForm', {
                 method: 'GET',
@@ -133,14 +133,12 @@ window.Step12 = {
                 if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
                 return response.json();
             }).then(data => {
-                if (data.length > 0) {
-                    sessionStorage.setItem("CustomField", data);
-                }
+                etCustomForm(data);
             })
         } catch (error) {
             alert(error.message);
         }
-    }
+    } 
 };
 
 window.Step13 = {
@@ -155,6 +153,30 @@ window.Step14 = {
         console.log("Step 14: Customfield");
         const getCustomfield = sessionStorage.getItem("CustomField");
         console.log(getCustomfield);
+    },
+    save_consent: async () => {
+        let cardData = getCardData();
+        let capture = getCapture();
+        cardData.KioskCode = GetKioskCode();
+        const encrypCardData = encrypt(cardData);
+
+        try {
+            const response = await fetch('/api/KioskApi/SaveNationalCardData', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ EncrypString: encrypCardData })
+            });
+
+            const message = await response.text();
+
+            if (!response.ok) {
+                throw new Error(message);
+            } else {
+                next_page("/Step/Step13", 1);
+            }
+        } catch (error) {
+            alert(error.message);
+        }
     }
 };
 

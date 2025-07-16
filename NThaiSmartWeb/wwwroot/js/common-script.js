@@ -76,3 +76,6 @@ logoutBtn?.addEventListener("click", async (e) => {
 const next_page = (href, time_sec = 0) => {
     setTimeout(() => { window.location.href = href; }, time_sec * 1000);
 }
+
+const setCustomForm = (c) => sessionStorage.setItem("CustomForm", c);
+const getCustomForm = () => sessionStorage.getItem("CustomForm")
