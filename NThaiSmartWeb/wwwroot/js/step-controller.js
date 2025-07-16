@@ -41,9 +41,9 @@ window.Step3 = {
         button.addEventListener("click", () => {
             setConsent();
             if (getCardData() == null) {
-                next_page("/Step/Step4", 0.5);
+                next_page("/Step/Step4");
             } else {
-                next_page("/Step/Step5", 0.5);
+                next_page("/Step/Step5");
             }
         });
     }
@@ -110,7 +110,7 @@ window.Step10 = {
         console.log("Step 10: Face scanning");
     },
     capture_success: () => {
-        next_page("/Step/Step11", 3);
+        next_page("/Step/Step11", 1.5);
     }
 };
 
