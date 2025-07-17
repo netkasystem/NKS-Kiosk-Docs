@@ -250,6 +250,33 @@ document.addEventListener("click", function (e) {
             console.warn(`Step${stepNum}.init() not found`);
         }
     }
+    const timerElement = document.getElementById("timer");
+    if (location.pathname == "/Step/Step1") {
+        setCountTimer(0);
+        timerElement.textContent = 0;
+    } else {
+        // ⏱ ตัวจับเวลา
+        const timerInterval = setInterval(() => {
+            var sec = (getCountTimer() ?? 0);
+            sec++;
+            setCountTimer(sec);
+            timerElement.textContent = sec;
+        }, 1000);
+    }
+
+    document.addEventListener("click", function (e) {
+        const touch = document.createElement("div");
+        touch.classList.add("touch-effect");
+        touch.style.left = `${e.clientX}px`;
+        touch.style.top = `${e.clientY}px`;
+
+        document.body.appendChild(touch);
+
+        setTimeout(() => {
+            touch.remove();
+        }, 500);
+    });
+
 
     const timerElement = document.getElementById("timer");
     if (location.pathname == "/Step/Step1") {
@@ -264,4 +291,18 @@ document.addEventListener("click", function (e) {
             timerElement.textContent = sec;
         }, 1000);
     }
+
+    let countdown = 20;
+    const countdownElement = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(timer);
+            countdownElement.textContent = '0';
+        }
+    }, 1000);
+
 })();
