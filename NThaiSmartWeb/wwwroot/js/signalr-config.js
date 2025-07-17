@@ -26,12 +26,14 @@ connection.on("KioskStatus", (data) => {
     console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
     console.log(`[${data.timestamp}] ${data.statusCode}: ${data.statusText}`);
 
+    if (data.statusCode === "card_error") {
+        next_page("/Step/Step6", 3);
+    }
     if (data.statusCode === "card_detected") {
         onCardInserted();
     }
     if (data.statusCode === "card_removed") {
-        clearCardInfo();
-        withoutCard();
+        window.withoutCard();
     }
 });
 

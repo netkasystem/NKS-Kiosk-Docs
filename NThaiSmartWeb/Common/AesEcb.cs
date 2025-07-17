@@ -4,11 +4,7 @@ using System.Text;
 
 public class AesEcb
 {
-    public class EncryptedPayload
-    {
-        public string EncrypString { get; set; }
-    }
-
+     
     private static readonly byte[] Key = Encoding.UTF8.GetBytes("Netk@Sy$temKi0sk"); // 16 bytes key
 
     public static string Encrypt(string plainText)

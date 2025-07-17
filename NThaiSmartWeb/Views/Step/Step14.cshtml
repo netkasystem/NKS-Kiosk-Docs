@@ -169,7 +169,7 @@
 
                 const form = event.target;
                 const formData = new FormData(form);
-                const data = {};
+                const data = [];
                 let hasError = false;
 
                 // ตรวจสอบฟิลด์ที่ required
@@ -207,7 +207,11 @@
 
                 // ดึงค่าทั้งหมดไปใส่ object
                 for (let [key, value] of formData.entries()) {
-                    data[key] = value;
+                    var customField = {
+                        customFieldId : key,
+                        customFieldValue : value
+                    }
+                    data.push(customField);
                 }
                 setCustomData(data); 
                 window.Step14.save_consent();

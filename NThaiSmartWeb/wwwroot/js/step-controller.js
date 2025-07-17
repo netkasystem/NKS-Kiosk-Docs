@@ -27,6 +27,21 @@
     });
 });
 
+window.Step1 = {
+    init: () => {
+        console.log("Step 1 welcome");
+        clearSessionStorage();
+    }
+};
+
+window.Step2 = {
+    init: () => {
+        console.log("Step 2 read me");
+        next_page("/Step/Step3", 7);
+        setCountTimer(0);
+    }
+};
+
 window.Step3 = {
     init: () => {
         console.log("Step 3 read consent and check consent");
@@ -52,6 +67,11 @@ window.Step3 = {
 window.Step4 = {
     init: () => {
         console.log("Step 4 connected =>", window.GetKioskCode());
+        setTimeout(() => {
+            var alert_card = document.getElementById("alert-notfound-card");
+            if (alert_card != null)
+                alert_card.style.setProperty("display", "block", "important");
+        }, 5_000);
     }
 };
 
@@ -84,10 +104,36 @@ window.Step5 = {
     }
 };
 
+window.Step6 = {
+    init: () => {
+        console.log("Step 6: Broken ID card");
+        var _btn = document.querySelector(".retry-button");
+        if (_btn != null) _btn.addEventListener('click', () => next_page("/Step/Step4"));
+
+        var _btn_fail = document.querySelector(".action-button cancel-button-fail");
+        if (_btn_fail != null) window.withoutCard();
+    },
+    start_count_down: () => {
+        let countdown = 20;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement) {
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '0';
+                    window.location.href = "/Step/Step1";
+                }
+            }, 1000);
+        }
+    }
+};
+
 window.Step7 = {
     init: () => {
         console.log("Step 7: Retry connect card");
-        next_page("/Step/Step7", 1);
     }
 };
 
@@ -101,7 +147,7 @@ window.Step8 = {
 window.Step9 = {
     init: () => {
         console.log("Step 9: Recommend scanning");
-        next_page("/Step/Step10", 5);
+        next_page("/Step/Step10", 10);
     }
 };
 
@@ -138,7 +184,7 @@ window.Step12 = {
         } catch (error) {
             alert(error.message);
         }
-    } 
+    }
 };
 
 window.Step13 = {
@@ -156,21 +202,28 @@ window.Step14 = {
     },
     save_consent: async () => {
         let cardData = getCardData();
-        let capture = getCapture();
-        let resizeCapture = await window.resizeImage(capture, 300);
         let CustomData = getCustomData();
+        let capture = getCapture();
+        let resizeCapture = await window.resizeImage(capture, 300); 
 
-        
         cardData.KioskCode = GetKioskCode();
         cardData.face_capture = resizeCapture;
-        cardData.CustomData = CustomData;
-        const encrypCardData = encrypt(cardData);
+         
+        const encrypUpdatedData = cardData.updatedData ? encrypt(cardData.updatedData) : "";
+        delete cardData.updatedData;
+        const encrypCustomData = CustomData ? encrypt(CustomData) : "";
+        const encrypCardData = encrypt(cardData); 
 
         try {
             const response = await fetch('/api/KioskApi/SaveNationalCardData', {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ EncrypString: encrypCardData })
+                body: JSON.stringify({
+                    EncrypString: encrypCardData,
+                    EncrypUpdatedData: encrypUpdatedData,
+                    EncrypCustomDataData: encrypCustomData,
+
+                })
             });
 
             const message = await response.text();
@@ -187,13 +240,17 @@ window.Step14 = {
 };
 
 window.onCardInserted = () => {
-    if (!getConsent()) next_page("/Step/Step3", 1.5);
-    else next_page("/Step/Step5", 1.5);
+    if (!getConsent()) next_page("/Step/Step3", 1);
+    else next_page("/Step/Step5", 1);
 }
 
 window.withoutCard = () => {
-    clearSessionStorage();
-    window.location.href = "/Step/Step1";
+    if (location.pathname == "/Step/Step6") {
+        window.Step6.start_count_down();
+    }
+    else if (location.pathname == "/Step/Step7" || location.pathname == "/Step/Step13") {
+        window.location.href = "/Step/Step1";
+    }
 }
 
 (function () {
@@ -210,30 +267,33 @@ window.withoutCard = () => {
             console.warn(`Step${stepNum}.init() not found`);
         }
     }
-})();
-document.addEventListener("click", function (e) {
-    const touch = document.createElement("div");
-    touch.classList.add("touch-effect");
-    touch.style.left = `${e.clientX}px`;
-    touch.style.top = `${e.clientY}px`;
 
-    document.body.appendChild(touch);
+    document.addEventListener("click", function (e) {
+        const touch = document.createElement("div");
+        touch.classList.add("touch-effect");
+        touch.style.left = `${e.clientX}px`;
+        touch.style.top = `${e.clientY}px`;
 
-    setTimeout(() => {
-        touch.remove();
-    }, 500); 
-});
+        document.body.appendChild(touch);
 
-    let countdown = 20;
-    const countdownElement = document.getElementById('countdown');
+        setTimeout(() => {
+            touch.remove();
+        }, 500);
+    });
 
-    const timer = setInterval(() => {
-        countdown--;
-        countdownElement.textContent = countdown;
-
-        if (countdown <= 0) {
-            clearInterval(timer);
-            countdownElement.textContent = '0';
+    const timerElement = document.getElementById("timer");
+    if (timerElement) {
+        if (location.pathname == "/Step/Step1") {
+            setCountTimer(0);
+            timerElement.textContent = 0;
+        } else {
+            // ⏱ ตัวจับเวลา
+            const timerInterval = setInterval(() => {
+                var sec = (getCountTimer() ?? 0);
+                sec++;
+                setCountTimer(sec);
+                timerElement.textContent = sec;
+            }, 1000);
         }
-    }, 1000);
-
+    }
+})();

@@ -5093,6 +5093,14 @@ public partial class DBContext : DbContext
                 .HasDefaultValueSql("''")
                 .HasColumnType("text")
                 .HasColumnName("json_data");
+            entity.Property(e => e.JsonUpdatedData)
+                .HasDefaultValueSql("''")
+                .HasColumnType("text")
+                .HasColumnName("json_updated_data");
+            entity.Property(e => e.JsonCustomData)
+                .HasDefaultValueSql("''")
+                .HasColumnType("text")
+                .HasColumnName("json_custom_data");
             entity.Property(e => e.KioskId)
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("kiosk_id");
