@@ -219,3 +219,15 @@ window.withoutCard = () => {
         }
     }
 })();
+document.addEventListener("click", function (e) {
+    const touch = document.createElement("div");
+    touch.classList.add("touch-effect");
+    touch.style.left = `${e.clientX}px`;
+    touch.style.top = `${e.clientY}px`;
+
+    document.body.appendChild(touch);
+
+    setTimeout(() => {
+        touch.remove();
+    }, 500); 
+});

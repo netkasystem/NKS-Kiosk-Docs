@@ -1,58 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Step6";
+    ViewData["Title"] = "Step7";
 }
-    <a asp-controller="Step" asp-action="Step7" class="card-link" style="text-decoration: none;">
-
 <body class="red-background">
-    <header class="page-header">
+
+    <header class="page-header" style="padding-bottom:0%;">
         <div class="scan_fail" style="margin-bottom:40px;">
             <img src="/images/icons/scan_fail.svg" class="scan_fail" />
         </div>
-        <h1>กรุณาลองใหม่อีกครั้ง</h1>
+        <h1>ไม่สามารถทำรายการได้</h1>
     </header>
-    <div class="mainCard-container">
 
-        <div class="left-column">
-
-            <div class="reader-slot">
-                <img src="/images/icons/Readercard.svg" class="Readercard" />
-                <img src="/images/icons/outside_reder.svg" class="outside-reader" />
-
-            </div>
-            <div class="hand-with-card">
-                <img src="/images/icons/hand_card.svg" class="Heandcard" />
-            </div>
-
+    <div class="page-center">
+        <img src="/images/icons/font_card_id.svg" class="id-card-image-fail" style="margin-bottom: 0%; margin-top: 0%;" />
+        <h2>
+            บัตรประชาชนของท่านอาจ
+            <span class="expired-word">เสียหายหรือชำรุด</span><br>
+        </h2>
+        <div class="bottom-section" style="justify-content:left;">
+            <ol class="instruction-list">
+                <li>ระบบไม่สามารถอ่านข้อมูลจากบัตรประชาชนของท่านได้อย่างสมบูรณ์</li>
+                <li>อาจเกิดจากบัตรมีรอยขีดข่วน ชิพเสื่อมสภาพ หรืออุปกรณ์อ่านบัตรทำงานผิดปกติ</li>
+                <li>กรุณาลองถอดและเสียบบัตรใหม่อีกครั้งอย่างระมัดระวัง หรือใช้บัตรประชาชนใบอื่น</li>
+            </ol>
+        </div>
+        <div class="button-group">
+            <button class="action-button cancel-button-fail">ยกเลิกการยืนยันตัวตน</button>
+            <button class="action-button retry-button">ลองใหม่อีกครั้ง</button>
         </div>
 
-        <div class="right-column">
-            <div class="top-section">
-                <img src="/images/icons/font_card_id.svg" class="id-card-image" />
-            </div>
 
-            <div class="bottom-section">
-                <ol class="instruction-list">
-                        <li>เตรียมบัตรประชาชน</li>
-                        <li>โปรดหงายบัตรและหันด้านที่มีชิพ เข้าช่องอ่านบัตรตามภาพ</li>
-                        <li>กรุณาอย่าเพิ่งดึงบัตรออก จนกว่าจะทำรายการเสร็จสิ้น</li>
-                </ol>
-            </div>
-          @*   <form asp-controller="Step" asp-action="Step7" method="get" class="button-section" onsubmit="return handleScan(this)">
-                <button type="submit" class="scan-button">เริ่มสแกน</button>
-            </form> *@
-        </div>
     </div>
-        <audio id="scan_card" src="/audio/Steap_scan_card.wav" ></audio>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const audio = document.getElementById("scan_card");
-                if (audio) {
-                    audio.currentTime = 0;
-                    audio.play().catch(err => {
-                        console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
-                    });
-                }
-            });
-        </script>
+@* 
+    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)" id="cardLink">
+        <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px;width:50%;">
+            ย้อนกลับ
+        </button>
+    </form> *@
 </body>
-</a>
