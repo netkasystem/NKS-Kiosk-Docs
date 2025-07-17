@@ -369,12 +369,12 @@
 
             function maskText(text, visible = 3) {
                 if (!text || text.length <= visible) return "*".repeat(text.length);
-                const hidden = "*".repeat(text.length - visible);
+                const hidden = "x".repeat(text.length - visible);
                 return hidden + text.slice(-visible);
             }
 
             function getGenderText(code) {
-                return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "***";
+                return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "xxx";
             }
 
             function getAddress(addr) {
@@ -389,7 +389,7 @@
                   first_name: data.thaiPersonalInfo.firstName,
                   last_name: data.thaiPersonalInfo.lastName,
                   gender: getGenderText(data.sex),
-                  religion: "***", // ยังไม่มีใน object
+                  religion: "xxx", // ยังไม่มีใน object
                   address: getAddress(data.addressInfo),
                   issue_date: formatDateTH(data.issueDate),
                   expiry_date: formatDateTH(data.expireDate),
