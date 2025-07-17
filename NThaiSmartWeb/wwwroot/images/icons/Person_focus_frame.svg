@@ -9,7 +9,6 @@
         fill="black" />
     </mask>
   </defs>
-
   <!-- Overlay ดำทึบใช้ mask -->
   <rect width="100%" height="100%" fill="rgba(0, 0, 0, 0.7)" mask="url(#frameMask)" />
 </svg>
