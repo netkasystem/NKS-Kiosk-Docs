@@ -8,14 +8,16 @@
                 <video id="videoInput" autoplay muted playsinline></video>
                 <canvas id="faceCanvas" style="display: none;"></canvas>
 
-                <div class="glass-overlay"></div>
              
                 @* <img src="/images/icons/focus.svg" class="focus-frame" alt="frame"> *@
-                <img src="/images/icons/Person_focus_frame.svg" class="focus-frame" alt="frame" id="normal-frame">
-                <img src="/images/icons/Person_focus_frame.svg" class="focus-frame" alt="frame" id="danger-frame" style="display: none;">
-                <img src="/images/icons/Person_focus_sucess_frame.svg" class="focus-frame" alt="frame" id="success-frame" style="display: none;">
+                <img src="/images/icons/Person_focus_frame_overay.svg" class="focus-frame" alt="frame" id="normal-frame">
+                <img src="/images/icons/Person_focus_frame_overay.svg" class="focus-frame" alt="frame" id="danger-frame" style="display: none;">
+                <img src="/images/icons/Person_focus_frame_overay_success.svg" class="focus-frame" alt="frame" id="success-frame" style="display: none;">
+                <img src="/images/icons/Person_focus_frame_overay_success.svg" class="focus-frame" alt="frame" id="success-frame" style="display: none;">
                 <audio id="audio-focus" src="/audio/focus_frame.wav" preload="auto"></audio>
                 <audio id="audio-look" src="/audio/look_at_camera.wav" preload="auto"></audio>
+                <div class="glass-overlay"></div>
+
             </div>
             <div id="scanResult">กำลังรอการตรวจจับใบหน้า...</div>
             <div class="row-button" style="display:none;" id="submitBtn">

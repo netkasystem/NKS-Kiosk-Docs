@@ -938,7 +938,7 @@ body, html {
 }
 
 .id-card-image-fail {
-    width: 45%;
+    width: 43%;
     transform: rotate(-90deg);
     margin-bottom: 15%;
     margin-top: 12%;
@@ -964,15 +964,14 @@ body, html {
     height: 6vh;
 }
 
-.retry-button {
-    background-color: #0046c1;
-    color: white;
+.retry-message {
+    font-size: 3em;
+    font-weight: 500;
+    text-align: center;
+    color: #FFFFFF;
+    margin-bottom: 20px;
 }
 
-    .retry-button:hover {
-        background-color: white;
-        color: #0046c1;
-    }
 
 .cancel-button-fail {
     background-color: #FFFFFF;
@@ -1096,12 +1095,25 @@ h2 {
     overflow: hidden;
     border-radius: 10px;
 }
+.crop-box {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
 
-    .image-container img {
+    .crop-box img {
+        position: absolute;
+        top: -60px; /* เลื่อนภาพขึ้นไป */
+        left: 0px;
         width: 100%;
-        height: 100%;
-        object-fit: contain;
+        height: 130%;
     }
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 .bottom-right {
     grid-column: 2 / 3;
@@ -1236,7 +1248,7 @@ h2 {
 
 .info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
 }
 
@@ -1250,6 +1262,8 @@ h2 {
 .info-field label {
     color: #ffff;
     font-size: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .toggle-single-field-button {
@@ -1274,6 +1288,7 @@ h2 {
 
 .info-field {
     position: relative;
+
 }
 
     .info-field label {
@@ -1313,6 +1328,9 @@ h2 {
     font-size: 1.5rem;
     color: #000000;
     letter-spacing: 2px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap; 
 }
 
 .info-field.full-width {
@@ -1619,9 +1637,9 @@ h2 {
 /* 🟩 กรอบ SVG 4 มุม */
 .focus-frame {
     position: absolute;
-    top: 25vh;
-    left: -10%;
-    width: 120%;
+    top: -41vh;
+    left: -34%;
+    width: 170%;
     height: auto;
     pointer-events: none;
     z-index: 3;
