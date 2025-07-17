@@ -27,6 +27,13 @@
     });
 });
 
+window.Step2 = {
+    init: () => {
+        console.log("Step 2 read me");
+        next_page("/Step/Step3", 3);
+    }
+};
+
 window.Step3 = {
     init: () => {
         console.log("Step 3 read consent and check consent");
@@ -52,6 +59,8 @@ window.Step3 = {
 window.Step4 = {
     init: () => {
         console.log("Step 4 connected =>", window.GetKioskCode());
+        setTimeout(() => {
+        }, 10_000);
     }
 };
 
@@ -87,7 +96,7 @@ window.Step5 = {
 window.Step7 = {
     init: () => {
         console.log("Step 7: Retry connect card");
-        next_page("/Step/Step7", 1);
+        window.withoutCard();
     }
 };
 
@@ -138,7 +147,7 @@ window.Step12 = {
         } catch (error) {
             alert(error.message);
         }
-    } 
+    }
 };
 
 window.Step13 = {
@@ -160,7 +169,6 @@ window.Step14 = {
         let resizeCapture = await window.resizeImage(capture, 300);
         let CustomData = getCustomData();
 
-        
         cardData.KioskCode = GetKioskCode();
         cardData.face_capture = resizeCapture;
         cardData.CustomData = CustomData;
