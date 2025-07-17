@@ -30,7 +30,8 @@
 window.Step2 = {
     init: () => {
         console.log("Step 2 read me");
-        next_page("/Step/Step3", 3);
+        next_page("/Step/Step3", 5);
+        setCountTimer(0);
     }
 };
 
@@ -60,7 +61,10 @@ window.Step4 = {
     init: () => {
         console.log("Step 4 connected =>", window.GetKioskCode());
         setTimeout(() => {
-        }, 10_000);
+            var alert_card = document.getElementById("alert-notfound-card");
+            if (alert_card != null)
+                alert_card.style.setProperty("display", "block", "important");
+        }, 5_000);
     }
 };
 
@@ -93,10 +97,20 @@ window.Step5 = {
     }
 };
 
+window.Step6 = {
+    init: () => {
+        console.log("Step 6: Broken ID card");
+        var _btn = document.querySelector(".retry-button");
+        if (_btn != null) _btn.addEventListener('click', () => next_page("/Step/Step4"));
+
+        var _btn_fail = document.querySelector(".action-button cancel-button-fail");
+        if (_btn_fail != null) window.withoutCard();
+    }
+};
+
 window.Step7 = {
     init: () => {
         console.log("Step 7: Retry connect card");
-        window.withoutCard();
     }
 };
 
@@ -195,14 +209,32 @@ window.Step14 = {
 };
 
 window.onCardInserted = () => {
-    if (!getConsent()) next_page("/Step/Step3", 1.5);
-    else next_page("/Step/Step5", 1.5);
+    if (!getConsent()) next_page("/Step/Step3", 1);
+    else next_page("/Step/Step5", 1);
 }
 
 window.withoutCard = () => {
-    clearSessionStorage();
-    window.location.href = "/Step/Step1";
+    if (location.pathname == "/Step/Step6") {
+        next_page("/Step/Step4");
+    }
+    else if (location.pathname == "/Step/Step7" || location.pathname == "/Step/Step13") {
+        clearSessionStorage();
+        window.location.href = "/Step/Step1";
+    }
 }
+
+document.addEventListener("click", function (e) {
+    const touch = document.createElement("div");
+    touch.classList.add("touch-effect");
+    touch.style.left = `${e.clientX}px`;
+    touch.style.top = `${e.clientY}px`;
+
+    document.body.appendChild(touch);
+
+    setTimeout(() => {
+        touch.remove();
+    }, 500);
+});
 
 (function () {
     const currentPath = window.location.pathname;
@@ -218,16 +250,18 @@ window.withoutCard = () => {
             console.warn(`Step${stepNum}.init() not found`);
         }
     }
+
+    const timerElement = document.getElementById("timer");
+    if (location.pathname == "/Step/Step1") {
+        setCountTimer(0);
+        timerElement.textContent = 0;
+    } else {
+        // ⏱ ตัวจับเวลา
+        const timerInterval = setInterval(() => {
+            var sec = (getCountTimer() ?? 0);
+            sec++;
+            setCountTimer(sec);
+            timerElement.textContent = sec;
+        }, 1000);
+    }
 })();
-document.addEventListener("click", function (e) {
-    const touch = document.createElement("div");
-    touch.classList.add("touch-effect");
-    touch.style.left = `${e.clientX}px`;
-    touch.style.top = `${e.clientY}px`;
-
-    document.body.appendChild(touch);
-
-    setTimeout(() => {
-        touch.remove();
-    }, 500); 
-});
