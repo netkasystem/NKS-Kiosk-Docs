@@ -202,20 +202,28 @@ window.Step14 = {
     },
     save_consent: async () => {
         let cardData = getCardData();
-        let capture = getCapture();
-        let resizeCapture = await window.resizeImage(capture, 300);
         let CustomData = getCustomData();
+        let capture = getCapture();
+        let resizeCapture = await window.resizeImage(capture, 300); 
 
         cardData.KioskCode = GetKioskCode();
         cardData.face_capture = resizeCapture;
-        cardData.CustomData = CustomData;
-        const encrypCardData = encrypt(cardData);
+         
+        const encrypUpdatedData = cardData.updatedData ? encrypt(cardData.updatedData) : "";
+        delete cardData.updatedData;
+        const encrypCustomData = CustomData ? encrypt(CustomData) : "";
+        const encrypCardData = encrypt(cardData); 
 
         try {
             const response = await fetch('/api/KioskApi/SaveNationalCardData', {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ EncrypString: encrypCardData })
+                body: JSON.stringify({
+                    EncrypString: encrypCardData,
+                    EncrypUpdatedData: encrypUpdatedData,
+                    EncrypCustomDataData: encrypCustomData,
+
+                })
             });
 
             const message = await response.text();

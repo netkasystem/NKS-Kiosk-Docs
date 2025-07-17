@@ -14,3 +14,9 @@
     public string face_capture { get; set; } 
     public string CustomData { get; set; } 
 }
+public class EncryptedPayload
+{
+    public string EncrypString { get; set; }
+    public string EncrypUpdatedData { get; set; }
+    public string EncrypCustomDataData { get; set; }
+}
