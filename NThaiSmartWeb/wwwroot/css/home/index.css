@@ -284,6 +284,44 @@ body, html {
         animation: ping-effect 1.5s infinite;
         opacity: 1;
     }
+.click-hint {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* ให้อยู่หน้าสุด */
+    text-align: center;
+    animation: blink 3s infinite;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0;
+    animation: fadeSlideInhint 0.3s ease-out 3s forwards, blink 3s 3.6s infinite;
+}
+
+    .click-hint img {
+        width: 120px;
+        height: auto;
+    }
+@keyframes fadeSlideInhint {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+}
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
 
 .step-container {
     max-width: 100%;
@@ -450,6 +488,31 @@ body, html {
         background-color: #aaa;
         cursor: not-allowed;
     }
+    .terms-submit-button:active:not(:disabled) {
+        transform: scale(0.78); /* กดแล้วหดลงเล็กน้อย */
+        box-shadow: 0 4px 8px rgba(0, 47, 134, 0.2);
+        background-color: #FFFFFF;
+        color: #002f86;
+    }
+.touch-effect {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgb(6 6 6 / 30%);
+    transform: translate(-50%, -50%) scale(0);
+    animation: touch-animation 0.5s ease-out forwards;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes touch-animation {
+    to {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
 
 .page-container {
     display: flex;
@@ -684,12 +747,27 @@ body, html {
     text-align: left;
     padding: 0px 0px;
 }
+@keyframes blinktext {
+    0%, 100% {
+        opacity: 1;
+    }
 
+    50% {
+        opacity: 0;
+    }
+}
     .instruction-list li {
         margin-bottom:36px;
         margin-left: 55px;
     }
-
+        .instruction-list li.Alert {
+            list-style: none;
+            color: #ffc107;
+            font-weight: bold;
+            margin-left: 29px;
+            animation: blinktext 3s infinite;
+        }
+        
 .button-section {
     display: flex;
     justify-content: center;
@@ -865,6 +943,47 @@ body, html {
     margin-bottom: 15%;
     margin-top: 12%;
 }
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 40px;
+}
+
+.action-button {
+    flex: 1;
+    max-width: 400px;
+    padding: 16px 32px;
+    font-size: 1.8rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    text-align: center;
+    height: 6vh;
+}
+
+.retry-button {
+    background-color: #0046c1;
+    color: white;
+}
+
+    .retry-button:hover {
+        background-color: white;
+        color: #0046c1;
+    }
+
+.cancel-button-fail {
+    background-color: #FFFFFF;
+    color: #e74c3c;
+}
+
+    .cancel-button-fail:hover {
+        background-color: #e74c3c;
+        color: #FFFFFF;
+    }
+
 
 .id-card-image-pass {
     margin-bottom: 12%;
@@ -880,7 +999,7 @@ h2 {
     color: #fff;
     font-size: 48px;
     font-weight: 700;
-    line-height: 1.25;
+    line-height: 1.70;
     margin: 0 16px 32px;
     margin-bottom: 24px;
 }
