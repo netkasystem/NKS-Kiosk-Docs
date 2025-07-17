@@ -1095,12 +1095,25 @@ h2 {
     overflow: hidden;
     border-radius: 10px;
 }
+.crop-box {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
 
-    .image-container img {
+    .crop-box img {
+        position: absolute;
+        top: -60px; /* เลื่อนภาพขึ้นไป */
+        left: 0px;
         width: 100%;
-        height: 100%;
-        object-fit: contain;
+        height: 130%;
     }
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 .bottom-right {
     grid-column: 2 / 3;
@@ -1624,9 +1637,9 @@ h2 {
 /* 🟩 กรอบ SVG 4 มุม */
 .focus-frame {
     position: absolute;
-    top: 25vh;
-    left: -10%;
-    width: 120%;
+    top: -41vh;
+    left: -34%;
+    width: 170%;
     height: auto;
     pointer-events: none;
     z-index: 3;
