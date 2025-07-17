@@ -27,10 +27,17 @@
     });
 });
 
+window.Step1 = {
+    init: () => {
+        console.log("Step 1 welcome");
+        clearSessionStorage();
+    }
+};
+
 window.Step2 = {
     init: () => {
         console.log("Step 2 read me");
-        next_page("/Step/Step3", 5);
+        next_page("/Step/Step3", 7);
         setCountTimer(0);
     }
 };
@@ -105,6 +112,22 @@ window.Step6 = {
 
         var _btn_fail = document.querySelector(".action-button cancel-button-fail");
         if (_btn_fail != null) window.withoutCard();
+    },
+    start_count_down: () => {
+        let countdown = 20;
+        const countdownElement = document.getElementById('countdown');
+        if (countdownElement) {
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '0';
+                    window.location.href = "/Step/Step1";
+                }
+            }, 1000);
+        }
     }
 };
 
@@ -124,7 +147,7 @@ window.Step8 = {
 window.Step9 = {
     init: () => {
         console.log("Step 9: Recommend scanning");
-        next_page("/Step/Step10", 5);
+        next_page("/Step/Step10", 10);
     }
 };
 
@@ -215,26 +238,12 @@ window.onCardInserted = () => {
 
 window.withoutCard = () => {
     if (location.pathname == "/Step/Step6") {
-        next_page("/Step/Step4");
+        window.Step6.start_count_down();
     }
     else if (location.pathname == "/Step/Step7" || location.pathname == "/Step/Step13") {
-        clearSessionStorage();
         window.location.href = "/Step/Step1";
     }
 }
-
-document.addEventListener("click", function (e) {
-    const touch = document.createElement("div");
-    touch.classList.add("touch-effect");
-    touch.style.left = `${e.clientX}px`;
-    touch.style.top = `${e.clientY}px`;
-
-    document.body.appendChild(touch);
-
-    setTimeout(() => {
-        touch.remove();
-    }, 500);
-});
 
 (function () {
     const currentPath = window.location.pathname;
@@ -250,19 +259,6 @@ document.addEventListener("click", function (e) {
             console.warn(`Step${stepNum}.init() not found`);
         }
     }
-    const timerElement = document.getElementById("timer");
-    if (location.pathname == "/Step/Step1") {
-        setCountTimer(0);
-        timerElement.textContent = 0;
-    } else {
-        // ⏱ ตัวจับเวลา
-        const timerInterval = setInterval(() => {
-            var sec = (getCountTimer() ?? 0);
-            sec++;
-            setCountTimer(sec);
-            timerElement.textContent = sec;
-        }, 1000);
-    }
 
     document.addEventListener("click", function (e) {
         const touch = document.createElement("div");
@@ -277,32 +273,19 @@ document.addEventListener("click", function (e) {
         }, 500);
     });
 
-
     const timerElement = document.getElementById("timer");
-    if (location.pathname == "/Step/Step1") {
-        setCountTimer(0);
-        timerElement.textContent = 0;
-    } else {
-        // ⏱ ตัวจับเวลา
-        const timerInterval = setInterval(() => {
-            var sec = (getCountTimer() ?? 0);
-            sec++;
-            setCountTimer(sec);
-            timerElement.textContent = sec;
-        }, 1000);
-    }
-
-    let countdown = 20;
-    const countdownElement = document.getElementById('countdown');
-
-    const timer = setInterval(() => {
-        countdown--;
-        countdownElement.textContent = countdown;
-
-        if (countdown <= 0) {
-            clearInterval(timer);
-            countdownElement.textContent = '0';
+    if (timerElement) {
+        if (location.pathname == "/Step/Step1") {
+            setCountTimer(0);
+            timerElement.textContent = 0;
+        } else {
+            // ⏱ ตัวจับเวลา
+            const timerInterval = setInterval(() => {
+                var sec = (getCountTimer() ?? 0);
+                sec++;
+                setCountTimer(sec);
+                timerElement.textContent = sec;
+            }, 1000);
         }
-    }, 1000);
-
+    }
 })();

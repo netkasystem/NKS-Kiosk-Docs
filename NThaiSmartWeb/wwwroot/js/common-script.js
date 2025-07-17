@@ -86,6 +86,9 @@ const getCapture = () => sessionStorage.getItem("capture");
 const setConsent = () => sessionStorage.setItem("hasConsent", true);
 const getConsent = () => sessionStorage.getItem("hasConsent");
 
+const setCountTimer = (d) => sessionStorage.setItem("countTimer", d);
+const getCountTimer = () => sessionStorage.getItem("countTimer");
+
 const clearSessionStorage = () => sessionStorage.clear();
 
 const logoutBtn = document.getElementById("logout");
