@@ -93,8 +93,10 @@ public class KioskApiController : ControllerBase
     {
         try
         {
-            string jsondata = Decrypt(payload.EncrypString);
-            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsondata);
+            string jsonData = Decrypt(payload.EncrypString);
+            string jsonUpdatedData = Decrypt(payload.EncrypUpdatedData);
+            string jsonCustomDataData = Decrypt(payload.EncrypCustomDataData);
+            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsonData);
             if (data != null)
             {
                 data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
@@ -103,7 +105,9 @@ public class KioskApiController : ControllerBase
                 {
                     KioskId = data.KioskId,
                     Idcard = data.citizenID,
-                    JsonData = payload.EncrypString
+                    JsonData = payload.EncrypString,
+                    JsonUpdatedData = payload.EncrypUpdatedData,
+                    JsonCustomData = payload.EncrypCustomDataData
                 };
                 _context.KioskConsented.Add(newKioskConsented);
                 _context.SaveChanges();

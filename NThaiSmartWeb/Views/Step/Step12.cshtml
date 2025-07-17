@@ -18,7 +18,7 @@
             <div class="info-grid">
                 <div class="info-field">
                     <label>เลขบัตรประชาชน</label>
-                    <div class="info-value" data-field-name="id_number" data-full-value="1-1043-44043-34-0">1-****-*****-34-0</div>
+                    <div class="info-value" data-field-name="citizenID" data-full-value="1-1043-44043-34-0">1-****-*****-34-0</div>
                     <button class="local-icon-button" style="width:100%;">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -26,7 +26,7 @@
 
                 <div class="info-field">
                     <label>วันเกิด</label>
-                    <div class="info-value" data-field-name="birthdate" data-full-value="21 มีนาคม 2545">21 ****** 25**</div>
+                    <div class="info-value" data-field-name="dateOfBirth" data-full-value="21 มีนาคม 2545">21 ****** 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -34,21 +34,21 @@
 
                 <div class="info-field">
                     <label>ชื่อ</label>
-                    <div class="info-value" data-field-name="first_name" data-full-value="นาย เมธา">นาย เมธา</div>
+                    <div class="info-value" data-field-name="firstNameTH" data-full-value="นาย เมธา">นาย เมธา</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>นามสกุล</label>
-                    <div class="info-value" data-field-name="last_name" data-full-value="ฟ้าแวบแวบ"> ฟ้าแวบแวบ</div>
+                    <div class="info-value" data-field-name="lastNameTH" data-full-value="ฟ้าแวบแวบ"> ฟ้าแวบแวบ</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
                 <div class="info-field">
                     <label>เพศ</label>
-                    <div class="info-value" data-field-name="gender" data-full-value="ชาย"> ***</div>
+                    <div class="info-value" data-field-name="sex" data-full-value="ชาย"> ***</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="info-field">
                     <label>วันออกบัตร</label>
-                    <div class="info-value" data-field-name="issue_date" data-full-value="29 มี.ค. 2562">** มี.ค. 25**</div>
+                    <div class="info-value" data-field-name="issueDate" data-full-value="29 มี.ค. 2562">** มี.ค. 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -80,7 +80,7 @@
 
                 <div class="info-field">
                     <label>วันหมดอายุบัตร</label>
-                    <div class="info-value" data-field-name="expiry_date" data-full-value="29 มี.ค. 2571">** มี.ค. 25**</div>
+                    <div class="info-value" data-field-name="expireDate" data-full-value="29 มี.ค. 2571">** มี.ค. 25**</div>
                     <button class="local-icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
@@ -124,27 +124,27 @@
                     <div class="form-field">
                         <label for="input-id-number">เลขบัตรประชาชน</label>
                         <div class="input-wrapper">
-                            <span class="old-data-placeholder"></span> <input type="text" id="input-id-number" data-source-field="id_number">
+                            <span class="old-data-placeholder"></span> <input type="text" id="input-id-number" data-source-field="citizenID">
                         </div>
                     </div>
                     <div class="form-field">
-                        <label for="input-birthdate">วันเกิด</label>
-                        <input type="text" id="input-birthdate" data-source-field="birthdate">
+                        <label for="input-dateOfBirth">วันเกิด</label>
+                        <input type="text" id="input-dateOfBirth" data-source-field="dateOfBirth">
                     </div>
 
                     <div class="form-field">
                         <label for="input-first-name">ชื่อ</label>
-                        <input type="text" id="input-first-name" data-source-field="first_name">
+                        <input type="text" id="input-first-name" data-source-field="firstNameTH">
                     </div>
 
                     <div class="form-field">
                         <label for="input-last-name">นามสกุล</label>
-                        <input type="text" id="input-last-name" data-source-field="last_name">
+                        <input type="text" id="input-last-name" data-source-field="lastNameTH">
                     </div>
 
                     <div class="form-field">
-                        <label for="input-gender">เพศ</label>
-                        <input type="text" id="input-gender" data-source-field="gender">
+                        <label for="input-sex">เพศ</label>
+                        <input type="text" id="input-sex" data-source-field="sex">
                     </div>
 
                     <div class="form-field">
@@ -159,12 +159,12 @@
 
                     <div class="form-field">
                         <label for="input-issue-date">วันออกบัตร</label>
-                        <input type="text" id="input-issue-date" data-source-field="issue_date">
+                        <input type="text" id="input-issue-date" data-source-field="issueDate">
                     </div>
 
                     <div class="form-field">
                         <label for="input-expiry-date">วันหมดอายุบัตร</label>
-                        <input type="text" id="input-expiry-date" data-source-field="expiry_date">
+                        <input type="text" id="input-expiry-date" data-source-field="expireDate">
                     </div>
 
                 </div>
@@ -314,20 +314,21 @@
 
                   console.log("ข้อมูลที่จะส่งไปบันทึก:", updatedData);
 
-                  // ⬇️ อัปเดตค่าใน cardData (และเช็ค nested field ด้วยถ้ามี)
-                  for (let key in updatedData) {
-                    // 🔍 รองรับรูปแบบ key แบบ "thaiPersonalInfo.firstName"
-                    if (key.includes(".")) {
-                      const parts = key.split(".");
-                      let target = cardData;
-                      for (let i = 0; i < parts.length - 1; i++) {
-                        target = target[parts[i]];
-                      }
-                      target[parts[parts.length - 1]] = updatedData[key];
-                    } else {
-                      cardData[key] = updatedData[key];
-                    }
-                  }
+                  cardData.updatedData = updatedData;
+                  // // ⬇️ อัปเดตค่าใน cardData (และเช็ค nested field ด้วยถ้ามี)
+                  // for (let key in updatedData) {
+                  //   // 🔍 รองรับรูปแบบ key แบบ "thaiPersonalInfo.firstName"
+                  //   if (key.includes(".")) {
+                  //     const parts = key.split(".");
+                  //     let target = cardData;
+                  //     for (let i = 0; i < parts.length - 1; i++) {
+                  //       target = target[parts[i]];
+                  //     }
+                  //     target[parts[parts.length - 1]] = updatedData[key];
+                  //   } else {
+                  //     cardData[key] = updatedData[key];
+                  //   }
+                  // }
 
                   // ✅ Save กลับ sessionStorage
                   setCardData(cardData);
@@ -339,6 +340,7 @@
                     }
                   });
 
+                  populateCardData(cardData);
                   alert("บันทึกข้อมูลเรียบร้อย!");
 
                   closeEditModal();
@@ -373,7 +375,7 @@
                 return hidden + text.slice(-visible);
             }
 
-            function getGenderText(code) {
+            function getsexText(code) {
                 return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "xxx";
             }
 
@@ -383,17 +385,7 @@
 
               // 🎯 ใส่ข้อมูลทั้งหมดลง DOM
             function populateCardData(data) {
-                const fields = {
-                  id_number: data.citizenID,
-                  birthdate: formatDateTH(data.dateOfBirth),
-                  first_name: data.thaiPersonalInfo.firstName,
-                  last_name: data.thaiPersonalInfo.lastName,
-                  gender: getGenderText(data.sex),
-                  religion: "xxx", // ยังไม่มีใน object
-                  address: getAddress(data.addressInfo),
-                  issue_date: formatDateTH(data.issueDate),
-                  expiry_date: formatDateTH(data.expireDate),
-                };
+                const fields = data.updatedData;
 
                 if (data.photo?.startsWith("data:image")) {
                   const photoImg = document.getElementById("idCardPhoto");
@@ -421,8 +413,21 @@
                 }
             }
 
-            if (cardData) populateCardData(cardData);
-
+            if (cardData) {
+                 const fields = {
+                  citizenID: cardData.citizenID,
+                  dateOfBirth: formatDateTH(cardData.dateOfBirth),
+                  firstNameTH: cardData.thaiPersonalInfo.firstName,
+                  lastNameTH: cardData.thaiPersonalInfo.lastName,
+                  sex: getsexText(cardData.sex),
+                  religion: "xxx", // ยังไม่มีใน object
+                  address: getAddress(cardData.addressInfo),
+                  issueDate: formatDateTH(cardData.issueDate),
+                  expireDate: formatDateTH(cardData.expireDate),
+                };
+                cardData.updatedData = fields;
+                populateCardData(cardData);
+            }
             const ConfirmBtn = document.getElementById("confirm-btn");
             if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
 
