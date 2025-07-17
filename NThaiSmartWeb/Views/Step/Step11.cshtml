@@ -11,7 +11,7 @@
         <h1 style ="margin-top:50px;">สแกนเสร็จสิ้น</h1>
     </header>
     <div class="page-center">
-        <img src="/images/icons/Profile.jpg" class="id-card-scan-pass" />
+        <img id="capturePhoto" src="/images/icons/Profile.jpg" class="id-card-scan-pass" />
         <h2>
             กรุณา
             <span class="expired-word">เสียบบัตรประชาชน</span> ของท่านไว้<br>
@@ -28,6 +28,18 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            
+            var capture = getCapture();
+            if (capture) {
+                const captureImg = document.getElementById("capturePhoto");
+                if (captureImg) {
+                  captureImg.src = capture;
+                }
+            }
+            
+            
+            
+            
             const audio = document.getElementById("scan_card");
             if (audio) {
                 audio.currentTime = 0;

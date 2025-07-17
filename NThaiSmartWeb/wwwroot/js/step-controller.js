@@ -218,15 +218,15 @@ window.Step14 = {
         let cardData = getCardData();
         let CustomData = getCustomData();
         let capture = getCapture();
-        let resizeCapture = await window.resizeImage(capture, 300); 
+        let resizeCapture = await window.resizeImage(capture, 300);
 
         cardData.KioskCode = GetKioskCode();
         cardData.face_capture = resizeCapture;
-         
+
         const encrypUpdatedData = cardData.updatedData ? encrypt(cardData.updatedData) : "";
         delete cardData.updatedData;
         const encrypCustomData = CustomData ? encrypt(CustomData) : "";
-        const encrypCardData = encrypt(cardData); 
+        const encrypCardData = encrypt(cardData);
 
         try {
             const response = await fetch('/api/KioskApi/SaveNationalCardData', {
@@ -310,4 +310,14 @@ window.withoutCard = () => {
             }, 1000);
         }
     }
+
+    const cTimer = document.querySelector(".timer");
+    if (cTimer) {
+        if (location.pathname.startsWith("/Step/Step")) {
+            cTimer.style.setProperty("display", "block", "important");
+        } else {
+            cTimer.style.setProperty("display", "none", "important");
+        }
+    }
+
 })();
