@@ -79,11 +79,11 @@ public class CardReaderHub : Hub
     private List<KioskStatusDto> GetKioskList() => _kioskConnections.Values.ToList();
 
     // ฟังก์ชันที่ตู้ kiosk ส่งข้อมูลบัตรมา แล้วกระจายข้อมูลให้กับ client ที่สมัครอยู่ใน group นั้น
-    public async Task BroadcastKioskMessage(string KioskCode, PersonalPhoto cardData)
+    public async Task BroadcastKioskMessage(KioskStatusDto status, PersonalPhoto cardData)
     {
         Console.WriteLine("🔥 Broadcast KioskMessage: " + cardData.FullNameTH);
-        _kioskConnections[KioskCode].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
-        await Clients.Group($"kiosk:{KioskCode}").SendAsync("KioskMessage", cardData);
+        _kioskConnections[cardData.KioskCode].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
+        await Clients.Group($"kiosk:{cardData.KioskCode}").SendAsync("KioskMessage", cardData);
     }
 
     // kiosk ส่งสถานะปัจจุบัน (เช่น ready, card_detected ฯลฯ) ไปยังหน้าบ้าน
