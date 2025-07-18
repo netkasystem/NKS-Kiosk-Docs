@@ -46,6 +46,21 @@
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
                     </button>
                 </div>
+
+                <div class="info-field">
+                    <label>ชื่อ (ภาษาอังกฤษ)</label>
+                    <div class="info-value" data-field-name="firstNameEN" data-full-value="Mr. Metha">Mr. Metha</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
+                <div class="info-field">
+                    <label>นามสกุล (ภาษาอังกฤษ)</label>
+                    <div class="info-value" data-field-name="lastNameEN" data-full-value="Far-wabwab"> Far-wabwab</div>
+                    <button class="local-icon-button">
+                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล">
+                    </button>
+                </div>
                 <div class="info-field">
                     <label>เพศ</label>
                     <div class="info-value" data-field-name="sex" data-full-value="ชาย"> ***</div>
@@ -139,6 +154,16 @@
                     <div class="form-field">
                         <label for="input-last-name">นามสกุล</label>
                         <input type="text" id="input-last-name" data-source-field="lastNameTH">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-first-name">ชื่อ (ภาษาอังกฤษ)</label>
+                        <input type="text" id="input-first-name" data-source-field="firstNameEN">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="input-last-name">นามสกุล (ภาษาอังกฤษ)</label>
+                        <input type="text" id="input-last-name" data-source-field="lastNameEN">
                     </div>
 
                     <div class="form-field">
@@ -338,10 +363,7 @@
                       infoDiv.dataset.fullValue = updatedData[fieldName];
                     }
                   });
-
-                  populateCardData(cardData);
-                  alert("บันทึกข้อมูลเรียบร้อย!");
-
+                  populateCardData(cardData); 
                   closeEditModal();
                   closeConfirmModal();
                 }
@@ -418,6 +440,8 @@
                   dateOfBirth: formatDateTH(cardData.dateOfBirth),
                   firstNameTH: cardData.thaiPersonalInfo.firstName,
                   lastNameTH: cardData.thaiPersonalInfo.lastName,
+                  firstNameEN: cardData.englishPersonalInfo.firstName,
+                  lastNameEN: cardData.englishPersonalInfo.lastName,
                   sex: getsexText(cardData.sex),
                   religion: "xxx", // ยังไม่มีใน object
                   address: getAddress(cardData.addressInfo),

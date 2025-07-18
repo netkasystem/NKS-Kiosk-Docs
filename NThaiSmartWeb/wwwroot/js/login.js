@@ -12,11 +12,27 @@ form?.addEventListener("submit", async (e) => {
     const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     const res = await response.json();
     if (response.ok) {
+        //kioskcode
         localStorage.setItem('selectedKioskCode', res.kioskCode);
+
+        localStorage.setItem('kioskHomeDelaySec', res.kioskHomeDelaySec);
+        localStorage.setItem('kioskWaitBrokenCardSec', res.kioskWaitBrokenCardSec);
+        localStorage.setItem('kioskReadStepSec', res.kioskReadStepSec);
+        localStorage.setItem('kioskReadStepScanSec', res.kioskReadStepScanSec);
+
         window.location.href = '/kiosk/list';
     } else {
         alert(res.message || 'Login failed');
     }
+
+    const response_var = await fetch('/api/KioskApi/GetKioskVariable', { method: 'GET', headers: { "Content-Type": "application/json", }
+    }).then(response_var => {
+        if (!response_var.ok) throw new Error("เกิดข้อผิดพลาด: " + response_var.status);
+        return response_var.json();
+    }).then(data => {
+        localStorage.setItem('KioskHomeDelaySec', data.KioskHomeDelaySec);
+        localStorage.setItem('KioskWaitBrokenCardSec', data.KioskWaitBrokenCardSec);
+    })
 });
 
 const urlParams = new URLSearchParams(window.location.search);

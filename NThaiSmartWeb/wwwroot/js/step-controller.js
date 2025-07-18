@@ -37,7 +37,8 @@ window.Step1 = {
 window.Step2 = {
     init: () => {
         console.log("Step 2 read me");
-        next_page("/Step/Step3", 7);
+        var read_sec = getKioskReadStepSec(); //from variable [kiosk_read_step_sec]
+        next_page("/Step/Step3", read_sec);
         setCountTimer(0);
     }
 };
@@ -114,7 +115,7 @@ window.Step6 = {
         if (_btn_fail != null) window.withoutCard();
     },
     start_count_down: () => {
-        let countdown = 20;
+        let countdown = getKioskWaitBrokenCardSec(); //from variable [kiosk_wait_broken_card_sec]
         const countdownElement = document.getElementById('countdown');
         if (countdownElement) {
             const timer = setInterval(() => {
@@ -147,7 +148,8 @@ window.Step8 = {
 window.Step9 = {
     init: () => {
         console.log("Step 9: Recommend scanning");
-        next_page("/Step/Step10", 10);
+        var read_sec = getKioskReadStepScanSec(); //from variable [kiosk_read_step_scan_sec]
+        next_page("/Step/Step10", read_sec);
     }
 };
 
@@ -190,7 +192,7 @@ window.Step12 = {
 window.Step13 = {
     init: () => {
         console.log("Step 13: Success (without card)");
-        let counter = 10;
+        let counter = getKioskHomeDelaySec(); //from variable [kiosk_home_delay_sec];
         const countdownEl = document.getElementById("countdown-end");
 
         const interval = setInterval(() => {
@@ -201,7 +203,7 @@ window.Step13 = {
 
             if (counter <= 0) {
                 clearInterval(interval);
-                next_page("/Step/Step1", 8);
+                next_page("/Step/Step1");
             }
         }, 1000);
     }
