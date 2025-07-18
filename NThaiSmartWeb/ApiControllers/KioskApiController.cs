@@ -136,17 +136,5 @@ public class KioskApiController : ControllerBase
         var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
     }
-
-    [HttpGet("GetKioskVariable")]
-    public IActionResult GetKioskVariable()
-    {
-        //ส่ง variable ไปด้วยยยยย
-        var KioskHomeDelaySec = _context.Variables.Where(v => v.Name == "kiosk_home_delay_sec").Select(v => v.Value).FirstOrDefault();
-        var KioskWaitBrokenCardSec = _context.Variables.Where(v => v.Name == "kiosk_wait_broken_card_sec").Select(v => v.Value).FirstOrDefault();
-        var KioskReadStepSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_sec").Select(v => v.Value).FirstOrDefault();
-        var KioskReadStepScanSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_scan_sec").Select(v => v.Value).FirstOrDefault();
-
-
-        return Ok(new { KioskHomeDelaySec , KioskWaitBrokenCardSec, KioskReadStepSec, KioskReadStepScanSec });
-    }
+     
 }
