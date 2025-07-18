@@ -137,4 +137,5 @@ public class KioskApiController : ControllerBase
         var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
     }
+     
 }
