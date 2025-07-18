@@ -55,6 +55,13 @@ public class AuthController : ControllerBase
         oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
         if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
 
+
+        var KioskHomeDelaySec = _context.Variables.Where(v => v.Name == "kiosk_home_delay_sec").Select(v => v.Value).FirstOrDefault();
+        var KioskWaitBrokenCardSec = _context.Variables.Where(v => v.Name == "kiosk_wait_broken_card_sec").Select(v => v.Value).FirstOrDefault();
+        var KioskReadStepSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_sec").Select(v => v.Value).FirstOrDefault();
+        var KioskReadStepScanSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_scan_sec").Select(v => v.Value).FirstOrDefault();
+
+
         // ✅ Login สำเร็จ
         NSDXSession.Set(NSDXSessionKey.CurrentUser, username);
 
@@ -68,7 +75,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        return Ok(new { message = "✅ Login success", username, oKiosk.KioskCode });
+        return Ok(new { message = "✅ Login success", username, oKiosk.KioskCode, KioskHomeDelaySec, KioskWaitBrokenCardSec, KioskReadStepSec, KioskReadStepScanSec });
     }
 
     [HttpPost("reset")]

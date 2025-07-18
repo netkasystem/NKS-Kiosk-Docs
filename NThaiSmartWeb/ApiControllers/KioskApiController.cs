@@ -73,8 +73,9 @@ public class KioskApiController : ControllerBase
         if (oKiosk != null && fileCode.StartsWith("setup-kiosk-config"))
         {
             var KIOSK_TOKEN = GeneratePermanentToken();
-
             req["KIOSK_TOKEN"] = KIOSK_TOKEN;
+
+            req["KIOSK_ID"] = oKiosk.Id;
             req["KIOSK_CODE"] = oKiosk?.KioskCode ?? "";
 
             oKiosk.KioskToken = KIOSK_TOKEN;
@@ -136,4 +137,5 @@ public class KioskApiController : ControllerBase
         var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
     }
+     
 }

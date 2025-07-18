@@ -116,4 +116,9 @@ const getCustomForm = () => sessionStorage.getItem("CustomForm")
 
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
- 
+
+
+window.getKioskHomeDelaySec = () => localStorage.getItem("kioskHomeDelaySec");
+window.getKioskWaitBrokenCardSec = () => localStorage.getItem("kioskWaitBrokenCardSec");
+window.getKioskReadStepSec = () => localStorage.getItem("kioskReadStepSec");
+window.getKioskReadStepScanSec = () => localStorage.getItem("kioskReadStepScanSec");
