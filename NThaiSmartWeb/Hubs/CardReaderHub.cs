@@ -26,14 +26,14 @@ public class CardReaderHub : Hub
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
 
     // kiosk เรียกเมธอดนี้ครั้งแรกเพื่อบอกว่ามาออนไลน์แล้ว
-    public async Task<KioskStatusDto> RegisterKiosk(string KioskCode, string KioskToken)
+    public async Task<KioskStatusDto> RegisterKiosk(KioskStatusDto statusDto)
     {
-        var findKiosk = _dbContext.Kiosk.Where(_k => _k.KioskCode == KioskCode).FirstOrDefault();
+        var findKiosk = _dbContext.Kiosk.Where(_k => _k.KioskCode == statusDto.KioskCode).FirstOrDefault();
 
         if (findKiosk == null)
             return new KioskStatusDto
             {
-                KioskCode = KioskCode,
+                KioskCode = statusDto.KioskCode,
                 StatusCode = "error",
                 StatusText = "❌ Kiosk ไม่มีในระบบ"
             };
@@ -41,33 +41,28 @@ public class CardReaderHub : Hub
         if (findKiosk.Inactive == 1)
             return new KioskStatusDto
             {
-                KioskCode = KioskCode,
+                KioskCode = statusDto.KioskCode,
                 StatusCode = "error",
                 StatusText = "❌ Kiosk นี้ยังไม่ได้เปิดใช้งาน กรุณาติดต่อเจ้าหน้าที่"
             };
 
-        if (findKiosk.KioskToken != KioskToken)
+        if (findKiosk.KioskToken != statusDto.KioskToken)
             return new KioskStatusDto
             {
-                KioskCode = KioskCode,
+                KioskCode = statusDto.KioskCode,
                 StatusCode = "error",
                 StatusText = "❌ Kiosk ไม่ถูกต้องกรุณาติดตั้งใหม่อีกครั้ง"
             };
 
         // Register สำเร็จ
-        var kioskDetail = new KioskStatusDto
-        {
-            KioskCode = KioskCode,
-            KioskToken = KioskToken,
-            StatusCode = "ready",
-            StatusText = "✅ พร้อมใช้งาน",
-            Timestamp = DateTime.Now,
-            LastUpdateTime = DateTime.Now
-        };
+        statusDto.StatusCode = KioskStatusConstant.Ready;
+        statusDto.StatusText = KioskStatusConstant.ReadyText;
+        statusDto.Timestamp = DateTime.Now;
+        statusDto.LastUpdateTime = DateTime.Now;
 
-        _kioskConnections[KioskCode] = kioskDetail;
+        _kioskConnections[statusDto.KioskCode] = statusDto;
         await Clients.All.SendAsync("KioskList", GetKioskList());
-        return kioskDetail;
+        return statusDto;
     }
 
     // ให้ client สมัครเข้ารับข้อมูลของ kiosk แบบเฉพาะเจาะจง (เช่นหน้าบ้านติดตาม kiosk เดียว)
@@ -83,8 +78,8 @@ public class CardReaderHub : Hub
     public async Task BroadcastKioskMessage(KioskStatusDto status, PersonalPhoto cardData)
     {
         Console.WriteLine("🔥 Broadcast KioskMessage: " + cardData.FullNameTH);
-        _kioskConnections[cardData.KioskCode].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
-        await Clients.Group($"kiosk:{cardData.KioskCode}").SendAsync("KioskMessage", cardData);
+        _kioskConnections[status.KioskCode].LastUpdateTime = DateTime.Now; // อัปเดตเวลาออนไลน์ล่าสุด
+        await Clients.Group($"kiosk:{status.KioskCode}").SendAsync("KioskMessage", cardData);
     }
 
     // kiosk ส่งสถานะปัจจุบัน (เช่น ready, card_detected ฯลฯ) ไปยังหน้าบ้าน
@@ -93,6 +88,37 @@ public class CardReaderHub : Hub
         Console.WriteLine($"🔥 {status.Timestamp:HH:mm:ss} - [{status.KioskCode}] {status.StatusCode}: {status.StatusText}");
         _kioskConnections[status.KioskCode].LastUpdateTime = DateTime.Now; // บันทึกเวลาสุดท้ายที่ kiosk ยังออนไลน์
         await Clients.Group($"kiosk:{status.KioskCode}").SendAsync("KioskStatus", status);
+    }
+
+    public async Task HeartBeat(string KioskId)
+    {
+        var find_kiosk = _kioskConnections.Where(x => x.Value.KioskId == KioskId);
+        if (find_kiosk?.Any() ?? false)
+        {
+            try
+            {
+                var kioskId = uint.TryParse(KioskId, out var id) ? id : 0;
+                if (kioskId == 0) return;
+
+                var existing = _dbContext.KioskHeartbeat.FirstOrDefault(k => k.KioskId == kioskId);
+                if (existing == null)
+                {
+                    _dbContext.KioskHeartbeat.Add(new KioskHeartbeat { KioskId = kioskId, Lastupdate = DateTime.Now });
+                }
+                else
+                {
+                    existing.Lastupdate = DateTime.Now;
+                    _dbContext.KioskHeartbeat.Update(existing);
+                }
+
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"KioskHeartbeatWorker error: {ex.Message}");
+                _dbContext.NsdxErrorLog.Add(new NsdxErrorLog { Message = ex.Message });
+            }
+        }
     }
 
     // เรียกอัตโนมัติเมื่อ client (kiosk หรือ web) หลุดการเชื่อมต่อ
@@ -105,51 +131,14 @@ public class CardReaderHub : Hub
             {
                 // ❗ ไม่ลบออกจาก _kioskConnections ทันที เพื่อให้ฝั่ง web ยังเห็นว่าหลุด (Disconnected)
                 Console.WriteLine($"⚠️ Kiosk [{KioskCode}] disconnected");
-				_kioskConnections[KioskCode].LastUpdateTime = DateTime.Now;
-				_connectionToKioskMap.Remove(Context.ConnectionId);
+                _kioskConnections[KioskCode].LastUpdateTime = DateTime.Now;
+                _connectionToKioskMap.Remove(Context.ConnectionId);
 
                 // ถ้าคุณอยากลบทิ้งเลยจริง ๆ ให้ปลด comment ด้านล่าง:
                 // _kioskConnections.Remove(kioskId);
             }
         }
-		
-		return base.OnDisconnectedAsync(exception);
+
+        return base.OnDisconnectedAsync(exception);
     }
-
-	public async Task HeartBeat(string KioskId)
-	{
-		if (_kioskConnections.TryGetValue(KioskId, out var kiosk))
-		{
-			try
-			{
-				var kioskId = uint.TryParse(KioskId, out var id) ? id : 0;
-                if (kioskId == 0) return;
-
-				var existing = _dbContext.KioskHeartbeat.FirstOrDefault(k => k.KioskId == kioskId);
-				if (existing == null)
-				{
-					_dbContext.KioskHeartbeat.Add(new KioskHeartbeat
-					{
-						KioskId = kioskId,
-						Lastupdate = DateTime.Now
-					});
-				}
-				else
-				{
-					existing.Lastupdate = DateTime.Now;
-					_dbContext.KioskHeartbeat.Update(existing);
-				}
-
-				await _dbContext.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine($"KioskHeartbeatWorker error: {ex.Message}");
-				_dbContext.NsdxErrorLog.Add(new NsdxErrorLog
-				{
-					Message = ex.Message
-				});
-			}
-		}
-	}
 }
