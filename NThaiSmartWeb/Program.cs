@@ -29,6 +29,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddDbContext<KioskContext>(options => options.ConfigureFromEnvOrAppSettings(builder.Configuration));
+builder.Services.AddHostedService<KioskHeartbeatWorker>();
 
 // CORS Policy แบบเปิดทุก origin (ระวังใช้ใน Production ควรระบุ origin ให้เจาะจง)
 builder.Services.AddCors(options =>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using NThaiSmartWeb.EFModels;
 
 public class CardReaderHub : Hub
@@ -104,14 +105,51 @@ public class CardReaderHub : Hub
             {
                 // ❗ ไม่ลบออกจาก _kioskConnections ทันที เพื่อให้ฝั่ง web ยังเห็นว่าหลุด (Disconnected)
                 Console.WriteLine($"⚠️ Kiosk [{KioskCode}] disconnected");
-
-                _connectionToKioskMap.Remove(Context.ConnectionId);
+				_kioskConnections[KioskCode].LastUpdateTime = DateTime.Now;
+				_connectionToKioskMap.Remove(Context.ConnectionId);
 
                 // ถ้าคุณอยากลบทิ้งเลยจริง ๆ ให้ปลด comment ด้านล่าง:
                 // _kioskConnections.Remove(kioskId);
             }
         }
-
-        return base.OnDisconnectedAsync(exception);
+		
+		return base.OnDisconnectedAsync(exception);
     }
+
+	public async Task HeartBeat(string KioskId)
+	{
+		if (_kioskConnections.TryGetValue(KioskId, out var kiosk))
+		{
+			try
+			{
+				var kioskId = uint.TryParse(KioskId, out var id) ? id : 0;
+                if (kioskId == 0) return;
+
+				var existing = _dbContext.KioskHeartbeat.FirstOrDefault(k => k.KioskId == kioskId);
+				if (existing == null)
+				{
+					_dbContext.KioskHeartbeat.Add(new KioskHeartbeat
+					{
+						KioskId = kioskId,
+						Lastupdate = DateTime.Now
+					});
+				}
+				else
+				{
+					existing.Lastupdate = DateTime.Now;
+					_dbContext.KioskHeartbeat.Update(existing);
+				}
+
+				await _dbContext.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"KioskHeartbeatWorker error: {ex.Message}");
+				_dbContext.NsdxErrorLog.Add(new NsdxErrorLog
+				{
+					Message = ex.Message
+				});
+			}
+		}
+	}
 }
