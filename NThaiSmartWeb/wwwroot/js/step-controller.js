@@ -190,9 +190,23 @@ window.Step12 = {
 window.Step13 = {
     init: () => {
         console.log("Step 13: Success (without card)");
-        next_page("/Step/Step1", 8);
+        let counter = 10;
+        const countdownEl = document.getElementById("countdown-end");
+
+        const interval = setInterval(() => {
+            counter--;
+            if (countdownEl) {
+                countdownEl.textContent = counter;
+            }
+
+            if (counter <= 0) {
+                clearInterval(interval);
+                next_page("/Step/Step1", 8);
+            }
+        }, 1000);
     }
 };
+
 
 window.Step14 = {
     init: () => {
