@@ -7,8 +7,15 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="icon" type="image/png" href="~/favicon.png" />
+    <link rel="stylesheet" href="~/css/Login/_Layout.css" />
 </head>
 <body>
+    <div id="loading" style="display:none;">
+        <div class="spinner"></div>
+        <p>กำลังโหลดข้อมูล...</p>
+    </div>
+
+
     <div class="container mt-4">
         <main role="main" class="pb-5">
             @RenderBody()
@@ -17,8 +24,14 @@
 
     @await Html.PartialAsync("_Footer")
 
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/js/common-ajax.js"></script>
+
+    <script src="~/lib/crypto-js/crypto-js.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/common-script.js"></script>
 
     <script src="~/js/login.js"></script>
 </body>

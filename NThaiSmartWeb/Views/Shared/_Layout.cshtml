@@ -1,4 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper Html
+@inject IWebHostEnvironment env
 @functions {
     public string IsActive(string controller, string action = "")
     {
@@ -29,7 +30,8 @@
 </head>
 <body>
 
-    @if (!(ViewBag.HideHeader is true))
+    @* @if (!(ViewBag.HideHeader is true)) *@
+    @if (!ViewBag.HideHeader || env.IsDevelopment())
     {
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
@@ -89,10 +91,15 @@
             </nav>
         </header>
     }
+
     <div class="container mt-4">
         <main role="main" class="pb-5">
             <div class="timer" style="background-color: slategray;display: block !important;width: fit-content;padding-right: 10px;">
-                ⏳ Time elapsed: <span id="timer">0</span> seconds
+                @if (env.IsDevelopment())
+                {
+                    <tspan>Dev Mode</tspan>
+                    <span> ⏳ Time elapsed: <span id="timer">0</span> seconds</span>
+                }
             </div>
             @RenderBody()
         </main>
@@ -133,7 +140,10 @@
     </script>
     @await Html.PartialAsync("_Footer")
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/js/common-ajax.js"></script>
+
+    <script src="~/lib/crypto-js/crypto-js.min.js"></script>
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

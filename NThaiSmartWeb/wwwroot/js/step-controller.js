@@ -111,8 +111,8 @@ window.Step6 = {
         var _btn = document.querySelector(".retry-button");
         if (_btn != null) _btn.addEventListener('click', () => next_page("/Step/Step4"));
 
-        var _btn_fail = document.querySelector(".action-button cancel-button-fail");
-        if (_btn_fail != null) window.withoutCard();
+        var _btn_fail = document.querySelector(".cancel-button-fail");
+        if (_btn_fail != null) _btn_fail.addEventListener('click', () => next_page("/Step/Step1"));
     },
     start_count_down: () => {
         let countdown = getKioskWaitBrokenCardSec(); //from variable [kiosk_wait_broken_card_sec]
@@ -135,6 +135,8 @@ window.Step6 = {
 window.Step7 = {
     init: () => {
         console.log("Step 7: Retry connect card");
+        const cancelBtn = document.querySelector(".cancel-button-fail.step7");
+        if (cancelBtn != null) cancelBtn.addEventListener('click', () => next_page("/Step/Step1"));
     }
 };
 
@@ -291,10 +293,7 @@ window.withoutCard = () => {
         touch.style.top = `${e.clientY}px`;
 
         document.body.appendChild(touch);
-
-        setTimeout(() => {
-            touch.remove();
-        }, 500);
+        setTimeout(() => { touch.remove(); }, 500);
     });
 
     const timerElement = document.getElementById("timer");

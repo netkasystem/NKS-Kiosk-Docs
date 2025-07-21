@@ -73,24 +73,6 @@ window.resizeImage = function (imgBase64, size) {
     });
 };
 
-window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
-window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
-
-const setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
-const getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? null);
-const removeCardData = () => sessionStorage.removeItem("cardData");
-
-const setCapture = (d) => sessionStorage.setItem("capture", d);
-const getCapture = () => sessionStorage.getItem("capture");
-
-const setConsent = () => sessionStorage.setItem("hasConsent", true);
-const getConsent = () => sessionStorage.getItem("hasConsent");
-
-const setCountTimer = (d) => sessionStorage.setItem("countTimer", d);
-const getCountTimer = () => sessionStorage.getItem("countTimer");
-
-const clearSessionStorage = () => sessionStorage.clear();
-
 const logoutBtn = document.getElementById("logout");
 logoutBtn?.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -107,16 +89,31 @@ logoutBtn?.addEventListener("click", async (e) => {
     }
 });
 
-const next_page = (href, time_sec = 0) => {
-    setTimeout(() => { window.location.href = href; }, time_sec * 1000);
-}
+const next_page = (href, time_sec = 0) => { setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
+
+const clearSessionStorage = () => sessionStorage.clear();
+
+window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
+window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
+
+const setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
+const getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? null);
+const removeCardData = () => sessionStorage.removeItem("cardData");
+
+const setCapture = (d) => sessionStorage.setItem("capture", d);
+const getCapture = () => sessionStorage.getItem("capture");
+
+const setConsent = () => sessionStorage.setItem("hasConsent", true);
+const getConsent = () => sessionStorage.getItem("hasConsent");
+
+const setCountTimer = (d) => sessionStorage.setItem("countTimer", d);
+const getCountTimer = () => sessionStorage.getItem("countTimer");
 
 const setCustomForm = (c) => sessionStorage.setItem("CustomForm", c);
 const getCustomForm = () => sessionStorage.getItem("CustomForm")
 
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
-
 
 window.getKioskHomeDelaySec = () => localStorage.getItem("kioskHomeDelaySec");
 window.getKioskWaitBrokenCardSec = () => localStorage.getItem("kioskWaitBrokenCardSec");

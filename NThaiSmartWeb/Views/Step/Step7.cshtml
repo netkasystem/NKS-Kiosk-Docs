@@ -23,11 +23,8 @@
 
     </div>
 
-    <form asp-controller="Step" asp-action="Step8" method="get" class="button-section" onsubmit="return handleScan(this)" id="cardLink">
-        <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px;width:50%; color:red;">
-            ยกเลิกการยืนยันตัวตน
-        </button>
-    </form>
+    <button class="action-button cancel-button-fail step7">ยกเลิกการยืนยันตัวตน</button>
+
     <audio id="scan_card" src="/audio/expire_card.wav"></audio>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
 
