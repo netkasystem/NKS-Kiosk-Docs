@@ -9,7 +9,10 @@
             <header class="page-header" style="padding-top:120px; padding-bottom:120px;">
                 <h1>ข้อตกลงและเงื่อนไข</h1>
             </header>
-
+   <div class="scroll-anime">
+                    <img  src="/images/icons/interac_icon_scroll.svg" class="interac_icon_scroll" />
+                    <div class="ping-scroll"></div>
+                </div>
             <div class="terms-content-box">
                 <section class="policy-box">
                     <h2 class="terms-title">
@@ -23,7 +26,6 @@
                         ข้อตกลงและเงื่อนไขการใช้งานนี้อยู่ภายใต้บทบังคับแห่งกฎหมายตามที่กฎหมายบัญญัติไว้
                     </p>
                 </section>
-
                 <section class="policy-box">
                     <h2 class="terms-title">
                         ข้อสงวนสิทธิและข้อจำกัดความรับผิด
@@ -64,5 +66,19 @@
         </div>
     </div>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const el = document.querySelector('.interac_icon_scroll');
+            const wrapper = document.querySelector('.scroll-anime');
+            let count = 0;
+
+            el.addEventListener('animationiteration', () => {
+                count++;
+                if (count === 3) {
+                    wrapper.style.display = 'none'; // หรือใช้ fade out ก็ได้
+                }
+            });
+        });
+    </script>
 
 </body>
