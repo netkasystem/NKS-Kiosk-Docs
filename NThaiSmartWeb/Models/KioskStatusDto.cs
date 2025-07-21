@@ -11,4 +11,5 @@
     public bool Connected => (DateTime.Now - LastUpdateTime).TotalMinutes < 3;
 
     public DateTime LastUpdateTime { get; set; }  // server บันทึก
+	public int HeartBeatInterval { get; set; }
 }
