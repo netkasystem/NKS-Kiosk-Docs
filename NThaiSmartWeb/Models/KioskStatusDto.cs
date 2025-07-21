@@ -1,5 +1,6 @@
 ﻿public class KioskStatusDto
 {
+    public string KioskId { get; set; }
     public string KioskCode { get; set; }
     public string KioskToken { get; set; }
     public string StatusCode { get; set; }
