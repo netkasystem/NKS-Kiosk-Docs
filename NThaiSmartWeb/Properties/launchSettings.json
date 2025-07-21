@@ -39,7 +39,9 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:5201",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:5201"
+        "ASPNETCORE_URLS": "http://+:5201",
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "TZ": "Asia/Bangkok"
       },
       "publishAllPorts": false,
       "useSSL": false

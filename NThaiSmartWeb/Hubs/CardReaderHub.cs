@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NThaiSmartWeb.EFModels;
 
 public class CardReaderHub : Hub
 {
     private readonly KioskContext _dbContext;
-
-    public CardReaderHub(KioskContext dbContext)
+	private readonly IMemoryCache _memoryCache;
+	public CardReaderHub(IMemoryCache memoryCache, KioskContext dbContext)
     {
+		_memoryCache = memoryCache;
         _dbContext = dbContext;
-    }
+	}
 
     // เก็บสถานะของแต่ละ kiosk โดยใช้ kioskId เป็น key
     private static readonly Dictionary<string, KioskStatusDto> _kioskConnections = new();
@@ -19,8 +21,23 @@ public class CardReaderHub : Hub
 
     private static readonly object _lock = new(); // ใช้ lock ป้องกัน race condition
 
-    // ให้สิทธิภายนอก (เช่น Worker) เข้าถึงข้อมูล kiosk status ปัจจุบัน
-    public static Dictionary<string, KioskStatusDto> GetKioskStatusMap() => _kioskConnections;
+	private int HeartBeatInterval() =>
+	    _memoryCache.GetOrCreate("health_check_interval_min", entry =>
+	    {
+		    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+
+		    var value = _dbContext.Variables
+			    .FirstOrDefault(v => v.Name == "health_check_interval_min")
+			    ?.Value;
+
+		    if (int.TryParse(value, out var min))
+			    return min;
+
+		    return 5;
+	    });
+
+	// ให้สิทธิภายนอก (เช่น Worker) เข้าถึงข้อมูล kiosk status ปัจจุบัน
+	public static Dictionary<string, KioskStatusDto> GetKioskStatusMap() => _kioskConnections;
 
     // รับคำขอจาก client เพื่อดึง kiosk list ปัจจุบัน (ใช้ในการแสดง UI)
     public async Task RequestKioskList() => await Clients.Caller.SendAsync("KioskList", GetKioskList());
@@ -30,7 +47,7 @@ public class CardReaderHub : Hub
     {
         var findKiosk = _dbContext.Kiosk.Where(_k => _k.KioskCode == statusDto.KioskCode).FirstOrDefault();
 
-        if (findKiosk == null)
+		if (findKiosk == null)
             return new KioskStatusDto
             {
                 KioskCode = statusDto.KioskCode,
@@ -59,8 +76,9 @@ public class CardReaderHub : Hub
         statusDto.StatusText = KioskStatusConstant.ReadyText;
         statusDto.Timestamp = DateTime.Now;
         statusDto.LastUpdateTime = DateTime.Now;
+        statusDto.HeartBeatInterval = HeartBeatInterval();
 
-        _kioskConnections[statusDto.KioskCode] = statusDto;
+		_kioskConnections[statusDto.KioskCode] = statusDto;
         await Clients.All.SendAsync("KioskList", GetKioskList());
         return statusDto;
     }
@@ -90,40 +108,45 @@ public class CardReaderHub : Hub
         await Clients.Group($"kiosk:{status.KioskCode}").SendAsync("KioskStatus", status);
     }
 
-    public async Task HeartBeat(string KioskId)
-    {
-        var find_kiosk = _kioskConnections.Where(x => x.Value.KioskId == KioskId);
-        if (find_kiosk?.Any() ?? false)
-        {
-            try
-            {
-                var kioskId = uint.TryParse(KioskId, out var id) ? id : 0;
-                if (kioskId == 0) return;
+	public async Task<int> HeartBeat(string KioskId)
+	{
+		var find_kiosk = _kioskConnections.Where(x => x.Value.KioskId == KioskId);
+		var interval = HeartBeatInterval();
 
-                var existing = _dbContext.KioskHeartbeat.FirstOrDefault(k => k.KioskId == kioskId);
-                if (existing == null)
-                {
-                    _dbContext.KioskHeartbeat.Add(new KioskHeartbeat { KioskId = kioskId, Lastupdate = DateTime.Now });
-                }
-                else
-                {
-                    existing.Lastupdate = DateTime.Now;
-                    _dbContext.KioskHeartbeat.Update(existing);
-                }
+		if (find_kiosk?.Any() ?? false)
+		{
+			try
+			{
+				var kioskId = uint.TryParse(KioskId, out var id) ? id : 0;
+				if (kioskId == 0) return interval;
 
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"KioskHeartbeatWorker error: {ex.Message}");
-                _dbContext.NsdxErrorLog.Add(new NsdxErrorLog { Message = ex.Message });
-            }
-        }
-    }
+				var existing = _dbContext.KioskHeartbeat.FirstOrDefault(k => k.KioskId == kioskId);
+				if (existing == null)
+				{
+					_dbContext.KioskHeartbeat.Add(new KioskHeartbeat { KioskId = kioskId, Lastupdate = DateTime.Now });
+				}
+				else
+				{
+					existing.Lastupdate = DateTime.Now;
+					_dbContext.KioskHeartbeat.Update(existing);
+				}
 
-    // เรียกอัตโนมัติเมื่อ client (kiosk หรือ web) หลุดการเชื่อมต่อ
-    // เรียกอัตโนมัติเมื่อมี client หลุด
-    public override Task OnDisconnectedAsync(Exception? exception)
+				await _dbContext.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"KioskHeartbeatWorker error: {ex.Message}");
+				_dbContext.NsdxErrorLog.Add(new NsdxErrorLog { Message = ex.Message });
+				await _dbContext.SaveChangesAsync();
+			}
+		}
+
+		return interval;
+	}
+
+	// เรียกอัตโนมัติเมื่อ client (kiosk หรือ web) หลุดการเชื่อมต่อ
+	// เรียกอัตโนมัติเมื่อมี client หลุด
+	public override Task OnDisconnectedAsync(Exception? exception)
     {
         lock (_lock)
         {

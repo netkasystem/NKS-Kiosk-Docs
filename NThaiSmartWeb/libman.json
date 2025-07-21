@@ -9,6 +9,18 @@
     {
       "library": "microsoft-signalr@8.0.7",
       "destination": "wwwroot/lib/microsoft-signalr/"
+    },
+    {
+      "library": "crypto-js@4.2.0",
+      "destination": "wwwroot/lib/crypto-js/",
+      "files": [
+        "crypto-js.min.js",
+        "crypto-js.js"
+      ]
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/"
     }
   ]
 }

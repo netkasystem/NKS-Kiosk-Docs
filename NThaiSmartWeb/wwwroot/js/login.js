@@ -9,30 +9,9 @@ form?.addEventListener("submit", async (e) => {
         kioskCode: kiosk_code ?? ""
     };
 
-    const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    const res = await response.json();
-    if (response.ok) {
-        //kioskcode
-        localStorage.setItem('selectedKioskCode', res.kioskCode);
-
-        localStorage.setItem('kioskHomeDelaySec', res.kioskHomeDelaySec);
-        localStorage.setItem('kioskWaitBrokenCardSec', res.kioskWaitBrokenCardSec);
-        localStorage.setItem('kioskReadStepSec', res.kioskReadStepSec);
-        localStorage.setItem('kioskReadStepScanSec', res.kioskReadStepScanSec);
-
-        window.location.href = '/kiosk/list';
-    } else {
-        alert(res.message || 'Login failed');
-    }
-
-    const response_var = await fetch('/api/KioskApi/GetKioskVariable', { method: 'GET', headers: { "Content-Type": "application/json", }
-    }).then(response_var => {
-        if (!response_var.ok) throw new Error("เกิดข้อผิดพลาด: " + response_var.status);
-        return response_var.json();
-    }).then(data => {
-        localStorage.setItem('KioskHomeDelaySec', data.KioskHomeDelaySec);
-        localStorage.setItem('KioskWaitBrokenCardSec', data.KioskWaitBrokenCardSec);
-    })
+    ajaxCommon.post("/api/auth/login", data,
+        (res) => { AfterAuthen(res) },
+        (res) => { alert(res.message || 'Login failed'); });
 });
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -40,33 +19,35 @@ const kiosk_code = urlParams.get("kiosk_code");
 const token = urlParams.get("token");
 
 async function SSOLogin() {
-    const data = { kiosk_code: kiosk_code ?? "", token: token ?? "" };
+    const data = {
+        kiosk_code: kiosk_code ?? "",
+        token: token ?? ""
+    };
 
     try {
-        const response = await fetch('/api/auth/sso', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
+        const response = await fetch('/api/auth/sso', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         const res = await response.json();
 
         if (response.ok) {
-            // ✅ เก็บ kioskCode ไว้ใช้ภายหลัง (เช่น redirect กลับ)
-            localStorage.setItem('selectedKioskCode', res.kioskCode);
-
-            // ✅ ไปขั้นตอนถัดไปหลัง SSO สำเร็จ
-            window.location.href = '/Step/Step1';
+            AfterAuthen(res);
         } else {
-            // ❌ กรณี token หรือ kioskCode ผิด
             console.error("SSO Login Failed:", res.message || res.error || res);
-            alert("⚠️ ไม่สามารถเข้าสู่ระบบได้ กรุณาตรวจสอบ token หรือ kiosk");
         }
-
     } catch (err) {
         console.error("❌ Error calling /api/auth/sso", err);
         alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
     }
+}
+
+function AfterAuthen(res) {
+    //kioskcode
+    SetKioskCode(res.kioskCode);
+    localStorage.setItem('kioskHomeDelaySec', res.kioskHomeDelaySec);
+    localStorage.setItem('kioskWaitBrokenCardSec', res.kioskWaitBrokenCardSec);
+    localStorage.setItem('kioskReadStepSec', res.kioskReadStepSec);
+    localStorage.setItem('kioskReadStepScanSec', res.kioskReadStepScanSec);
+
+    next_page('/Step/Step1', 0.5);
 }
 
 window.addEventListener('DOMContentLoaded', () => {

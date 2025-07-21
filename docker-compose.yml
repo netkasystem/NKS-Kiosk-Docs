@@ -9,3 +9,4 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:5201
       - ASPNETCORE_ENVIRONMENT=Development
+      - TZ=Asia/Bangkok

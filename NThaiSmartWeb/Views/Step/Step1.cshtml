@@ -1,28 +1,27 @@
 ﻿@{
     ViewData["Title"] = "Step1";
+    ViewBag.HideHeader = true;
 }
-<body>
 
-    <div class="header">
-        <div class="normal-container">
-            <h2>
-                ยืนยันตัวตนด้วย
-            </h2>
-        </div>
-        <div class="normal-container">
-            <h1>
-                บัตรประชาชน
-            </h1>
-        </div>
+<div class="header">
+    <div class="normal-container">
+        <h2>
+            ยืนยันตัวตนด้วย
+        </h2>
     </div>
-    <a asp-controller="Step" asp-action="Step2" class="card-link" style="text-decoration: none;" id="cardLink">
-        <div class="card_thai">
-            <img id="font_thai_id" src="/images/icons/Thai_id.svg" style="width:88%; height:100%; " class="thai_id_icon" />
+    <div class="normal-container">
+        <h1>
+            บัตรประชาชน
+        </h1>
+    </div>
+</div>
+<a asp-controller="Step" asp-action="Step2" class="card-link" style="text-decoration: none;" id="cardLink">
+    <div class="card_thai">
+        <img id="font_thai_id" src="/images/icons/Thai_id.svg" style="width:88%; height:100%; " class="thai_id_icon" />
         <div class="interac">
             <img id="interac" src="/images/icons/Interac.svg" style="width:50%; height:auto; " class="interac_icon" />
-            <div class="ping-center"></div> 
+            <div class="ping-center"></div>
         </div>
     </div>
-    </a>
-    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
-</body>
+</a>
+<audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>

@@ -25,6 +25,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\css\Login\_Layout.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\models\age_gender_model-shard1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
