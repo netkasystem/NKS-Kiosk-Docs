@@ -143,7 +143,7 @@ window.Step7 = {
 window.Step8 = {
     init: () => {
         console.log("Step 8: Read card successful");
-        next_page("/Step/Step9", 3);
+        next_page("/Step/Step9", 5);
     }
 };
 
@@ -167,7 +167,7 @@ window.Step10 = {
 window.Step11 = {
     init: () => {
         console.log("Step 11: Scanning successful");
-        next_page("/Step/Step12", 3);
+        next_page("/Step/Step12", 5);
     }
 };
 
