@@ -1,46 +1,48 @@
 ﻿@{
     ViewData["Title"] = "Step2";
     ViewBag.HideHeader = true;
+    ViewBag.HideFooter = true;
 }
+
 <a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;" id="cardLink">
 
-<section class="main">
-<div class="header">
-    <div class="normal-container">
-        <h2>
-            ขั้นตอน
-        </h2>
-    </div>
-    <div class="normal-container">
-        <h1>
-           การยืนยันตัวตน
-        </h1>
-    </div>
-    <div class="step-container">
-        <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-text">สอดบัตรประจำตัวประชาชน</div>
-        </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-text">สแกนใบหน้า</div>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-text">ตรวจสอบและยืนยันข้อมูล</div>
-        </div>
+    <section class="main">
+        <div class="header">
+            <div class="normal-container">
+                <h2>
+                    ขั้นตอน
+                </h2>
+            </div>
+            <div class="normal-container">
+                <h1>
+                    การยืนยันตัวตน
+                </h1>
+            </div>
+            <div class="step-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">สอดบัตรประจำตัวประชาชน</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">สแกนใบหน้า</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">ตรวจสอบและยืนยันข้อมูล</div>
+                </div>
                 <div class="click-hint hidden">
                     <img id="interac" src="/images/icons/Interac.svg" class="interac_icon" />
                     <div class="ping-center"></div>
                 </div>
 
 
-        <div class="step">
-            <div class="step-number">4</div>
-            <div class="step-text">นำบัตรประจำตัวประชาชนออก</div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-text">นำบัตรประจำตัวประชาชนออก</div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
         <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
     </section>
 </a>

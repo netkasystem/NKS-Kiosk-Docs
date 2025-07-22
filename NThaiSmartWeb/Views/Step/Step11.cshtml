@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Step11";
     ViewBag.HideHeader = true;
+    ViewBag.HideFooter = true;
 }
 
 <body class="green-background">
@@ -29,7 +30,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            
+
             var capture = getCapture();
             if (capture) {
                 const captureImg = document.getElementById("capturePhoto");
@@ -37,10 +38,10 @@
                   captureImg.src = capture;
                 }
             }
-            
-            
-            
-            
+
+
+
+
             const audio = document.getElementById("scan_card");
             if (audio) {
                 audio.currentTime = 0;

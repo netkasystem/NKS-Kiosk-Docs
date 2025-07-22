@@ -105,19 +105,21 @@
         </main>
     </div>
 
+    <footer>
+        <button class="footer-button" id="back-button">
+            <img src="/images/icons/back_icon.svg" class="footer_icon">
+        </button>
+       @*  <button class="footer-button" id="setting-button">
+            <img src="/images/icons/Setting.svg" class="footer_icon">
+        </button>
+        <button class="footer-button">
+            <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
+        </button> *@
+    </footer>
+
     @if (!(ViewBag.HideFooter is true))
     {
-        <footer>
-            <button class="footer-button" id="back-button">
-                <img src="/images/icons/back_icon.svg" class="footer_icon">
-            </button>
-           @*  <button class="footer-button" id="setting-button">
-                <img src="/images/icons/Setting.svg" class="footer_icon">
-            </button>
-            <button class="footer-button">
-                <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
-            </button> *@
-        </footer>
+        @await Html.PartialAsync("_Footer")
     }
 
     <script>
@@ -139,12 +141,11 @@
             }
             if (settingButton) {
             settingButton.addEventListener('click', function () {
-                window.location.href = '/Kiosk/Setup'; 
+                window.location.href = '/Kiosk/Setup';
             });
         }
         });
     </script>
-    @await Html.PartialAsync("_Footer")
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/js/common-ajax.js"></script>
