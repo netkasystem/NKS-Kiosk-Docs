@@ -211,7 +211,6 @@ window.Step13 = {
     }
 };
 
-
 window.Step14 = {
     init: () => {
         console.log("Step 14: Customfield");
@@ -240,7 +239,6 @@ window.Step14 = {
                     EncrypString: encrypCardData,
                     EncrypUpdatedData: encrypUpdatedData,
                     EncrypCustomDataData: encrypCustomData,
-
                 })
             });
 
@@ -258,8 +256,8 @@ window.Step14 = {
 };
 
 window.onCardInserted = () => {
-    if (!getConsent()) next_page("/Step/Step3", 1);
-    else next_page("/Step/Step5", 1);
+    if (!getConsent()) next_page("/Step/Step3");
+    else next_page("/Step/Step5");
 }
 
 window.withoutCard = () => {
@@ -320,5 +318,4 @@ window.withoutCard = () => {
             cTimer.style.setProperty("display", "none", "important");
         }
     }
-
 })();
