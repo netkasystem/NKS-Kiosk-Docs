@@ -397,8 +397,7 @@ body, html {
     width: 100%;
     height: auto;
     animation: scrollUpFade 2.5s ease-in-out 3;
-    animation-fill-mode: forwards; /* หยุดที่เฟรมสุดท้าย */
-    opacity: 0.8;
+    animation-fill-mode: forwards; 
 }
 
 @keyframes scrollUpFade {
@@ -430,7 +429,7 @@ body, html {
     border-radius: 70px 70px 0 0;
     max-height: 1224px;
     scrollbar-width: thin;
-    scrollbar-color: #00000057 transparent;
+    scrollbar-color: #24171766 #0000001c;
 }
 
     .terms-content-box::-webkit-scrollbar {
@@ -1075,8 +1074,8 @@ body, html {
 }
 
 .id-card-scan-pass {
-    margin-bottom: 23%;
-    margin-top: 20%;
+    margin-bottom: 5%;
+    margin-top: 5%;
     width: 50%;
 }
 
