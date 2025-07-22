@@ -31,7 +31,7 @@
 <body>
 
     @* @if (!(ViewBag.HideHeader is true)) *@
-    @if (!ViewBag.HideHeader || env.IsDevelopment())
+    @if (!(ViewBag.HideHeader is true) || env.IsDevelopment())
     {
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
