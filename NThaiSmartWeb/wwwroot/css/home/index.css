@@ -2103,3 +2103,67 @@ textarea {
     width: 100% !important;
     max-width: inherit;
 }
+.glass-step-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 5rem auto;
+    padding-inline: 1rem;
+}
+
+.glass-step-box {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 30px 45px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.step-number {
+    font-size: 3rem;
+    min-width: 48px;
+    text-align: center;
+}
+
+.step-label {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.script-button {
+    background-color: #ffffff;
+    color: #021b79;
+    border: none;
+    padding: 0.5rem 2rem;
+    font-size: 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 48px;
+}
+
+    .script-button:hover {
+        background-color: #021b79;
+        color: #ffffff;
+        border: none;
+        padding: 0.5rem 2rem;
+        font-size: 2rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border-radius: 48px;
+    }
+.download_icon {
+    width: 10%;
+    height: auto;
+    margin-right: 20px;
+}
