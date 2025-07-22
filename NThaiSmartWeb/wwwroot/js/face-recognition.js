@@ -97,11 +97,7 @@ async function detectLoop() {
     const toleranceX = 0.1;
     const toleranceY = 0.05;
 
-    const isCentered =
-        Math.abs(faceCenterX_ratio - 0.5) < toleranceX &&
-        Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY;
-
-
+    const isCentered = Math.abs(faceCenterX_ratio - 0.5) < toleranceX && Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY;
     const isBigEnough = faceRatio > 0.010;
 
     // ✅ log ทุกอย่าง
@@ -143,7 +139,15 @@ async function detectLoop() {
     const elapsed = now - stableSince;
     const remaining = 2000 - elapsed;
 
-    if (remaining > 0) {
+    if (remaining > 1) {
+        // --- ส่วนที่แก้ไข: เมื่อเริ่มนับถอยหลัง ---
+        const secondsLeft = Math.ceil(remaining / 1000);
+        showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
+
+        if (audioLook.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
+            audioLook.play(); // เล่นเสียง "มองกล้อง"
+        }
+    } else if (remaining > 0) {
         // --- ส่วนที่แก้ไข: เมื่อเริ่มนับถอยหลัง ---
         const secondsLeft = Math.ceil(remaining / 1000);
         showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
@@ -152,14 +156,6 @@ async function detectLoop() {
         if (audioLook.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
             audioLook.play(); // เล่นเสียง "มองกล้อง"
         }
-    } else {
-        faceDetected = true;
-        audioLook.pause();
-        audioLook.currentTime = 0;
-
-        normalFrame.style.display = "none";
-        dangerFrame.style.display = "none";
-        successFrame.style.display = "none";
 
         // แสดงภาพนิ่ง
         const canvas = document.getElementById("faceCanvas");
@@ -197,16 +193,25 @@ async function detectLoop() {
         // วาดเฉพาะส่วนที่ครอปลง canvas
         cctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
+        // ✅ แปลงภาพใน canvas เป็น base64
+        const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
+        setCapture(base64Image);
+
+    } else {
+        faceDetected = true;
+        audioLook.pause();
+        audioLook.currentTime = 0;
+
+        normalFrame.style.display = "none";
+        dangerFrame.style.display = "none";
+        successFrame.style.display = "none";
+
         video.style.display = "none";
         canvas.style.display = "block";
 
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
         const submitBtn = document.getElementById("submitBtn");
         submitBtn.style.display = "inline-block";
-
-        // ✅ แปลงภาพใน canvas เป็น base64
-        const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
-        setCapture(base64Image);
 
         window.Step10.capture_success();
     }
