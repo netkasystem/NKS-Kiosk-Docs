@@ -111,7 +111,7 @@
             <button class="footer-button" id="back-button">
                 <img src="/images/icons/back_icon.svg" class="footer_icon">
             </button>
-            <button class="footer-button">
+            <button class="footer-button" id="setting-button">
                 <img src="/images/icons/Setting.svg" class="footer_icon">
             </button>
             <button class="footer-button">
@@ -124,10 +124,11 @@
            document.addEventListener('DOMContentLoaded', function () {
             const backButton = document.getElementById('back-button');
             const refreshButton = document.getElementById('refresh-button');
+            const settingButton = document.getElementById('setting-button');
 
             if (backButton) {
                 backButton.addEventListener('click', function () {
-                    window.location.href = '/Step/Step1'; // ✅ ไปหน้า Step1
+                    window.location.href = '/Step/Step1'; // ไปหน้า Step1
                 });
             }
 
@@ -136,6 +137,11 @@
                     location.reload(); // รีเฟรชหน้านี้
                 });
             }
+            if (settingButton) {
+            settingButton.addEventListener('click', function () {
+                window.location.href = '/Kiosk/Setup'; 
+            });
+        }
         });
     </script>
     @await Html.PartialAsync("_Footer")
