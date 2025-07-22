@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Step11";
     ViewBag.HideHeader = true;
+    ViewBag.HideFooter = true;
 }
 
 <body class="green-background">
@@ -9,7 +10,7 @@
         <div class="scan_fail">
             <img src="/images/icons/scan_pass.svg" class="scan_fail" />
         </div>
-        <h1 style ="margin-top:50px;">สแกนเสร็จสิ้น</h1>
+        <h1 style="margin-top:50px;">สแกนเสร็จสิ้น</h1>
     </header>
     <div class="page-center">
         <img id="capturePhoto" src="/images/icons/Profile.jpg" class="id-card-scan-pass" />
@@ -29,7 +30,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            
+
             var capture = getCapture();
             if (capture) {
                 const captureImg = document.getElementById("capturePhoto");
@@ -37,10 +38,10 @@
                   captureImg.src = capture;
                 }
             }
-            
-            
-            
-            
+
+
+
+
             const audio = document.getElementById("scan_card");
             if (audio) {
                 audio.currentTime = 0;
