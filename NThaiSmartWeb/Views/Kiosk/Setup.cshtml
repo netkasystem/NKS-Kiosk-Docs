@@ -8,7 +8,7 @@
         gap: 3rem;
         width: 100%;
         max-width: 900px;
-        margin: 2rem auto;
+        margin: 5rem auto;
         padding-inline: 1rem;
     }
     .glass-step-box {
@@ -18,7 +18,7 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 20px 30px;
+        padding: 30px 45px;
         color: #ffffff;
         display: flex;
         align-items: center;
@@ -39,12 +39,24 @@
         background-color: #ffffff;
         color: #021b79;
         border: none;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 2rem;
         font-size: 2rem;
         border-radius: 6px;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
         border-radius:48px;
+    }
+
+    .script-button:hover {
+        background-color: #021b79;
+        color: #ffffff;
+        border: none;
+        padding: 0.5rem 2rem;
+        font-size: 2rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border-radius: 48px;
     }
 
 </style>
@@ -73,17 +85,18 @@
         <div class="glass-step-box">
             <div class="step-number">1</div>
             <div class="step-label">ดาวน์โหลดไฟล์ </div>
-            <button type="submit" class="script-button" onclick="downloadFileSetup('setup-kiosk-install')">Generate Kiosk Script</button>
+            <button type="submit" class="script-button" onclick="downloadFileSetup('setup-kiosk-install')">Kiosk Script</button>
 
         </div>
         <div class="glass-step-box">
             <div class="step-number">2</div>
             <div class="step-label">ดาวน์โหลดไฟล์</div>
-            <button type="button" class="script-button" onclick="downloadFileSetup('setup-kiosk-config')">Generate Docker Script</button>
+            <button type="button" class="script-button" onclick="downloadFileSetup('setup-kiosk-config')">Docker Script</button>
         </div>
         <div class="glass-step-box">
             <div class="step-number">3</div>
-            <div class="step-label">ดาวน์โหลดไฟล์คู่มือการติดตั้ง</div>
+            <div class="step-label">ปฏิบัติตามไฟล์</div>
+            <button type="button" class="script-button">คู่มือการติดตั้ง</button>
         </div>
         <div class="glass-step-box">
             <div class="step-number">4</div>
