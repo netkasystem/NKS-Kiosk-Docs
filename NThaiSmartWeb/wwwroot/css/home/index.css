@@ -476,7 +476,7 @@ body, html {
 
 .terms-footer-fixed {
     position: fixed;
-    bottom: 50px;
+    bottom: 0px;
     left: 0;
     width: 100%;
     background-color: #ffffff;
@@ -485,7 +485,7 @@ body, html {
     flex-direction: column;
     gap: 16px;
     z-index: 1000;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.14);
 }
 
 .terms-checkbox-group {
