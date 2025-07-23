@@ -382,10 +382,24 @@
                 return `${day} ${month} ${year}`;
             }
 
-            function maskText(text, visible = 3) {
+            const maskText = (text, visible) => hideLastN(text, visible);
+
+            function maskTextFront(text, visible = 3) {
                 if (!text || text.length <= visible) return "*".repeat(text.length);
                 const hidden = "x".repeat(text.length - visible);
                 return hidden + text.slice(-visible);
+            }
+
+            function maskTextBack(text, visible = 3) {
+                if (!text || text.length <= visible) return "*".repeat(text.length);
+                const shown = text.slice(0, visible);              // เหลือไว้ด้านหน้า
+                const hidden = "x".repeat(text.length - visible);  // ซ่อนไว้ด้านหลัง
+                return shown + hidden;
+            }
+
+            function hideLastN(text, count = 4) {
+                if (!text || text.length <= count) return "x".repeat(text.length);
+                return text.slice(0, -count) + "x".repeat(count);
             }
 
             function getsexText(code) {
@@ -413,7 +427,7 @@
                   if (el) {
                     var maskVal = maskText(value);
 
-                    if(ignoreMask.includes(key))maskVal = value;
+                    if(ignoreMask.includes(key)) maskVal = value;
 
                     el.setAttribute("data-full-value", value);
                     el.setAttribute("data-mask-value", maskVal);
