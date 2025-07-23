@@ -84,7 +84,7 @@ button.accept-policy {
     }
 }
 body {
-    background: linear-gradient(135deg, #021B79, #3852A3);
+    background: linear-gradient(#021B79);
     height: 100vh;
     display: flex;
     align-items: center;
@@ -92,20 +92,21 @@ body {
 }
 
 .login-container {
-    background: rgba(255, 255, 255, 0.30);
-    padding: 70px 70px;
+    background: rgba(255, 255, 255, 0.19);
+    padding: 50px 50px;
     border-radius: 20px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    width: 100%;
-    max-width: 100%;
+    border: 1px solid #41464b;
+    width: 90%;
+    justify-self: center;
+    max-width: 90%;
 }
 
     .login-container h4 {
         font-weight: bold;
         color: #ffffff;
-        font-size: 6rem;
+        font-size: 5rem;
         text-shadow: 0 2px 4px rgba(0,0,0,0.4);
         margin-bottom: 60px;
     }
@@ -172,7 +173,7 @@ body {
     text-decoration: underline;
     font-size: 2rem;
     color: #FFFFFF;
-    margin-left: 60%;
+    margin-left: 52%;
 }
 
 .alert-danger {
@@ -187,5 +188,4 @@ body {
     object-fit: cover;
     z-index: -1;
     object-position: 41% 50%;
-    
 }
