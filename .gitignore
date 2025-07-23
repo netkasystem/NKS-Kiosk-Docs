@@ -28,3 +28,7 @@ bld/
 /NSDX.Web/Properties/PublishProfiles/registry.*.pubxml.user
 *.pubxml
 *.user
+
+# Ignore files downloaded by LibMan
+wwwroot/lib/
+lib/
