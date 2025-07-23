@@ -50,10 +50,12 @@ public class AuthController : ControllerBase
 
         if (!PasswordHelper.VerifyPassword(password, findUser.Password))
             return Unauthorized(new { message = "❌ Invalid credentials" });
-
+ 
         var oKiosk = new Kiosk();
         oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
         if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
+       
+        if (oKiosk.Inactive == 1) return BadRequest(new { message = "ตู้ Kiosk นี้ไม่เปิดให้ใช้งาน" });
 
 
         var KioskHomeDelaySec = _context.Variables.Where(v => v.Name == "kiosk_home_delay_sec").Select(v => v.Value).FirstOrDefault();
