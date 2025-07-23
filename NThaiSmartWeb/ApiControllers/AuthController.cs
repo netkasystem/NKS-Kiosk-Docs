@@ -48,8 +48,8 @@ public class AuthController : ControllerBase
         var findUser = _context.User.Where(u => u.Username == username).FirstOrDefault();
         if (findUser == null) return BadRequest(new { message = "❌ User not found" });
 
-        //if (!PasswordHelper.VerifyPassword(password, user.Password))
-        //    return Unauthorized(new { message = "❌ Invalid credentials" });
+        if (!PasswordHelper.VerifyPassword(password, findUser.Password))
+            return Unauthorized(new { message = "❌ Invalid credentials" });
 
         var oKiosk = new Kiosk();
         oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
