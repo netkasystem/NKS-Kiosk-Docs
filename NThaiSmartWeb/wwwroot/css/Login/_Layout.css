@@ -1,6 +1,19 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+@font-face {
+    font-family: 'Notosansthai';
+    src: url('../fonts/Noto_Sans_Thai/static/NotoSansThai-Regular.ttf');
+    font-weight: normal;
+    font-style: normal !important;
+}
+
+@font-face {
+    font-family: 'Notosansthai';
+    src: url('../fonts/Noto_Sans_Thai/static/NotoSansThai-ExtraBold.ttf');
+    font-weight: bold;
+    font-style: normal !important;
+}
 a.navbar-brand {
     white-space: normal;
     text-align: center;
