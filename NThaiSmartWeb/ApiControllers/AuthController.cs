@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
     public IActionResult Login([FromBody] JObject data)
     {
         var username = data["username"]?.ToString();
-        var password = data["password"]?.ToString();
+        var password = data["password"]?.ToString()?.ToUpper();
         var rememberMe = data["rememberMe"]?.ToString() ?? "off";
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
@@ -48,13 +48,13 @@ public class AuthController : ControllerBase
         var findUser = _context.User.Where(u => u.Username == username).FirstOrDefault();
         if (findUser == null) return BadRequest(new { message = "❌ User not found" });
 
-        if (!PasswordHelper.VerifyPassword(password, findUser.Password))
+        if (password != findUser.Password)
             return Unauthorized(new { message = "❌ Invalid credentials" });
- 
+
         var oKiosk = new Kiosk();
         oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
         if (oKiosk == null) return BadRequest(new { message = "ชื่อผู้ใช้ไม่ตรงกับตู้ Kiosk นี้" });
-       
+
         if (oKiosk.Inactive == 1) return BadRequest(new { message = "ตู้ Kiosk นี้ไม่เปิดให้ใช้งาน" });
 
 

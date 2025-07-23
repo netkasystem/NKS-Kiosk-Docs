@@ -21,8 +21,11 @@
             @RenderBody()
         </main>
     </div>
-
-    @await Html.PartialAsync("_Footer")
+    
+    @if (!(ViewBag.HideFooter is true))
+    {
+        @await Html.PartialAsync("_Footer")
+    }
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/js/common-ajax.js"></script>

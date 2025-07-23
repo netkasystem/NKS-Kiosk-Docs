@@ -97,11 +97,9 @@ let timeoutNextPage;
 const next_page = (href, time_sec = 0) => { timeoutNextPage = setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
 const cancelNextPage = () => { if (timeoutNextPage) { clearTimeout(timeoutNextPage); console.log("⛔ ยกเลิกการเปลี่ยนหน้าแล้ว"); } };
 
+//Session Storage
 
 const clearSessionStorage = () => sessionStorage.clear();
-
-window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
-window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
 
 const setCardData = (card) => sessionStorage.setItem("cardData", JSON.stringify(card));
 const getCardData = () => JSON.parse(sessionStorage.getItem("cardData") ?? null);
@@ -121,6 +119,13 @@ const getCustomForm = () => sessionStorage.getItem("CustomForm")
 
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
+
+//Local Storage
+window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);
+window.GetKioskCode = () => localStorage.getItem('selectedKioskCode');
+
+window.SetLoginDetail = (data) => localStorage.setItem('LoginDetail', JSON.stringify(data));
+window.GetLoginDetail = () => JSON.parse(localStorage.getItem("LoginDetail") ?? null);
 
 window.getKioskHomeDelaySec = () => localStorage.getItem("kioskHomeDelaySec");
 window.getKioskWaitBrokenCardSec = () => localStorage.getItem("kioskWaitBrokenCardSec");
