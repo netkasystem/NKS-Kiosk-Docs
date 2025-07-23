@@ -113,10 +113,12 @@ window.Step6 = {
 
         var _btn_fail = document.querySelector(".cancel-button-fail");
         if (_btn_fail != null) _btn_fail.addEventListener('click', () => next_page("/Step/Step1"));
+
+        Step6.start_count_down();
     },
     start_count_down: () => {
         let countdown = getKioskWaitBrokenCardSec(); //from variable [kiosk_wait_broken_card_sec]
-        const countdownElement = document.getElementById('countdown');
+        const countdownElement = document.querySelector(".step6.countdown");
         if (countdownElement) {
             const timer = setInterval(() => {
                 countdown--;
@@ -125,7 +127,7 @@ window.Step6 = {
                 if (countdown <= 0) {
                     clearInterval(timer);
                     countdownElement.textContent = '0';
-                    window.location.href = "/Step/Step1";
+                    next_page("/Step/Step1");
                 }
             }, 1000);
         }
@@ -262,11 +264,36 @@ window.onCardInserted = () => {
 
 window.withoutCard = () => {
     if (location.pathname == "/Step/Step6") {
-        window.Step6.start_count_down();
+        
+    } else if (location.pathname == "/Step/Step1") {
+        next_page("/Step/Step1");
+    } else {
+        showCountdownAndRedirect(10)
     }
-    else if (location.pathname == "/Step/Step7" || location.pathname == "/Step/Step13") {
-        window.location.href = "/Step/Step1";
-    }
+
+}
+
+let countdownInterval;
+function showCountdownAndRedirect(seconds = 5) {
+    cancelNextPage();
+
+    let countdown = seconds;
+    document.getElementById('countdown').textContent = countdown;
+
+    // แสดง modal
+    const modal = new bootstrap.Modal(document.getElementById('cardRemovedModal'));
+    modal.show();
+
+    // เริ่มนับถอยหลัง
+    countdownInterval = setInterval(() => {
+        countdown--;
+        document.getElementById('countdown').textContent = countdown;
+
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            next_page("/Step/Step1");
+        }
+    }, 1000);
 }
 
 (function () {

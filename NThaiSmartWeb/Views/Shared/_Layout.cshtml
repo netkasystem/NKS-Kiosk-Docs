@@ -92,6 +92,16 @@
         </header>
     }
 
+    <!-- Countdown Modal -->
+    <div class="modal fade" id="cardRemovedModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered text-center">
+            <div class="modal-content p-4">
+                <h5 class="modal-title mb-3">กรุณารอสักครู่</h5>
+                <p>กำลังกลับสู่หน้าแรกใน <span id="countdown">5</span> วินาที</p>
+            </div>
+        </div>
+    </div>
+
     <div class="container mt-4">
         <main role="main" class="pb-5">
             <div class="timer" style="background-color: slategray;display: block !important;width: fit-content;padding-right: 10px;">
@@ -105,17 +115,20 @@
         </main>
     </div>
 
-    <footer>
-        <button class="footer-button" id="back-button">
-            <img src="/images/icons/back_icon.svg" class="footer_icon">
-        </button>
-       @*  <button class="footer-button" id="setting-button">
+    @if (!(ViewBag.HideButton is true))
+    {
+        <footer>
+            <button class="footer-button" id="back-button">
+                <img src="/images/icons/back_icon.svg" class="footer_icon">
+            </button>
+            @*  <button class="footer-button" id="setting-button">
             <img src="/images/icons/Setting.svg" class="footer_icon">
         </button>
         <button class="footer-button">
             <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
         </button> *@
-    </footer>
+        </footer>
+    }
 
     @if (!(ViewBag.HideFooter is true))
     {

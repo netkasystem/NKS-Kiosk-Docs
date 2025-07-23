@@ -89,7 +89,10 @@ logoutBtn?.addEventListener("click", async (e) => {
     }
 });
 
-const next_page = (href, time_sec = 0) => { setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
+let timeoutNextPage;
+const next_page = (href, time_sec = 0) => { timeoutNextPage = setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
+const cancelNextPage = () => { if (timeoutNextPage) { clearTimeout(timeoutNextPage); console.log("⛔ ยกเลิกการเปลี่ยนหน้าแล้ว"); } };
+
 
 const clearSessionStorage = () => sessionStorage.clear();
 

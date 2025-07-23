@@ -10,7 +10,7 @@ connection.start().then(() => {
         }
     }, 2 * 60 * 1000);
 
-    const KioskCode = localStorage.getItem('selectedKioskCode');
+    const KioskCode = window.GetKioskCode();
     if (KioskCode) selectKiosk(KioskCode);
 }).catch(err => console.error("❌ SignalR error: ", err));
 
