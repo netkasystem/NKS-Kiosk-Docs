@@ -30,7 +30,7 @@ connection.on("KioskStatus", (data) => {
         next_page("/Step/Step6", 3);
     }
     if (data.statusCode === "card_detected") {
-        onCardInserted();
+        
     }
     if (data.statusCode === "card_removed") {
         window.withoutCard();
@@ -41,6 +41,7 @@ connection.on("KioskStatus", (data) => {
 connection.on("KioskMessage", (data) => { showCardInfo(data); });
 function showCardInfo(data) {
     setCardData(data);
+    onCardInserted();
 }
 
 // ฟังก์ชันเคลียร์ข้อมูลบัตร

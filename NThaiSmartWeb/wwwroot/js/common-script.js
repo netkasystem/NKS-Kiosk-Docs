@@ -89,6 +89,10 @@ logoutBtn?.addEventListener("click", async (e) => {
     }
 });
 
+const CountdownInterval = function (ele, t, func) {
+
+}
+
 let timeoutNextPage;
 const next_page = (href, time_sec = 0) => { timeoutNextPage = setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
 const cancelNextPage = () => { if (timeoutNextPage) { clearTimeout(timeoutNextPage); console.log("⛔ ยกเลิกการเปลี่ยนหน้าแล้ว"); } };
