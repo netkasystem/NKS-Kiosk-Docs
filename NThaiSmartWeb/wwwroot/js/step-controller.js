@@ -258,19 +258,18 @@ window.Step14 = {
 };
 
 window.onCardInserted = () => {
-    if (!getConsent()) next_page("/Step/Step3");
-    else next_page("/Step/Step5");
+    if (!getConsent()) next_page("/Step/Step3", 0.5);
+    else next_page("/Step/Step5", 0.5);
 }
 
 window.withoutCard = () => {
     if (location.pathname == "/Step/Step6") {
-        
-    } else if (location.pathname == "/Step/Step1") {
-        next_page("/Step/Step1");
-    } else {
-        showCountdownAndRedirect(10)
-    }
 
+    } else if (location.pathname == "/Step/Step13") {
+        next_page("/Step/Step1");
+    } else if (location.pathname != "/Step/Step1") {
+        showCountdownAndRedirect(10);
+    }
 }
 
 let countdownInterval;

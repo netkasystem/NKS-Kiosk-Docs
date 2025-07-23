@@ -136,69 +136,23 @@ async function detectLoop() {
     const now = Date.now();
     if (!stableSince) stableSince = now;
 
-    const elapsed = now - stableSince;
-    const remaining = 2000 - elapsed;
+    const secondsPassed = Math.floor((now - stableSince) / 1000);
+    const secondsRemaining = 2 - secondsPassed;
 
-    if (remaining > 1) {
-        // --- ส่วนที่แก้ไข: เมื่อเริ่มนับถอยหลัง ---
-        const secondsLeft = Math.ceil(remaining / 1000);
-        showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
-
-        if (audioLook.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
-            audioLook.play(); // เล่นเสียง "มองกล้อง"
-        }
-    } else if (remaining > 0) {
-        // --- ส่วนที่แก้ไข: เมื่อเริ่มนับถอยหลัง ---
-        const secondsLeft = Math.ceil(remaining / 1000);
-        showSuccess(`✅ รอสักครู่... ${secondsLeft}`);
+    if (secondsRemaining > 1) {
+        showSuccess(`✅ รอสักครู่... ${secondsRemaining}`);
+        if (audioLook.paused) audioLook.play();
+    } else if (secondsRemaining > 0) {
+        showSuccess(`✅ รอสักครู่... ${secondsRemaining}`);
         showFrame("success");
 
-        if (audioLook.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
-            audioLook.play(); // เล่นเสียง "มองกล้อง"
-        }
+        if (audioLook.paused) audioLook.play();
 
-        // แสดงภาพนิ่ง
-        const canvas = document.getElementById("faceCanvas");
-        const cctx = canvas.getContext("2d");
-
-        // ขนาดจอแสดงผลจริง
-        const rect = video.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-
-        // ขนาดกล้องจริง (อาจเป็น 1280x720 หรือ 640x480)
-        const videoWidth = video.videoWidth;
-        const videoHeight = video.videoHeight;
-
-        // คำนวณอัตราส่วนของ container
-        const aspectCanvas = canvas.width / canvas.height;
-        const aspectVideo = videoWidth / videoHeight;
-
-        let sx, sy, sWidth, sHeight;
-
-        if (aspectVideo > aspectCanvas) {
-            // กล้องกว้างเกิน → ครอปด้านข้าง
-            sHeight = videoHeight;
-            sWidth = videoHeight * aspectCanvas;
-            sx = (videoWidth - sWidth) / 2;
-            sy = 0;
-        } else {
-            // กล้องสูงเกิน → ครอปด้านบนล่าง
-            sWidth = videoWidth;
-            sHeight = videoWidth / aspectCanvas;
-            sx = 0;
-            sy = (videoHeight - sHeight) / 2;
-        }
-
-        // วาดเฉพาะส่วนที่ครอปลง canvas
-        cctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-
-        // ✅ แปลงภาพใน canvas เป็น base64
-        const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
-        setCapture(base64Image);
-
+        // ถ่ายภาพเก็บไว้
+        captureFrameToBase64(); // 👈 แยกฟังก์ชันมาเก็บภาพ
     } else {
         faceDetected = true;
+        // ครบ 2 วินาทีแล้ว → ไปขั้นต่อไป
         audioLook.pause();
         audioLook.currentTime = 0;
 
@@ -210,14 +164,56 @@ async function detectLoop() {
         canvas.style.display = "block";
 
         showSuccess("✅ ตรวจพบใบหน้าแล้ว");
-        const submitBtn = document.getElementById("submitBtn");
-        submitBtn.style.display = "inline-block";
-
+        document.getElementById("submitBtn").style.display = "inline-block";
         window.Step10.capture_success();
     }
 
     requestAnimationFrame(detectLoop);
 }
+
+function captureFrameToBase64() {
+    // แสดงภาพนิ่ง
+    const canvas = document.getElementById("faceCanvas");
+    const cctx = canvas.getContext("2d");
+
+    // ขนาดจอแสดงผลจริง
+    const rect = video.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    // ขนาดกล้องจริง (อาจเป็น 1280x720 หรือ 640x480)
+    const videoWidth = video.videoWidth;
+    const videoHeight = video.videoHeight;
+
+    // คำนวณอัตราส่วนของ container
+    const aspectCanvas = canvas.width / canvas.height;
+    const aspectVideo = videoWidth / videoHeight;
+
+    let sx, sy, sWidth, sHeight;
+
+    if (aspectVideo > aspectCanvas) {
+        // กล้องกว้างเกิน → ครอปด้านข้าง
+        sHeight = videoHeight;
+        sWidth = videoHeight * aspectCanvas;
+        sx = (videoWidth - sWidth) / 2;
+        sy = 0;
+    } else {
+        // กล้องสูงเกิน → ครอปด้านบนล่าง
+        sWidth = videoWidth;
+        sHeight = videoWidth / aspectCanvas;
+        sx = 0;
+        sy = (videoHeight - sHeight) / 2;
+    }
+
+    // วาดเฉพาะส่วนที่ครอปลง canvas
+    cctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+    // ✅ แปลงภาพใน canvas เป็น base64
+    const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
+    setCapture(base64Image);
+}
+
+
 function showFrame(type) {
     normalFrame.style.display = type === 'normal' ? 'block' : 'none';
     dangerFrame.style.display = type === 'danger' ? 'block' : 'none';
