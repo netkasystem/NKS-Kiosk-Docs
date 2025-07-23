@@ -1,7 +1,45 @@
 ﻿@{
     ViewData["Title"] = "เข้าสู่ระบบ";
+    ViewBag.HideHeader = true;
+    ViewBag.HideFooter = true;
 }
+<!-- Bootstrap 5 CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<video class="video-bg" autoplay muted loop playsinline>
+    <source src="/images/icons/Getty.mp4" >
+</video>
+<div class="login-container">
+    <h4 class="text-center">ระบบยืนยันตัวตน</h4>
 
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+    }
+
+    <form id="loginForm" method="post" action="/api/auth/login">
+        <div class="mb-3">
+            <label for="username" class="form-label_login">ชื่อผู้ใช้</label>
+            <input type="text" class="form-control_login" id="username" name="username" required autofocus>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label_login">รหัสผ่าน</label>
+            <input type="password" class="form-control_login" id="password" name="password" required>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+            <label class="form-check-label_login" for="rememberMe">จำฉันไว้</label>
+            <a href="/Account/ForgotPassword" class="text-decoration-none">ลืมรหัสผ่าน?</a>
+        </div>
+        <button type="submit" class="login_button">เข้าสู่ระบบ</button>
+        <div class="text-center">
+          
+        </div>
+    </form>
+</div>
+
+
+
+@* 
 <div class="login-container">
     <h4 class="mb-4 text-center">🔐 เข้าสู่ระบบ</h4>
 
@@ -29,3 +67,4 @@
         </div>
     </form>
 </div>
+ *@
