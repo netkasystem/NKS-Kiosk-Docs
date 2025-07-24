@@ -49,15 +49,18 @@ public class AuthController : ControllerBase
         if (findUser == null) return BadRequest(new { message = "❌ User not found" });
 
         if (password != findUser.Password)
-            return Unauthorized(new { message = "❌ Invalid credentials" });
+            return Unauthorized(new { message = "❌ Invalid Credentials" });
 
         var oKiosk = new Kiosk();
         oKiosk = _context.Kiosk.Where(k => k.Id == findUser.KioskId).FirstOrDefault();
 
+        //มี user แต่ไม่ใช่ kiosk
         if (oKiosk == null) return BadRequest(new { message = "❌ User not found" });
 
+        //kiosk inactive
         if (oKiosk.Inactive == 1) return BadRequest(new { message = "ตู้ Kiosk นี้ไม่เปิดให้ใช้งาน" });
 
+        //มี token = user ถูกใช้แล้ว
         if (!string.IsNullOrEmpty(oKiosk.KioskToken)) return BadRequest(new { message = "User นี้ถูกใช้งานกับตู้ Kiosk เครื่องอื่นอยู่แล้ว" });
 
 
