@@ -1,22 +1,34 @@
-﻿const form = document.getElementById("loginForm");
+﻿const urlParams = new URLSearchParams(window.location.search);
+const kiosk_code = urlParams.get("kiosk_code");
+const token = urlParams.get("token");
+const form = document.getElementById("loginForm");
+const passwordInput = form.querySelector("[name='password']");
+
 form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
+    const rawPassword = formData.get("password");
+    const isHashed = passwordInput.getAttribute("data-ishash") === "true";
+
     const data = {
         username: formData.get("username"),
-        password: formData.get("password"),
+        password: isHashed ? rawPassword : CryptoJS.MD5(rawPassword).toString(),
         rememberMe: formData.get("rememberMe") ?? "off",
         kioskCode: kiosk_code ?? ""
     };
 
+    if (data.rememberMe === "on") {
+        SetLoginDetail(data);
+    } else {
+        SetLoginDetail(null);
+    }
+
     ajaxCommon.post("/api/auth/login", data,
         (res) => { AfterAuthen(res) },
-        (res) => { alert(res.message || 'Login failed'); });
+        (res) => {
+            alert(res.responseJSON?.message || 'Login failed');
+        });
 });
-
-const urlParams = new URLSearchParams(window.location.search);
-const kiosk_code = urlParams.get("kiosk_code");
-const token = urlParams.get("token");
 
 async function SSOLogin() {
     const data = {
@@ -54,6 +66,28 @@ function AfterAuthen(res) {
     }
 }
 
+// ฟังก์ชันนี้จะอ่านค่าจาก localStorage และใส่กลับเข้า form
+function LoadLoginDetailToForm(form) {
+    if (typeof window.GetLoginDetail !== "function") return;
+
+    const loginDetail = window.GetLoginDetail();
+    if (!loginDetail) return;
+
+    // โหลดจาก localStorage
+    if (loginDetail) {
+        form.querySelector("[name='username']").value = loginDetail.username ?? "";
+        if (loginDetail.password) {
+            passwordInput.value = loginDetail.password;
+            passwordInput.setAttribute("data-ishash", "true"); // <-- บอกว่าเป็น hash แล้ว
+        }
+        form.querySelector("[name='rememberMe']").checked = loginDetail.rememberMe === "on";
+    }
+
+    // ถ้ามีการแก้ไข password → ให้ลบ data-ishash ออก
+    passwordInput.addEventListener("input", () => { passwordInput.removeAttribute("data-ishash"); });
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
     if (!kiosk_code) {
         console.log("❌ ไม่พบ KioskCode");
@@ -62,4 +96,5 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     if (kiosk_code && token) SSOLogin();
+    LoadLoginDetailToForm(form);
 });
