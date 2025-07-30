@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
@@ -137,5 +136,4 @@ public class KioskApiController : ControllerBase
         var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
     }
-     
 }

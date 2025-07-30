@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
+using NuGet.Common;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -28,11 +29,13 @@ public class AuthController : ControllerBase
                 data["username"] = user.Username;
                 data["password"] = user.Password;
             }
+
+            data["sso"] = true;
+
             return Login(data);
         }
         else
             return BadRequest(new { message = "SSO ไม่สำเร็จ" });
-
     }
 
     [HttpPost("login")]
@@ -41,6 +44,7 @@ public class AuthController : ControllerBase
         var username = data["username"]?.ToString();
         var password = data["password"]?.ToString()?.ToUpper();
         var rememberMe = data["rememberMe"]?.ToString() ?? "off";
+        bool sso = (bool?)data?["sso"] ?? false;
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             return BadRequest(new { message = "กรุณาระบุชื่อผู้ใช้และรหัสผ่าน" });
@@ -61,14 +65,12 @@ public class AuthController : ControllerBase
         if (oKiosk.Inactive == 1) return BadRequest(new { message = "ตู้ Kiosk นี้ไม่เปิดให้ใช้งาน" });
 
         //มี token = user ถูกใช้แล้ว
-        if (!string.IsNullOrEmpty(oKiosk.KioskToken)) return BadRequest(new { message = "User นี้ถูกใช้งานกับตู้ Kiosk เครื่องอื่นอยู่แล้ว" });
-
+        if (!string.IsNullOrEmpty(oKiosk.KioskToken) && !sso) return BadRequest(new { message = "User นี้ถูกใช้งานกับตู้ Kiosk เครื่องอื่นอยู่แล้ว" });
 
         var KioskHomeDelaySec = _context.Variables.Where(v => v.Name == "kiosk_home_delay_sec").Select(v => v.Value).FirstOrDefault();
         var KioskWaitBrokenCardSec = _context.Variables.Where(v => v.Name == "kiosk_wait_broken_card_sec").Select(v => v.Value).FirstOrDefault();
         var KioskReadStepSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_sec").Select(v => v.Value).FirstOrDefault();
         var KioskReadStepScanSec = _context.Variables.Where(v => v.Name == "kiosk_read_step_scan_sec").Select(v => v.Value).FirstOrDefault();
-
 
         // ✅ Login สำเร็จ
         NSDXSession.Set(NSDXSessionKey.CurrentUser, username);
@@ -83,7 +85,15 @@ public class AuthController : ControllerBase
             });
         }
 
-        return Ok(new { message = "✅ Login success", username, oKiosk.KioskCode, KioskHomeDelaySec, KioskWaitBrokenCardSec, KioskReadStepSec, KioskReadStepScanSec });
+        return Ok(new { 
+            message = "✅ Login success", username, 
+            oKiosk.KioskCode, 
+            KioskHomeDelaySec, 
+            KioskWaitBrokenCardSec, 
+            KioskReadStepSec, 
+            KioskReadStepScanSec, 
+            HasToken= !string.IsNullOrEmpty(oKiosk.KioskToken) 
+        });
     }
 
     [HttpPost("reset")]

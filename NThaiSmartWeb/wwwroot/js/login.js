@@ -59,10 +59,10 @@ function AfterAuthen(res) {
     localStorage.setItem('kioskReadStepSec', res.kioskReadStepSec);
     localStorage.setItem('kioskReadStepScanSec', res.kioskReadStepScanSec);
 
-    if (!kiosk_code) {
-        next_page('/kiosk/setup', 0.5);
-    } else {
+    if (res.hasToken) {
         next_page('/Step/Step1', 0.5);
+    } else {
+        next_page('/kiosk/setup', 0.5);
     }
 }
 
@@ -87,7 +87,6 @@ function LoadLoginDetailToForm(form) {
     passwordInput.addEventListener("input", () => { passwordInput.removeAttribute("data-ishash"); });
 }
 
-
 window.addEventListener('DOMContentLoaded', () => {
     if (location.pathname?.toLowerCase() == "/login") {
         if (!kiosk_code) {
@@ -97,6 +96,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         if (kiosk_code && token) SSOLogin();
+
         LoadLoginDetailToForm(form);
     }
 });
