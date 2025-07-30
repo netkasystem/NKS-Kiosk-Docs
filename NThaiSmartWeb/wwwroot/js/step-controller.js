@@ -160,9 +160,22 @@ window.Step9 = {
 window.Step10 = {
     init: () => {
         console.log("Step 10: Face scanning");
+        var scan_again = document.querySelector(".scan-again");
+        if (scan_again) {
+            scan_again.addEventListener("click", function (e) {
+                next_page("/Step/Step10");
+            });
+        }
+
+        var submit_scan = document.querySelector(".submit-scan");
+        if (submit_scan) {
+            submit_scan.addEventListener("click", function (e) {
+                next_page("/Step/Step11");
+            });
+        }
     },
     capture_success: () => {
-        next_page("/Step/Step11", 1.5);
+        //next_page("/Step/Step11", 1.5);
     }
 };
 
@@ -264,7 +277,6 @@ window.onCardInserted = () => {
 
 window.withoutCard = () => {
     if (location.pathname == "/Step/Step6") {
-
     } else if (location.pathname == "/Step/Step13") {
         next_page("/Step/Step1");
     } else if (location.pathname != "/Step/Step1") {
