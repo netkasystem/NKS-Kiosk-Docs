@@ -2,7 +2,7 @@
 const kiosk_code = urlParams.get("kiosk_code");
 const token = urlParams.get("token");
 const form = document.getElementById("loginForm");
-const passwordInput = form.querySelector("[name='password']");
+const passwordInput = form?.querySelector("[name='password']");
 
 form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -89,12 +89,14 @@ function LoadLoginDetailToForm(form) {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-    if (!kiosk_code) {
-        console.log("❌ ไม่พบ KioskCode");
-    } else {
-        console.log("ตู้นี้คือ:", kiosk_code);
-    }
+    if (location.pathname?.toLowerCase() == "/login") {
+        if (!kiosk_code) {
+            console.log("❌ ไม่พบ KioskCode");
+        } else {
+            console.log("ตู้นี้คือ:", kiosk_code);
+        }
 
-    if (kiosk_code && token) SSOLogin();
-    LoadLoginDetailToForm(form);
+        if (kiosk_code && token) SSOLogin();
+        LoadLoginDetailToForm(form);
+    }
 });
