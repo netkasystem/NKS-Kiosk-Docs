@@ -89,13 +89,13 @@ function ControlPage(data) {
 // เรียกใช้เมื่อคลิก "เลือกตู้"
 function selectKiosk(id) {
     const kioskNo = document.getElementById("kiosk-no");
-    if (kioskNo) kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
+    if (kioskNo) kioskNo.innerText = `เชื่อมต่อกับตู้: ${id}`;
 
     const kioskElements = document.querySelectorAll(".connected-kiosk");
     if (kioskElements) {
         kioskElements.forEach(el => {
-            el.textContent = "❌ ไม่ได้เชื่อมต่อกับตู้";
-            if (id) el.textContent = `✅ ตู้: ${id}`;
+            el.textContent = "ไม่ได้เชื่อมต่อกับตู้";
+            if (id) el.textContent = `${id}`;
         });
     }
 
