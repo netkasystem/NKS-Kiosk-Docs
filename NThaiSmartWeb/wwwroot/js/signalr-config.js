@@ -30,7 +30,6 @@ connection.on("KioskStatus", (data) => {
         next_page("/Step/Step6", 3);
     }
     if (data.statusCode === "card_detected") {
-        
     }
     if (data.statusCode === "card_removed") {
         window.withoutCard();
@@ -81,15 +80,23 @@ function renderKioskList(kioskArray) {
     });
 }
 
+// รับข้อมูลบัตร
+connection.on("KioskControlPage", (data) => { showCardInfo(data); });
+function ControlPage(data) {
+    console.log(`call ControlPage ${data}`);
+}
+
 // เรียกใช้เมื่อคลิก "เลือกตู้"
 function selectKiosk(id) {
     const kioskNo = document.getElementById("kiosk-no");
     if (kioskNo) kioskNo.innerText = `📡 เชื่อมต่อกับตู้: ${id}`;
 
-    const kioskElement = document.getElementById("connected-kiosk");
-    if (kioskElement) {
-        kioskElement.textContent = "❌ ไม่ได้เชื่อมต่อกับตู้";
-        if (id) kioskElement.textContent = `✅ ตู้: ${id}`;
+    const kioskElements = document.querySelectorAll(".connected-kiosk");
+    if (kioskElements) {
+        kioskElements.forEach(el => {
+            el.textContent = "❌ ไม่ได้เชื่อมต่อกับตู้";
+            if (id) el.textContent = `✅ ตู้: ${id}`;
+        });
     }
 
     SetKioskCode(id);
