@@ -242,53 +242,6 @@ function isImageSharpEnough(canvas, threshold = 20) {
     return variance > threshold; // ยิ่งมากยิ่งชัด
 }
 
-submitBtn?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    if (cardData == null) alert("ไม่พบข้อมูลบัตรประชาชน");
-
-    const canvas = document.getElementById("faceCanvas");
-    if (!canvas) { alert("❌ ไม่พบ canvas ที่ใช้สำหรับจับภาพ"); return; }
-
-    // --- Resize ---
-    const resizedCanvas = document.createElement("canvas");
-    const targetWidth = 300;
-    const targetHeight = 300;
-    resizedCanvas.width = targetWidth;
-    resizedCanvas.height = targetHeight;
-
-    const resizedCtx = resizedCanvas.getContext("2d");
-    resizedCtx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
-
-    const dataUrl = resizedCanvas.toDataURL("image/jpeg", 0.7);
-    const base64Image = dataUrl.split(',')[1];
-
-    // --- ส่งต่อ ---
-    // information จาก บัตรประชาชน
-
-    cardData.face_capture = base64Image;
-    cardData.KioskCode = GetKioskCode();
-    const encrypCardData = encrypt(cardData);
-
-    try {
-        const response = await fetch('/api/KioskApi/SaveNationalCardData', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ EncrypString: encrypCardData })
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText);
-        }
-        else {
-            const message = await response.text();
-            alert(message);
-        }
-    } catch (error) {
-        alert(error.message);
-    }
-});
-
 // ฟังก์ชันแสดงผล
 function showError(msg) {
     statusElem.innerText = msg;

@@ -1162,8 +1162,8 @@ h2 {
 
 .bottom-left-1 img,
 .bottom-left-2 img {
-    width: 50%;
-    height: 50%;
+    width: 22vw;
+    height: 15vh;
     object-fit: cover;
 }
 
@@ -1187,8 +1187,8 @@ h2 {
 }
 
     .crop-box img {
-        width: 50%;
-        height: 50%;
+        width: 22vw;
+        height: 15vh;
     }
 
 .image-container img {

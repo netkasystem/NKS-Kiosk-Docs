@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NThaiSmartWeb.EFModels;
@@ -81,11 +82,64 @@ public class KioskApiController : ControllerBase
             _context.SaveChanges();
         }
 
-        string result = script.ScriptContent.ReplaceByObject(req);
-        var unixScript = result.Replace("\r\n", "\n"); // 🔧 Convert Windows CRLF to Unix LF
+        string file_type = "application/octet-stream"; // default binary
+        byte[] bytes;
 
-        var bytes = Encoding.UTF8.GetBytes(unixScript);
-        return File(bytes, "application/x-sh", script.Filename);
+        string result = script.ScriptContent;
+        string ext = Path.GetExtension(script.Filename).ToLowerInvariant();
+
+        switch (ext)
+        {
+            case ".sh":
+                result = result.ReplaceByObject(req);
+                result = result.Replace("\r\n", "\n"); // 🔧 Convert CRLF to LF
+                file_type = "application/x-sh";
+                bytes = Encoding.UTF8.GetBytes(result);
+                break;
+
+            case ".txt":
+                result = result.ReplaceByObject(req);
+                file_type = "text/plain";
+                bytes = Encoding.UTF8.GetBytes(result);
+                break;
+
+            case ".json":
+                file_type = "application/json";
+                bytes = Encoding.UTF8.GetBytes(result);
+                break;
+
+            case ".html":
+                file_type = "text/html";
+                bytes = Encoding.UTF8.GetBytes(result);
+                break;
+
+            case ".pdf":
+                // assume base64-encoded binary
+                file_type = "application/pdf";
+                bytes = Convert.FromBase64String(result);
+                break;
+
+            case ".zip":
+                file_type = "application/zip";
+                bytes = Convert.FromBase64String(result); // ถ้าเก็บใน base64
+                break;
+
+            default:
+                // fallback: check if it's base64 and try decode
+                try
+                {
+                    bytes = Convert.FromBase64String(result);
+                }
+                catch
+                {
+                    // fallback to UTF-8 text if not base64
+                    bytes = Encoding.UTF8.GetBytes(result);
+                }
+                break;
+        }
+
+        // ส่งไฟล์ออกไป
+        return File(bytes, file_type, script.Filename);
     }
 
     [HttpPost("SaveNationalCardData")]
