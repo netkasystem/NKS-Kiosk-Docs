@@ -1711,7 +1711,7 @@ h2 {
 /* 🟩 กรอบ SVG 4 มุม */
 .focus-frame {
     position: absolute;
-    top: -41vh;
+    top: -50vh;
     left: -34%;
     width: 170%;
     height: auto;
