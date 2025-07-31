@@ -93,18 +93,20 @@ async function detectLoop() {
     const faceRatio = faceArea_ratio; // ไม่ต้องเปลี่ยนแล้ว เพราะใช้จากอัตราส่วน
 
     // เช็กเงื่อนไข
-    const expectedCenterY = 0.7; // ตำแหน่ง Y ที่คุณอยากให้หน้ากลางจอ
-    const toleranceX = 0.1;
-    const toleranceY = 0.05;
+    const expectedCenterX = 0.5; // ตำแหน่ง X ที่คุณอยากให้หน้ากลางจอ
+    const expectedCenterY = 0.6; // ตำแหน่ง Y ที่คุณอยากให้หน้ากลางจอ
+    const toleranceX = 0.07;
+    const toleranceY = 0.07;
 
-    const isCentered = Math.abs(faceCenterX_ratio - 0.5) < toleranceX && Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY;
-    const isBigEnough = faceRatio > 0.010;
+    const isCentered = Math.abs(faceCenterX_ratio - expectedCenterX) < toleranceX
+        && Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY;
+    const isBigEnough = faceRatio > 0.09 && faceRatio < 0.15
 
     // ✅ log ทุกอย่าง
     //console.log("📷 VIDEO SIZE:", videoWidth, videoHeight);
     //console.log("🖼️  SCREEN SIZE:", vw, vh);
-    //console.log("🎯 faceCenterX:", faceCenterX, `(${faceCenterX_ratio.toFixed(3)})`);
-    //console.log("🎯 faceCenterY:", faceCenterY, `(${faceCenterY_ratio.toFixed(3)})`);
+    //console.log("🎯 faceCenterX:", faceCenterX, `(${faceCenterX_ratio.toFixed(3)}) => ${Math.abs(faceCenterX_ratio - expectedCenterX) < toleranceX}`);
+    //console.log("🎯 faceCenterY:", faceCenterY, `(${faceCenterY_ratio.toFixed(3)}) => ${Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY}`);
     //console.log("📐 faceAreaRatio:", faceArea_ratio.toFixed(4));
     //console.log("✅ isCentered:", isCentered, "isBigEnough:", isBigEnough);
 
@@ -121,11 +123,17 @@ async function detectLoop() {
             audioLook.pause();
             audioLook.currentTime = 0;
         }
+
         if (!isSharp) {
             showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");
-        } else {
-            showError("⚠️ กรุณาให้ใบหน้าอยู่กลางจอและใกล้กล้องมากขึ้น");
+        } else if (faceRatio < 0.09) {
+            showError("⚠️ กรุณาขยับเข้ามาใกล้กล้องมากขึ้น");
+        } else if (faceRatio > 0.15) {
+            showError("⚠️ กรุณาถอยหลังออกจากกล้องมากขึ้น");
+        } else if (!isCentered) {
+            showError("⚠️ กรุณาขยับให้ใบหน้าอยู่กลางจอ");
         }
+
         showFrame("danger");
         stableSince = null;
         requestAnimationFrame(detectLoop);
@@ -212,7 +220,6 @@ function captureFrameToBase64() {
     const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
     setCapture(base64Image);
 }
-
 
 function showFrame(type) {
     normalFrame.style.display = type === 'normal' ? 'block' : 'none';
