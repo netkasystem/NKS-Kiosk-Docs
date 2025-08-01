@@ -1438,6 +1438,20 @@ h2 {
     max-width: 800px;
     color: #333;
 }
+.modal-content-remove {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 70%;
+    max-width: 100%;
+    color: #333;
+    justify-content: center;
+    font-size: 3rem;
+    margin-left: 13%;
+}
+    .modal-content-remove .content-remove {
+        font-size: 2.5rem;
+    }
 
 .modal-header {
     display: flex;
@@ -2079,7 +2093,7 @@ textarea {
     }
 
 .congratulations-image {
-    width: 100%;
+    width: 60%;
 }
 
 .confirmation-modal-overlay {
@@ -2097,13 +2111,14 @@ textarea {
 }
 
 .modal-confirmation {
-    background-color: white;
+    background-color: #ededed;
     width: 45vh;
-    padding: 60px 60px;
+    padding: 60px 10px;
     font-size: 48px;
     height: auto;
     text-align: center;
     border-radius: 20px;
+    margin-left: 10%;
 }
 
 .step7.cancel-button-fail {
@@ -2151,12 +2166,13 @@ textarea {
     background-color: #ffffff;
     color: #021b79;
     border: none;
-    padding: 0.5rem 2rem;
+    padding: 1.3rem 2rem;
     font-size: 2rem;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     border-radius: 48px;
+    max-width: 20rem;
 }
 
     .script-button:hover {
@@ -2174,5 +2190,105 @@ textarea {
 .download_icon {
     width: 10%;
     height: auto;
-    margin-right: 20px;
+    margin-right: 15px;
+}
+/* Modal & zone card */
+.zone-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 1000;
+    font-family: inherit;
+}
+
+    .zone-modal[aria-hidden="false"] {
+        display: block;
+        align-content: center;
+    }
+
+.zone-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+}
+
+.zone-modal-content {
+    position: relative;
+    max-width: 900px;
+    margin: 4rem auto;
+    background: #021b7900;
+    padding: 6rem 4rem;
+    border-radius: 20px;
+    color: #fff;
+    backdrop-filter: blur(90px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 20px 60px #021b7940;
+}
+
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    font-size: 2.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.zone-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin-top: 1rem;
+}
+
+.zone-card {
+    flex: 1 1 calc(33.33% - 1rem);
+    min-width: 220px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 33px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.zone-title {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.zone-desc {
+    font-size: 2rem;
+    flex-grow: 1;
+}
+
+.script-button.small {
+    padding: 0.8rem 1.2rem;
+    font-size: 2rem;
+    border-radius: 32px;
+    max-width: 182px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+}
+.modal-text-header {
+    font-size: 70px !important;
+    font-weight: 100;
+    color: #FFFFFF;
+    margin: 0;
+}
+.modal-text-h1 {
+    font-size: 100px !important;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 50px !important;
+}
+.highlight-yellow {
+    color: #fdff00;
+    font-weight: 600;
 }
