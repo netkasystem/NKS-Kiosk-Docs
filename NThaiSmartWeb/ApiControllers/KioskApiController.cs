@@ -43,7 +43,7 @@ public class KioskApiController : ControllerBase
     // ตัวอย่าง: 4f0e3bc2381742e8b8a7dd1703ec2d3d
     public string GeneratePermanentToken() => Guid.NewGuid().ToString("N");
 
-    public JObject GetScriptDetail(string username = null)
+    public JObject GetScriptDetail()
     {
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
         var detail = new { URL = SignalRHub };
@@ -63,7 +63,7 @@ public class KioskApiController : ControllerBase
 
         if (script == null) return NotFound("Script not found.");
 
-        JObject req = GetScriptDetail(username);
+        JObject req = GetScriptDetail();
         if (username == null)
             username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
 

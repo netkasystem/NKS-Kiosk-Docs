@@ -32,3 +32,4 @@ bld/
 # Ignore files downloaded by LibMan
 wwwroot/lib/
 lib/
+BuildVersion.cs
