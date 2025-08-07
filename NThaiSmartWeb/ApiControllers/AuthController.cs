@@ -92,7 +92,7 @@ public class AuthController : ControllerBase
             KioskWaitBrokenCardSec, 
             KioskReadStepSec, 
             KioskReadStepScanSec, 
-            HasToken= !string.IsNullOrEmpty(oKiosk.KioskToken) 
+            HasToken = !string.IsNullOrEmpty(oKiosk.KioskToken) 
         });
     }
 

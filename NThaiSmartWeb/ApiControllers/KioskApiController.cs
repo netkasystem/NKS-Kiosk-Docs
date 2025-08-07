@@ -43,50 +43,48 @@ public class KioskApiController : ControllerBase
     // ตัวอย่าง: 4f0e3bc2381742e8b8a7dd1703ec2d3d
     public string GeneratePermanentToken() => Guid.NewGuid().ToString("N");
 
-    public JObject GetScriptDetail()
-    {
-        var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
-        var detail = new { URL = SignalRHub };
-        return JObject.FromObject(detail);
-    }
-
     [HttpPost("DownloadFile")]
-    public IActionResult DownloadFile([FromQuery] string fileCode, string username = null)
+    public IActionResult DownloadFile([FromQuery] string fileCode, string username = null, uint KioskId = 0, string KioskCode = null)
     {
         if (string.IsNullOrEmpty(fileCode)) return BadRequest("Missing fileCode");
 
-        var script = _context.KioskSetup.Where(k => k.Code.StartsWith(fileCode) && (k.IsActive ?? false))
-                                        .Where(k => !string.IsNullOrEmpty(k.Version) && k.Version.StartsWith("v"))
-                                        .AsEnumerable()
-                                        .OrderByDescending(k => Version.Parse(k.Version.TrimStart('v')))
-                                        .FirstOrDefault();
+        var find_setup = _context.KioskSetup.Where(k => (k.IsActive ?? false) && k.Code == fileCode);
+        if (!find_setup.Any())
+            find_setup = _context.KioskSetup.Where(k => (k.IsActive ?? false) && k.Code.StartsWith(fileCode));
 
-        if (script == null) return NotFound("Script not found.");
+        var kiosk_setup = find_setup.AsEnumerable().OrderByDescending(k => Version.Parse(k.Version)).FirstOrDefault();
 
-        JObject req = GetScriptDetail();
+        if (kiosk_setup == null) return NotFound("Script not found.");
+
+        var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
+        JObject req = JObject.FromObject(new { URL = SignalRHub });
+
+        if (!string.IsNullOrEmpty(kiosk_setup.UrlRegion)) req["URL"] = kiosk_setup.UrlRegion;
+
         if (username == null)
             username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
 
-        uint KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
-        var oKiosk = _context.Kiosk.Where(_k => _k.Id == KioskId).FirstOrDefault();
+        if (KioskId == 0)
+            KioskId = _context.User.FirstOrDefault(_u => _u.Username == username)?.KioskId ?? 0;
+
+        var oKiosk = _context.Kiosk.Where(_k => _k.Id == KioskId || _k.KioskCode == KioskCode).FirstOrDefault();
 
         if (oKiosk != null && fileCode.StartsWith("setup-kiosk-config"))
         {
             var KIOSK_TOKEN = GeneratePermanentToken();
-            req["KIOSK_TOKEN"] = KIOSK_TOKEN;
-
-            req["KIOSK_ID"] = oKiosk.Id;
-            req["KIOSK_CODE"] = oKiosk?.KioskCode ?? "";
-
             oKiosk.KioskToken = KIOSK_TOKEN;
             _context.SaveChanges();
         }
 
+        req["KIOSK_ID"] = oKiosk?.Id ?? 0;
+        req["KIOSK_CODE"] = oKiosk?.KioskCode ?? "";
+        req["KIOSK_TOKEN"] = oKiosk?.KioskToken ?? "";
+
         string file_type = "application/octet-stream"; // default binary
         byte[] bytes;
 
-        string result = script.ScriptContent;
-        string ext = Path.GetExtension(script.Filename).ToLowerInvariant();
+        string result = kiosk_setup.ScriptContent;
+        string ext = Path.GetExtension(kiosk_setup.Filename).ToLowerInvariant();
 
         switch (ext)
         {
@@ -139,7 +137,7 @@ public class KioskApiController : ControllerBase
         }
 
         // ส่งไฟล์ออกไป
-        return File(bytes, file_type, script.Filename);
+        return File(bytes, file_type, kiosk_setup.Filename);
     }
 
     [HttpPost("SaveNationalCardData")]

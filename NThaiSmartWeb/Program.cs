@@ -7,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // ======================
 
 builder.Services
-    .AddControllersWithViews(options => { options.Filters.Add<AuthorizationFilter>(); })
+    .AddControllersWithViews(options =>
+    {
+        options.Filters.Add<AuthorizationFilter>();
+        options.Filters.Add<ActionFilter>();
+    })
     .AddNewtonsoftJson();
 
 builder.Services.AddSignalR();

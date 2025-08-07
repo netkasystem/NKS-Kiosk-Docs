@@ -25,9 +25,7 @@ form?.addEventListener("submit", async (e) => {
 
     ajaxCommon.post("/api/auth/login", data,
         (res) => { AfterAuthen(res) },
-        (res) => {
-            alert(res.responseJSON?.message || 'Login failed');
-        });
+        (res) => { alert(res.responseJSON?.message || 'Login failed'); });
 });
 
 async function SSOLogin() {

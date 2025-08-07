@@ -20,6 +20,4 @@ public partial class Customer
     public byte Inactive { get; set; }
 
     public virtual ICollection<Contact> Contact { get; set; } = new List<Contact>();
-
-    public virtual ICollection<Region> Region { get; set; } = new List<Region>();
 }

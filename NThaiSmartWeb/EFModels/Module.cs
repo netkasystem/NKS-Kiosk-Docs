@@ -38,6 +38,4 @@ public partial class Module
     public string SqlDetailByCaseid { get; set; } = null!;
 
     public virtual ICollection<MenuApiPathAnonymous> MenuApiPathAnonymous { get; set; } = new List<MenuApiPathAnonymous>();
-
-    public virtual ICollection<MenuApiPathPhase2> MenuApiPathPhase2 { get; set; } = new List<MenuApiPathPhase2>();
 }

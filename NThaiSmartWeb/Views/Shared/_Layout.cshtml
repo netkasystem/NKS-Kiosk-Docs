@@ -16,16 +16,24 @@
 }
 
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <html lang="th">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - N-ThaiSmart</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
+    <link rel="stylesheet" href="~/lib/fortawesome/fontawesome-free/css/all.min.css">
+
+    <link rel="icon" type="image/png" href="~/favicon.png" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true" />
-    <link rel="icon" type="image/png" href="~/favicon.png" />
+    <link rel="stylesheet" href="~/css/master.css" asp-append-version="true" />
+
 </head>
 <body>
 
@@ -89,16 +97,16 @@
                 </div>
             </nav>
         </header>
-    }modal-content-remove
+    }
 
     <!-- Countdown Modal -->
     <div class="modal fade" id="cardRemovedModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered text-center mw-100 align-content-center">
-     
+
             <div class="modal-confirmation">
                 <p style="font-size:4rem; font-weight:900;">มีการดึงบัตรออก</p>
                 <img src="/images/icons/font_card_id.svg" class="congratulations-image" style="margin-bottom:40px; margin-top:40px;" />
-              
+
                 <div class="modal-footer">
                     <p>กำลังกลับสู่หน้าจอหลักใน <span id="countdown">5</span> วินาที</p>
 
@@ -108,7 +116,7 @@
     </div>
 
     <div class="container mt-4">
-        <main role="main" class="pb-5">
+        <main ng-app="main" role="main" class="pb-5">
             <div class="timer" style="background-color: slategray;display: block !important;width: fit-content;padding-right: 10px;">
                 @if (env.IsDevelopment())
                 {
@@ -116,7 +124,13 @@
                     <span> ⏳ Time elapsed: <span id="timer">0</span> seconds</span>
                 }
             </div>
+
+            <div class="row-logout p-3 text-center" style="height: 7vh; width: 10vw; z-index: 99; position: fixed;top: 2vh;right: 2vw;">
+                <i class="fas fa-sign-out-alt fa-2x" title="Logout" id="icon-logout" style="color:white; display:none"></i>
+            </div>
+
             @RenderBody()
+
         </main>
     </div>
 
@@ -126,12 +140,6 @@
             <button class="footer-button" id="back-button">
                 <img src="/images/icons/back_icon.svg" class="footer_icon">
             </button>
-            @*  <button class="footer-button" id="setting-button">
-            <img src="/images/icons/Setting.svg" class="footer_icon">
-        </button>
-        <button class="footer-button">
-            <img src="/images/icons/refresh.svg" class="footer_icon" id="refresh-button">
-        </button> *@
         </footer>
     }
 
@@ -157,28 +165,74 @@
                     location.reload(); // รีเฟรชหน้านี้
                 });
             }
+
             if (settingButton) {
-            settingButton.addEventListener('click', function () {
-                window.location.href = '/Kiosk/Setup';
+                settingButton.addEventListener('click', function () {
+                    window.location.href = '/Kiosk/Setup';
+                });
+            }
+
+            let lastClickTime;
+            let clicks = 0;
+            $('#icon-logout').on('click', function () { window.location.href = '/logout'; });
+
+            document.querySelector('.row-logout').addEventListener('click', function () {
+                const now = new Date().getTime();
+                lastClickTime = lastClickTime ?? now;
+
+                if (now - lastClickTime < 1000)
+                    clicks++;
+                else
+                    clicks = 1;
+
+                lastClickTime = now;
+
+                if (clicks === 3) {
+                    document.getElementById('icon-logout').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('icon-logout').style.display = 'none';
+                    }, 1000 * 10);
+                    clicks = 0;
+                }
             });
-        }
+
+            document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }, { passive: false });
         });
     </script>
 
-    <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/js/common-ajax.js"></script>
-
-    <script src="~/lib/crypto-js/crypto-js.min.js"></script>
-    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <!-- jQuery ก่อน -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap ต้องตามหลัง jQuery -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AngularJS -->
+    <script src="~/lib/angular.js/angular.min.js"></script>
+
+    <!-- Select2 ต้องมาก่อนใช้งาน directive/JS custom -->
     <script src="~/lib/select2/js/select2.js"></script>
+
+    <!-- SignalR -->
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+
+    <!-- crypto-js -->
+    <script src="~/lib/crypto-js/crypto-js.min.js"></script>
+
+    <!-- face-api -->
     <script src="~/lib/face-api/face-api.min.js"></script>
 
-    <script src="~/js/common-script.js"></script>
-    <script src="~/js/signalr-config.js"></script>
+    <script src="~/js/angularjs-directive.js" asp-append-version="true"></script>
+    <script src="~/js/common-ajax.js" asp-append-version="true"></script>
+    <script src="~/js/common-script.js" asp-append-version="true"></script>
+    <script src="~/js/signalr-config.js" asp-append-version="true"></script>
     <script src="~/js/login.js" asp-append-version="true"></script>
-    <script src="~/js/face-recognition.js"></script>
-    <script src="~/js/step-controller.js"></script>
+    <script src="~/js/face-recognition.js" asp-append-version="true"></script>
+    <script src="~/js/step-controller.js" asp-append-version="true"></script>
+    <script src="~/js/kiosk_setup.js"></script>
+
 </body>
 </html>

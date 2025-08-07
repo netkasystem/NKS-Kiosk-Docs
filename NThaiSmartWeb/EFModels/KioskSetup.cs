@@ -28,6 +28,8 @@ public partial class KioskSetup
     /// </summary>
     public string Name { get; set; } = null!;
 
+    public string UrlRegion { get; set; } = null!;
+
     /// <summary>
     /// รายละเอียดเพิ่มเติมของสคริปต์หรือวิธีใช้งาน
     /// </summary>

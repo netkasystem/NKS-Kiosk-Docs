@@ -164,4 +164,122 @@ public static class EntitiesHelpers
     private static T Private<T>(this object obj, string privateField) => (T)obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
 
     public static DbTransaction GetDbTransaction(this IDbContextTransaction source) => (source as IInfrastructure<DbTransaction>)?.Instance;
+
+    public static async Task<DataTable> ExecuteSQL(this KioskContext context, string sqlCommand, IDictionary<string, object>? parameters = null)
+    {
+        Console.WriteLine("ExecuteSQL => " + sqlCommand);
+
+        var dbTransaction = context.Database.CurrentTransaction?.GetDbTransaction();
+        if (dbTransaction != null)
+            context.Database.UseTransaction(dbTransaction);
+
+        try
+        {
+            using var command = context.Database.GetDbConnection().CreateCommand();
+
+            if (dbTransaction != null)
+                command.Transaction = dbTransaction;
+
+            command.CommandText = sqlCommand;
+            command.CommandTimeout = 100;
+
+            // เพิ่ม parameters ถ้ามี
+            if (parameters != null)
+            {
+                foreach (var p in parameters)
+                {
+                    var param = command.CreateParameter();
+                    param.ParameterName = p.Key;
+                    param.Value = p.Value ?? DBNull.Value;
+                    command.Parameters.Add(param);
+                }
+            }
+
+            if (command.Connection.State != System.Data.ConnectionState.Open)
+                await command.Connection.OpenAsync();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            var dataTable = new DataTable();
+            var ds = new DataSet() { EnforceConstraints = false };
+            ds.Tables.Add(dataTable);
+
+            // สร้าง columns
+            foreach (var column in reader.GetColumnSchema())
+            {
+                dataTable.Columns.Add(new DataColumn(column.ColumnName) { AllowDBNull = true });
+            }
+
+            // โหลดข้อมูลทีละแถว
+            while (await reader.ReadAsync())
+            {
+                var row = dataTable.NewRow();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    var columnName = reader.GetName(i);
+                    var value = reader.GetValue(i);
+                    if (reader.GetFieldType(i) == typeof(DateTime) && value is DateTime dt && dt == DateTime.MinValue)
+                    {
+                        row[columnName] = DBNull.Value;
+                    }
+                    else
+                    {
+                        row[columnName] = value;
+                    }
+                }
+                dataTable.Rows.Add(row);
+            }
+
+            dataTable.Constraints.Clear();
+
+            return dataTable;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"ExecuteSQL Exception => {ex.GetBaseException().Message}");
+            return new DataTable();
+        }
+    }
+
+    public static async Task<object> SelectExecuteCommand(this KioskContext context, string sqlCommand, IDictionary<string, object>? parameters = null)
+    {
+        Console.WriteLine("SelectExecuteCommand => " + sqlCommand);
+
+        var dbTransaction = context.Database.CurrentTransaction?.GetDbTransaction();
+        if (dbTransaction != null)
+            context.Database.UseTransaction(dbTransaction);
+
+        try
+        {
+            using var command = context.Database.GetDbConnection().CreateCommand();
+
+            if (dbTransaction != null)
+                command.Transaction = dbTransaction;
+
+            command.CommandText = sqlCommand;
+            command.CommandTimeout = 100;
+
+            if (parameters != null)
+            {
+                foreach (var p in parameters)
+                {
+                    var param = command.CreateParameter();
+                    param.ParameterName = p.Key;
+                    param.Value = p.Value ?? DBNull.Value;
+                    command.Parameters.Add(param);
+                }
+            }
+
+            if (command.Connection.State != System.Data.ConnectionState.Open)
+                await command.Connection.OpenAsync();
+
+            var scalar = await command.ExecuteScalarAsync();
+            return scalar!;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"SelectExecuteCommand Exception => {ex.GetBaseException().Message}");
+            throw;
+        }
+    }
 }
