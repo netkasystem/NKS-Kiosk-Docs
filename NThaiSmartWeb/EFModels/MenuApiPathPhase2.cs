@@ -10,6 +10,4 @@ public partial class MenuApiPathPhase2
     public string Path { get; set; } = null!;
 
     public uint? ModuleId { get; set; }
-
-    public virtual Module? Module { get; set; }
 }

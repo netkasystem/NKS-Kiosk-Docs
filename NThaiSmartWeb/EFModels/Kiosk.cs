@@ -47,4 +47,14 @@ public partial class Kiosk
     /// Permanent kiosk token for SSO / agent auth
     /// </summary>
     public string? KioskToken { get; set; }
+
+    public string KioskImage { get; set; } = null!;
+
+    public int ProvinceId { get; set; }
+
+    public string? SerialNumber { get; set; }
+
+    public uint? ContractId { get; set; }
+
+    public uint? RegionId { get; set; }
 }

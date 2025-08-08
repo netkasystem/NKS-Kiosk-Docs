@@ -9,14 +9,15 @@ public class AuthorizationFilter : IAuthorizationFilter
         "/api/auth/login",
         "/api/auth/logout",
         "/api/kioskapi/savenationalcarddata",
-        "/api/kioskapi/getcustomform", 
-    };
+        "/api/kioskapi/getcustomform",
+        "/api/KioskApi/DownloadFile",
+    }.Select(x => x.ToLower()).ToList();
 
     public List<string> AllowPageList = new List<string>{
         "/login",
         "/account/login",
         "/account/logout",
-    };
+    }.Select(x => x.ToLower()).ToList();
 
     public void OnAuthorization(AuthorizationFilterContext context)
     {
@@ -34,7 +35,7 @@ public class AuthorizationFilter : IAuthorizationFilter
 
     public void OnWebApiRequest(AuthorizationFilterContext context)
     {
-        var path = context.HttpContext.Request.Path.Value?.Replace("/api","")?.ToLower();
+        var path = context.HttpContext.Request.Path.Value?.Replace("/api", "")?.ToLower();
         // ⛔ อนุญาตเฉพาะ API ที่คุณ whitelist ไว้ (หรือสลับเป็น Blacklist ถ้าส่วนใหญ่ปิดหมด)
         if (AllowApiList.Contains(path))
             return;

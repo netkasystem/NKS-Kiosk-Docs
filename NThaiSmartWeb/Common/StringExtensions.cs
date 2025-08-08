@@ -18,7 +18,6 @@ public static class StringExtensions
             // ถ้าพบ key และไม่ null ให้แทนที่ด้วยค่า string,
             // ถ้าไม่เจอ ให้คืนข้อความเดิมที่จับมา เช่น {key}
             return token != null ? token.ToString() : match.Value;
-
         });
 
         return result;

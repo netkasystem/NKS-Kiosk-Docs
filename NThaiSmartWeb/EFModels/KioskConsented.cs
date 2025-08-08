@@ -12,7 +12,9 @@ public partial class KioskConsented
     public string Idcard { get; set; } = null!;
 
     public string JsonData { get; set; } = null!;
+
     public string JsonUpdatedData { get; set; } = null!;
+
     public string JsonCustomData { get; set; } = null!;
 
     public DateTime ConsentedDate { get; set; }

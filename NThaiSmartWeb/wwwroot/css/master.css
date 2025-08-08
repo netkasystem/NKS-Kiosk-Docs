@@ -1,0 +1,16 @@
+/*.select2-lg + .select2-container .select2-selection--single {
+    height: 3.5rem;
+    font-size: 2rem;
+    line-height: 3.5rem;*/ /* ต้องให้เท่ากับ height เพื่อจัด vertical center */
+    /*padding: 0 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+}*/
+
+/* ปรับลูกศรด้านขวาให้ตรงกลาง */
+/*.select2-lg + .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 3.5rem;
+    top: 0.5rem;
+    right: 0.75rem;
+}*/
+

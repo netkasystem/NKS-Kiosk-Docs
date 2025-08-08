@@ -25,11 +25,11 @@ public partial class KioskView
 
     public string? Longitude { get; set; }
 
-    public string? ContactName { get; set; }
+    public string? OnsiteContactName { get; set; }
 
-    public string? ContactEmail { get; set; }
+    public string? OnsiteContactEmail { get; set; }
 
-    public string? ContactTel { get; set; }
+    public string? OnsiteContactTel { get; set; }
 
     public byte? Inactive { get; set; }
 
@@ -47,7 +47,30 @@ public partial class KioskView
 
     public long? MinAgo { get; set; }
 
+    public uint? ContractId { get; set; }
+
+    /// <summary>
+    /// เลขที่สัญญา
+    /// </summary>
+    public string? ContractCode { get; set; }
+
+    public string? ContractName { get; set; }
+
+    public string? ContactNameOfContract { get; set; }
+
+    public string? ContactEmailOfContract { get; set; }
+
+    public string? ContactTelOfContract { get; set; }
+
+    public string? ProvinceName { get; set; }
+
     public string? HealthTitle { get; set; }
 
-    public string? Color { get; set; }
+    public string? BackgroundColor { get; set; }
+
+    public string? FontColor { get; set; }
+
+    public string CustomFormValue { get; set; } = null!;
+
+    public DateOnly Today { get; set; }
 }
