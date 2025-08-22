@@ -22,6 +22,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Register IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
+// ลงทะเบียน HttpClient factory
+builder.Services.AddHttpClient();
 
 // ✅ เพิ่มบรรทัดนี้
 builder.Services.AddSession(options =>

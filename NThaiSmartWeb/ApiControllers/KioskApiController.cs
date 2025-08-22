@@ -181,11 +181,19 @@ public class KioskApiController : ControllerBase
     {
         var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v => v.Value).FirstOrDefault();
         uint CustomfieldId = 0;
-        if (int.TryParse(CustomFormId, out int formId))
+        if ( !string.IsNullOrEmpty(CustomFormId) && int.TryParse(CustomFormId, out int formId))
         {
             CustomfieldId = Convert.ToUInt32(CustomFormId);
         }
-        var JsonForm = _context.CustomForm.Where(c => c.Id == Convert.ToInt32(CustomFormId)).Select(c => c.FormFieldJson).ToList();
+        var JsonForm = _context.CustomForm.Where(c => c.Id == CustomfieldId).Select(c => c.FormFieldJson).ToList();
         return Ok(JsonForm);
+    }
+
+    [HttpGet("GetIntegrateNdpp")]
+    public IActionResult GetIntegrateNdpp()
+    {
+         
+        var LsIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0 ).ToList();
+        return Ok(LsIntegrateNdpp);
     }
 }

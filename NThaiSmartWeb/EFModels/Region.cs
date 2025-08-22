@@ -9,6 +9,8 @@ public partial class Region
 
     public string RegionTitle { get; set; } = null!;
 
+    public string RegionDescription { get; set; } = null!;
+
     public uint CustomerId { get; set; }
 
     public byte Inactive { get; set; }

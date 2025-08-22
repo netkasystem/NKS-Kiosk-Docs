@@ -117,6 +117,10 @@ const getCountTimer = () => sessionStorage.getItem("countTimer");
 const setCustomForm = (c) => sessionStorage.setItem("CustomForm", c);
 const getCustomForm = () => sessionStorage.getItem("CustomForm")
 
+const setIntegrateNdpp = (c) => sessionStorage.setItem("IntegrateNdpp", JSON.stringify(c));
+const getIntegrateNdpp = () => JSON.parse(sessionStorage.getItem("IntegrateNdpp") ?? null);
+const removeIntegrateNdpp = () => sessionStorage.removeItem("IntegrateNdpp");
+
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
 

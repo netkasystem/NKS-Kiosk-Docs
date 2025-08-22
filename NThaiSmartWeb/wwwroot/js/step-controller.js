@@ -203,6 +203,20 @@ window.Step12 = {
         } catch (error) {
             alert(error.message);
         }
+        //get integrate ndpp
+        try {
+            const response = fetch('/api/KioskApi/GetIntegrateNdpp', {
+                method: 'GET',
+                headers: { "Content-Type": "application/json", }
+            }).then(response => {
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                return response.json();
+            }).then(data => {
+                setIntegrateNdpp(data);
+            })
+        } catch (error) {
+            alert(error.message);
+        }
     }
 };
 
@@ -267,6 +281,12 @@ window.Step14 = {
         } catch (error) {
             alert(error.message);
         }
+    }
+};
+
+window.Step15 = {
+    init: () => {
+         
     }
 };
 

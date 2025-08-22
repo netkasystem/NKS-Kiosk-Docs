@@ -473,7 +473,16 @@
 
             function ConfirmData() {
                 const getCustomfieldRaw = getCustomForm();
-                if(getCustomfieldRaw == "") window.Step14.save_consent();
+                const getIntegrateNdppData  = getIntegrateNdpp();
+                if(getCustomfieldRaw == "") {
+                    if(getIntegrateNdppData?.length == 0){
+                        window.Step14.save_consent();
+                    }
+                    else{
+                        //go to ndpp page
+                        window.location.href = "/Step/Step17";
+                    }
+                }
                 else{
                     const getCustomfield = JSON.parse(getCustomfieldRaw);
                     if (getCustomfield != null) window.location.href = "/Step/Step14";
@@ -482,6 +491,10 @@
                     }
                 }
 
+            }
+
+            function getAddress(addr) {
+                return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
             }
         });
     </script>

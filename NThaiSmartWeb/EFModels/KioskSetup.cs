@@ -19,6 +19,11 @@ public partial class KioskSetup
     public string Code { get; set; } = null!;
 
     /// <summary>
+    /// เวอร์ชันของสคริปต์ เช่น v1.0.3 หรือ latest
+    /// </summary>
+    public string? Version { get; set; }
+
+    /// <summary>
     /// ชื่อไฟล์ shell script เช่น setup-kiosk.sh
     /// </summary>
     public string Filename { get; set; } = null!;
@@ -44,11 +49,6 @@ public partial class KioskSetup
     /// ระบบปฏิบัติการที่รองรับ เช่น ubuntu22.04, debian
     /// </summary>
     public string? OsType { get; set; }
-
-    /// <summary>
-    /// เวอร์ชันของสคริปต์ เช่น v1.0.3 หรือ latest
-    /// </summary>
-    public string? Version { get; set; }
 
     /// <summary>
     /// สถานะการใช้งาน (1=ใช้งาน, 0=ไม่ใช้งาน)
