@@ -9,13 +9,50 @@
 
         <!-- Card List -->
         <div id="ndpp-container" class="row g-3"></div>
+         
+        <!-- NDPP Form Container -->
+        <div id="ndpp-form-container" style="display:none; margin-top:20px;">
+            <button id="btn-back" class="btn btn-secondary mb-3">← ย้อนกลับ</button>
 
-        <!-- Iframe Container -->
-        <div id="iframe-container" class="mt-3" style="display:none; height:600px;">
-            <div class="d-flex justify-content-between mb-2">
-                <button id="btn-back" class="btn btn-secondary">← ย้อนกลับ</button>
-            </div>
-            <iframe id="preview-frame" style="width:100%; height:100%; border:1px solid #ccc;"></iframe>
+             
+            <form id="ndpp-form" class="p-3 border rounded bg-white shadow-sm">
+
+                <!-- Section 01 ข้อมูลส่วนบุคคล -->
+                <div class="mb-12">
+                    <h3 id="activity-title" class="mb-4"></h3>
+                </div>
+                <div class="mb-4">
+                    <h5 class="pb-2 border-bottom text-primary">01 กรอกข้อมูลส่วนบุคคล</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="firstname" class="form-label">ชื่อจริง<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastname" class="form-label">นามสกุล<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="email" class="form-label">อีเมล</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 02 รายละเอียดและเงื่อนไขการยินยอม -->
+                <div class="mb-4">
+                    <h5 class="pb-2 border-bottom text-primary">02 รายละเอียดและเงื่อนไขในการยินยอม</h5>
+
+                    <!-- content จาก API -->
+                    <div id="activity-content" class="mb-3"></div>
+
+                    <!-- purpose options -->
+                    <div id="purpose-options" class="mb-3"></div>
+                     
+                </div>
+
+                <button type="submit" class="btn btn-success px-4">ยืนยัน</button>
+            </form>
         </div>
 
     </div>
@@ -23,9 +60,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", async function () {
             const container = document.getElementById("ndpp-container");
-            const iframeContainer = document.getElementById("iframe-container");
-            const iframe = document.getElementById("preview-frame");
-            const btnBack = document.getElementById("btn-back");
 
             // ดึงข้อมูล NDPP
             const getIntegrateNdppData = await getIntegrateNdpp();
@@ -34,37 +68,188 @@
             getIntegrateNdppData.forEach(item => {
                 const col = document.createElement("div");
                 col.className = "col-12 col-sm-6 col-lg-4";
+                // ตรวจสอบว่ามี image และเป็น Base64
+                const imgSrc = item.serviceImage ? `data:image/png;base64,${item.serviceImage}` : '';
 
                 col.innerHTML = `
                     <div class="card h-100 shadow-sm">
-                        <div class="card-body d-flex flex-column">
+                            ${imgSrc ? `<img src="${imgSrc}" class="card-img-top" alt="${item.serviceName}">` : ''}
+                            <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${item.serviceName}</h5>
                             <p class="card-text text-truncate" style="max-height:3.6em;">${item.serviceDescription}</p>
                             <p class="mb-1"><small>เริ่ม: ${new Date(item.serviceStartDate).toLocaleString()}</small></p>
                             <p class="mb-2"><small>สิ้นสุด: ${new Date(item.serviceStopDate).toLocaleString()}</small></p>
-                            <button class="btn btn-primary mt-auto btn-open" data-url="${item.ndppPreferenceUrl}">เปิดดู</button>
+                            <button class="btn btn-primary mt-auto btn-open"
+                                    data-url="${item.ndppPreferenceUrl}"
+                                    data-id="${item.id}">เปิดดู</button>
                         </div>
                     </div>
                 `;
                 container.appendChild(col);
             });
 
-            // เปิด iframe
-            container.addEventListener("click", function(e) {
+            const cardData = getCardData();
+            let ndppId = 0;
+            let url = "";
+            // เปิดหน้าใหม่เมื่อกดปุ่ม
+            container.addEventListener("click", async function(e) {
                 if (e.target.classList.contains("btn-open")) {
-                    const url = e.target.getAttribute("data-url");
-                    iframe.src = url;
-                    container.style.display = "none";
-                    iframeContainer.style.display = "block";
+                    ndppId = e.target.getAttribute("data-id");
+                    url = e.target.getAttribute("data-url");
+                    // ตัวอย่างข้อมูลที่ต้องเข้ารหัส
+                    const IntegrateNdppData = {
+                        Firstname: cardData.thaiPersonalInfo.firstName,
+                        Lastname: cardData.thaiPersonalInfo.lastName,
+                        IntegrateNdppId: ndppId
+                    };
+
+                    const encrypCardData = encrypt(IntegrateNdppData);
+
+                    try {
+                        const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
+                            method: 'POST',
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                EncryptedINDPPString: encrypCardData 
+                            })
+                        });
+
+                        if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+
+                        const data = await response.json();
+
+                        // 🔗 ไปที่หน้า NDPP (redirect หรือเปิด tab ใหม่)
+                        if (data) {
+                            showNdppForm(data);
+                        } else {
+                            alert("ไม่พบ URL ของ NDPP");
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("โหลดข้อมูลไม่สำเร็จ");
+                    }
+                }
+            });
+       
+            function showNdppForm(data) {
+                const container = document.getElementById("ndpp-form-container");
+                const title = document.getElementById("activity-title");
+                const activityContent = document.getElementById("activity-content");
+                const purposeDiv = document.getElementById("purpose-options");
+
+                // แสดงชื่อกิจกรรม
+                title.textContent = data.ActivityNameTh || data.ServiceNameTh || "NDPP Form";
+
+
+
+
+                    // ใส่ content โดยแทนที่ {PurposeOption} ด้วย div ว่างๆ ที่เราจะ render
+                    const replacedContent = data.content.replace(
+                        "{PurposeOption}",
+                        `<div id="purpose-placeholder"></div>`
+                    ).replace(
+                        "{SubPurposeOption}",
+                        `<div id="sub-purpose-placeholder"></div>`
+                    );
+                    activityContent.innerHTML = replacedContent;
+
+                    // หา placeholder
+                    const placeholder = document.getElementById("purpose-placeholder");
+                    const subplaceholder = document.getElementById("sub-purpose-placeholder");
+
+                    // สร้าง checkbox จาก purpose_option
+                    data.purpose_option.forEach(purpose => {
+                        const div = document.createElement("div");
+                        div.classList.add("form-check");
+                        div.innerHTML = `
+                            <input class="form-check-input" type="checkbox"
+                                   id="purpose-${purpose.purpose_id}"
+                                   name="purpose"
+                                   value="${purpose.purpose_id}"
+                                   ${purpose.selected ? "checked" : ""}
+                                   ${purpose.is_required ? "required" : ""}>
+                            <label class="form-check-label" for="purpose-${purpose.purpose_id}">
+                                ${purpose.purpose_th || purpose.purpose_en}
+                            </label>
+                        `;
+
+                        if(purpose.purpose_type == "Standard"){
+                            placeholder.appendChild(div);
+                        }
+                        else{
+                            subplaceholder.appendChild(div);
+                        }
+                    });
+
+                    // ✅ ใส่ค่า firstname/lastname จาก cardData
+                    document.getElementById("firstname").value = cardData.thaiPersonalInfo.firstName || "";
+                    document.getElementById("lastname").value  = cardData.thaiPersonalInfo.lastName || "";
+
+                    // แสดงฟอร์มขึ้นมา
+                    container.style.display = "block";
+
+                     
+                document.getElementById("ndpp-container").style.display = "none";
+            }
+            //ปุ่มย้อนกลับ
+            document.getElementById("btn-back").addEventListener("click", function() {
+                document.getElementById("ndpp-form-container").style.display = "none";
+                document.getElementById("ndpp-container").style.display = "flex";
+            });
+
+            //ปุ่ม submit
+            document.getElementById("ndpp-form").addEventListener("submit", async function(e) {
+                e.preventDefault();
+                // ดึงค่าจากฟอร์ม
+                const firstname = document.getElementById("firstname").value.trim();
+                const lastname  = document.getElementById("lastname").value.trim();
+                const email     = document.getElementById("email").value.trim();
+
+                // ดึง purpose_id ที่เลือก
+                const selectedPurposes = Array.from(
+                    document.querySelectorAll("#ndpp-form input[name='purpose']:checked")
+                ).map(input => parseInt(input.value));
+
+                // เตรียม payload
+                const payload = {
+                    Firstname: firstname || cardData.thaiPersonalInfo.firstName,
+                    Lastname: lastname  || cardData.thaiPersonalInfo.lastName,
+                    Email: email,
+                    IntegrateNdppId: ndppId,
+                    IntegrateUrl: url,
+                    PurposeOption: selectedPurposes
+                }; 
+                const encrypPayload = encrypt(payload);
+                try {
+                    const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                                EncryptedINDPPString: encrypPayload
+                            })
+                    });
+
+                    if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
+
+                    const result = await response.json();
+                   
+
+                    // กลับไปหน้า list
+                    // document.getElementById("ndpp-form-container").style.display = "none";
+                    // document.getElementById("ndpp-container").style.display = "flex";
+                    
+                    // สิ้นสุด
+                    window.location.href = "/Step/Step13";
+
+                } catch (err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาดในการบันทึก");
                 }
             });
 
-            // ปุ่มย้อนกลับ
-            btnBack.addEventListener("click", function() {
-                iframe.src = "";
-                iframeContainer.style.display = "none";
-                container.style.display = "flex";
-            });
         });
+
+
     </script>
+
 </body>

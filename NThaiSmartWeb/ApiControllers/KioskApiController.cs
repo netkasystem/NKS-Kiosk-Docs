@@ -1,9 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NSDX.Common.Security;
 using NThaiSmartWeb.EFModels;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
+using System.Web;
 using static AesEcb;
 
 [ApiController]
@@ -181,7 +190,7 @@ public class KioskApiController : ControllerBase
     {
         var CustomFormId = _context.Variables.Where(v => v.Name == "kiosk_use_custom_form_id").Select(v => v.Value).FirstOrDefault();
         uint CustomfieldId = 0;
-        if ( !string.IsNullOrEmpty(CustomFormId) && int.TryParse(CustomFormId, out int formId))
+        if (!string.IsNullOrEmpty(CustomFormId) && int.TryParse(CustomFormId, out int formId))
         {
             CustomfieldId = Convert.ToUInt32(CustomFormId);
         }
@@ -192,8 +201,112 @@ public class KioskApiController : ControllerBase
     [HttpGet("GetIntegrateNdpp")]
     public IActionResult GetIntegrateNdpp()
     {
-         
-        var LsIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0 ).ToList();
+
+        var LsIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0).ToList();
         return Ok(LsIntegrateNdpp);
+    }
+
+    [HttpPost("GetIntegrateNdppForm")]
+    public async Task<IActionResult> GetIntegrateNdppFormAsync([FromBody] EncryptedIntegrateNdppData PrefData)
+    {
+
+        string jsonData = Decrypt(PrefData.EncryptedINDPPString);
+        var data = JsonConvert.DeserializeObject<IntegrateNdppData>(jsonData);
+        var oIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Id.ToString() == data.IntegrateNdppId).FirstOrDefault();
+        Uri uri = new Uri(oIntegrateNdpp.NdppPreferenceUrl);
+
+        // ใช้ HttpUtility.ParseQueryString ดึง query string
+        string Key = HttpUtility.ParseQueryString(uri.Query).Get("key");
+        var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
+        var TokenKey = JWTHelpers.Encode(new JObject
+            {
+                { "Firstname", data.Firstname },
+                { "Lastname", data.Lastname }
+            }, secretKey);
+        using (var client = new HttpClient())
+        {
+            // ดึงเฉพาะ host 
+            string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
+
+            // ต่อกับ path คงที่
+            string requestUrl = $"{baseHost}/api/AdminPreferenceConsentForm/PreferenceFormToken?key={Key}&token_key={TokenKey}";
+            // ส่ง request
+            HttpResponseMessage response = await client.GetAsync(requestUrl);
+            string result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, result);
+            }
+        }
+    }
+
+    [HttpPost("SubmitIntegrateNdpp")]
+    public async Task<IActionResult> SubmitIntegrateNdpp([FromBody] EncryptedIntegrateNdppData PrefData)
+    {
+        try
+        {
+
+            string jsonData = Decrypt(PrefData.EncryptedINDPPString);
+            var data = JsonConvert.DeserializeObject<IntegrateNdppData>(jsonData);
+            var oIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Id.ToString() == data.IntegrateNdppId).FirstOrDefault();
+            if (oIntegrateNdpp == null)
+                return BadRequest("IntegrateNdpp not found");
+
+
+            Uri uri = new Uri(oIntegrateNdpp.NdppPreferenceUrl);
+            string Key = HttpUtility.ParseQueryString(uri.Query).Get("key");
+
+            if (string.IsNullOrEmpty(Key))
+                return BadRequest("Missing key in NdppPreferenceUrl");
+
+
+            var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
+            var TokenKey = JWTHelpers.Encode(new JObject {
+                { "Firstname", data.Firstname },
+                { "Lastname", data.Lastname },
+                { "Email", data.Email }
+            }, secretKey);
+
+
+            // ดึงเฉพาะ host 
+            string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
+            string requestUrl = $"{baseHost}/api/AdminPreferenceConsentForm/PreferenceFormConsent";
+
+            // เตรียม payload
+            var payload = new
+            {
+                purpose_option = data.PurposeOption.ConvertAll(id => new { PurposeOption = id }),
+                key = Key,
+                token_key = TokenKey
+            };
+            // serialize เป็น JSON
+            string json = System.Text.Json.JsonSerializer.Serialize(payload, new JsonSerializerOptions());
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+
+            using var client = new HttpClient();
+
+            var response = await client.PutAsync(requestUrl, content);
+            string result = await response.Content.ReadAsStringAsync();
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Ok(JsonConvert.DeserializeObject(result));
+            }
+            else
+            {
+                return StatusCode((int)response.StatusCode, result);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"SubmitIntegrateNdpp failed: {ex.Message}");
+        }
     }
 }

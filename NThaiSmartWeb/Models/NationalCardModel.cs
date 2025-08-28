@@ -20,3 +20,18 @@ public class EncryptedPayload
     public string EncrypUpdatedData { get; set; }
     public string EncrypCustomDataData { get; set; }
 }
+public class EncryptedIntegrateNdppData
+{
+    public string EncryptedINDPPString { get; set; } 
+}
+ 
+public class IntegrateNdppData
+{
+    public string IntegrateNdppId { get; set; } 
+    public string Firstname { get; set; } 
+    public string Lastname { get; set; } 
+    public string Email { get; set; } 
+    public string IntegrateUrl { get; set; } 
+    public List<uint> PurposeOption { get; set; } 
+}
+ 

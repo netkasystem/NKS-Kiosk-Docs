@@ -276,7 +276,18 @@ window.Step14 = {
             if (!response.ok) {
                 throw new Error(message);
             } else {
-                next_page("/Step/Step13", 1);
+
+                const getIntegrateNdppData = getIntegrateNdpp();
+                if (getIntegrateNdppData?.length > 0) {
+                    //go to integrate ndpp page
+                    window.location.href = "/Step/Step17";
+                }
+                else {
+                    next_page("/Step/Step13", 1);
+                }
+               
+
+
             }
         } catch (error) {
             alert(error.message);
@@ -286,7 +297,7 @@ window.Step14 = {
 
 window.Step15 = {
     init: () => {
-         
+
     }
 };
 

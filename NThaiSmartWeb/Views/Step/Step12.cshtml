@@ -471,18 +471,9 @@
             const ConfirmBtn = document.getElementById("confirm-btn");
             if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
 
-            function ConfirmData() {
+           function ConfirmData() {
                 const getCustomfieldRaw = getCustomForm();
-                const getIntegrateNdppData  = getIntegrateNdpp();
-                if(getCustomfieldRaw == "") {
-                    if(getIntegrateNdppData?.length == 0){
-                        window.Step14.save_consent();
-                    }
-                    else{
-                        //go to ndpp page
-                        window.location.href = "/Step/Step17";
-                    }
-                }
+                if(getCustomfieldRaw == "") window.Step14.save_consent();
                 else{
                     const getCustomfield = JSON.parse(getCustomfieldRaw);
                     if (getCustomfield != null) window.location.href = "/Step/Step14";
