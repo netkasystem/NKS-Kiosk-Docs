@@ -12,7 +12,7 @@
     <div class="row">
         <div class="grid-item top-box">
             <div class="info-header d-flex justify-content-between align-items-center">
-                <h2>ข้อมูลบัตรประชาชน</h2>
+                <h2>ข้อมูลบัตรประจำตัวประชาชน</h2>
                 <div class="action-buttons">
                     <button class="icon-button">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
@@ -22,7 +22,7 @@
 
             <div class="row g-4">
                 <div class="col-12 col-md-6 info-field">
-                    <label>เลขบัตรประชาชน</label>
+                    <label>เลขบัตรประจำตัวประชาชน</label>
                     <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
                     <button class="local-icon-button w-100">
                         <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
@@ -106,7 +106,7 @@
                         <div class="id-card-box">
                             <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
                         </div>
-                        <h3>รูปบัตรประชาชน</h3>
+                        <h3>รูปบัตรประจำตัวประชาชน</h3>
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@
             <form id="edit-form">
                 <div class="form-grid">
                     <div class="form-field">
-                        <label for="input-id-number">เลขบัตรประชาชน</label>
+                        <label for="input-id-number">เลขบัตรประจำตัวประชาชน</label>
                         <div class="input-wrapper">
                             <span class="old-data-placeholder"></span> <input type="text" id="input-id-number" data-source-field="citizenID">
                         </div>
@@ -471,7 +471,7 @@
             const ConfirmBtn = document.getElementById("confirm-btn");
             if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
 
-           function ConfirmData() {
+            function ConfirmData() {
                 const getCustomfieldRaw = getCustomForm();
                 if(getCustomfieldRaw == "") window.Step14.save_consent();
                 else{
@@ -482,10 +482,6 @@
                     }
                 }
 
-            }
-
-            function getAddress(addr) {
-                return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
             }
         });
     </script>

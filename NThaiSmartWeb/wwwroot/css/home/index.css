@@ -222,14 +222,14 @@ body, html {
 }
 
     .header h1 {
-        font-size: 126px;
+        font-size: 89px;
         font-weight: bold;
         color: #FFFFFF;
         margin: 0;
     }
 
     .header h2 {
-        font-size: 96px;
+        font-size: 70px;
         font-weight: 100;
         color: #FFFFFF;
         margin: 0;
@@ -361,7 +361,7 @@ body, html {
     font-weight: 400;
     color: #ffff;
     margin-left: 30px;
-    justify-content: center;
+    text-align: left;
 }
 
 .terms-page-container {
@@ -1021,7 +1021,7 @@ body, html {
 }
 
 .id-card-image-fail {
-    width: 43%;
+    width: 39%;
     transform: rotate(-90deg);
     margin-bottom: 15%;
     margin-top: 12%;
@@ -1053,7 +1053,7 @@ body, html {
     font-weight: 500;
     text-align: center;
     color: #FFFFFF;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 
 .cancel-button-fail {
