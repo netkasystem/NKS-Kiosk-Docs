@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -18,6 +18,11 @@ public partial class KioskIntegrateNdpp
     public string? ServiceDescription { get; set; }
 
     public string? NdppPreferenceUrl { get; set; }
+
+    /// <summary>
+    /// key สำหรับเรียก URL preference form ของ NDPP
+    /// </summary>
+    public string? NdppPreferenceUrlKey { get; set; }
 
     /// <summary>
     /// วันที่เริ่ม เปิดบริการ
@@ -47,3 +52,4 @@ public partial class KioskIntegrateNdpp
 
     public uint UpdatedBy { get; set; }
 }
+

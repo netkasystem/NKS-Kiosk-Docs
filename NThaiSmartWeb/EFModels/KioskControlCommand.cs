@@ -28,12 +28,12 @@ public partial class KioskControlCommand
     /// <summary>
     /// Whether this command is enabled or not
     /// </summary>
-    public bool? IsEnabled { get; set; }
+    public bool IsEnabled { get; set; }
 
     /// <summary>
     /// Allow passing additional arguments or not
     /// </summary>
-    public bool? AllowArgs { get; set; }
+    public bool AllowArgs { get; set; }
 
     /// <summary>
     /// Record creation timestamp

@@ -33,26 +33,43 @@ public partial class Kiosk
 
     public byte? Inactive { get; set; }
 
+    public bool? FirstBoot { get; set; }
+
+    public bool? ActivationStatus { get; set; }
+
+    public string? ActivationNote { get; set; }
+
+    public string? FactoryImageVersion { get; set; }
+
     /// <summary>
     /// วันที่สร้าง
     /// </summary>
     public DateTime CreatedAt { get; set; }
+
+    public DateTime? RegisteredAt { get; set; }
+
+    public DateTime? LastSeenAt { get; set; }
+
+    public string? RegisteredIp { get; set; }
 
     /// <summary>
     /// วันที่อัพเดตล่าสุด
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 
-    /// <summary>
-    /// Permanent kiosk token for SSO / agent auth
-    /// </summary>
     public string? KioskToken { get; set; }
+
+    public DateTime? TokenCreatedAt { get; set; }
 
     public string KioskImage { get; set; } = null!;
 
     public int ProvinceId { get; set; }
 
     public string? SerialNumber { get; set; }
+
+    public string? MacAddress { get; set; }
+
+    public string? HardwareHash { get; set; }
 
     public uint? ContractId { get; set; }
 

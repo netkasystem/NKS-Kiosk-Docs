@@ -14,4 +14,6 @@ public partial class Region
     public uint CustomerId { get; set; }
 
     public byte Inactive { get; set; }
+
+    public string RegionSite { get; set; } = null!;
 }
