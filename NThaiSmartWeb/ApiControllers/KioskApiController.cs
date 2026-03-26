@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NSDX.Common.Security;
 using NThaiSmartWeb.EFModels;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Policy;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Web;
@@ -49,7 +44,6 @@ public class KioskApiController : ControllerBase
         return Ok(list);
     }
 
-    // ตัวอย่าง: 4f0e3bc2381742e8b8a7dd1703ec2d3d
     public string GeneratePermanentToken() => Guid.NewGuid().ToString("N");
 
     [HttpPost("DownloadFile")]
@@ -68,8 +62,6 @@ public class KioskApiController : ControllerBase
         var SignalRHub = _context.Variables?.FirstOrDefault(_v => _v.Name == "kiosk_path_web")?.Value ?? "";
         JObject req = JObject.FromObject(new { URL = SignalRHub });
 
-        if (!string.IsNullOrEmpty(kiosk_setup.UrlRegion)) req["URL"] = kiosk_setup.UrlRegion;
-
         if (username == null)
             username = NSDXSession.Get<string>(NSDXSessionKey.CurrentUser);
 
@@ -83,6 +75,10 @@ public class KioskApiController : ControllerBase
             var KIOSK_TOKEN = GeneratePermanentToken();
             oKiosk.KioskToken = KIOSK_TOKEN;
             _context.SaveChanges();
+
+            var URL = _context.Region.Where(r => r.RegionId == oKiosk.RegionId).Select(r => r.RegionSite).FirstOrDefault() ?? "";
+            if (!string.IsNullOrEmpty(URL))
+                req["URL"] = URL;
         }
 
         req["KIOSK_ID"] = oKiosk?.Id ?? 0;
@@ -150,38 +146,64 @@ public class KioskApiController : ControllerBase
     }
 
     [HttpPost("SaveNationalCardData")]
-    public IActionResult SaveNationalCardData([FromBody] EncryptedPayload payload)
+    public async Task<IActionResult> SaveNationalCardData([FromBody] EncryptedPayload payload)
     {
         try
         {
             string jsonData = Decrypt(payload.EncrypString);
             string jsonUpdatedData = Decrypt(payload.EncrypUpdatedData);
-            string jsonCustomDataData = Decrypt(payload.EncrypCustomDataData);
-            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsonData);
-            if (data != null)
-            {
-                data.KioskId = _context.Kiosk.Where(k => k.KioskCode == data.KioskCode).Select(k => k.Id).FirstOrDefault();
+            string jsonCustomData = Decrypt(payload.EncrypCustomDataData);
 
-                var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
-                {
-                    KioskId = data.KioskId,
-                    Idcard = data.citizenID,
-                    JsonData = payload.EncrypString,
-                    JsonUpdatedData = payload.EncrypUpdatedData,
-                    JsonCustomData = payload.EncrypCustomDataData
-                };
-                _context.KioskConsented.Add(newKioskConsented);
-                _context.SaveChanges();
-                return Ok("✅ บันทึกสำเร็จ");
-            }
-            else
-            {
+            var data = JsonConvert.DeserializeObject<NationalCardModel>(jsonData);
+            if (data == null)
                 return BadRequest("❌ บันทึกไม่สำเร็จ");
+
+            data.KioskId = _context.Kiosk
+                .Where(k => k.KioskCode == data.KioskCode)
+                .Select(k => k.Id)
+                .FirstOrDefault();
+
+            // ─── Upload photo จากบัตร ─────────────────────────────────
+            if (!string.IsNullOrEmpty(data.photo))
+            {
+                data.photo_path = FileManagementHelpers.SaveFilePath(
+                    new FileViewModel { FileName = "photo.jpg", FileBase64 = data.photo },
+                    "kiosk card photo",
+                    subPath: "kiosk/photo"
+                );
+                data.photo = string.Empty;
             }
+
+            // ─── Upload face_capture จากกล้อง ────────────────────────
+            if (!string.IsNullOrEmpty(data.face_capture))
+            {
+                data.face_capture_path = FileManagementHelpers.SaveFilePath(
+                    new FileViewModel { FileName = "face.jpg", FileBase64 = data.face_capture },
+                    "kiosk face capture",
+                    subPath: "kiosk/face"
+                );
+                data.face_capture = string.Empty;
+            }
+
+            // ─── Re-encrypt ข้อมูลที่เคลียร์ base64 แล้ว ─────────────
+            var cleanedJson = JsonConvert.SerializeObject(data);
+            var encryptedCleaned = AesEcb.Encrypt(cleanedJson);
+
+            var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+            {
+                KioskId = data.KioskId,
+                Idcard = data.citizenID,
+                JsonData = encryptedCleaned,
+                JsonUpdatedData = payload.EncrypUpdatedData,
+                JsonCustomData = payload.EncrypCustomDataData
+            };
+            _context.KioskConsented.Add(newKioskConsented);
+            await _context.SaveChangesAsync();
+            return Ok(new { photo_path = data.photo_path ?? "", face_capture_path = data.face_capture_path ?? "" });
         }
         catch (Exception ex)
         {
-            return BadRequest("❌ บันทึกไม่สำเร็จ");
+            return BadRequest($"❌ บันทึกไม่สำเร็จ: {ex.Message}");
         }
     }
 
@@ -199,17 +221,39 @@ public class KioskApiController : ControllerBase
     }
 
     [HttpGet("GetIntegrateNdpp")]
-    public IActionResult GetIntegrateNdpp()
+    public async Task<IActionResult> GetIntegrateNdpp()
     {
+        var _flag = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate").Select(v => v.Value).FirstOrDefault();
+        if (_flag == "0") return Ok();
 
-        var LsIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0).ToList();
-        return Ok(LsIntegrateNdpp);
+        var api = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_api").Select(v => v.Value).FirstOrDefault();
+        var res = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0).ToList();
+        res.ForEach(r => { r.NdppPreferenceUrl = $"{api}?key={r.NdppPreferenceUrlKey}"; });
+
+        return Ok(res);
+    }
+
+    [HttpGet("GetIntegrateNdppByKiosk")]
+    public async Task<IActionResult> GetIntegrateNdppByKiosk([FromQuery] string kioskCode)
+    {
+        if (string.IsNullOrEmpty(kioskCode)) return BadRequest("Missing kioskCode");
+
+        var _flag = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_by_kiosk").Select(v => v.Value).FirstOrDefault();
+        if (_flag == "0") return Ok();
+
+        var kioskId = await _context.Kiosk.Where(_k => _k.KioskCode == kioskCode).Select(_k => _k.Id).FirstOrDefaultAsync();
+        var KioskIntegrateNdppId = _context.KioskIntegrateNdppConsentMapping.Where(k => k.KioskId == kioskId).Select(k => k.KioskIntegrateNdppId).ToList();
+
+        var api = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_api").Select(v => v.Value).FirstOrDefault();
+        var res = _context.KioskIntegrateNdpp.Where(c => KioskIntegrateNdppId.Contains(c.Id) && c.Inactive == 0).ToList();
+        res.ForEach(r => { r.NdppPreferenceUrl = $"{api}?key={r.NdppPreferenceUrlKey}"; });
+
+        return Ok(res);
     }
 
     [HttpPost("GetIntegrateNdppForm")]
     public async Task<IActionResult> GetIntegrateNdppFormAsync([FromBody] EncryptedIntegrateNdppData PrefData)
     {
-
         string jsonData = Decrypt(PrefData.EncryptedINDPPString);
         var data = JsonConvert.DeserializeObject<IntegrateNdppData>(jsonData);
         var oIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Id.ToString() == data.IntegrateNdppId).FirstOrDefault();
@@ -218,14 +262,11 @@ public class KioskApiController : ControllerBase
         // ใช้ HttpUtility.ParseQueryString ดึง query string
         string Key = HttpUtility.ParseQueryString(uri.Query).Get("key");
         var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
-        var TokenKey = JWTHelpers.Encode(new JObject
-            {
-                { "Firstname", data.Firstname },
-                { "Lastname", data.Lastname }
-            }, secretKey);
+        var TokenKey = JWTHelpers.Encode(new JObject { { "Firstname", data.Firstname }, { "Lastname", data.Lastname } }, secretKey);
+
         using (var client = new HttpClient())
         {
-            // ดึงเฉพาะ host 
+            // ดึงเฉพาะ host
             string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
 
             // ต่อกับ path คงที่
@@ -250,20 +291,17 @@ public class KioskApiController : ControllerBase
     {
         try
         {
-
             string jsonData = Decrypt(PrefData.EncryptedINDPPString);
             var data = JsonConvert.DeserializeObject<IntegrateNdppData>(jsonData);
             var oIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Id.ToString() == data.IntegrateNdppId).FirstOrDefault();
             if (oIntegrateNdpp == null)
                 return BadRequest("IntegrateNdpp not found");
 
-
             Uri uri = new Uri(oIntegrateNdpp.NdppPreferenceUrl);
             string Key = HttpUtility.ParseQueryString(uri.Query).Get("key");
 
             if (string.IsNullOrEmpty(Key))
                 return BadRequest("Missing key in NdppPreferenceUrl");
-
 
             var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
             var TokenKey = JWTHelpers.Encode(new JObject {
@@ -272,12 +310,10 @@ public class KioskApiController : ControllerBase
                 { "Email", data.Email }
             }, secretKey);
 
-
-            // ดึงเฉพาะ host 
+            // ดึงเฉพาะ host
             string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
             string requestUrl = $"{baseHost}/api/AdminPreferenceConsentForm/PreferenceFormConsent";
 
-            // เตรียม payload
             var payload = new
             {
                 purpose_option = data.PurposeOption.ConvertAll(id => new { PurposeOption = id }),
@@ -288,15 +324,47 @@ public class KioskApiController : ControllerBase
             string json = System.Text.Json.JsonSerializer.Serialize(payload, new JsonSerializerOptions());
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-
             using var client = new HttpClient();
 
             var response = await client.PutAsync(requestUrl, content);
             string result = await response.Content.ReadAsStringAsync();
 
-
             if (response.IsSuccessStatusCode)
             {
+                var callbackUrl = $"{baseHost}/api/AdminPreferenceConsentForm/ConsentCallback";
+
+                var formJson = JObject.Parse(data.NdppFormData ?? "{}");
+                var purposeDetails = data.PurposeOptionDetail ?? new List<PurposeOptionDetail>();
+                var purposeOptions = formJson["purpose_option"]?.ToObject<JArray>() ?? new JArray();
+                foreach (JObject p in purposeOptions)
+                {
+                    var id = p["purpose_id"]?.ToString();
+                    var detail = purposeDetails.FirstOrDefault(d => d.PurposeNameId == id);
+                    if (detail != null)
+                        p["selected"] = detail.PurposeChecked;
+                }
+
+                var callbackPayload = new
+                {
+                    photo               = data.photo_path          ?? "",
+                    face_capture        = data.face_capture_path   ?? "",
+                    idcard              = data.citizenID           ?? "",
+                    fullNameTH          = data.fullNameTH          ?? "",
+                    fullNameEN          = data.fullNameEN          ?? "",
+                    ActivityNameEn      = formJson["ActivityNameEn"]?.ToString()      ?? "",
+                    ActivityNameTh      = formJson["ActivityNameTh"]?.ToString()      ?? "",
+                    BusinessProcessEn   = formJson["BusinessProcessEn"]?.ToString()   ?? "",
+                    BusinessProcessTh   = formJson["BusinessProcessTh"]?.ToString()   ?? "",
+                    EntityEn            = formJson["EntityEn"]?.ToString()            ?? "",
+                    EntityTh            = formJson["EntityTh"]?.ToString()            ?? "",
+                    OrganizationUnitEn  = formJson["OrganizationUnitEn"]?.ToString()  ?? "",
+                    OrganizationUnitTh  = formJson["OrganizationUnitTh"]?.ToString()  ?? "",
+                    purpose_option      = purposeOptions,
+                    service_id          = formJson["service_id"]?.ToObject<int>()     ?? 0,
+                    version             = formJson["version"]?.ToString()             ?? "2"
+                };
+                await CallExternalHttpAsync(callbackUrl, HttpMethod.Post, callbackPayload);
+
                 return Ok(JsonConvert.DeserializeObject(result));
             }
             else
@@ -309,4 +377,123 @@ public class KioskApiController : ControllerBase
             return StatusCode(500, $"SubmitIntegrateNdpp failed: {ex.Message}");
         }
     }
+
+    private async Task<(bool Success, string Body)> CallExternalHttpAsync(string url, HttpMethod method, object payload)
+    {
+        try
+        {
+            string json = System.Text.Json.JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(method, url) { Content = content };
+            var response = await client.SendAsync(request);
+            string body = await response.Content.ReadAsStringAsync();
+
+            return (response.IsSuccessStatusCode, body);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"CallExternalHttpAsync failed: {url} — {ex.Message}");
+            return (false, ex.Message);
+        }
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterKiosk([FromBody] Kiosk dto)
+    {
+        // 1) ตรวจสอบ hardware ขั้นต้น
+        if (string.IsNullOrWhiteSpace(dto.SerialNumber) || string.IsNullOrWhiteSpace(dto.MacAddress))
+            return BadRequest(new { message = "serial_number and mac_address required" });
+
+        var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "";
+
+        // 2) หา kiosk เดิมจาก serial หรือ MAC
+        var kiosk = await _context.Kiosk.FirstOrDefaultAsync(k => k.SerialNumber == dto.SerialNumber || k.MacAddress == dto.MacAddress);
+
+        // ถ้ายังไม่มี → สร้างใหม่
+        if (kiosk == null)
+        {
+            kiosk = new Kiosk
+            {
+                KioskCode = $"KIOSK-{Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper()}",
+                SerialNumber = dto.SerialNumber,
+                MacAddress = dto.MacAddress,
+                HardwareHash = dto.HardwareHash,
+                FactoryImageVersion = dto.FactoryImageVersion,
+                RegisteredAt = DateTime.UtcNow,
+                RegisteredIp = clientIp,
+                FirstBoot = false,
+                ActivationStatus = false,
+                KioskToken = GenerateKioskToken(dto.HardwareHash),
+                TokenCreatedAt = DateTime.UtcNow
+            };
+
+            _context.Kiosk.Add(kiosk);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { status = "created", kiosk });
+        }
+
+        // 3) ถ้าเคยมีแล้ว → update hardware + token เดิม
+        kiosk.LastSeenAt = DateTime.UtcNow;
+        kiosk.RegisteredIp = clientIp;
+
+        // อัปเดต hardware เฉพาะตอน clone แล้วเพิ่ง boot ครั้งแรกจริงๆ
+        kiosk.SerialNumber = dto.SerialNumber;
+        kiosk.MacAddress = dto.MacAddress;
+        kiosk.HardwareHash = dto.HardwareHash;
+        kiosk.FactoryImageVersion = dto.FactoryImageVersion;
+
+        if (string.IsNullOrEmpty(kiosk.KioskToken))
+        {
+            kiosk.KioskToken = GenerateKioskToken(dto.HardwareHash);
+            kiosk.TokenCreatedAt = DateTime.UtcNow;
+        }
+
+        kiosk.FirstBoot = false;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new
+        {
+            status = "updated",
+            kiosk_id = kiosk.Id,
+            kiosk_code = kiosk.KioskCode,
+            token = kiosk.KioskToken,
+            first_boot = kiosk.FirstBoot
+        });
+    }
+
+    [HttpPost("enroll")]
+    public async Task<IActionResult> Enroll([FromBody] EnrollRequest req, CancellationToken ct)
+    {
+        if (req == null || string.IsNullOrWhiteSpace(req.DeviceId))
+            return BadRequest("device_id required");
+
+        await Task.Delay(10, ct);
+        return Ok(new { ok = true, enrolled_at = DateTime.UtcNow });
+    }
+
+    [HttpGet("GetConsentURL")]
+    public async Task<IActionResult> GetConsentURL([FromQuery] string kioskCode)
+    {
+        var kioskId = await _context.Kiosk.Where(_k => _k.KioskCode == kioskCode).Select(_k => _k.Id).FirstOrDefaultAsync();
+        var integrateNdppId = await _context.KioskIntegrateNdppConsentMapping.Where(_k => _k.KioskId == kioskId).Select(_k => _k.KioskIntegrateNdppId).FirstOrDefaultAsync();
+        var oKioskIntegrateNdpp = await _context.KioskIntegrateNdpp.Where(_ki => _ki.Id == integrateNdppId).FirstOrDefaultAsync();
+
+        var default_api = oKioskIntegrateNdpp?.NdppPreferenceUrl ?? "";
+        Console.WriteLine($"GetConsentURL Default API {default_api}");
+        return Ok(new { url = default_api, integrateNdppId = integrateNdppId.ToString() });
+    }
+
+    private static string RandomToken(int length = 64)
+    {
+        var bytes = new byte[length / 2];
+        RandomNumberGenerator.Fill(bytes);
+        return Convert.ToHexString(bytes).ToLower();
+    }
+
+    private static string GenerateKioskToken(string hardwareHash)
+        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(hardwareHash + RandomToken(32)))).ToLower();
 }

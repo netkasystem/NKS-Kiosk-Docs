@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
         if (oKiosk.Inactive == 1) return BadRequest(new { message = "ตู้ Kiosk นี้ไม่เปิดให้ใช้งาน" });
 
         //มี token = user ถูกใช้แล้ว
-        if (!string.IsNullOrEmpty(oKiosk.KioskToken) && !sso) return BadRequest(new { message = "User นี้ถูกใช้งานกับตู้ Kiosk เครื่องอื่นอยู่แล้ว" });
+        //if (!string.IsNullOrEmpty(oKiosk.KioskToken) && !sso) return BadRequest(new { message = "User นี้ถูกใช้งานกับตู้ Kiosk เครื่องอื่นอยู่แล้ว" });
 
         var KioskHomeDelaySec = _context.Variables.Where(v => v.Name == "kiosk_home_delay_sec").Select(v => v.Value).FirstOrDefault();
         var KioskWaitBrokenCardSec = _context.Variables.Where(v => v.Name == "kiosk_wait_broken_card_sec").Select(v => v.Value).FirstOrDefault();
@@ -85,14 +85,16 @@ public class AuthController : ControllerBase
             });
         }
 
-        return Ok(new { 
-            message = "✅ Login success", username, 
-            oKiosk.KioskCode, 
-            KioskHomeDelaySec, 
-            KioskWaitBrokenCardSec, 
-            KioskReadStepSec, 
-            KioskReadStepScanSec, 
-            HasToken = !string.IsNullOrEmpty(oKiosk.KioskToken) 
+        return Ok(new
+        {
+            message = "✅ Login success",
+            username,
+            oKiosk.KioskCode,
+            KioskHomeDelaySec,
+            KioskWaitBrokenCardSec,
+            KioskReadStepSec,
+            KioskReadStepScanSec,
+            HasToken = !string.IsNullOrEmpty(oKiosk.KioskToken)
         });
     }
 
