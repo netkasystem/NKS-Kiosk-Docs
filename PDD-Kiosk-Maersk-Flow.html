@@ -1143,12 +1143,12 @@
     <tr>
       <td><code>kiosk_ndpp_privacy_notice</code></td>
       <td>URL ของ Privacy Notice จาก NDPP — ระบบจะ parse key แล้ว proxy เรียก <code>GetPolicyOuByKey</code> ดึง HTML content มาแสดงใน Step3</td>
-      <td><code>http://10.1.8.119/policy/policyview?type=policyou&amp;key=XXX</code></td>
+      <td><code>https://&lt;NDPP_DOMAIN&gt;/policy/policyview?type=policyou&amp;key=XXX</code></td>
     </tr>
     <tr>
       <td><code>kiosk_ndpp_preference_consent</code></td>
       <td>URL ของ Consent Form จาก NDPP — ถ้ามีค่า จะใช้แทน <code>kiosk_integrate_ndpp</code> table ใน Step17</td>
-      <td><code>http://10.1.8.119/admin/PreferenceConsentFormView?key=XXX</code></td>
+      <td><code>https://&lt;NDPP_DOMAIN&gt;/admin/PreferenceConsentFormView?key=XXX</code></td>
     </tr>
     <tr>
       <td><code>kiosk_ndpp_integrate</code></td>
@@ -1163,7 +1163,7 @@
     <tr>
       <td><code>kiosk_ndpp_integrate_api</code></td>
       <td>Base URL ของ NDPP API สำหรับสร้าง Consent Form URL</td>
-      <td><code>http://10.1.8.119/admin/PreferenceConsentFormView</code></td>
+      <td><code>https://&lt;NDPP_DOMAIN&gt;/admin/PreferenceConsentFormView</code></td>
     </tr>
   </table>
 
