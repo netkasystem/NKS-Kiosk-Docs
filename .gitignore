@@ -36,4 +36,5 @@ BuildVersion.cs
 
 # Kiosk runtime files
 NThaiSmartWeb/wwwroot/uploads/
-NThaiSmartWeb/wwwroot/face-api.js-models/
+NThaiSmartWeb/wwwroot/face-api.js-models/*
+!NThaiSmartWeb/wwwroot/face-api.js-models/tiny_face_detector/
