@@ -14,6 +14,7 @@ for details on configuring this project to bundle and minify static web assets. 
     font-weight: bold;
     font-style: normal !important;
 }
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -96,7 +97,8 @@ button.accept-policy {
         transform: rotate(360deg);
     }
 }
-body {
+
+.body-login {
     background: linear-gradient(#021B79);
     height: 100vh;
     display: flex;
@@ -142,18 +144,20 @@ body {
     border: none;
 }
 
-.form-control_login:active {
-    border-radius: 20px;
-    padding: 10px 30px;
-    font-size: 3rem;
-    color: #000000;
-    width: 100%;
-    margin-top: 20px;
-}
+    .form-control_login:active {
+        border-radius: 20px;
+        padding: 10px 30px;
+        font-size: 3rem;
+        color: #000000;
+        width: 100%;
+        margin-top: 20px;
+    }
+
 .form-check {
     margin-top: 26px;
     margin-left: 26px;
 }
+
 .form-check-input {
     margin-top: 6px;
     font-size: 2rem;
@@ -176,7 +180,6 @@ body {
     color: #ffff;
     padding: 30px 30px;
     margin-top: 60px;
-
 }
 
     .login_button:hover {
@@ -193,6 +196,7 @@ body {
 .alert-danger {
     border-radius: 10px;
 }
+
 .video-bg {
     position: fixed;
     top: 0px;
