@@ -217,26 +217,21 @@ window.Step12 = {
         } catch (error) {
             alert(error.message);
         }
-    }
-};
-
-window.Step13 = {
-    init: () => {
-        console.log("Step 13: Success (without card)");
-        let counter = getKioskHomeDelaySec(); //from variable [kiosk_home_delay_sec];
-        const countdownEl = document.getElementById("countdown-end");
-
-        const interval = setInterval(() => {
-            counter--;
-            if (countdownEl) {
-                countdownEl.textContent = counter;
-            }
-
-            if (counter <= 0) {
-                clearInterval(interval);
-                next_page("/Step/Step1");
-            }
-        }, 1000);
+        //get integrate ndpp by kiosk
+        try {
+            const kioskCode = GetKioskCode();
+            const response = fetch(`/api/KioskApi/GetIntegrateNdppByKiosk?kioskCode=${encodeURIComponent(kioskCode)}`, {
+                method: 'GET',
+                headers: { "Content-Type": "application/json", }
+            }).then(response => {
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                return response.json();
+            }).then(data => {
+                setIntegrateNdppByKiosk(data);
+            })
+        } catch (error) {
+            alert(error.message);
+        }
     }
 };
 
@@ -271,23 +266,15 @@ window.Step14 = {
                 })
             });
 
-            const message = await response.text();
-
+            let result = {};
+            try { result = await response.json(); } catch { }
             if (!response.ok) {
-                throw new Error(message);
+                throw new Error(result?.message ?? "บันทึกไม่สำเร็จ");
             } else {
-
-                const getIntegrateNdppData = getIntegrateNdpp();
-                if (getIntegrateNdppData?.length > 0) {
-                    //go to integrate ndpp page
-                    window.location.href = "/Step/Step17";
-                }
-                else {
-                    next_page("/Step/Step13", 1);
-                }
-               
-
-
+                cardData.photo_path = result.photo_path ?? "";
+                cardData.face_capture_path = result.face_capture_path ?? "";
+                setCardData(cardData);
+                next_page();
             }
         } catch (error) {
             alert(error.message);
@@ -295,9 +282,41 @@ window.Step14 = {
     }
 };
 
-window.Step15 = {
-    init: () => {
 
+window.Step17 = {
+    init: () => {
+        const data = getIntegrateNdpp();
+        if (!data?.length) { next_page(); return; }
+        document.getElementById("step17-content").style.display = "";
+    }
+};
+
+window.Step18 = {
+    init: () => {
+        const data = getIntegrateNdppByKiosk();
+        if (!data?.length) { next_page(); return; }
+        document.getElementById("step18-content").style.display = "";
+    }
+};
+
+
+window.StepEnd = {
+    init: () => {
+        console.log("StepEnd: Success (without card)");
+        let counter = getKioskHomeDelaySec(); //from variable [kiosk_home_delay_sec];
+        const countdownEl = document.getElementById("countdown-end");
+
+        const interval = setInterval(() => {
+            counter--;
+            if (countdownEl) {
+                countdownEl.textContent = counter;
+            }
+
+            if (counter <= 0) {
+                clearInterval(interval);
+                next_page("/Step/Step1");
+            }
+        }, 1000);
     }
 };
 
@@ -308,7 +327,7 @@ window.onCardInserted = () => {
 
 window.withoutCard = () => {
     if (location.pathname == "/Step/Step6") {
-    } else if (location.pathname == "/Step/Step13") {
+    } else if (location.pathname == "/Step/StepEnd") {
         next_page("/Step/Step1");
     } else if (location.pathname != "/Step/Step1") {
         showCountdownAndRedirect(10);

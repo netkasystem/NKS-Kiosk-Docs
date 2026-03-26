@@ -3,7 +3,9 @@
         $("#loading").show();
     },
     hideLoading: function () {
-        $("#loading").hide();
+        setTimeout(function () {
+            $("#loading").hide();
+        }, 2000);
     },
 
     get: function (url, successCallback, errorCallback) {

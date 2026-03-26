@@ -7,6 +7,7 @@ let faceDetected = false;
 let stableSince = null;
 
 let canPlayFocusAudio = true;
+let tempCanvas = null; // reuse canvas แทนสร้างใหม่ทุก frame
 
 const video = document.getElementById("videoInput");
 const canvas = document.getElementById("faceCanvas");
@@ -59,7 +60,7 @@ async function detectLoop() {
         stableSince = null;
 
         audioLook.pause(); // หยุดเสียงนับถอยหลัง ถ้ากำลังเล่นอยู่
-        audioLook.currentTime = 3000;
+        audioLook.currentTime = 0;
 
         if (audioFocus.paused) { // เช็คว่าเสียงยังไม่ได้เล่นอยู่
             audioFocus.play(); // เล่นเสียง "ให้อยู่ในกรอบ"
@@ -95,12 +96,12 @@ async function detectLoop() {
     // เช็กเงื่อนไข
     const expectedCenterX = 0.5; // ตำแหน่ง X ที่คุณอยากให้หน้ากลางจอ
     const expectedCenterY = 0.6; // ตำแหน่ง Y ที่คุณอยากให้หน้ากลางจอ
-    const toleranceX = 0.07;
-    const toleranceY = 0.07;
+    const toleranceX = 0.10;
+    const toleranceY = 0.10;
 
     const isCentered = Math.abs(faceCenterX_ratio - expectedCenterX) < toleranceX
         && Math.abs(faceCenterY_ratio - expectedCenterY) < toleranceY;
-    const isBigEnough = faceRatio > 0.09 && faceRatio < 0.15
+    const isBigEnough = faceRatio > 0.06 && faceRatio < 0.22
 
     // ✅ log ทุกอย่าง
     //console.log("📷 VIDEO SIZE:", videoWidth, videoHeight);
@@ -110,14 +111,16 @@ async function detectLoop() {
     //console.log("📐 faceAreaRatio:", faceArea_ratio.toFixed(4));
     //console.log("✅ isCentered:", isCentered, "isBigEnough:", isBigEnough);
 
-    // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด
-    const tempCanvas = document.createElement('canvas');
+    // วาดภาพจาก video ลง canvas ชั่วคราว เพื่อตรวจความชัด (reuse canvas)
+    if (!tempCanvas) {
+        tempCanvas = document.createElement('canvas');
+        tempCanvas.width = video.videoWidth;
+        tempCanvas.height = video.videoHeight;
+    }
     const ctx = tempCanvas.getContext('2d');
-    tempCanvas.width = video.videoWidth;
-    tempCanvas.height = video.videoHeight;
     ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
-    const isSharp = isImageSharpEnough(tempCanvas);
+    const isSharp = isImageSharpEnough(tempCanvas, box);
     if (!isCentered || !isBigEnough || !isSharp) {
         if (!audioLook.paused) {
             audioLook.pause();
@@ -126,9 +129,9 @@ async function detectLoop() {
 
         if (!isSharp) {
             showError("⚠️ ภาพไม่ชัด กรุณาอยู่นิ่ง และใกล้กล้อง");
-        } else if (faceRatio < 0.09) {
+        } else if (faceRatio < 0.06) {
             showError("⚠️ กรุณาขยับเข้ามาใกล้กล้องมากขึ้น");
-        } else if (faceRatio > 0.15) {
+        } else if (faceRatio > 0.22) {
             showError("⚠️ กรุณาถอยหลังออกจากกล้องมากขึ้น");
         } else if (!isCentered) {
             showError("⚠️ กรุณาขยับให้ใบหน้าอยู่กลางจอ");
@@ -145,12 +148,9 @@ async function detectLoop() {
     if (!stableSince) stableSince = now;
 
     const secondsPassed = Math.floor((now - stableSince) / 1000);
-    const secondsRemaining = 2 - secondsPassed;
+    const secondsRemaining = 1 - secondsPassed;
 
-    if (secondsRemaining > 1) {
-        showSuccess(`✅ รอสักครู่... ${secondsRemaining}`);
-        if (audioLook.paused) audioLook.play();
-    } else if (secondsRemaining > 0) {
+    if (secondsRemaining > 0) {
         showSuccess(`✅ รอสักครู่... ${secondsRemaining}`);
         showFrame("success");
 
@@ -160,7 +160,7 @@ async function detectLoop() {
         captureFrameToBase64(); // 👈 แยกฟังก์ชันมาเก็บภาพ
     } else {
         faceDetected = true;
-        // ครบ 2 วินาทีแล้ว → ไปขั้นต่อไป
+        // ครบ 1 วินาทีแล้ว → ไปขั้นต่อไป
         audioLook.pause();
         audioLook.currentTime = 0;
 
@@ -180,44 +180,17 @@ async function detectLoop() {
 }
 
 function captureFrameToBase64() {
-    // แสดงภาพนิ่ง
     const canvas = document.getElementById("faceCanvas");
     const cctx = canvas.getContext("2d");
 
-    // ขนาดจอแสดงผลจริง
-    const rect = video.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+    // ใช้ขนาด native ของกล้องเต็มๆ ไม่บีบตาม display
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
 
-    // ขนาดกล้องจริง (อาจเป็น 1280x720 หรือ 640x480)
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
+    cctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // คำนวณอัตราส่วนของ container
-    const aspectCanvas = canvas.width / canvas.height;
-    const aspectVideo = videoWidth / videoHeight;
-
-    let sx, sy, sWidth, sHeight;
-
-    if (aspectVideo > aspectCanvas) {
-        // กล้องกว้างเกิน → ครอปด้านข้าง
-        sHeight = videoHeight;
-        sWidth = videoHeight * aspectCanvas;
-        sx = (videoWidth - sWidth) / 2;
-        sy = 0;
-    } else {
-        // กล้องสูงเกิน → ครอปด้านบนล่าง
-        sWidth = videoWidth;
-        sHeight = videoWidth / aspectCanvas;
-        sx = 0;
-        sy = (videoHeight - sHeight) / 2;
-    }
-
-    // วาดเฉพาะส่วนที่ครอปลง canvas
-    cctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-
-    // ✅ แปลงภาพใน canvas เป็น base64
-    const base64Image = canvas.toDataURL("image/png"); // หรือ "image/jpeg"
+    // jpeg quality 0.92 — คมชัดพอ ขนาดไฟล์เล็กกว่า png มาก
+    const base64Image = canvas.toDataURL("image/jpeg", 0.92);
     setCapture(base64Image);
 }
 
@@ -226,25 +199,28 @@ function showFrame(type) {
     dangerFrame.style.display = type === 'danger' ? 'block' : 'none';
     successFrame.style.display = type === 'success' ? 'block' : 'none';
 }
-function isImageSharpEnough(canvas, threshold = 20) {
+
+function isImageSharpEnough(canvas, box, threshold = 20) {
     const ctx = canvas.getContext('2d');
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const gray = [];
 
-    // แปลงเป็น grayscale
-    for (let i = 0; i < imageData.data.length; i += 4) {
+    // เช็คเฉพาะบริเวณใบหน้า ไม่ต้องวนทั้งภาพ
+    const x = Math.max(0, Math.floor(box.x));
+    const y = Math.max(0, Math.floor(box.y));
+    const w = Math.min(canvas.width - x, Math.floor(box.width));
+    const h = Math.min(canvas.height - y, Math.floor(box.height));
+    const imageData = ctx.getImageData(x, y, w, h);
+
+    // sample ทุก 4 pixel เพื่อลด load
+    const step = 4;
+    let sum = 0, sumSq = 0, count = 0;
+    for (let i = 0; i < imageData.data.length; i += 4 * step) {
         const avg = (imageData.data[i] + imageData.data[i + 1] + imageData.data[i + 2]) / 3;
-        gray.push(avg);
+        sum += avg;
+        sumSq += avg * avg;
+        count++;
     }
-
-    // คำนวณความแตกต่างของ pixel เพื่อนิยามความชัด (ความแปรปรวน)
-    let sum = 0, sumSq = 0;
-    for (const g of gray) {
-        sum += g;
-        sumSq += g * g;
-    }
-    const mean = sum / gray.length;
-    const variance = sumSq / gray.length - mean * mean;
+    const mean = sum / count;
+    const variance = sumSq / count - mean * mean;
 
     return variance > threshold; // ยิ่งมากยิ่งชัด
 }

@@ -93,8 +93,25 @@ const CountdownInterval = function (ele, t, func) {
 
 }
 
+const findNextStep = async (current) => {
+    const maxStep = 30;
+    for (let i = current + 1; i <= maxStep; i++) {
+        try {
+            const res = await fetch(`/Step/Step${i}`, { method: 'HEAD' });
+            if (res.ok) return `/Step/Step${i}`;
+        } catch (_) { }
+    }
+    return "/Step/StepEnd";
+};
+
 let timeoutNextPage;
-const next_page = (href, time_sec = 0) => { timeoutNextPage = setTimeout(() => { window.location.href = href; }, time_sec * 1000); }
+const next_page = async (href, time_sec = 0) => {
+    if (!href && location.pathname.startsWith("/Step/Step")) {
+        const match = location.pathname.match(/\/Step\/Step(\d+)/);
+        href = match ? await findNextStep(parseInt(match[1])) : "/Step/StepEnd";
+    }
+    timeoutNextPage = setTimeout(() => { window.location.href = href; }, time_sec * 1000);
+}
 const cancelNextPage = () => { if (timeoutNextPage) { clearTimeout(timeoutNextPage); console.log("⛔ ยกเลิกการเปลี่ยนหน้าแล้ว"); } };
 
 //Session Storage
@@ -120,6 +137,10 @@ const getCustomForm = () => sessionStorage.getItem("CustomForm")
 const setIntegrateNdpp = (c) => sessionStorage.setItem("IntegrateNdpp", JSON.stringify(c));
 const getIntegrateNdpp = () => JSON.parse(sessionStorage.getItem("IntegrateNdpp") ?? null);
 const removeIntegrateNdpp = () => sessionStorage.removeItem("IntegrateNdpp");
+
+const setIntegrateNdppByKiosk = (c) => sessionStorage.setItem("IntegrateNdppByKiosk", JSON.stringify(c));
+const getIntegrateNdppByKiosk = () => JSON.parse(sessionStorage.getItem("IntegrateNdppByKiosk") ?? null);
+const removeIntegrateNdppByKiosk = () => sessionStorage.removeItem("IntegrateNdppByKiosk");
 
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
