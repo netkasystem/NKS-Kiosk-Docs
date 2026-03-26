@@ -1,0 +1,36 @@
+# =============================================================
+# Redis — แยก compose เพื่อไม่ให้ down ตาม web
+# เริ่มก่อน web: docker compose -f docker-compose-redis.yml up -d
+# =============================================================
+
+version: "3.3"
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: ${REDIS_CONTAINER_NAME:-Netka.Kiosk.Redis}
+    restart: always
+    command: redis-server --appendonly yes
+    env_file: .env
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - netka-kiosk-shared
+
+volumes:
+  redis_data:
+
+networks:
+  netka-kiosk-shared:
+    name: netka-kiosk-shared
+    driver: bridge

@@ -1,0 +1,24 @@
+# =============================================================
+# เครื่อง LB — nginx Load Balancer
+# แก้ IP ใน .env: WEB1_IP, WEB2_IP
+# =============================================================
+
+version: "3.3"
+
+services:
+  load-balancer:
+    image: nginx:alpine
+    container_name: Netka.Kiosk.LoadBalancer
+    restart: always
+    ports:
+      - "5201:80"
+    environment:
+      - WEB1_IP=${WEB1_IP}
+      - WEB2_IP=${WEB2_IP}
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

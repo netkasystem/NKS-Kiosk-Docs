@@ -1,0 +1,31 @@
+# =============================================================
+# เครื่อง Web — Netka Kiosk Web (หลาย instance)
+# ใช้ docker-compose.yml เดียวกันทุกเครื่อง แก้ .env ตาม IP
+# Redis อยู่บนเครื่อง Storage — ชี้ผ่าน REDIS_CONNECTION ใน .env
+# =============================================================
+
+version: "3.3"
+
+services:
+  netka-kiosk-web:
+    image: netkaofficialhub/nthaismartweb:${IMAGE_TAG:-latest}
+    container_name: Netka.Kiosk.Web
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      - TZ=Asia/Bangkok
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Production
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

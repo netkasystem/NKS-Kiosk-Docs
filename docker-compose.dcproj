@@ -4,10 +4,10 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>6516bfdf-7649-441a-b86e-70471bc56d66</ProjectGuid>
+    <ProjectGuid>bbd574d4-4b0a-4562-ab48-c329fb70dfa6</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>n-thaismart-web</DockerServiceName>
+    <DockerServiceName>nthaismartweb</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

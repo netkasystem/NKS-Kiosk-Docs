@@ -1,11 +1,11 @@
 services:
-  n-thaismart-web:
-    image: ${DOCKER_REGISTRY-}nthaismartweb
+  nthaismartweb:
+    image: netka-kiosk-web
     build:
       context: .
       dockerfile: NThaiSmartWeb/Dockerfile
     ports:
-      - "5201:5201"  # Host:Container
+      - "5201:5201"
     environment:
       - ASPNETCORE_URLS=http://+:5201
       - ASPNETCORE_ENVIRONMENT=Development
