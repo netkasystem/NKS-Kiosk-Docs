@@ -33,3 +33,7 @@ bld/
 wwwroot/lib/
 lib/
 BuildVersion.cs
+
+# Kiosk runtime files
+NThaiSmartWeb/wwwroot/uploads/
+NThaiSmartWeb/wwwroot/face-api.js-models/
