@@ -1,0 +1,235 @@
+@{
+    ViewData["Title"] = "Consent Form";
+    ViewBag.HideHeader = true;
+    ViewBag.HideFooter = true;
+}
+
+<body class="bg-light">
+    <div class="container py-4" id="step18-content" style="display:none">
+
+        <!-- Loading State -->
+        <div id="consent-loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-3 text-muted">กำลังโหลดข้อมูล...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="consent-error" style="display:none;" class="alert alert-danger"></div>
+
+        <!-- Consent Form -->
+        <div id="consent-form-container" style="display:none;">
+            <form id="consent-form" class="p-3 border rounded bg-white shadow-sm">
+
+                <!-- Header: ชื่อองค์กร / กิจกรรม -->
+                <div class="mb-4">
+                    <p id="org-unit" class="text-muted mb-0 small"></p>
+                    <p id="entity-process" class="text-muted mb-2 small"></p>
+                    <h3 id="activity-title" class="mb-1"></h3>
+                    <p id="service-name" class="text-muted small"></p>
+                </div>
+
+                <!-- Section 01 ข้อมูลส่วนบุคคล -->
+                <div class="mb-4">
+                    <h5 class="pb-2 border-bottom text-primary">01 กรอกข้อมูลส่วนบุคคล</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="firstname" class="form-label">ชื่อจริง<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="firstname" name="firstname" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastname" class="form-label">นามสกุล<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="email" class="form-label">อีเมล</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 02 รายละเอียดและเงื่อนไขการยินยอม -->
+                <div class="mb-4">
+                    <h5 class="pb-2 border-bottom text-primary">02 รายละเอียดและเงื่อนไขในการยินยอม</h5>
+                    <div id="activity-content" class="mb-3"></div>
+                </div>
+
+                <!-- Privacy Notice Link -->
+                <div id="privacy-notice-wrap" class="mb-4" style="display:none;">
+                    <a id="privacy-notice-link" href="#" target="_blank" class="small">นโยบายความเป็นส่วนตัว</a>
+                </div>
+
+                <button type="submit" class="btn btn-success px-4">ยืนยัน</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const loadingEl     = document.getElementById("consent-loading");
+            const errorEl       = document.getElementById("consent-error");
+            const formContainer = document.getElementById("consent-form-container");
+
+            function showError(msg) {
+                loadingEl.style.display = "none";
+                errorEl.textContent = msg;
+                errorEl.style.display = "block";
+            }
+
+            let integrateNdppId = "";
+
+            try {
+                // Step 1: ดึง URL เต็มจากหลังบ้าน (variable: kiosk_consent_form_url)
+                const kioskCode = window.GetKioskCode();
+                const urlRes = await fetch(`/api/KioskApi/GetConsentURL?kioskCode=${encodeURIComponent(kioskCode)}`);
+                if (!urlRes.ok) throw new Error("ดึง URL ไม่สำเร็จ: " + urlRes.status);
+                const { url: consentUrl, integrateNdppId: ndppId } = await urlRes.json();
+                integrateNdppId = ndppId || "";
+
+                if (!consentUrl) {
+                    window.location.href = "/Step/StepEnd";
+                    return;
+                }
+
+                // Step 2: เรียก API PreferenceFormToken ผ่าน proxy
+                const proxyUrl = `/api/ProxyApi/proxy?url=${encodeURIComponent(consentUrl)}`;
+
+                const formRes = await fetch(proxyUrl);
+                if (!formRes.ok) throw new Error("โหลดฟอร์ม Consent ไม่สำเร็จ: " + formRes.status);
+
+                const text = await formRes.text();
+                const data = JSON.parse(text);
+
+                renderForm(data);
+            } catch (err) {
+                console.error(err);
+                showError("เกิดข้อผิดพลาด: " + err.message);
+            }
+
+            function renderForm(data) {
+                // องค์กร / หน่วยงาน
+                const orgUnit = data.OrganizationUnitTh || data.OrganizationUnitEn || "";
+                const entity  = data.EntityTh || data.EntityEn || "";
+                const process = data.BusinessProcessTh || data.BusinessProcessEn || "";
+
+                if (orgUnit) {
+                    document.getElementById("org-unit").textContent = orgUnit;
+                }
+                if (entity || process) {
+                    document.getElementById("entity-process").textContent = [entity, process].filter(Boolean).join(" / ");
+                }
+
+                // ชื่อกิจกรรม
+                document.getElementById("activity-title").textContent =
+                    data.ActivityNameTh || data.ActivityNameEn || data.ServiceNameTh || data.ServiceNameEn || "Consent Form";
+
+                document.getElementById("service-name").textContent =
+                    data.ServiceNameTh || data.ServiceNameEn || "";
+
+                // เนื้อหา (แทนที่ {PurposeOption} ด้วย div สำหรับ render checkbox)
+                const replacedContent = (data.content || "")
+                    .replace("{PurposeOption}",    `<div id="purpose-placeholder"></div>`)
+                    .replace("{SubPurposeOption}", `<div id="sub-purpose-placeholder"></div>`);
+                document.getElementById("activity-content").innerHTML = replacedContent;
+
+                // สร้าง checkbox จาก purpose_option
+                const placeholder    = document.getElementById("purpose-placeholder");
+                const subPlaceholder = document.getElementById("sub-purpose-placeholder");
+
+                (data.purpose_option || []).forEach(purpose => {
+                    const div = document.createElement("div");
+                    div.classList.add("form-check", "mb-2");
+                    div.innerHTML = `
+                        <input class="form-check-input" type="checkbox"
+                               id="purpose-${purpose.purpose_id}"
+                               name="purpose"
+                               value="${purpose.purpose_id}"
+                               ${purpose.selected    ? "checked"  : ""}
+                               ${purpose.is_required ? "required" : ""}>
+                        <label class="form-check-label" for="purpose-${purpose.purpose_id}">
+                            ${purpose.purpose_th || purpose.purpose_en}
+                        </label>
+                    `;
+                    if (purpose.purpose_type === "Standard") {
+                        placeholder    && placeholder.appendChild(div);
+                    } else {
+                        subPlaceholder && subPlaceholder.appendChild(div);
+                    }
+                });
+
+                // Privacy Notice link
+                if (data.privacy_notice_key) {
+                    document.getElementById("privacy-notice-link").href = data.privacy_notice_key;
+                    document.getElementById("privacy-notice-wrap").style.display = "block";
+                }
+
+                // ใส่ข้อมูลจาก ds_* (data subject) ถ้ามีจาก API
+                if (data.ds_name)     document.getElementById("firstname").value = data.ds_name;
+                if (data.ds_lastname) document.getElementById("lastname").value  = data.ds_lastname;
+                if (data.ds_email)    document.getElementById("email").value     = data.ds_email;
+
+                // fallback จาก cardData (บัตรประชาชน)
+                const cardData = typeof getCardData === "function" ? getCardData() : null;
+                if (cardData?.thaiPersonalInfo) {
+                    if (!document.getElementById("firstname").value)
+                        document.getElementById("firstname").value = cardData.thaiPersonalInfo.firstName || "";
+                    if (!document.getElementById("lastname").value)
+                        document.getElementById("lastname").value  = cardData.thaiPersonalInfo.lastName  || "";
+                }
+
+                // แสดงฟอร์ม
+                loadingEl.style.display = "none";
+                formContainer.style.display = "block";
+            }
+
+            // Submit
+            document.getElementById("consent-form").addEventListener("submit", async function (e) {
+                e.preventDefault();
+
+                const cardData  = typeof getCardData === "function" ? getCardData() : null;
+                const firstname = document.getElementById("firstname").value.trim();
+                const lastname  = document.getElementById("lastname").value.trim();
+                const email     = document.getElementById("email").value.trim();
+
+                const selectedPurposes = Array.from(
+                    document.querySelectorAll("#consent-form input[name='purpose']:checked")
+                ).map(input => parseInt(input.value));
+
+                // เก็บรายละเอียด purpose ทุกตัว (ทั้ง checked และ unchecked)
+                const purposeOptionDetail = Array.from(
+                    document.querySelectorAll("#consent-form input[name='purpose']")
+                ).map(input => ({
+                    PurposeNameId:  input.value,
+                    PurposeName:    input.nextElementSibling?.textContent?.trim() ?? "",
+                    PurposeChecked: input.checked
+                }));
+
+                const payload = {
+                    Firstname:           firstname || cardData?.thaiPersonalInfo?.firstName,
+                    Lastname:            lastname  || cardData?.thaiPersonalInfo?.lastName,
+                    Email:               email,
+                    IntegrateNdppId:     integrateNdppId,
+                    PurposeOption:       selectedPurposes,
+                    PurposeOptionDetail: purposeOptionDetail
+                };
+                const encrypPayload = encrypt(payload);
+
+                try {
+                    const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ EncryptedINDPPString: encrypPayload })
+                    });
+
+                    if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
+
+                    window.location.href = "/Step/StepEnd";
+                } catch (err) {
+                    console.error(err);
+                    alert("เกิดข้อผิดพลาดในการบันทึก");
+                }
+            });
+        });
+    </script>
+
+</body>

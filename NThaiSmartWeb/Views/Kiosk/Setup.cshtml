@@ -10,47 +10,52 @@
         <h1> การติดตั้ง </h1>
     </div>
     <div class="glass-step-vertical">
+        @* <div class="glass-step-box"> *@
+        @*     <div class="step-number">2</div> *@
+        @*     <div class="step-label">ดาวน์โหลดไฟล์</div> *@
+        @*     <button type="button" class="script-button" ng-click="openZoneModal()"><img src="/images/icons/download.svg" class="download_icon" /> Docker Script</button> *@
+        @* </div> *@
+
         <div class="glass-step-box">
             <div class="step-number">1</div>
-            <div class="step-label">ดาวน์โหลดไฟล์</div>
-            <button type="submit" class="script-button" ng-click="downloadFileSetup('setup-kiosk-install')"><img src="/images/icons/download.svg" class="download_icon" /> Kiosk Script</button>
-        </div>
-        <div class="glass-step-box">
-            <div class="step-number">2</div>
-            <div class="step-label">ดาวน์โหลดไฟล์</div>
-            <button type="button" class="script-button" ng-click="openZoneModal()"><img src="/images/icons/download.svg" class="download_icon" /> Docker Script</button>
-        </div>
-        @*
-    <div class="glass-step-box">
-      <div class="step-number">2</div>
-      <div class="step-label">ดาวน์โหลดไฟล์</div>
-      <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-config')"><img src="/images/icons/download.svg" class="download_icon" /> Docker Script</button>
-    </div>
-    *@
-        <div class="glass-step-box">
-            <div class="step-number">3</div>
             <div class="step-label">ปฏิบัติตามไฟล์</div>
             <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-manual')"><img src="/images/icons/download.svg" class="download_icon" />คู่มือการติดตั้ง</button>
         </div>
+
         <div class="glass-step-box">
-            <div class="step-number">4</div>
-            <div class="step-label">รีสตาร์ทเครื่อง</div>
+            <div class="step-number">2</div>
+            <div class="step-label">ดาวน์โหลดไฟล์</div>
+            <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-config')"><img src="/images/icons/download.svg" class="download_icon" />Config</button>
         </div>
+
+        <div class="glass-step-box">
+            <div class="step-number">3</div>
+            <div class="step-label">ดาวน์โหลดไฟล์</div>
+            <button type="submit" class="script-button" ng-click="downloadFileSetup('setup-kiosk-install')"><img src="/images/icons/download.svg" class="download_icon" />
+                <div>Setup</div>
+                <span>(กรณี เครื่องเปล่า)</span>
+            </button>
+        </div>
+
+        @* <div class="glass-step-box">
+        @*     <div class="step-number">4</div> *@
+        @*     <div class="step-label">รีสตาร์ทเครื่อง</div> *@
+        @* </div> *@
     </div>
 
     <div id="zoneModal" class="zone-modal" aria-hidden="true">
         <div class="zone-modal-backdrop" ng-click="closeZoneModal()"></div>
         <div class="zone-modal-content" role="dialog" aria-labelledby="zoneModalTitle" ng-click="event.stopPropagation()">
             <button class="close-btn" aria-label="ปิด" ng-click="closeZoneModal()">&times;</button>
-            
+
             <div class="modal-text-header">
                 <h2 id="zoneModalTitle"> กรุณาดาวน์โหลด </h2>
             </div>
-            
+
             <div class="modal-text-h1">
                 <h1 class="modal-text-h1"> ตาม Zone พื้นที่ที่ต้องการติดตั้ง </h1>
             </div>
-            
+
             <div class="zone-buttons">
                 <div class="zone-card" ng-repeat="r in Regions" data-zone="{{r.RegionID}}">
                     <div class="zone-title">{{r.Title}}</div>
@@ -66,7 +71,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content zone-modal-content">
                 <button class="close-btn" aria-label="ปิด" data-bs-dismiss="modal">&times;</button>
-                
+
                 <div class="modal-text-header">
                     <h2 id="kioskModalLabel"> เลือก Kiosk  </h2>
                 </div>

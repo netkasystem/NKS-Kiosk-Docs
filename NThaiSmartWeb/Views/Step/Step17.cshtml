@@ -5,7 +5,7 @@
 }
 
 <body class="bg-light">
-    <div class="container py-4">
+    <div class="container py-4" id="step17-content" style="display:none">
 
         <!-- Card List -->
         <div id="ndpp-container" class="row g-3"></div>
@@ -91,6 +91,7 @@
             const cardData = getCardData();
             let ndppId = 0;
             let url = "";
+            let ndppFormData = null;
             // เปิดหน้าใหม่เมื่อกดปุ่ม
             container.addEventListener("click", async function(e) {
                 if (e.target.classList.contains("btn-open")) {
@@ -120,6 +121,7 @@
 
                         // 🔗 ไปที่หน้า NDPP (redirect หรือเปิด tab ใหม่)
                         if (data) {
+                            ndppFormData = data;
                             showNdppForm(data);
                         } else {
                             alert("ไม่พบ URL ของ NDPP");
@@ -139,10 +141,6 @@
 
                 // แสดงชื่อกิจกรรม
                 title.textContent = data.ActivityNameTh || data.ServiceNameTh || "NDPP Form";
-
-
-
-
                     // ใส่ content โดยแทนที่ {PurposeOption} ด้วย div ว่างๆ ที่เราจะ render
                     const replacedContent = data.content.replace(
                         "{PurposeOption}",
@@ -210,15 +208,31 @@
                     document.querySelectorAll("#ndpp-form input[name='purpose']:checked")
                 ).map(input => parseInt(input.value));
 
+                // เก็บรายละเอียด purpose ทุกตัว (ทั้ง checked และ unchecked)
+                const purposeOptionDetail = Array.from(
+                    document.querySelectorAll("#ndpp-form input[name='purpose']")
+                ).map(input => ({
+                    PurposeNameId:  input.value,
+                    PurposeName:    input.nextElementSibling?.textContent?.trim() ?? "",
+                    PurposeChecked: input.checked
+                }));
+
                 // เตรียม payload
                 const payload = {
-                    Firstname: firstname || cardData.thaiPersonalInfo.firstName,
-                    Lastname: lastname  || cardData.thaiPersonalInfo.lastName,
-                    Email: email,
-                    IntegrateNdppId: ndppId,
-                    IntegrateUrl: url,
-                    PurposeOption: selectedPurposes
-                }; 
+                    Firstname:           firstname || cardData.thaiPersonalInfo.firstName,
+                    Lastname:            lastname  || cardData.thaiPersonalInfo.lastName,
+                    Email:               email,
+                    IntegrateNdppId:     ndppId,
+                    IntegrateUrl:        url,
+                    PurposeOption:       selectedPurposes,
+                    PurposeOptionDetail: purposeOptionDetail,
+                    NdppFormData:        JSON.stringify(ndppFormData),
+                    citizenID:           cardData.citizenID        ?? "",
+                    fullNameTH:          cardData.fullNameTH       ?? "",
+                    fullNameEN:          cardData.fullNameEN       ?? "",
+                    photo_path:          cardData.photo_path       ?? "",
+                    face_capture_path:   cardData.face_capture_path ?? ""
+                };
                 const encrypPayload = encrypt(payload);
                 try {
                     const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
@@ -232,14 +246,13 @@
                     if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
 
                     const result = await response.json();
-                   
 
                     // กลับไปหน้า list
                     // document.getElementById("ndpp-form-container").style.display = "none";
                     // document.getElementById("ndpp-container").style.display = "flex";
                     
                     // สิ้นสุด
-                    window.location.href = "/Step/Step13";
+                    window.location.href = "/Step/StepEnd";
 
                 } catch (err) {
                     console.error(err);

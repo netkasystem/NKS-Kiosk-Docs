@@ -10,27 +10,20 @@ public class StepController : BaseController
     }
 
     public IActionResult Step1() => View();
-
     public IActionResult Step2() => View();
-
     public IActionResult Step3() => View();
-
     public IActionResult Step4() => View();
-
     public IActionResult Step5() => View();
-
     public IActionResult Step6() => View();
-
     public IActionResult Step7() => View();
-
     public IActionResult Step8() => View();
     public IActionResult Step9() => View();
     public IActionResult Step10() => View();
     public IActionResult Step11() => View();
     public IActionResult Step12() => View();
-    public IActionResult Step13() => View();
     public IActionResult Step14() => View();
-    public IActionResult Step15() => View();
-    public IActionResult Step16() => View();
-    public IActionResult Step17() => View();
+public IActionResult Step17() => View();
+    public IActionResult Step18() => View();
+
+    public IActionResult StepEnd() => View();
 }
