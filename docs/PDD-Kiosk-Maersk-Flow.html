@@ -389,12 +389,12 @@
 
   <h3>Main Flow (New User)</h3>
   <p style="text-align:center; font-size:13px; color:#555;">
-    Welcome &rarr; Privacy Notice &rarr; Insert Card &rarr; Read Card &rarr; Face Capture &rarr; Confirm Data &rarr; <b>Consent Form</b> &rarr; Send to IoT &rarr; Complete
+    Welcome &rarr; Privacy Notice &rarr; Insert Card &rarr; Read Card &rarr; Face Capture &rarr; Confirm Data &rarr; <b>Consent Form</b> &rarr; Send to Netka Intelligent &rarr; Complete
   </p>
 
   <h3>Returning User Flow</h3>
   <p style="text-align:center; font-size:13px; color:#555;">
-    Welcome &rarr; Insert Card &rarr; Read Card &rarr; <b>Show Previous Consent</b> &rarr; Edit &amp; Re-submit &rarr; Send to IoT &rarr; Complete
+    Welcome &rarr; Insert Card &rarr; Read Card &rarr; <b>Show Previous Consent</b> &rarr; Edit &amp; Re-submit &rarr; Send to Netka Intelligent &rarr; Complete
   </p>
 
   <div class="note">
@@ -555,6 +555,10 @@
       </div>
       <div class="spec-box" style="flex:1;">
         <b>Description:</b> แจ้งให้ผู้ใช้ทราบก่อนเริ่มกระบวนการว่าตู้นี้มีการเก็บข้อมูลอะไรบ้าง<br>
+        <b>Data Source:</b> ดึง Privacy Notice จาก NDPP ผ่าน <code>GetPrivacyNotice</code> proxy API<br>
+        &nbsp;&nbsp;- เรียก <code>GetPolicyOuByKey</code> ด้วย key จาก variable <code>kiosk_ndpp_privacy_notice</code><br>
+        &nbsp;&nbsp;- แสดง HTML content จาก NDPP / ถ้าไม่มีจะแสดง fallback content เดิม<br>
+        &nbsp;&nbsp;- แสดง Loading spinner ระหว่างรอ API &rarr; disable checkbox จนกว่าจะโหลดเสร็จ<br>
         <b>PDPA Requirement:</b> ต้องแจ้งให้ทราบก่อนเก็บข้อมูล (Privacy Notice)<br>
         <b>Action:</b> กด "รับทราบ" เพื่อดำเนินการต่อ<br>
         <b>Navigation:</b> รับทราบ &rarr; Insert Card / ยกเลิก &rarr; Welcome<br>
@@ -863,8 +867,8 @@
         </div>
       </div>
       <div class="spec-box" style="flex:1;">
-        <b>Trigger:</b> ระบบตรวจพบว่าเลขบัตรนี้เคยลงทะเบียนแล้ว<br>
-        <b>Description:</b> แสดง consent ที่เคยให้ไว้ (ดึงจาก DB) พร้อมสถานะปัจจุบันของแต่ละข้อ<br>
+        <b>Trigger:</b> ระบบส่งชื่อ-นามสกุลไป NDPP API (<code>GetCheckDsExistConsentForm</code>) แล้วพบว่าเคยลงทะเบียนแล้ว (return DS ID &gt; 0)<br>
+        <b>Description:</b> แสดง consent ที่เคยให้ไว้ (ดึงจาก NDPP API) พร้อมสถานะปัจจุบันของแต่ละข้อ<br>
         <b>User Options:</b><br>
         &nbsp;&nbsp;- แก้ไข checkbox แล้วกด "บันทึกการแก้ไข" &rarr; ส่ง consent ใหม่ไป Netka Intelligent<br>
         &nbsp;&nbsp;- กด "ไม่เปลี่ยนแปลง" &rarr; ข้ามไป Completion<br>
@@ -964,21 +968,204 @@
 
   <h3>6.2 Payload to Netka Intelligent</h3>
   <div class="spec-box">
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Example</th>
+      </tr>
+      <tr>
+        <td>photo</td>
+        <td>string (base64)</td>
+        <td>ภาพบัตรประชาชน (base64 encoded)</td>
+        <td>"data:image/jpeg;base64,/9j/4AAQ..."</td>
+      </tr>
+      <tr>
+        <td>face_capture</td>
+        <td>string (base64)</td>
+        <td>ภาพถ่ายใบหน้า (base64 encoded)</td>
+        <td>"data:image/jpeg;base64,/9j/4AAQ..."</td>
+      </tr>
+      <tr>
+        <td>idcard</td>
+        <td>string</td>
+        <td>เลขบัตรประชาชน</td>
+        <td>"1234567890123"</td>
+      </tr>
+      <tr>
+        <td>fullNameTH</td>
+        <td>string</td>
+        <td>ชื่อ-นามสกุล ภาษาไทย</td>
+        <td>"นายทดสอบ ระบบ"</td>
+      </tr>
+      <tr>
+        <td>fullNameEN</td>
+        <td>string</td>
+        <td>ชื่อ-นามสกุล ภาษาอังกฤษ</td>
+        <td>"Mr.Todsob Rabob"</td>
+      </tr>
+      <tr>
+        <td>ActivityNameEn</td>
+        <td>string</td>
+        <td>ชื่อกิจกรรม (EN)</td>
+        <td>"Data Collection"</td>
+      </tr>
+      <tr>
+        <td>ActivityNameTh</td>
+        <td>string</td>
+        <td>ชื่อกิจกรรม (TH)</td>
+        <td>"การเก็บข้อมูล"</td>
+      </tr>
+      <tr>
+        <td>BusinessProcessEn</td>
+        <td>string</td>
+        <td>กระบวนการทางธุรกิจ (EN)</td>
+        <td>"Visitor Registration"</td>
+      </tr>
+      <tr>
+        <td>BusinessProcessTh</td>
+        <td>string</td>
+        <td>กระบวนการทางธุรกิจ (TH)</td>
+        <td>"ลงทะเบียนผู้มาติดต่อ"</td>
+      </tr>
+      <tr>
+        <td>EntityEn</td>
+        <td>string</td>
+        <td>หน่วยงาน (EN)</td>
+        <td>"Maersk Thailand"</td>
+      </tr>
+      <tr>
+        <td>EntityTh</td>
+        <td>string</td>
+        <td>หน่วยงาน (TH)</td>
+        <td>"เมอร์สก ประเทศไทย"</td>
+      </tr>
+      <tr>
+        <td>OrganizationUnitEn</td>
+        <td>string</td>
+        <td>แผนก/หน่วยย่อย (EN)</td>
+        <td>"Security"</td>
+      </tr>
+      <tr>
+        <td>OrganizationUnitTh</td>
+        <td>string</td>
+        <td>แผนก/หน่วยย่อย (TH)</td>
+        <td>"แผนกรักษาความปลอดภัย"</td>
+      </tr>
+      <tr>
+        <td>purpose_option</td>
+        <td>array</td>
+        <td>รายการวัตถุประสงค์ที่ยินยอม</td>
+        <td>[{"purpose": "เก็บข้อมูลบัตร", "granted": true}]</td>
+      </tr>
+      <tr>
+        <td>service_id</td>
+        <td>int</td>
+        <td>รหัสบริการ NDPP</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>version</td>
+        <td>string</td>
+        <td>เวอร์ชันของ payload</td>
+        <td>"2"</td>
+      </tr>
+    </table>
+    <br>
+    <b>Example JSON:</b>
     <pre style="font-size:12px; margin:0;">{
-  "citizen_id": "1234567890123",
-  "fullname_th": "นายทดสอบ ระบบ",
-  "fullname_en": "Mr.Todsob Rabob",
-  "photo_url": "http://file-server/api/files/kiosk/photo/2026/03/xxx.jpg",
-  "face_capture_url": "http://file-server/api/files/kiosk/face/2026/03/xxx.jpg",
-  "consent": [
+  "photo": "data:image/jpeg;base64,/9j/4AAQ...",
+  "face_capture": "data:image/jpeg;base64,/9j/4AAQ...",
+  "idcard": "1234567890123",
+  "fullNameTH": "นายทดสอบ ระบบ",
+  "fullNameEN": "Mr.Todsob Rabob",
+  "ActivityNameEn": "Data Collection",
+  "ActivityNameTh": "การเก็บข้อมูล",
+  "BusinessProcessEn": "Visitor Registration",
+  "BusinessProcessTh": "ลงทะเบียนผู้มาติดต่อ",
+  "EntityEn": "Maersk Thailand",
+  "EntityTh": "เมอร์สก ประเทศไทย",
+  "OrganizationUnitEn": "Security",
+  "OrganizationUnitTh": "แผนกรักษาความปลอดภัย",
+  "purpose_option": [
     { "purpose": "เก็บข้อมูลบัตรประชาชน", "granted": true },
-    { "purpose": "บันทึกภาพใบหน้า", "granted": true },
-    { "purpose": "การตลาด", "granted": false }
+    { "purpose": "บันทึกภาพใบหน้า", "granted": true }
   ],
-  "kiosk_id": "KIOSK-001",
-  "timestamp": "2026-03-26T10:30:00+07:00"
+  "service_id": 1,
+  "version": "2"
 }</pre>
   </div>
+
+  <h3>6.3 NDPP External APIs</h3>
+  <p>API ภายนอกที่ Kiosk เรียกผ่าน Proxy (KioskApiController) ไปยัง NDPP Server:</p>
+  <table>
+    <tr>
+      <th>ชื่อ</th>
+      <th>NDPP Endpoint</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><b>Privacy Notice (Proxy)</b></td>
+      <td><code>/api/AdminPrivacyPolicyOu/GetPolicyOuByKey</code></td>
+      <td>ดึง Privacy Notice HTML content จาก NDPP (เรียกผ่าน <code>GetPrivacyNotice</code> proxy ฝั่ง Kiosk)<br>
+          Config: variable <code>kiosk_ndpp_privacy_notice</code> เก็บ URL + key</td>
+    </tr>
+    <tr>
+      <td><b>Consent Form</b></td>
+      <td><code>/api/AdminPreferenceConsentForm/PreferenceFormToken?key=XXX&amp;token_key=XXX</code></td>
+      <td>ดึง Consent Form template พร้อมรายการ purpose options (เรียกผ่าน <code>GetIntegrateNdppForm</code>)</td>
+    </tr>
+    <tr>
+      <td><b>Submit Consent</b></td>
+      <td><code>/api/AdminPreferenceConsentForm/PreferenceFormConsent</code></td>
+      <td>ส่ง consent (PUT) พร้อม purpose_option + JWT token (เรียกผ่าน <code>SubmitIntegrateNdpp</code>)</td>
+    </tr>
+    <tr>
+      <td><b>Consent Callback</b></td>
+      <td><code>/api/AdminPreferenceConsentForm/ConsentCallback</code></td>
+      <td>Callback หลัง submit สำเร็จ — ส่ง payload (ข้อมูลบัตร + ภาพ + consent) ไป Netka Intelligent</td>
+    </tr>
+    <tr>
+      <td><b>Returning User Check</b></td>
+      <td><code>/api/SubjectRightRequestSubjectRightRequestNew/GetCheckDsExistConsentForm</code></td>
+      <td>ตรวจสอบว่า Data Subject เคยให้ consent แล้วหรือไม่ (ใช้ชื่อ-นามสกุล + TokenLink)</td>
+    </tr>
+  </table>
+
+  <h3>6.4 DB Variables สำหรับ NDPP Integration</h3>
+  <table>
+    <tr>
+      <th>Variable Name</th>
+      <th>Description</th>
+      <th>Example Value</th>
+    </tr>
+    <tr>
+      <td><code>kiosk_ndpp_privacy_notice</code></td>
+      <td>URL ของ Privacy Notice จาก NDPP — ระบบจะ parse key แล้ว proxy เรียก <code>GetPolicyOuByKey</code> ดึง HTML content มาแสดงใน Step3</td>
+      <td><code>http://10.1.8.119/policy/policyview?type=policyou&amp;key=XXX</code></td>
+    </tr>
+    <tr>
+      <td><code>kiosk_ndpp_preference_consent</code></td>
+      <td>URL ของ Consent Form จาก NDPP — ถ้ามีค่า จะใช้แทน <code>kiosk_integrate_ndpp</code> table ใน Step17</td>
+      <td><code>http://10.1.8.119/admin/PreferenceConsentFormView?key=XXX</code></td>
+    </tr>
+    <tr>
+      <td><code>kiosk_ndpp_integrate</code></td>
+      <td>Flag เปิด/ปิด NDPP Integrate ส่วนกลาง (0=ปิด)</td>
+      <td><code>1</code></td>
+    </tr>
+    <tr>
+      <td><code>kiosk_ndpp_integrate_by_kiosk</code></td>
+      <td>Flag เปิด/ปิด NDPP Integrate เฉพาะ Kiosk (0=ปิด)</td>
+      <td><code>1</code></td>
+    </tr>
+    <tr>
+      <td><code>kiosk_ndpp_integrate_api</code></td>
+      <td>Base URL ของ NDPP API สำหรับสร้าง Consent Form URL</td>
+      <td><code>http://10.1.8.119/admin/PreferenceConsentFormView</code></td>
+    </tr>
+  </table>
 
   <!-- ========== 7. CONSENT LOG ========== -->
   <h1 id="sec7">7. Consent Log Requirements</h1>
@@ -1047,34 +1234,72 @@
     <b>Requirement:</b> หากผู้ที่เคยลงทะเบียนแล้ว เวลาเสียบบัตรเข้าไป ให้ขึ้นหน้า Consent ที่เคยให้ความยินยอมไว้ แล้วสามารถแก้ไขและส่งกลับไปอีกครั้งได้
   </div>
 
-  <h3>8.1 Detection</h3>
-  <p>หลังจากอ่านบัตรสำเร็จ ระบบค้นหา <code>citizen_id</code> ใน DB:</p>
-  <ul>
-    <li><b>ไม่พบ</b> &rarr; New User Flow (Face Capture &rarr; Confirm &rarr; Consent &rarr; Complete)</li>
-    <li><b>พบ</b> &rarr; Returning User Flow (แสดง consent เดิม &rarr; แก้ไข &rarr; Complete)</li>
-  </ul>
+  <h3>8.1 Detection (Local DB)</h3>
+  <p>หลังจากอ่านบัตรสำเร็จ (Step5) ระบบเรียก <code>CheckReturningUser</code> API โดยส่ง <b>เลขบัตรประชาชน (idcard)</b> เพื่อค้นหาใน table <code>kiosk_consented</code>:</p>
 
-  <h3>8.2 Edit & Re-submit</h3>
+  <h4>API: <code>GET /api/KioskApi/CheckReturningUser?idcard=XXX</code></h4>
   <table>
     <tr>
-      <th>Action</th>
+      <th>Response Field</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>isReturning</td>
+      <td>boolean</td>
+      <td>พบเลขบัตรใน kiosk_consented หรือไม่</td>
+    </tr>
+    <tr>
+      <td>consentedId</td>
+      <td>uint</td>
+      <td>ID ของ record ล่าสุด (เมื่อ isReturning = true)</td>
+    </tr>
+    <tr>
+      <td>consentedDate</td>
+      <td>datetime</td>
+      <td>วันที่ consent ล่าสุด</td>
+    </tr>
+  </table>
+
+  <h4>Flow Summary</h4>
+  <ul>
+    <li><b>isReturning = true</b> &rarr; Returning User Flow:
+      <ol>
+        <li>Step5: Preload NDPP data (GetIntegrateNdpp, GetIntegrateNdppByKiosk, GetNdppPreferenceConsent)</li>
+        <li>Step8: <b>ข้าม Face Capture (Step9-11)</b> ไปตรง Step17</li>
+        <li>Step17: Auto-submit consent ทุก service (select all purposes) &rarr; NDPP + Netka Intelligent &rarr; StepEnd</li>
+      </ol>
+    </li>
+    <li><b>isReturning = false</b> &rarr; New User Flow (Step8 &rarr; Face Capture &rarr; Confirm &rarr; Consent &rarr; Complete)</li>
+  </ul>
+
+  <div class="note">
+    <b>หมายเหตุ:</b> Returning User detection ใช้ <b>เลขบัตรประชาชน (idcard)</b> เช็คจาก <code>kiosk_consented</code> table ใน local DB<br>
+    สำหรับ NDPP ยังมี API <code>GetCheckDsExistConsentForm</code> ที่ใช้ <b>ชื่อ-นามสกุล</b> ผ่าน <code>FindDS()</code> ซึ่งสามารถใช้เสริมได้ในอนาคต
+  </div>
+
+  <h3>8.2 Auto Re-submit (Returning User)</h3>
+  <p>Returning User <b>ไม่ต้องกรอกหรือแก้ไข consent</b> — ระบบจะ auto-submit ทั้งหมด:</p>
+  <table>
+    <tr>
+      <th>Step</th>
       <th>System Behavior</th>
     </tr>
     <tr>
-      <td>แสดง Consent เดิม</td>
-      <td>ดึง consent ล่าสุดจาก DB แสดง checkbox ตามสถานะเดิม</td>
+      <td>1. ดึง Consent Form</td>
+      <td>เรียก <code>GetIntegrateNdppForm</code> สำหรับทุก service</td>
     </tr>
     <tr>
-      <td>แก้ไข</td>
-      <td>ผู้ใช้เปลี่ยน checkbox ได้อิสระ</td>
+      <td>2. Select All Purposes</td>
+      <td>เลือก purpose_option ทั้งหมดโดยอัตโนมัติ</td>
     </tr>
     <tr>
-      <td>บันทึก</td>
-      <td>สร้าง consent log ใหม่ (revision +1) + ส่งไป Netka Intelligent</td>
+      <td>3. Submit</td>
+      <td>เรียก <code>SubmitIntegrateNdpp</code> &rarr; ส่ง consent ไป NDPP + Callback ไป Netka Intelligent</td>
     </tr>
     <tr>
-      <td>ไม่เปลี่ยนแปลง</td>
-      <td>ไม่สร้าง log ใหม่ ข้ามไป Complete</td>
+      <td>4. Complete</td>
+      <td>ไป StepEnd</td>
     </tr>
   </table>
 
