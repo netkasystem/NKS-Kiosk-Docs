@@ -1,0 +1,28 @@
+﻿
+
+
+public class SyncKioskInfoRequest
+{
+    public uint? KioskId { get; set; }
+    public string? KioskCode { get; set; }
+    public string? KioskName { get; set; }
+    public string? Description { get; set; }
+    public string? Address { get; set; }
+    public string? Latitude { get; set; }
+    public string? Longitude { get; set; }
+    public string? ContactName { get; set; }
+    public string? ContactEmail { get; set; }
+    public string? ContactTel { get; set; }
+    public byte? Inactive { get; set; }
+    public bool? FirstBoot { get; set; }
+    public bool? ActivationStatus { get; set; }
+    public string? ActivationNote { get; set; }
+    public string? FactoryImageVersion { get; set; }
+    public string? KioskImage { get; set; }
+    public int? ProvinceId { get; set; }
+    public string? SerialNumber { get; set; }
+    public string? MacAddress { get; set; }
+    public string? HardwareHash { get; set; }
+    public uint? ContractId { get; set; }
+    public uint? RegionId { get; set; }
+}
