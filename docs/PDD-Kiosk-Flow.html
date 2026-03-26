@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>PDD - N-Kiosk Identity Verification System</title>
+<style>
+  @page { size: A4; margin: 2cm; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; color: #333; max-width: 210mm; margin: 0 auto; padding: 20px; line-height: 1.6; }
+  h1 { color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; page-break-before: always; }
+  h1:first-of-type { page-break-before: avoid; }
+  h2 { color: #2471a3; margin-top: 30px; }
+  h3 { color: #2e86c1; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+  th { background: #1a5276; color: white; padding: 10px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 8px; vertical-align: top; }
+  tr:nth-child(even) { background: #f2f8fd; }
+
+  /* Cover */
+  .cover { text-align: center; padding: 120px 0 80px; page-break-after: always; }
+  .cover h1 { border: none; font-size: 36px; color: #1a5276; }
+  .cover .subtitle { font-size: 20px; color: #555; margin: 20px 0; }
+  .cover .meta { font-size: 14px; color: #888; margin-top: 60px; }
+
+  /* TOC */
+  .toc { page-break-after: always; }
+  .toc ul { list-style: none; padding: 0; }
+  .toc li { padding: 6px 0; border-bottom: 1px dotted #ccc; }
+  .toc li a { text-decoration: none; color: #2471a3; }
+
+  /* Flow diagram */
+  .flow { text-align: center; margin: 20px 0; }
+  .flow-box { display: inline-block; background: #eaf2f8; border: 2px solid #2471a3; border-radius: 10px; padding: 12px 20px; margin: 5px; font-size: 13px; min-width: 140px; text-align: center; }
+  .flow-box.error { background: #fdedec; border-color: #e74c3c; }
+  .flow-box.success { background: #eafaf1; border-color: #27ae60; }
+  .flow-box.optional { background: #fef9e7; border-color: #f39c12; border-style: dashed; }
+  .flow-arrow { font-size: 24px; color: #2471a3; display: block; margin: 3px auto; }
+
+  /* Mockup */
+  .mockup-section { page-break-inside: avoid; margin: 30px 0; }
+  .mockup-container { display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+  .mockup { width: 300px; min-height: 420px; border: 3px solid #333; border-radius: 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 20px; font-size: 13px; position: relative; overflow: hidden; flex-shrink: 0; }
+  .mockup::before { content: ''; display: block; width: 60px; height: 5px; background: #555; border-radius: 3px; margin: 0 auto 15px; }
+  .mockup .screen-title { text-align: center; font-size: 16px; font-weight: bold; color: #5dade2; margin-bottom: 15px; }
+  .mockup .screen-content { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin: 10px 0; }
+  .mockup .btn { display: inline-block; padding: 8px 20px; border-radius: 20px; margin: 5px; font-size: 12px; text-align: center; cursor: default; }
+  .mockup .btn-primary { background: #2471a3; color: white; }
+  .mockup .btn-secondary { background: transparent; border: 1px solid #5dade2; color: #5dade2; }
+  .mockup .btn-danger { background: #e74c3c; color: white; }
+  .mockup .btn-success { background: #27ae60; color: white; }
+  .mockup .btn-block { display: block; width: 80%; margin: 8px auto; text-align: center; }
+  .mockup .icon { font-size: 48px; text-align: center; display: block; margin: 10px 0; }
+  .mockup .input-field { display: block; width: 85%; margin: 6px auto; padding: 6px 10px; border: 1px solid #5dade2; border-radius: 5px; background: rgba(255,255,255,0.1); color: #aaa; font-size: 11px; }
+  .mockup .checkbox-row { padding: 4px 0; font-size: 11px; }
+  .mockup .checkbox-box { display: inline-block; width: 14px; height: 14px; border: 1px solid #5dade2; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .mockup .checkbox-box.checked { background: #2471a3; }
+  .mockup .card-preview { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin: 8px 0; font-size: 11px; }
+  .mockup .avatar { width: 60px; height: 60px; border-radius: 50%; background: #5dade2; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .mockup .face-frame { width: 120px; height: 150px; border: 2px dashed #5dade2; border-radius: 60px; margin: 10px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+  .mockup .progress-dots { text-align: center; margin: 10px 0; }
+  .mockup .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #555; margin: 0 3px; }
+  .mockup .dot.active { background: #5dade2; }
+  .mockup .list-item { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin: 6px 0; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
+  .mockup .countdown { font-size: 36px; text-align: center; color: #5dade2; font-weight: bold; }
+
+  .spec-box { background: #f8f9fa; border-left: 4px solid #2471a3; padding: 15px; margin: 10px 0; font-size: 14px; }
+  .spec-box b { color: #1a5276; }
+
+  .note { background: #fef9e7; border-left: 4px solid #f39c12; padding: 10px 15px; margin: 10px 0; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<div class="cover">
+  <h1 style="font-size:36px;">Process Design Document</h1>
+  <div class="subtitle">N-Kiosk Identity Verification System</div>
+  <div class="subtitle" style="font-size:16px;">ระบบยืนยันตัวตนผ่านตู้ Kiosk</div>
+  <div class="meta">
+    <p>Version: 1.0</p>
+    <p>Date: March 2026</p>
+    <p>Prepared by: N-ThaiSmart Team</p>
+  </div>
+</div>
+
+<!-- ========== TOC ========== -->
+<div class="toc">
+  <h1 style="page-break-before:avoid;">Table of Contents</h1>
+  <ul>
+    <li><a href="#sec1">1. System Overview</a></li>
+    <li><a href="#sec2">2. Actors</a></li>
+    <li><a href="#sec3">3. Preconditions</a></li>
+    <li><a href="#sec4">4. Process Flow Diagram</a></li>
+    <li><a href="#sec5">5. Screen Mockup & Specifications</a></li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.1 Step1 - Welcome</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.2 Step2 - Introduction</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.3 Step3 - Terms & Conditions</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.4 Step4 - Insert Card</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.5 Step5 - Reading Card</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.6 Step6 - Card Error</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.7 Step7 - Card Expired</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.8 Step8 - Card Success</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.9 Step9 - Face Scan Guide</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.10 Step10 - Face Capture</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.11 Step11 - Face Success</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.12 Step12 - Data Confirmation</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.13 Step14 - Custom Form</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.14 Step17 - NDPP Consent (Global)</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.15 Step18 - NDPP Consent (Kiosk)</li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;5.16 StepEnd - Completion</li>
+    <li><a href="#sec6">6. Data Flow</a></li>
+    <li><a href="#sec7">7. Session Storage</a></li>
+    <li><a href="#sec8">8. Exception Handling</a></li>
+    <li><a href="#sec9">9. Security</a></li>
+  </ul>
+</div>
+
+<!-- ========== 1. OVERVIEW ========== -->
+<h1 id="sec1">1. System Overview</h1>
+<p>ระบบยืนยันตัวตนผ่านบัตรประชาชนบนตู้ Kiosk แบบ Self-Service โดยผู้ใช้สอดบัตรประชาชน (Smart Card) สแกนใบหน้า และยืนยันข้อมูลด้วยตนเอง พร้อมรองรับ Consent Form ตาม NDPP (National Data Privacy Protection)</p>
+
+<h3>Main Flow</h3>
+<p style="text-align:center; font-size:13px; color:#555;">
+  Step1 &rarr; Step2 &rarr; Step3 &rarr; Step4 &rarr; Step5 &rarr; Step8 &rarr; Step9 &rarr; Step10 &rarr; Step11 &rarr; Step12 &rarr; [Step14] &rarr; [Step17] &rarr; [Step18] &rarr; StepEnd
+</p>
+<div class="note">Step14, Step17, Step18 เป็น <b>Conditional Steps</b> จะแสดงเฉพาะเมื่อมี config/data ที่เกี่ยวข้อง ถ้าไม่มีจะข้ามไปอัตโนมัติ</div>
+
+<!-- ========== 2. ACTORS ========== -->
+<h1 id="sec2">2. Actors</h1>
+<table>
+  <tr><th>Actor</th><th>Description</th></tr>
+  <tr><td>Visitor (ผู้ใช้บริการ)</td><td>ยืนยันตัวตนที่หน้าตู้ Kiosk</td></tr>
+  <tr><td>Kiosk Terminal</td><td>แสดง UI, สั่ง Card Reader, ถ่ายภาพใบหน้า</td></tr>
+  <tr><td>Card Reader (Hardware)</td><td>อ่านข้อมูลจากชิปบัตรประชาชน ผ่าน SignalR</td></tr>
+  <tr><td>Camera (Hardware)</td><td>ถ่ายภาพใบหน้าผู้ใช้</td></tr>
+  <tr><td>Web Server (N-Kiosk-Web)</td><td>ประมวลผล, จัดเก็บข้อมูล, เรียก API ภายนอก (ASP.NET Core)</td></tr>
+  <tr><td>File Server (nginx)</td><td>จัดเก็บไฟล์รูปภาพ (WebDAV PUT)</td></tr>
+  <tr><td>NDPP Server (External)</td><td>รับ consent form — JWT Auth + REST API</td></tr>
+</table>
+
+<!-- ========== 3. PRECONDITIONS ========== -->
+<h1 id="sec3">3. Preconditions</h1>
+<ul>
+  <li>ตู้ Kiosk เปิดอยู่และเชื่อมต่อ Web Server ได้</li>
+  <li>Card Reader เชื่อมต่อผ่าน SignalR Hub (<code>CardReaderHub</code>) สำเร็จ</li>
+  <li>กล้องพร้อมใช้งาน (browser permission granted)</li>
+  <li>ผู้ใช้มีบัตรประชาชนแบบ Smart Card ที่ยังไม่หมดอายุ</li>
+  <li>File Server (nginx) พร้อมรับ upload</li>
+</ul>
+
+<!-- ========== 4. FLOW DIAGRAM ========== -->
+<h1 id="sec4">4. Process Flow Diagram</h1>
+
+<div style="text-align:center; margin:20px 0;">
+  <!-- Row 1: Welcome -->
+  <div class="flow-box">Step1<br><small>Welcome</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box">Step2<br><small>Introduction</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box">Step3<br><small>Terms & Conditions</small></div>
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- Row 2: Card -->
+  <div class="flow-box">Step4<br><small>Insert Card</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box">Step5<br><small>Reading Card</small></div>
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- Branching -->
+  <div style="display:flex; justify-content:center; gap:20px; margin:10px 0;">
+    <div class="flow-box error">Step6<br><small>Card Error</small><br><small style="color:#e74c3c;">&rarr; Step1</small></div>
+    <div class="flow-box success">Step8<br><small>Card Success</small></div>
+    <div class="flow-box error">Step7<br><small>Card Expired</small><br><small style="color:#e74c3c;">&rarr; Step1</small></div>
+  </div>
+
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- Row 3: Face -->
+  <div class="flow-box">Step9<br><small>Face Guide</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box">Step10<br><small>Face Capture</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box success">Step11<br><small>Face Success</small></div>
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- Row 4: Data -->
+  <div class="flow-box">Step12<br><small>Data Confirmation</small></div>
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- Row 5: Optional -->
+  <div class="flow-box optional">Step14<br><small>Custom Form</small><br><small style="color:#f39c12;">conditional</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box optional">Step17<br><small>NDPP Global</small><br><small style="color:#f39c12;">conditional</small></div>
+  <span class="flow-arrow">&darr;</span>
+  <div class="flow-box optional">Step18<br><small>NDPP Kiosk</small><br><small style="color:#f39c12;">conditional</small></div>
+  <span class="flow-arrow">&darr;</span>
+
+  <!-- End -->
+  <div class="flow-box success" style="border-width:3px;">StepEnd<br><small>Completion</small></div>
+</div>
+
+<!-- ========== 5. MOCKUPS ========== -->
+<h1 id="sec5">5. Screen Mockup & Specifications</h1>
+
+<!-- ===== Step1 ===== -->
+<div class="mockup-section">
+  <h2>5.1 Step1 &mdash; Welcome (หน้าจอต้อนรับ)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">N-Kiosk</div>
+      <div style="text-align:center; margin:40px 0;">
+        <div class="icon">&#128079;</div>
+        <div style="font-size:20px; font-weight:bold; margin:20px 0;">ยินดีต้อนรับ</div>
+        <div style="color:#aaa; font-size:14px;">แตะหน้าจอเพื่อเริ่มยืนยันตัวตน</div>
+      </div>
+      <div style="text-align:center; margin-top:60px;">
+        <div style="width:80px; height:80px; border:2px solid #5dade2; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:32px;">&#9757;</span>
+        </div>
+        <div style="color:#5dade2; margin-top:10px; font-size:12px;">Touch to Start</div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ผู้ใช้แตะหน้าจอ<br>
+      <b>System:</b> Clear session storage ทั้งหมด (cardData, capture, hasConsent, etc.)<br>
+      <b>Navigation:</b> &rarr; Step2<br>
+      <b>Auto-reset:</b> idle timer ตาม <code>kioskHomeDelaySec</code> จะ refresh กลับหน้านี้<br>
+      <b>Notes:</b> หน้านี้เป็นจุดเริ่มต้นและจุดสิ้นสุดของทุกรอบการใช้งาน
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step2 ===== -->
+<div class="mockup-section">
+  <h2>5.2 Step2 &mdash; Introduction (แนะนำขั้นตอน)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">ขั้นตอนการใช้งาน</div>
+      <div class="screen-content" style="text-align:center;">
+        <div style="margin:15px 0;">
+          <div style="font-size:32px;">&#128179;</div>
+          <div style="font-size:13px; margin-top:5px;"><b>1.</b> สอดบัตรประชาชน</div>
+        </div>
+        <div style="margin:15px 0;">
+          <div style="font-size:32px;">&#128247;</div>
+          <div style="font-size:13px; margin-top:5px;"><b>2.</b> สแกนใบหน้า</div>
+        </div>
+        <div style="margin:15px 0;">
+          <div style="font-size:32px;">&#9989;</div>
+          <div style="font-size:13px; margin-top:5px;"><b>3.</b> ยืนยันข้อมูล</div>
+        </div>
+      </div>
+      <div class="progress-dots">
+        <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ระบบ auto-advance (ไม่ต้องกด)<br>
+      <b>Duration:</b> แสดงประมาณ 3-5 วินาที<br>
+      <b>Navigation:</b> &rarr; Step3 (auto)<br>
+      <b>Notes:</b> แสดงภาพรวมเพื่อให้ผู้ใช้เข้าใจกระบวนการ
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step3 ===== -->
+<div class="mockup-section">
+  <h2>5.3 Step3 &mdash; Terms & Conditions (ข้อตกลงและเงื่อนไข)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">ข้อตกลงและเงื่อนไข</div>
+      <div class="screen-content" style="max-height:220px; overflow:hidden; font-size:10px; color:#aaa; line-height:1.5;">
+        <p>เงื่อนไขการใช้บริการ ระบบยืนยันตัวตนผ่านตู้ Kiosk...</p>
+        <p>1. ข้อมูลส่วนบุคคลของท่านจะถูกเก็บรวบรวมเพื่อวัตถุประสงค์ในการยืนยันตัวตนเท่านั้น</p>
+        <p>2. ภาพถ่ายใบหน้าจะถูกใช้เพื่อเปรียบเทียบกับข้อมูลบนบัตรประชาชน</p>
+        <p>3. ท่านสามารถขอลบข้อมูลได้ตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล...</p>
+      </div>
+      <div style="text-align:center; margin-top:15px;">
+        <span class="btn btn-primary" style="width:60%;">ยอมรับ</span><br>
+        <span class="btn btn-secondary" style="width:60%;">ยกเลิก</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ผู้ใช้ต้องกดปุ่ม "ยอมรับ"<br>
+      <b>System:</b> ตั้ง <code>sessionStorage.hasConsent = true</code><br>
+      <b>Navigation:</b> ยอมรับ &rarr; Step4 / ยกเลิก &rarr; Step1<br>
+      <b>Notes:</b> ต้องยอมรับก่อนจึงจะดำเนินการต่อได้
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step4 ===== -->
+<div class="mockup-section">
+  <h2>5.4 Step4 &mdash; Insert Card (รอสอดบัตร)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">กรุณาสอดบัตรประชาชน</div>
+      <div style="text-align:center; margin:40px 0;">
+        <div class="icon">&#128179;</div>
+        <div style="font-size:14px; margin:15px 0;">สอดบัตรเข้าช่องอ่านบัตร</div>
+        <div style="color:#f39c12; font-size:12px; margin-top:20px;">&#9888; กรุณาสอดบัตรภายใน 30 วินาที</div>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <div style="width:100px; height:6px; background:#333; border-radius:3px; margin:0 auto; position:relative;">
+          <div style="width:40%; height:100%; background:#5dade2; border-radius:3px; animation:none;"></div>
+        </div>
+        <div style="color:#aaa; font-size:11px; margin-top:8px;">กำลังรอ...</div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ผู้ใช้สอดบัตรประชาชนเข้าช่อง Card Reader<br>
+      <b>System:</b> SignalR (<code>CardReaderHub</code>) รอ event จาก Card Reader<br>
+      <b>Timeout:</b> แจ้งเตือนหลัง 5 วินาทีถ้าไม่พบบัตร<br>
+      <b>Navigation:</b> พบบัตร &rarr; Step5 (auto)<br>
+      <b>Auto-reset:</b> timeout &rarr; Step1
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step5 ===== -->
+<div class="mockup-section">
+  <h2>5.5 Step5 &mdash; Reading Card (อ่านข้อมูลบัตร)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">กำลังอ่านข้อมูลบัตร</div>
+      <div style="text-align:center; margin:50px 0;">
+        <div class="icon">&#9881;</div>
+        <div style="font-size:14px; margin:15px 0;">กรุณารอสักครู่...</div>
+        <div style="color:#aaa; font-size:12px;">อย่าถอดบัตรออก</div>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <div style="width:100px; height:6px; background:#333; border-radius:3px; margin:0 auto;">
+          <div style="width:70%; height:100%; background:#5dade2; border-radius:3px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ระบบอ่านข้อมูลจากชิปบัตร (อัตโนมัติ)<br>
+      <b>Data Read:</b> เลขบัตร, ชื่อ-นามสกุล (TH/EN), วันเกิด, ที่อยู่, รูปถ่ายจากชิป, วันหมดอายุ<br>
+      <b>Storage:</b> เก็บใน <code>sessionStorage.cardData</code><br>
+      <b>Navigation:</b><br>
+      &nbsp;&nbsp;&#10003; อ่านสำเร็จ + ยังไม่หมดอายุ &rarr; Step8<br>
+      &nbsp;&nbsp;&#10007; อ่านไม่ได้ &rarr; Step6<br>
+      &nbsp;&nbsp;&#10007; บัตรหมดอายุ &rarr; Step7
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step6 ===== -->
+<div class="mockup-section">
+  <h2>5.6 Step6 &mdash; Card Error (บัตรชำรุด)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title" style="color:#e74c3c;">บัตรอ่านไม่ได้</div>
+      <div style="text-align:center; margin:40px 0;">
+        <div class="icon" style="color:#e74c3c;">&#10060;</div>
+        <div style="font-size:14px; margin:15px 0; color:#e74c3c;">ไม่สามารถอ่านข้อมูลบัตรได้</div>
+        <div style="color:#aaa; font-size:12px;">บัตรอาจชำรุดหรือสอดไม่ถูกต้อง</div>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <span class="btn btn-primary" style="width:60%;">ลองใหม่</span><br>
+        <span class="btn btn-danger" style="width:60%;">ยกเลิก</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Trigger:</b> Card Reader อ่านข้อมูลไม่สำเร็จ<br>
+      <b>Action:</b> ผู้ใช้เลือก "ลองใหม่" หรือ "ยกเลิก"<br>
+      <b>Navigation:</b> ลองใหม่ &rarr; Step4 / ยกเลิก &rarr; Step1<br>
+      <b>Auto-reset:</b> ถ้าไม่กด &rarr; Step1
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step7 ===== -->
+<div class="mockup-section">
+  <h2>5.7 Step7 &mdash; Card Expired (บัตรหมดอายุ)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title" style="color:#e74c3c;">บัตรหมดอายุ</div>
+      <div style="text-align:center; margin:40px 0;">
+        <div class="icon" style="color:#f39c12;">&#9888;</div>
+        <div style="font-size:14px; margin:15px 0; color:#e74c3c;">บัตรประชาชนของท่านหมดอายุแล้ว</div>
+        <div style="color:#aaa; font-size:12px;">กรุณาติดต่อเจ้าหน้าที่</div>
+      </div>
+      <div style="text-align:center; margin-top:30px;">
+        <span class="btn btn-danger" style="width:60%;">ยกเลิก</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Trigger:</b> วันหมดอายุบัตร &lt; วันปัจจุบัน<br>
+      <b>Action:</b> แจ้งผู้ใช้ให้ติดต่อเจ้าหน้าที่<br>
+      <b>Navigation:</b> ยกเลิก &rarr; Step1
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step8 ===== -->
+<div class="mockup-section">
+  <h2>5.8 Step8 &mdash; Card Success (สแกนบัตรสำเร็จ)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title" style="color:#27ae60;">สแกนบัตรสำเร็จ</div>
+      <div style="text-align:center; margin:50px 0;">
+        <div class="icon" style="color:#27ae60;">&#10004;</div>
+        <div style="font-size:16px; margin:15px 0; color:#27ae60;">อ่านข้อมูลบัตรสำเร็จ</div>
+        <div style="color:#f39c12; font-size:13px; margin-top:20px;">&#9888; อย่าถอดบัตรออก</div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> แสดงข้อความสำเร็จ (auto-advance)<br>
+      <b>Duration:</b> แสดง 2-3 วินาที<br>
+      <b>Navigation:</b> &rarr; Step9 (auto)<br>
+      <b>Notes:</b> เตือนผู้ใช้ไม่ให้ถอดบัตรออกจนกว่าจะจบกระบวนการ
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step9 ===== -->
+<div class="mockup-section">
+  <h2>5.9 Step9 &mdash; Face Scan Guide (คำแนะนำสแกนหน้า)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">เตรียมสแกนใบหน้า</div>
+      <div class="screen-content" style="text-align:center;">
+        <div style="margin:12px 0;">
+          <div style="font-size:24px;">&#129485;</div>
+          <div style="font-size:12px;">ยืนตรง หันหน้าเข้ากล้อง</div>
+        </div>
+        <div style="margin:12px 0;">
+          <div style="font-size:24px;">&#128567;</div>
+          <div style="font-size:12px;">ถอดหน้ากากอนามัย</div>
+        </div>
+        <div style="margin:12px 0;">
+          <div style="font-size:24px;">&#128161;</div>
+          <div style="font-size:12px;">อยู่ในที่แสงสว่างเพียงพอ</div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:15px;">
+        <span class="btn btn-primary" style="width:60%;">พร้อมแล้ว</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> ผู้ใช้กด "พร้อมแล้ว"<br>
+      <b>Navigation:</b> &rarr; Step10<br>
+      <b>Notes:</b> แสดงคำแนะนำเพื่อให้ได้ภาพถ่ายที่มีคุณภาพ
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step10 ===== -->
+<div class="mockup-section">
+  <h2>5.10 Step10 &mdash; Face Capture (สแกนใบหน้า)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">สแกนใบหน้า</div>
+      <div style="text-align:center;">
+        <div class="face-frame">
+          <span>&#128100;</span>
+        </div>
+        <div style="color:#5dade2; font-size:11px;">กำลังตรวจจับใบหน้า...</div>
+      </div>
+      <div style="text-align:center; margin-top:15px;">
+        <span class="btn btn-secondary">ถ่ายใหม่</span>
+        <span class="btn btn-success">ยืนยัน</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> กล้องเปิด live preview + <b>face-api.js</b> ตรวจจับใบหน้า real-time<br>
+      <b>Auto-capture:</b> เมื่อตรวจพบใบหน้า &ge; 1 จะถ่ายภาพอัตโนมัติ<br>
+      <b>User Options:</b> "ถ่ายใหม่" (retake) / "ยืนยัน" (confirm)<br>
+      <b>Storage:</b> ภาพ base64 เก็บใน <code>sessionStorage.capture</code><br>
+      <b>Navigation:</b> ยืนยัน &rarr; Step11<br>
+      <b>Technology:</b> face-api.js (TinyFaceDetector model)
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step11 ===== -->
+<div class="mockup-section">
+  <h2>5.11 Step11 &mdash; Face Success (สแกนหน้าสำเร็จ)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title" style="color:#27ae60;">สแกนใบหน้าสำเร็จ</div>
+      <div style="text-align:center; margin:30px 0;">
+        <div class="avatar"><span>&#128100;</span></div>
+        <div style="font-size:14px; color:#27ae60; margin:10px 0;">&#10004; บันทึกภาพสำเร็จ</div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> แสดงรูปที่ถ่ายได้ (auto-advance)<br>
+      <b>Duration:</b> แสดง 2-3 วินาที<br>
+      <b>Navigation:</b> &rarr; Step12 (auto)
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step12 ===== -->
+<div class="mockup-section">
+  <h2>5.12 Step12 &mdash; Data Confirmation (ตรวจสอบข้อมูล)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">ตรวจสอบข้อมูล</div>
+      <div class="card-preview">
+        <div style="display:flex; gap:10px; align-items:center;">
+          <div style="width:40px; height:50px; background:#5dade2; border-radius:4px; display:flex; align-items:center; justify-content:center;">&#128100;</div>
+          <div>
+            <div style="font-size:12px; font-weight:bold;">นายทดสอบ ระบบ</div>
+            <div style="font-size:10px; color:#aaa;">Mr.Todsob Rabob</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-preview">
+        <div style="font-size:10px;">
+          <div>เลขบัตร: <span style="color:#5dade2;">*-****-***0*-**-*</span> <span style="font-size:9px; color:#f39c12;">&#128065;</span></div>
+          <div>วันเกิด: 01/01/2540</div>
+          <div>ที่อยู่: กรุงเทพมหานคร...</div>
+          <div>วันหมดอายุ: 01/01/2575</div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <span class="btn btn-primary" style="width:70%;">ยืนยันข้อมูล</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> แสดงข้อมูลจากบัตรให้ผู้ใช้ตรวจสอบ (รองรับ mask/unmask)<br>
+      <b>Editable:</b> ผู้ใช้สามารถแก้ไขข้อมูลบางส่วนได้<br>
+      <b>On Confirm (Backend):</b><br>
+      &nbsp;&nbsp;1. <code>SaveNationalCardData</code> &mdash; บันทึก Enrollment ลง DB<br>
+      &nbsp;&nbsp;2. Upload photo &rarr; <code>FILE_STORAGE_URL/api/files/kiosk/photo/{year}/{month}/{id}.jpg</code><br>
+      &nbsp;&nbsp;3. Upload face capture &rarr; <code>FILE_STORAGE_URL/api/files/kiosk/face/{year}/{month}/{id}.jpg</code><br>
+      <b>Encryption:</b> payload เข้ารหัส AES-ECB ทั้ง request/response<br>
+      <b>Navigation:</b> มี Custom Form &rarr; Step14 / ไม่มี &rarr; <code>next_page()</code>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step14 ===== -->
+<div class="mockup-section">
+  <h2>5.13 Step14 &mdash; Custom Form (แบบฟอร์มเพิ่มเติม)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">กรอกข้อมูลเพิ่มเติม</div>
+      <div class="screen-content">
+        <div style="font-size:10px; color:#aaa; margin-bottom:4px;">แผนก / หน่วยงาน *</div>
+        <div class="input-field">เลือกแผนก...</div>
+        <div style="font-size:10px; color:#aaa; margin-bottom:4px; margin-top:10px;">เบอร์โทรศัพท์</div>
+        <div class="input-field">0xx-xxx-xxxx</div>
+        <div style="font-size:10px; color:#aaa; margin-bottom:4px; margin-top:10px;">หมายเหตุ</div>
+        <div class="input-field" style="height:40px;"></div>
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <span class="btn btn-primary" style="width:70%;">บันทึก</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Condition:</b> แสดงเมื่อ <code>getCustomForm()</code> มีข้อมูล<br>
+      <b>Form Fields:</b> Dynamic จาก API config (text, textarea, select)<br>
+      <b>Validation:</b> ตรวจสอบ required fields ก่อน submit<br>
+      <b>Action:</b> submit &rarr; <code>save_consent</code><br>
+      <b>Storage:</b> เก็บข้อมูลที่กรอกใน <code>sessionStorage.CustomData</code><br>
+      <b>Navigation:</b> &rarr; <code>next_page()</code><br>
+      <div class="note" style="margin-top:10px;">Conditional Step &mdash; ข้ามอัตโนมัติถ้าไม่มี config</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step17 ===== -->
+<div class="mockup-section">
+  <h2>5.14 Step17 &mdash; NDPP Consent Global (แบบฟอร์มความยินยอม ส่วนกลาง)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">ความยินยอม NDPP</div>
+      <div style="font-size:11px; color:#aaa; text-align:center; margin-bottom:10px;">เลือกบริการที่ต้องการให้ความยินยอม</div>
+      <div class="list-item">
+        <div>
+          <div style="font-weight:bold;">Latte-tea</div>
+          <div style="font-size:10px; color:#aaa;">ลาเต้-ชงชา</div>
+        </div>
+        <span style="color:#5dade2;">&rarr;</span>
+      </div>
+      <div class="list-item">
+        <div>
+          <div style="font-weight:bold;">Green Tea</div>
+          <div style="font-size:10px; color:#aaa;">ชาเขียว</div>
+        </div>
+        <span style="color:#5dade2;">&rarr;</span>
+      </div>
+      <div style="margin-top:15px; padding:10px; border:1px solid #5dade2; border-radius:8px;">
+        <div style="font-size:11px; font-weight:bold; margin-bottom:8px;">Purpose Options</div>
+        <div class="checkbox-row"><span class="checkbox-box checked"></span> Devlope_TH</div>
+        <div class="checkbox-row"><span class="checkbox-box"></span> Tester_TH</div>
+        <div class="checkbox-row"><span class="checkbox-box checked"></span> QA_TH</div>
+        <div class="checkbox-row"><span class="checkbox-box"></span> UI_TH</div>
+        <div style="margin-top:8px;">
+          <div style="font-size:10px; color:#aaa; margin-bottom:3px;">Firstname</div>
+          <div class="input-field" style="width:90%;">ชวัลชัย</div>
+          <div style="font-size:10px; color:#aaa; margin-bottom:3px; margin-top:5px;">Lastname</div>
+          <div class="input-field" style="width:90%;">ประกูลสันติ์ชัย</div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <span class="btn btn-primary" style="width:70%;">ยืนยัน</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Condition:</b> แสดงเมื่อ <code>getIntegrateNdpp()</code> มีข้อมูล<br>
+      <b>UI Flow:</b><br>
+      &nbsp;&nbsp;1. แสดงรายการบริการ (card list)<br>
+      &nbsp;&nbsp;2. คลิกเลือก &rarr; Fetch consent form จาก NDPP server<br>
+      &nbsp;&nbsp;3. แสดง form: purpose checkboxes + ชื่อ/นามสกุล/email<br>
+      &nbsp;&nbsp;4. กด submit<br>
+      <b>Submit Payload:</b><br>
+      &nbsp;&nbsp;- Firstname, Lastname, Email<br>
+      &nbsp;&nbsp;- IntegrateNdppId, IntegrateUrl<br>
+      &nbsp;&nbsp;- PurposeOption (selected IDs)<br>
+      &nbsp;&nbsp;- PurposeOptionDetail (all options + checked state)<br>
+      &nbsp;&nbsp;- NdppFormData (full form JSON)<br>
+      <b>Backend Process:</b><br>
+      &nbsp;&nbsp;1. สร้าง JWT จาก ชื่อ-นามสกุล-email (sign ด้วย SSO_Key)<br>
+      &nbsp;&nbsp;2. PUT &rarr; NDPP <code>/PreferenceFormConsent</code><br>
+      &nbsp;&nbsp;3. ถ้าสำเร็จ &rarr; POST callback &rarr; <code>/ConsentCallback</code><br>
+      <b>Navigation:</b> &rarr; <code>next_page()</code><br>
+      <div class="note" style="margin-top:10px;">Conditional Step &mdash; ข้ามอัตโนมัติถ้าไม่มีข้อมูล</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Step18 ===== -->
+<div class="mockup-section">
+  <h2>5.15 Step18 &mdash; NDPP Consent Kiosk (แบบฟอร์มความยินยอม เฉพาะ Kiosk)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title">ความยินยอม (เฉพาะ Kiosk)</div>
+      <div style="margin:10px 0; padding:10px; border:1px solid #5dade2; border-radius:8px;">
+        <div style="font-size:11px; font-weight:bold; margin-bottom:5px;">Service: Latte-tea</div>
+        <div style="font-size:10px; color:#aaa; margin-bottom:10px;">Organization: GREEN TEA SHOP</div>
+        <div style="font-size:10px; color:#aaa; line-height:1.5; max-height:80px; overflow:hidden;">
+          การสื่อสารการตลาดทางเลือก... ใช่ ฉันต้องการรับการสื่อสารทางอีเมลรายสัปดาห์...
+        </div>
+        <div style="margin-top:8px;">
+          <div class="checkbox-row"><span class="checkbox-box checked"></span> Devlope_TH</div>
+          <div class="checkbox-row"><span class="checkbox-box"></span> Tester_TH</div>
+          <div class="checkbox-row"><span class="checkbox-box checked"></span> QA_TH</div>
+        </div>
+        <div style="margin-top:8px;">
+          <div style="font-size:10px; color:#aaa; margin-bottom:3px;">Firstname</div>
+          <div class="input-field" style="width:90%;">ชวัลชัย</div>
+          <div style="font-size:10px; color:#aaa; margin-bottom:3px; margin-top:5px;">Lastname</div>
+          <div class="input-field" style="width:90%;">ประกูลสันติ์ชัย</div>
+          <div style="font-size:10px; color:#aaa; margin-bottom:3px; margin-top:5px;">Email</div>
+          <div class="input-field" style="width:90%;"></div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:10px;">
+        <span class="btn btn-primary" style="width:70%;">ยืนยัน</span>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Condition:</b> แสดงเมื่อ <code>getIntegrateNdppByKiosk()</code> มีข้อมูล<br>
+      <b>Difference from Step17:</b><br>
+      &nbsp;&nbsp;- ไม่ต้องเลือกบริการ (แสดง form เดียวจาก config เฉพาะ Kiosk)<br>
+      &nbsp;&nbsp;- Fetch form ผ่าน Proxy API (<code>GetConsentURL</code>)<br>
+      <b>Submit:</b> ใช้ <code>SubmitIntegrateNdpp</code> เดียวกับ Step17<br>
+      <b>Navigation:</b> &rarr; StepEnd<br>
+      <div class="note" style="margin-top:10px;">Conditional Step &mdash; ข้ามอัตโนมัติถ้าไม่มีข้อมูล</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== StepEnd ===== -->
+<div class="mockup-section">
+  <h2>5.16 StepEnd &mdash; Completion (จบกระบวนการ)</h2>
+  <div class="mockup-container">
+    <div class="mockup">
+      <div class="screen-title" style="color:#27ae60;">ขอบคุณค่ะ</div>
+      <div style="text-align:center; margin:40px 0;">
+        <div class="icon" style="color:#27ae60;">&#10004;</div>
+        <div style="font-size:16px; margin:15px 0; color:#27ae60;">ยืนยันตัวตนสำเร็จ</div>
+        <div style="color:#aaa; font-size:13px; margin-top:20px;">กรุณาดึงบัตรออก</div>
+      </div>
+      <div style="text-align:center; margin-top:20px;">
+        <div class="countdown">10</div>
+        <div style="color:#aaa; font-size:11px;">กลับหน้าแรกใน 10 วินาที</div>
+      </div>
+    </div>
+    <div class="spec-box" style="flex:1;">
+      <b>Action:</b> แสดง "ขอบคุณ" พร้อม countdown<br>
+      <b>Countdown:</b> ตาม <code>kioskHomeDelaySec</code> (localStorage)<br>
+      <b>Navigation:</b> auto-reset &rarr; Step1<br>
+      <b>Notes:</b> เตือนผู้ใช้ให้ดึงบัตรออก ระบบจะวนกลับหน้าแรกเพื่อรอผู้ใช้คนถัดไป
+    </div>
+  </div>
+</div>
+
+<!-- ========== 6. DATA FLOW ========== -->
+<h1 id="sec6">6. Data Flow</h1>
+
+<table>
+  <tr><th>From</th><th>To</th><th>Protocol</th><th>Data</th></tr>
+  <tr><td>Card Reader</td><td>Browser</td><td>SignalR (WebSocket)</td><td>cardData (ข้อมูลบัตร + รูปจากชิป)</td></tr>
+  <tr><td>Camera</td><td>Browser</td><td>WebRTC (getUserMedia)</td><td>face capture (base64)</td></tr>
+  <tr><td>Browser</td><td>Web Server</td><td>HTTPS + AES-ECB</td><td>encrypted payload (card data, face, form data)</td></tr>
+  <tr><td>Web Server</td><td>Database (SQL)</td><td>Entity Framework</td><td>KioskEnrollment, KioskIntegrateNdpp</td></tr>
+  <tr><td>Web Server</td><td>File Server (nginx)</td><td>HTTP PUT (WebDAV)</td><td>photo.jpg, face.jpg</td></tr>
+  <tr><td>Web Server</td><td>NDPP Server</td><td>HTTP PUT + JWT</td><td>consent form data (purpose options)</td></tr>
+  <tr><td>Web Server</td><td>NDPP Server</td><td>HTTP POST</td><td>callback (key, token, purpose_option)</td></tr>
+</table>
+
+<!-- ========== 7. SESSION ========== -->
+<h1 id="sec7">7. Session Storage Map</h1>
+
+<table>
+  <tr><th>Key</th><th>Set at</th><th>Used at</th><th>Description</th></tr>
+  <tr><td><code>cardData</code></td><td>Step5</td><td>Step10, 12, 14, 17, 18</td><td>ข้อมูลบัตรประชาชน (ชื่อ, เลขบัตร, ที่อยู่, รูป)</td></tr>
+  <tr><td><code>capture</code></td><td>Step10</td><td>Step11, 12</td><td>รูป face capture (base64)</td></tr>
+  <tr><td><code>hasConsent</code></td><td>Step3</td><td>Step12</td><td>flag ยอมรับเงื่อนไขแล้ว</td></tr>
+  <tr><td><code>CustomForm</code></td><td>Step12</td><td>Step14</td><td>config ของ custom form</td></tr>
+  <tr><td><code>CustomData</code></td><td>Step14</td><td>&mdash;</td><td>ข้อมูลที่กรอกใน custom form</td></tr>
+  <tr><td><code>IntegrateNdpp</code></td><td>Login</td><td>Step17</td><td>ข้อมูล NDPP ส่วนกลาง</td></tr>
+  <tr><td><code>IntegrateNdppByKiosk</code></td><td>Login</td><td>Step18</td><td>ข้อมูล NDPP เฉพาะ Kiosk</td></tr>
+  <tr><td><code>selectedKioskCode</code> (local)</td><td>Login</td><td>ทุก Step</td><td>รหัส Kiosk ที่เลือก</td></tr>
+  <tr><td><code>LoginDetail</code> (local)</td><td>Login</td><td>ทุก Step</td><td>ข้อมูล login</td></tr>
+  <tr><td><code>kioskHomeDelaySec</code> (local)</td><td>Login</td><td>StepEnd</td><td>วินาที auto-reset กลับ Step1</td></tr>
+</table>
+
+<!-- ========== 8. EXCEPTION ========== -->
+<h1 id="sec8">8. Exception Handling</h1>
+
+<table>
+  <tr><th>Scenario</th><th>Detection</th><th>Handling</th><th>Screen</th></tr>
+  <tr><td>บัตรอ่านไม่ได้ / ชำรุด</td><td>Card Reader return error</td><td>แจ้งเตือน &rarr; ลองใหม่ หรือ ยกเลิก</td><td>Step6 &rarr; Step4 or Step1</td></tr>
+  <tr><td>บัตรหมดอายุ</td><td>expiry_date &lt; today</td><td>แจ้งเตือน &rarr; ยกเลิกกลับหน้าแรก</td><td>Step7 &rarr; Step1</td></tr>
+  <tr><td>ไม่สอดบัตรภายใน timeout</td><td>SignalR timeout</td><td>แจ้งเตือน &rarr; auto-reset</td><td>Step4 &rarr; Step1</td></tr>
+  <tr><td>Face detection ล้มเหลว</td><td>face-api.js no detection</td><td>ผู้ใช้กดถ่ายใหม่</td><td>Step10 (retry)</td></tr>
+  <tr><td>File upload ล้มเหลว</td><td>HTTP non-2xx from File Server</td><td>Log error, continue flow</td><td>Step12</td></tr>
+  <tr><td>NDPP API ล้มเหลว</td><td>HTTP non-2xx from NDPP Server</td><td>แสดง error message</td><td>Step17 / Step18</td></tr>
+  <tr><td>ผู้ใช้ idle (ไม่ทำอะไร)</td><td>idle timer expired</td><td>auto-reset ตาม kioskHomeDelaySec</td><td>กลับ Step1</td></tr>
+  <tr><td>Network disconnect</td><td>fetch / SignalR failure</td><td>แสดง error, retry หรือกลับ Step1</td><td>แต่ละ Step</td></tr>
+</table>
+
+<!-- ========== 9. SECURITY ========== -->
+<h1 id="sec9">9. Security</h1>
+
+<table>
+  <tr><th>Measure</th><th>Description</th></tr>
+  <tr><td>Payload Encryption</td><td>ทุก request/response เข้ารหัส <b>AES-ECB</b> ระหว่าง Browser &harr; Web Server</td></tr>
+  <tr><td>JWT Authentication</td><td>NDPP consent ใช้ JWT token sign ด้วย <code>SSO_Key</code> (stored in DB Variables)</td></tr>
+  <tr><td>Data Masking</td><td>ข้อมูลอ่อนไหว (เลขบัตร) แสดงแบบ mask บน UI &mdash; unmask ได้ชั่วคราว</td></tr>
+  <tr><td>Session Isolation</td><td>Clear session storage ทุกครั้งที่เริ่มรอบใหม่ (Step1)</td></tr>
+  <tr><td>File Server ACL</td><td>nginx <code>allow/deny</code> จำกัด subnet ที่ upload ได้</td></tr>
+  <tr><td>HTTPS</td><td>Production environment ใช้ HTTPS สำหรับ communication ทุกช่องทาง</td></tr>
+</table>
+
+<br><br>
+<hr>
+<p style="text-align:center; color:#888; font-size:12px;">
+  N-Kiosk Identity Verification System &mdash; Process Design Document v1.0 &mdash; March 2026
+</p>
+
+</body>
+</html>

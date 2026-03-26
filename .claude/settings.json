@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(dotnet add:*)",
+      "Bash(dotnet remove:*)",
+      "Bash(dotnet build:*)",
+      "Bash(grep -r ConfigureFromEnvOrAppSettings c:/Project/N-Kiosk-Web --include=*.cs -A5)",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Read(//c/Project/N-Kiosk-Web/**)",
+      "Bash(sed -i 's/^services:/version: \"\"3.3\"\"\\\\n\\\\nservices:/' \"$f\")",
+      "Bash(echo \"✅ $f\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Project\\N-Kiosk-Web\\NThaiSmartWeb\\Views\\Step"
+    ]
+  }
+}

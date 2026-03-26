@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xxd \"c:/Project/N-ThaiSmart/NThaiSmartWeb/ApiControllers/KioskApiController.cs\")",
+      "Bash(xxd)"
+    ]
+  }
+}
