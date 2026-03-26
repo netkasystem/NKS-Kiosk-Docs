@@ -1,11 +1,62 @@
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using NThaiSmartWeb.EFModels;
+using StackExchange.Redis;
+using System.Globalization;
+
+// ======================
+// Culture
+// ======================
+var cultureInfo = new CultureInfo("en-GB");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 // ======================
-// Add Services
+// Environment Variables
 // ======================
+string expiration = Environment.GetEnvironmentVariable("SESSION_TIMEOUT") ?? "8";
+double timeout    = double.Parse(expiration);
+string cookieName = Environment.GetEnvironmentVariable("COOKIE_NAME") ?? "NetkaKiosk";
+string? redisConn = Environment.GetEnvironmentVariable("REDIS_CONNECTION");   // เช่น "localhost:6379"
 
+Console.WriteLine($"🔧 Build Version: {BuildVersion.Value}");
+
+// ======================
+// Redis (optional – fallback to in-memory ถ้าไม่มี env)
+// ======================
+ConnectionMultiplexer? redis = null;
+bool useRedis = false;
+
+if (!string.IsNullOrEmpty(redisConn))
+{
+    try
+    {
+        var cfg = ConfigurationOptions.Parse(redisConn);
+        cfg.AbortOnConnectFail = false;
+        cfg.ConnectTimeout     = 3000;
+        cfg.ReconnectRetryPolicy = new ExponentialRetry(5000);
+        redis    = ConnectionMultiplexer.Connect(cfg);
+        useRedis = redis.IsConnected;
+        Console.WriteLine(useRedis
+            ? $"✅ Redis connected: {redisConn}"
+            : $"⚠️ Redis unreachable, falling back to in-memory: {redisConn}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠️ Redis connect failed ({ex.Message}), falling back to in-memory");
+    }
+}
+else
+{
+    Console.WriteLine("ℹ️ REDIS_CONNECTION not set — using in-memory session/cache");
+}
+
+// ======================
+// MVC / JSON
+// ======================
 builder.Services
     .AddControllersWithViews(options =>
     {
@@ -14,52 +65,102 @@ builder.Services
     })
     .AddNewtonsoftJson();
 
-builder.Services.AddSignalR();
-
-// สำหรับ Endpoint API
 builder.Services.AddEndpointsApiExplorer();
-// สำหรับ Swagger UI
 builder.Services.AddSwaggerGen();
-// Register IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-// ลงทะเบียน HttpClient factory
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache(); // ใช้ใน CardReaderHub.HeartBeatInterval()
 
-// ✅ เพิ่มบรรทัดนี้
+// ======================
+// Distributed Cache (Session backing store)
+// ======================
+if (useRedis && redis != null)
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConn;
+        options.InstanceName  = cookieName + ":Session:";
+    });
+else
+    builder.Services.AddDistributedMemoryCache();
+
+// ======================
+// Session
+// ======================
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
+    options.IdleTimeout        = TimeSpan.FromHours(timeout);
+    options.Cookie.Name        = cookieName;
+    options.Cookie.HttpOnly    = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.Name = "NetkaKiosk";
+    options.Cookie.MaxAge      = TimeSpan.FromDays(1);
 });
 
-builder.Services.AddDbContext<KioskContext>(options => options.ConfigureFromEnvOrAppSettings(builder.Configuration));
+// ======================
+// Authentication / Cookie
+// ======================
+builder.Services.AddAuthentication("Cookies").AddCookie(options =>
+{
+    options.LoginPath         = "/Login";
+    options.LogoutPath        = "/Logout";
+    options.AccessDeniedPath  = "/AccessDenied";
+    options.ExpireTimeSpan    = TimeSpan.FromHours(timeout);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly   = true;
+});
 
-// CORS Policy แบบเปิดทุก origin (ระวังใช้ใน Production ควรระบุ origin ให้เจาะจง)
+// ======================
+// DataProtection (keys shared ข้าม instance ผ่าน Redis)
+// ======================
+var dp = builder.Services
+    .AddDataProtection()
+    .SetApplicationName(cookieName);
+
+if (useRedis && redis != null)
+    dp.PersistKeysToStackExchangeRedis(redis, cookieName + ":DataProtection:Keys");
+
+// ======================
+// Database
+// ======================
+builder.Services.AddDbContext<KioskContext>(options =>
+    options.ConfigureFromEnvOrAppSettings(builder.Configuration));
+
+// ======================
+// CORS
+// ======================
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DynamicOriginPolicy", policy =>
-    {
         policy
-            .SetIsOriginAllowed(origin => true)
+            .SetIsOriginAllowed(_ => true)
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
-    });
+            .AllowCredentials());
 });
 
-builder.Configuration.AddEnvironmentVariables();
+// ======================
+// SignalR (+ Redis backplane สำหรับ multi-instance)
+// ======================
+var signalR = builder.Services.AddSignalR();
+if (useRedis)
+    signalR.AddStackExchangeRedis(redisConn!, options =>
+    {
+        options.Configuration.ChannelPrefix =
+            new RedisChannel(cookieName + ":SignalR", RedisChannel.PatternMode.Literal);
+    });
 
-// 🔧 Print build version
-Console.WriteLine($"🔧 Build Version: {BuildVersion.Value}");
+// ======================
+// Forwarded Headers (Docker / nginx reverse proxy)
+// ======================
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+});
 
 // ======================
 // Build App
 // ======================
 var app = builder.Build();
 
-// ✅ ตรงนี้คือ log ตอนเริ่มต้น runtime
 Console.WriteLine($"🌐 Starting N-ThaiSmartWeb {BuildVersion.Value} @ {DateTime.Now} on {Environment.MachineName}");
 
 var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
@@ -68,6 +169,8 @@ NSDXHttpContextHelpers.HttpContextAccessor = httpContextAccessor;
 // ======================
 // Middleware Pipeline
 // ======================
+app.UseForwardedHeaders(); // ต้องอยู่บนสุด
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -75,31 +178,30 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-// ✅ ใส่แบบนี้เพื่อเสิร์ฟ .shard1, .bin หรือไฟล์ไม่มีนามสกุล
+
+// เสิร์ฟไฟล์ทุกประเภท (.shard1, .bin, face-api model ฯลฯ)
 app.UseStaticFiles(new StaticFileOptions
 {
-    ServeUnknownFileTypes = true, // สำคัญมาก!
-    DefaultContentType = "application/octet-stream"
+    ServeUnknownFileTypes = true,
+    DefaultContentType    = "application/octet-stream"
+});
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "N-ThaiSmart API v1");
+    c.RoutePrefix = "swagger";
+    c.DefaultModelsExpandDepth(-1);
 });
 
 app.UseRouting();
 app.UseCors("DynamicOriginPolicy");
 
-// ✅ เปิดใช้งาน session ก่อน UseEndpoints
 app.UseSession();
-
+app.UseAuthentication(); // ต้องอยู่ก่อน UseAuthorization เสมอ
 app.UseAuthorization();
 
-// ✅ Swagger เฉพาะ Dev
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "N-ThaiSmart API v1");
-        c.RoutePrefix = "swagger";
-    });
-}
+app.UseStatusCodePages();
 
 // ======================
 // Endpoint Routing

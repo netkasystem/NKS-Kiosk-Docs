@@ -12,7 +12,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FILE_STORAGE_URL": "http://10.1.8.59:8082"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5201"
@@ -21,7 +22,8 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "FILE_STORAGE_URL": "http://10.1.8.59:8082"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7121;http://localhost:5201"
@@ -30,7 +32,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "FILE_STORAGE_URL": "http://10.1.8.59:8082"
       },
       "applicationUrl": "http://localhost:5201"
     },
@@ -41,7 +44,8 @@
       "environmentVariables": {
         "ASPNETCORE_URLS": "http://+:5201",
         "ASPNETCORE_ENVIRONMENT": "Production",
-        "TZ": "Asia/Bangkok"
+        "TZ": "Asia/Bangkok",
+        "FILE_STORAGE_URL": "http://10.1.8.59:8082"
       },
       "publishAllPorts": false,
       "useSSL": false

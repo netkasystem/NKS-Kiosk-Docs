@@ -7,7 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 
 namespace NSDX.Common.Security
 {
@@ -18,7 +21,7 @@ namespace NSDX.Common.Security
         private static bool? localTokenExpired;
         private static bool? localTokenInvalid;
         private static string Secret { get; set; }
-        
+
 
         public static bool TokenExpired => localTokenExpired.GetValueOrDefault(false);
         public static bool TokenInvalid => localTokenInvalid.GetValueOrDefault(false);
@@ -29,6 +32,5 @@ namespace NSDX.Common.Security
             oJWT.AddClaims(model.ToObject<Dictionary<string, object>>());
             return oJWT.Encode();
         }
-         
     }
 }
