@@ -187,9 +187,9 @@ public class KioskApiController : ControllerBase
 
             // ─── Re-encrypt ข้อมูลที่เคลียร์ base64 แล้ว ─────────────
             var cleanedJson = JsonConvert.SerializeObject(data);
-            var encryptedCleaned = AesEcb.Encrypt(cleanedJson);
+            var encryptedCleaned = Encrypt(cleanedJson);
 
-            var newKioskConsented = new NThaiSmartWeb.EFModels.KioskConsented
+            var newKioskConsented = new KioskConsented
             {
                 KioskId = data.KioskId,
                 Idcard = data.citizenID,
@@ -226,27 +226,26 @@ public class KioskApiController : ControllerBase
         var _flag = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate").Select(v => v.Value).FirstOrDefault();
         if (_flag == "0") return Ok();
 
-        var api = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_api").Select(v => v.Value).FirstOrDefault();
+        // ถ้ามี kiosk_ndpp_integrate_id → ดึงจาก table เฉพาะ ID นั้นตัวเดียว
+        var integrateId = _context.Variables
+            .Where(v => v.Name == "kiosk_ndpp_integrate_id")
+            .Select(v => v.Value)
+            .FirstOrDefault();
+
+        var ndppUrl = GetNdppBaseUrl();
+
+        if (!string.IsNullOrEmpty(integrateId) && uint.TryParse(integrateId, out uint ndppId))
+        {
+            var item = _context.KioskIntegrateNdpp.Where(c => c.Id == ndppId && c.Inactive == 0).FirstOrDefault();
+            if (item != null)
+            {
+                item.NdppPreferenceUrl = $"{ndppUrl}/admin/PreferenceConsentFormView?key={item.NdppPreferenceUrlKey}";
+                return Ok(new List<KioskIntegrateNdpp> { item });
+            }
+        }
+
         var res = _context.KioskIntegrateNdpp.Where(c => c.Inactive == 0).ToList();
-        res.ForEach(r => { r.NdppPreferenceUrl = $"{api}?key={r.NdppPreferenceUrlKey}"; });
-
-        return Ok(res);
-    }
-
-    [HttpGet("GetIntegrateNdppByKiosk")]
-    public async Task<IActionResult> GetIntegrateNdppByKiosk([FromQuery] string kioskCode)
-    {
-        if (string.IsNullOrEmpty(kioskCode)) return BadRequest("Missing kioskCode");
-
-        var _flag = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_by_kiosk").Select(v => v.Value).FirstOrDefault();
-        if (_flag == "0") return Ok();
-
-        var kioskId = await _context.Kiosk.Where(_k => _k.KioskCode == kioskCode).Select(_k => _k.Id).FirstOrDefaultAsync();
-        var KioskIntegrateNdppId = _context.KioskIntegrateNdppConsentMapping.Where(k => k.KioskId == kioskId).Select(k => k.KioskIntegrateNdppId).ToList();
-
-        var api = _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_api").Select(v => v.Value).FirstOrDefault();
-        var res = _context.KioskIntegrateNdpp.Where(c => KioskIntegrateNdppId.Contains(c.Id) && c.Inactive == 0).ToList();
-        res.ForEach(r => { r.NdppPreferenceUrl = $"{api}?key={r.NdppPreferenceUrlKey}"; });
+        res.ForEach(r => { r.NdppPreferenceUrl = $"{ndppUrl}/admin/PreferenceConsentFormView?key={r.NdppPreferenceUrlKey}"; });
 
         return Ok(res);
     }
@@ -258,19 +257,15 @@ public class KioskApiController : ControllerBase
         var data = JsonConvert.DeserializeObject<IntegrateNdppData>(jsonData);
         var oIntegrateNdpp = _context.KioskIntegrateNdpp.Where(c => c.Id.ToString() == data.IntegrateNdppId).FirstOrDefault();
         Uri uri = new Uri(oIntegrateNdpp.NdppPreferenceUrl);
-
-        // ใช้ HttpUtility.ParseQueryString ดึง query string
         string Key = HttpUtility.ParseQueryString(uri.Query).Get("key");
+
+        var ndppUrl = GetNdppBaseUrl();
         var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
         var TokenKey = JWTHelpers.Encode(new JObject { { "Firstname", data.Firstname }, { "Lastname", data.Lastname } }, secretKey);
 
         using (var client = new HttpClient())
         {
-            // ดึงเฉพาะ host
-            string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
-
-            // ต่อกับ path คงที่
-            string requestUrl = $"{baseHost}/api/AdminPreferenceConsentForm/PreferenceFormToken?key={Key}&token_key={TokenKey}";
+            string requestUrl = $"{ndppUrl}/api/AdminPreferenceConsentForm/PreferenceFormToken?key={Key}&token_key={TokenKey}";
             // ส่ง request
             HttpResponseMessage response = await client.GetAsync(requestUrl);
             string result = await response.Content.ReadAsStringAsync();
@@ -284,6 +279,28 @@ public class KioskApiController : ControllerBase
                 return StatusCode((int)response.StatusCode, result);
             }
         }
+    }
+
+    [HttpGet("GetNdppConsented")]
+    public async Task<IActionResult> GetNdppConsented([FromQuery] string citizenId, [FromQuery] string kioskCode)
+    {
+        var kioskId = await _context.Kiosk
+            .Where(k => k.KioskCode == kioskCode)
+            .Select(k => k.Id).FirstOrDefaultAsync();
+
+        var consented = await _context.KioskIntegrateNdppConsented
+            .Where(c => c.CitizenId == citizenId && c.KioskId == kioskId && (c.Inactive == null || c.Inactive == 0))
+            .OrderByDescending(c => c.CreatedDate)
+            .Select(c => new
+            {
+                c.KioskIntegrateNdppId,
+                c.PurposeOptionDetail,
+                c.Email,
+                c.CreatedDate
+            })
+            .FirstOrDefaultAsync();
+
+        return Ok(consented);
     }
 
     [HttpPost("SubmitIntegrateNdpp")]
@@ -303,6 +320,7 @@ public class KioskApiController : ControllerBase
             if (string.IsNullOrEmpty(Key))
                 return BadRequest("Missing key in NdppPreferenceUrl");
 
+            var ndppUrl = GetNdppBaseUrl();
             var secretKey = _context.Variables.Where(v => v.Name == "SSO_Key").Select(v => v.Value).FirstOrDefault();
             var TokenKey = JWTHelpers.Encode(new JObject {
                 { "Firstname", data.Firstname },
@@ -310,9 +328,7 @@ public class KioskApiController : ControllerBase
                 { "Email", data.Email }
             }, secretKey);
 
-            // ดึงเฉพาะ host
-            string baseHost = $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? "" : ":" + uri.Port)}";
-            string requestUrl = $"{baseHost}/api/AdminPreferenceConsentForm/PreferenceFormConsent";
+            string requestUrl = $"{ndppUrl}/api/AdminPreferenceConsentForm/PreferenceFormConsent";
 
             var payload = new
             {
@@ -331,7 +347,9 @@ public class KioskApiController : ControllerBase
 
             if (response.IsSuccessStatusCode)
             {
-                var callbackUrl = $"{baseHost}/api/AdminPreferenceConsentForm/ConsentCallback";
+                var callbackUrl = _context.Variables
+                    .Where(v => v.Name == "kiosk_netka_entelligence_api")
+                    .Select(v => v.Value).FirstOrDefault() ?? "";
 
                 var formJson = JObject.Parse(data.NdppFormData ?? "{}");
                 var purposeDetails = data.PurposeOptionDetail ?? new List<PurposeOptionDetail>();
@@ -346,24 +364,47 @@ public class KioskApiController : ControllerBase
 
                 var callbackPayload = new
                 {
-                    photo               = data.photo_path          ?? "",
-                    face_capture        = data.face_capture_path   ?? "",
-                    idcard              = data.citizenID           ?? "",
-                    fullNameTH          = data.fullNameTH          ?? "",
-                    fullNameEN          = data.fullNameEN          ?? "",
-                    ActivityNameEn      = formJson["ActivityNameEn"]?.ToString()      ?? "",
-                    ActivityNameTh      = formJson["ActivityNameTh"]?.ToString()      ?? "",
-                    BusinessProcessEn   = formJson["BusinessProcessEn"]?.ToString()   ?? "",
-                    BusinessProcessTh   = formJson["BusinessProcessTh"]?.ToString()   ?? "",
-                    EntityEn            = formJson["EntityEn"]?.ToString()            ?? "",
-                    EntityTh            = formJson["EntityTh"]?.ToString()            ?? "",
-                    OrganizationUnitEn  = formJson["OrganizationUnitEn"]?.ToString()  ?? "",
-                    OrganizationUnitTh  = formJson["OrganizationUnitTh"]?.ToString()  ?? "",
-                    purpose_option      = purposeOptions,
-                    service_id          = formJson["service_id"]?.ToObject<int>()     ?? 0,
-                    version             = formJson["version"]?.ToString()             ?? "2"
+                    photo = data.photo ?? "",
+                    face_capture = data.face_capture ?? "",
+                    idcard = data.citizenID ?? "",
+                    fullNameTH = data.fullNameTH ?? "",
+                    fullNameEN = data.fullNameEN ?? "",
+                    ActivityNameEn = formJson["ActivityNameEn"]?.ToString() ?? "",
+                    ActivityNameTh = formJson["ActivityNameTh"]?.ToString() ?? "",
+                    BusinessProcessEn = formJson["BusinessProcessEn"]?.ToString() ?? "",
+                    BusinessProcessTh = formJson["BusinessProcessTh"]?.ToString() ?? "",
+                    EntityEn = formJson["EntityEn"]?.ToString() ?? "",
+                    EntityTh = formJson["EntityTh"]?.ToString() ?? "",
+                    OrganizationUnitEn = formJson["OrganizationUnitEn"]?.ToString() ?? "",
+                    OrganizationUnitTh = formJson["OrganizationUnitTh"]?.ToString() ?? "",
+                    purpose_option = purposeOptions,
+                    service_id = formJson["service_id"]?.ToObject<int>() ?? 0,
+                    version = formJson["version"]?.ToString() ?? "2"
                 };
                 await CallExternalHttpAsync(callbackUrl, HttpMethod.Post, callbackPayload);
+
+                // บันทึก consent ลง kiosk_integrate_ndpp_consented
+                var kioskId = _context.Kiosk
+                    .Where(k => k.KioskCode == data.KioskCode)
+                    .Select(k => k.Id).FirstOrDefault();
+
+                var purposeDetailJson = System.Text.Json.JsonSerializer.Serialize(
+                    data.PurposeOptionDetail ?? new List<PurposeOptionDetail>(),
+                    new JsonSerializerOptions { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
+
+                _context.KioskIntegrateNdppConsented.Add(new KioskIntegrateNdppConsented
+                {
+                    KioskId = kioskId,
+                    KioskIntegrateNdppId = oIntegrateNdpp.Id,
+                    CitizenId = data.citizenID,
+                    FullnameTh = data.fullNameTH,
+                    FullnameEn = data.fullNameEN,
+                    Email = data.Email,
+                    PurposeOptionDetail = purposeDetailJson,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = data.KioskCode
+                });
+                await _context.SaveChangesAsync();
 
                 return Ok(JsonConvert.DeserializeObject(result));
             }
@@ -398,6 +439,15 @@ public class KioskApiController : ControllerBase
             return (false, ex.Message);
         }
     }
+
+    /// <summary>
+    /// ดึง NDPP base URL จาก variable แล้ว replace {{ndpp_url}} ใน string
+    /// </summary>
+    private string GetNdppBaseUrl() =>
+        _context.Variables.Where(v => v.Name == "kiosk_ndpp_integrate_url").Select(v => v.Value).FirstOrDefault() ?? "";
+
+    private string ResolveNdppUrl(string url) =>
+        string.IsNullOrEmpty(url) ? url : url.Replace("{{ndpp_url}}", GetNdppBaseUrl());
 
     [HttpPost("register")]
     public async Task<IActionResult> RegisterKiosk([FromBody] Kiosk dto)
@@ -473,6 +523,79 @@ public class KioskApiController : ControllerBase
 
         await Task.Delay(10, ct);
         return Ok(new { ok = true, enrolled_at = DateTime.UtcNow });
+    }
+
+    [HttpGet("GetPrivacyNotice")]
+    public async Task<IActionResult> GetPrivacyNotice()
+    {
+        try
+        {
+            var rawUrl = _context.Variables.Where(v => v.Name == "kiosk_ndpp_privacy_notice").Select(v => v.Value).FirstOrDefault() ?? "";
+            var url = ResolveNdppUrl(rawUrl);
+            Console.WriteLine($"GetPrivacyNotice url: [{url}]");
+
+            if (string.IsNullOrEmpty(url))
+                return Ok(new { content = "", name = "" });
+            Uri uri = new Uri(url);
+            // DecryptToken ข้างใน NDPP ทำ UrlDecode เอง → ต้องส่ง encoded key
+            string key = HttpUtility.ParseQueryString(uri.Query).Get("key");
+            if (string.IsNullOrEmpty(key))
+                return Ok(new { content = "", name = "" });
+
+            string encodedKey = HttpUtility.UrlEncode(key);
+            Console.WriteLine($"GetPrivacyNotice key: [{key}] encodedKey: [{encodedKey}]");
+
+            var ndppUrl = GetNdppBaseUrl();
+            string requestUrl = $"{ndppUrl}/api/AdminPrivacyPolicyOu/GetPolicyOuByKey";
+
+            using var client = new HttpClient();
+            var body = new StringContent($"\"{encodedKey}\"", Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(requestUrl, body);
+            string result = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"GetPrivacyNotice NDPP response: {response.StatusCode} - {result?.Substring(0, Math.Min(result?.Length ?? 0, 200))}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var token = JToken.Parse(result);
+                JObject json = token is JArray arr && arr.Count > 0 ? arr[0] as JObject : token as JObject;
+
+                if (json != null)
+                {
+                    var content = json["Content"]?.ToString() ?? "";
+                    var name = json["Name"]?.ToString() ?? "";
+                    return Ok(new { content, name });
+                }
+            }
+
+            return Ok(new { content = "", name = "" });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"GetPrivacyNotice error: {ex.Message}");
+            return Ok(new { content = "", name = "" });
+        }
+    }
+
+    [HttpGet("CheckReturningUser")]
+    public async Task<IActionResult> CheckReturningUser([FromQuery] string idcard)
+    {
+        if (string.IsNullOrEmpty(idcard)) return BadRequest("Missing idcard");
+
+        var consented = await _context.KioskConsented
+            .Where(c => c.Idcard == idcard)
+            .OrderByDescending(c => c.ConsentedDate)
+            .FirstOrDefaultAsync();
+
+        if (consented == null)
+            return Ok(new { isReturning = false });
+
+        return Ok(new
+        {
+            isReturning = true,
+            consentedId = consented.Id,
+            consentedDate = consented.ConsentedDate
+        });
     }
 
     [HttpGet("GetConsentURL")]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -15,3 +15,4 @@ public partial class MenuChatbot
 
     public string RequiremenId { get; set; } = null!;
 }
+

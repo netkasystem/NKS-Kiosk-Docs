@@ -44,24 +44,69 @@ window.Step2 = {
 };
 
 window.Step3 = {
-    init: () => {
+    init: async () => {
         console.log("Step 3 read consent and check consent");
 
         const checkbox = document.getElementById('acceptCheckbox');
         const button = document.getElementById('submitButton');
 
-        checkbox.addEventListener('change', () => {
-            button.disabled = !checkbox.checked;
-        });
+        if (checkbox) {
+            checkbox.addEventListener('change', () => {
+                button.disabled = !checkbox.checked;
+            });
+        }
 
-        button.addEventListener("click", () => {
-            setConsent();
-            if (getCardData() == null) {
-                next_page("/Step/Step4");
+        if (button) {
+            button.addEventListener("click", () => {
+                setConsent();
+                if (getCardData() == null) {
+                    next_page("/Step/Step4");
+                } else {
+                    next_page("/Step/Step5");
+                }
+            });
+        }
+
+        // Scroll animation
+        const el = document.querySelector('.interac_icon_scroll');
+        const wrapper = document.querySelector('.scroll-anime');
+        if (el && wrapper) {
+            let count = 0;
+            el.addEventListener('animationiteration', () => {
+                count++;
+                if (count === 3) wrapper.style.display = 'none';
+            });
+        }
+
+        // ดึง Privacy Notice จาก NDPP
+        const loading = document.getElementById("privacy-notice-loading");
+        const contentDiv = document.getElementById("privacy-notice-content");
+        const fallback = document.getElementById("privacy-notice-fallback");
+        try {
+            const res = await fetch('/api/KioskApi/GetPrivacyNotice');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.content) {
+                    const titleEl = document.getElementById("privacy-notice-title");
+                    const bodyEl = document.getElementById("privacy-notice-body");
+                    if (titleEl) titleEl.textContent = data.name || "Privacy Notice";
+                    if (bodyEl) bodyEl.innerHTML = data.content;
+                    if (contentDiv) contentDiv.style.display = "block";
+                } else {
+                    if (fallback) fallback.style.display = "block";
+                }
             } else {
-                next_page("/Step/Step5");
+                if (fallback) fallback.style.display = "block";
             }
-        });
+        } catch (err) {
+            console.error("GetPrivacyNotice error:", err);
+            if (fallback) fallback.style.display = "block";
+        } finally {
+            if (loading) loading.style.display = "none";
+            if (checkbox) checkbox.disabled = false;
+            const label = document.getElementById("acceptCheckboxLabel");
+            if (label) { label.style.pointerEvents = "auto"; label.style.opacity = "1"; }
+        }
     }
 };
 
@@ -83,7 +128,7 @@ window.Step5 = {
             Step5.check();
         }, 1000);
     },
-    check: () => {
+    check: async () => {
         var _card = getCardData();
         var state = 1;
         if (_card == null) state = 2;
@@ -91,6 +136,38 @@ window.Step5 = {
 
         switch (state) {
             case 1:
+                // Check returning user from local DB
+                let isReturning = false;
+                try {
+                    const idcard = _card.citizenID ?? "";
+                    if (idcard) {
+                        const res = await fetch(`/api/KioskApi/CheckReturningUser?idcard=${encodeURIComponent(idcard)}`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.isReturning) {
+                                setReturningUser(data);
+                                isReturning = true;
+                                console.log("Returning user detected:", data);
+                            } else {
+                                removeReturningUser();
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error("CheckReturningUser error:", err);
+                    removeReturningUser();
+                }
+
+                // Returning user → preload NDPP data (ปกติโหลดใน Step12 ที่จะถูกข้าม)
+                if (isReturning) {
+                    try {
+                        const ndppRes = await fetch('/api/KioskApi/GetIntegrateNdpp', { headers: { "Content-Type": "application/json" } });
+                        if (ndppRes.ok) setIntegrateNdpp(await ndppRes.json());
+                    } catch (err) {
+                        console.error("Preload NDPP error:", err);
+                    }
+                }
+
                 next_page("/Step/Step8", 1);
                 break;
             case 2:
@@ -145,7 +222,13 @@ window.Step7 = {
 window.Step8 = {
     init: () => {
         console.log("Step 8: Read card successful");
-        next_page("/Step/Step9", 5);
+        const returning = getReturningUser();
+        if (returning && returning.isReturning) {
+            console.log("Returning user — skip face capture, go to Step17");
+            next_page("/Step/Step17", 3);
+        } else {
+            next_page("/Step/Step9", 5);
+        }
     }
 };
 
@@ -217,21 +300,6 @@ window.Step12 = {
         } catch (error) {
             alert(error.message);
         }
-        //get integrate ndpp by kiosk
-        try {
-            const kioskCode = GetKioskCode();
-            const response = fetch(`/api/KioskApi/GetIntegrateNdppByKiosk?kioskCode=${encodeURIComponent(kioskCode)}`, {
-                method: 'GET',
-                headers: { "Content-Type": "application/json", }
-            }).then(response => {
-                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
-                return response.json();
-            }).then(data => {
-                setIntegrateNdppByKiosk(data);
-            })
-        } catch (error) {
-            alert(error.message);
-        }
     }
 };
 
@@ -284,20 +352,243 @@ window.Step14 = {
 
 
 window.Step17 = {
-    init: () => {
-        const data = getIntegrateNdpp();
-        if (!data?.length) { next_page(); return; }
-        document.getElementById("step17-content").style.display = "";
+    init: async () => {
+        const cardData = getCardData();
+        const returningUser = getReturningUser();
+
+        let getIntegrateNdppData = await getIntegrateNdpp();
+
+        if (!getIntegrateNdppData?.length) { next_page(); return; }
+
+        // ดึง consent เดิม (ถ้าเคย submit มาก่อน)
+        let previousConsent = null;
+        try {
+            const citizenId = cardData.citizenID ?? "";
+            const kioskCode = GetKioskCode();
+            if (citizenId && kioskCode) {
+                const res = await fetch(`/api/KioskApi/GetNdppConsented?citizenId=${encodeURIComponent(citizenId)}&kioskCode=${encodeURIComponent(kioskCode)}`);
+                if (res.ok) {
+                    previousConsent = await res.json();
+                    if (previousConsent?.purposeOptionDetail) {
+                        previousConsent._parsed = JSON.parse(previousConsent.purposeOptionDetail);
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("GetNdppConsented error:", err);
+        }
+        Step17._previousConsent = previousConsent;
+
+        if (returningUser && returningUser.isReturning) {
+            console.log("Returning user — show consent form for editing");
+            removeReturningUser();
+        }
+
+        // แสดงหน้าเลือก/กรอก consent
+        const step17Content = document.getElementById("step17-content");
+        if (step17Content) step17Content.style.display = "";
+
+        // ผูก event submit + back ก่อน (ใช้ทั้ง 1 รายการและหลายรายการ)
+        const btnBack = document.getElementById("btn-back");
+        if (btnBack) {
+            btnBack.addEventListener("click", () => {
+                document.getElementById("ndpp-form-container").style.display = "none";
+                document.getElementById("ndpp-container").style.display = "flex";
+            });
+        }
+
+        const submitConsent = document.getElementById("submit-consent");
+        if (submitConsent) submitConsent.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const firstname = document.getElementById("firstname").value.trim();
+            const lastname  = document.getElementById("lastname").value.trim();
+            const email     = document.getElementById("email").value.trim();
+
+            const selectedPurposes = Array.from(
+                document.querySelectorAll("#ndpp-form input[name='purpose']:checked")
+            ).map(input => parseInt(input.value));
+
+            const purposeOptionDetail = Array.from(
+                document.querySelectorAll("#ndpp-form input[name='purpose']")
+            ).map(input => ({
+                PurposeNameId:  input.value,
+                PurposeName:    input.nextElementSibling?.textContent?.trim() ?? "",
+                PurposeChecked: input.checked
+            }));
+
+            const payload = {
+                Firstname:           firstname || cardData.thaiPersonalInfo.firstName,
+                Lastname:            lastname  || cardData.thaiPersonalInfo.lastName,
+                Email:               email,
+                IntegrateNdppId:     Step17._ndppId,
+                IntegrateUrl:        Step17._url,
+                PurposeOption:       selectedPurposes,
+                PurposeOptionDetail: purposeOptionDetail,
+                NdppFormData:        JSON.stringify(Step17._ndppFormData),
+                citizenID:           cardData.citizenID        ?? "",
+                fullNameTH:          cardData.fullNameTH       ?? "",
+                fullNameEN:          cardData.fullNameEN       ?? "",
+                photo_path:          cardData.photo_path       ?? "",
+                face_capture_path:   cardData.face_capture_path ?? "",
+                KioskCode:           GetKioskCode()
+            };
+            try {
+                const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ EncryptedINDPPString: encrypt(payload) })
+                });
+                if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
+                await response.json();
+                window.location.href = "/Step/StepEnd";
+            } catch (err) {
+                console.error(err);
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            }
+        });
+
+        // ถ้ามี 1 รายการ → เปิด consent form เลย
+        if (getIntegrateNdppData.length === 1) {
+            const item = getIntegrateNdppData[0];
+            Step17._ndppId = item.id;
+            Step17._url = item.ndppPreferenceUrl;
+
+            const encrypCardData = encrypt({
+                Firstname: cardData.thaiPersonalInfo.firstName,
+                Lastname: cardData.thaiPersonalInfo.lastName,
+                IntegrateNdppId: item.id
+            });
+
+            try {
+                const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data) {
+                        Step17._ndppFormData = data;
+                        Step17.showNdppForm(data, cardData);
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // หลายรายการ → สร้าง card list
+        const container = document.getElementById("ndpp-container");
+        container.innerHTML = "";
+        getIntegrateNdppData.forEach(item => {
+            const col = document.createElement("div");
+            col.className = "col-12 col-sm-6 col-lg-4";
+            const imgSrc = item.serviceImage ? `data:image/png;base64,${item.serviceImage}` : '';
+            col.innerHTML = `
+                <div class="card h-100 shadow-sm">
+                    ${imgSrc ? `<img src="${imgSrc}" class="card-img-top" alt="${item.serviceName}">` : ''}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">${item.serviceName}</h5>
+                        <p class="card-text text-truncate" style="max-height:3.6em;">${item.serviceDescription}</p>
+                        <p class="mb-1"><small>เริ่ม: ${new Date(item.serviceStartDate).toLocaleString()}</small></p>
+                        <p class="mb-2"><small>สิ้นสุด: ${new Date(item.serviceStopDate).toLocaleString()}</small></p>
+                        <button class="btn btn-primary mt-auto btn-open"
+                                data-url="${item.ndppPreferenceUrl}"
+                                data-id="${item.id}">เปิดดู</button>
+                    </div>
+                </div>`;
+            container.appendChild(col);
+        });
+
+        // กดเลือก service
+        container.addEventListener("click", async (e) => {
+            if (!e.target.classList.contains("btn-open")) return;
+            Step17._ndppId = e.target.getAttribute("data-id");
+            Step17._url = e.target.getAttribute("data-url");
+
+            const encrypCardData = encrypt({
+                Firstname: cardData.thaiPersonalInfo.firstName,
+                Lastname: cardData.thaiPersonalInfo.lastName,
+                IntegrateNdppId: Step17._ndppId
+            });
+            try {
+                const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
+                });
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                const data = await response.json();
+                if (data) {
+                    Step17._ndppFormData = data;
+                    Step17.showNdppForm(data, cardData);
+                } else {
+                    alert("ไม่พบ URL ของ NDPP");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("โหลดข้อมูลไม่สำเร็จ");
+            }
+        });
+
+    },
+
+    _ndppId: 0,
+    _url: "",
+    _ndppFormData: null,
+
+    showNdppForm: (data, cardData) => {
+        const container = document.getElementById("ndpp-form-container");
+        const title = document.getElementById("activity-title");
+        const activityContent = document.getElementById("activity-content");
+
+        title.textContent = data.ActivityNameTh || data.ServiceNameTh || "NDPP Form";
+
+        const replacedContent = data.content
+            .replace("{PurposeOption}", '<div id="purpose-placeholder"></div>')
+            .replace("{SubPurposeOption}", '<div id="sub-purpose-placeholder"></div>');
+        activityContent.innerHTML = replacedContent;
+
+        const placeholder = document.getElementById("purpose-placeholder");
+        const subplaceholder = document.getElementById("sub-purpose-placeholder");
+
+        // ดึง consent เดิมมา prefill
+        const prev = Step17._previousConsent?._parsed ?? [];
+
+        data.purpose_option.forEach(purpose => {
+            const prevItem = prev.find(p => String(p.PurposeNameId) === String(purpose.purpose_id));
+            const isChecked = prevItem ? prevItem.PurposeChecked : purpose.selected;
+
+            const div = document.createElement("div");
+            div.classList.add("form-check");
+            div.innerHTML = `
+                <input class="form-check-input" type="checkbox"
+                       id="purpose-${purpose.purpose_id}"
+                       name="purpose"
+                       value="${purpose.purpose_id}"
+                       ${isChecked ? "checked" : ""}
+                       ${purpose.is_required ? "required" : ""}>
+                <label class="form-check-label" for="purpose-${purpose.purpose_id}">
+                    ${purpose.purpose_th || purpose.purpose_en}
+                </label>`;
+            if (purpose.purpose_type == "Standard") {
+                placeholder.appendChild(div);
+            } else {
+                subplaceholder.appendChild(div);
+            }
+        });
+
+        const prevEmail = Step17._previousConsent?.email ?? "";
+        document.getElementById("firstname").value = cardData.thaiPersonalInfo.firstName || "";
+        document.getElementById("lastname").value  = cardData.thaiPersonalInfo.lastName || "";
+        document.getElementById("email").value     = prevEmail;
+
+        container.style.display = "block";
+        document.getElementById("ndpp-container").style.display = "none";
     }
 };
 
-window.Step18 = {
-    init: () => {
-        const data = getIntegrateNdppByKiosk();
-        if (!data?.length) { next_page(); return; }
-        document.getElementById("step18-content").style.display = "";
-    }
-};
 
 
 window.StepEnd = {
@@ -360,6 +651,7 @@ function showCountdownAndRedirect(seconds = 5) {
 (function () {
     const currentPath = window.location.pathname;
     const match = currentPath.match(/^\/Step\/Step(\d+)$/);
+    const matchEnd = currentPath === "/Step/StepEnd";
 
     if (match) {
         const stepNum = match[1];
@@ -370,6 +662,8 @@ function showCountdownAndRedirect(seconds = 5) {
         } else {
             console.warn(`Step${stepNum}.init() not found`);
         }
+    } else if (matchEnd && window.StepEnd?.init) {
+        window.StepEnd.init();
     }
 
     document.addEventListener("click", function (e) {

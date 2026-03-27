@@ -17,12 +17,14 @@
     public string photo_path { get; set; }
     public string face_capture_path { get; set; }
 }
+
 public class EncryptedPayload
 {
     public string EncrypString { get; set; }
     public string EncrypUpdatedData { get; set; }
     public string EncrypCustomDataData { get; set; }
 }
+
 public class EncryptedIntegrateNdppData
 {
     public string EncryptedINDPPString { get; set; }
@@ -43,6 +45,9 @@ public class IntegrateNdppData
     public string? fullNameEN { get; set; }
     public string? photo_path { get; set; }
     public string? face_capture_path { get; set; }
+    public string? photo { get; set; }
+    public string? face_capture { get; set; }
+    public string? KioskCode { get; set; }
 }
 
 public class PurposeOptionDetail

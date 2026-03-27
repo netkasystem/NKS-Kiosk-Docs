@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -13,3 +13,4 @@ public partial class Team
 
     public string LineToken { get; set; } = null!;
 }
+

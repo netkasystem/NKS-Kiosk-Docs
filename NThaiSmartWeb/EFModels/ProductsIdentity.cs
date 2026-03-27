@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -29,3 +29,4 @@ public partial class ProductsIdentity
 
     public byte Inactive { get; set; }
 }
+

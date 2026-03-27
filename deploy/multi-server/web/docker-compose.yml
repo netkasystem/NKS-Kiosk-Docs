@@ -1,15 +1,7 @@
-# =============================================================
-# เครื่อง Web — Netka Kiosk Web (หลาย instance)
-# ใช้ docker-compose.yml เดียวกันทุกเครื่อง แก้ .env ตาม IP
-# Redis อยู่บนเครื่อง Storage — ชี้ผ่าน REDIS_CONNECTION ใน .env
-# =============================================================
-
-version: "3.3"
-
 services:
   netka-kiosk-web:
-    image: netkaofficialhub/nthaismartweb:${IMAGE_TAG:-latest}
-    container_name: Netka.Kiosk.Web
+    image: netkaofficialhub/netka-kiosk-web-maersk:${IMAGE_TAG:-latest}
+    container_name: Kiosk.Maersk.Web
     restart: always
     ports:
       - "8080:8080"

@@ -23,7 +23,6 @@ public class StepController : BaseController
     public IActionResult Step12() => View();
     public IActionResult Step14() => View();
 public IActionResult Step17() => View();
-    public IActionResult Step18() => View();
 
     public IActionResult StepEnd() => View();
 }

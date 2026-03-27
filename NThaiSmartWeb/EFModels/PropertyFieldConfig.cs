@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -37,3 +37,4 @@ public partial class PropertyFieldConfig
 
     public ushort AllowDelete { get; set; }
 }
+

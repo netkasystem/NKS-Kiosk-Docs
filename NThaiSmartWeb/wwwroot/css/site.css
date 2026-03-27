@@ -8,7 +8,11 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -19,4 +23,92 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+/* NDPP Consent Form - Blue Theme */
+#ndpp-form {
+  background: linear-gradient(135deg, rgba(230, 244, 255, 0.92), rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 120, 215, 0.2) !important;
+  border-radius: 12px !important;
+}
+
+#ndpp-form h3,
+#ndpp-form #activity-title {
+  color: #004B87;
+  font-weight: 700;
+}
+
+#ndpp-form h5 {
+  color: #0073CF;
+  border-bottom-color: #0073CF !important;
+}
+
+#ndpp-form .form-label {
+  color: #00243D;
+  font-weight: 600;
+}
+
+#ndpp-form .form-control {
+  border: 1px solid #b0d4f1;
+  border-radius: 8px;
+}
+
+#ndpp-form .form-control:focus {
+  border-color: #0073CF;
+  box-shadow: 0 0 0 0.2rem rgba(0, 115, 207, 0.2);
+}
+
+#ndpp-form .form-check-input {
+  border-color: #0073CF;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+#ndpp-form .form-check-input:checked {
+  background-color: #0073CF;
+  border-color: #0073CF;
+}
+
+#ndpp-form .form-check-label {
+  color: #00243D;
+  padding-left: 0.3em;
+}
+
+#ndpp-form .btn-success {
+  background: linear-gradient(135deg, #0073CF, #004B87);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#ndpp-form .btn-success:hover {
+  background: linear-gradient(135deg, #005fa3, #003a6a);
+}
+
+#ndpp-form #activity-content {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid rgba(0, 120, 215, 0.1);
+}
+
+#ndpp-form #activity-content p {
+  margin-bottom: 0.5em;
+  line-height: 1.6;
+}
+
+#btn-back {
+  border-radius: 8px;
+  background: rgba(0, 75, 135, 0.1);
+  border: 1px solid #004B87;
+  color: #004B87;
+  font-weight: 600;
+}
+
+#btn-back:hover {
+  background: #004B87;
+  color: #fff;
 }

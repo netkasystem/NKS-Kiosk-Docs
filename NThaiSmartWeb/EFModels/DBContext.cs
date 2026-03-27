@@ -6,6 +6,7 @@ namespace NThaiSmartWeb.EFModels;
 
 public partial class DBContext : DbContext
 {
+        public virtual DbSet<KioskIntegrateNdppConsented> KioskIntegrateNdppConsented { get; set; }
     public virtual DbSet<KioskIntegrateNdppConsentMapping> KioskIntegrateNdppConsentMapping { get; set; }
 
     public DBContext(DbContextOptions<KioskContext> options) : base(options)
@@ -582,6 +583,54 @@ public partial class DBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+modelBuilder.Entity<KioskIntegrateNdppConsented>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("kiosk_integrate_ndpp_consented");
+
+            entity.HasIndex(e => e.CitizenId, "idx_citizen_id");
+
+            entity.HasIndex(e => e.KioskId, "idx_kiosk_id");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("id");
+            entity.Property(e => e.CitizenId)
+                .HasMaxLength(20)
+                .HasColumnName("citizen_id");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(100)
+                .HasColumnName("created_by");
+            entity.Property(e => e.CreatedDate)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime")
+                .HasColumnName("created_date");
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .HasColumnName("email");
+            entity.Property(e => e.FullnameEn)
+                .HasMaxLength(255)
+                .HasColumnName("fullname_en");
+            entity.Property(e => e.FullnameTh)
+                .HasMaxLength(255)
+                .HasColumnName("fullname_th");
+            entity.Property(e => e.Inactive)
+                .HasDefaultValueSql("'0'")
+                .HasColumnType("tinyint(4)")
+                .HasColumnName("inactive");
+            entity.Property(e => e.KioskId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_id");
+            entity.Property(e => e.KioskIntegrateNdppId)
+                .HasColumnType("int(10) unsigned")
+                .HasColumnName("kiosk_integrate_ndpp_id");
+            entity.Property(e => e.PurposeOptionDetail)
+                .HasComment("purpose ที่เลือก/ไม่เลือก")
+                .HasColumnType("json")
+                .HasColumnName("purpose_option_detail");
+        });
+
         modelBuilder.Entity<KioskIntegrateNdppConsentMapping>(entity =>
                 {
                     entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -620,9 +669,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -688,9 +735,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report_chart")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report_chart");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -730,9 +775,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report_data")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report_data");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -750,9 +793,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report_filter")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report_filter");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -786,9 +827,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report_module")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report_module");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -837,9 +876,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("ad_hoc_report_time_period")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ad_hoc_report_time_period");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -857,9 +894,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AddressId).HasName("PRIMARY");
 
-            entity
-                .ToTable("address")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("address");
 
             entity.HasIndex(e => new { e.Type, e.AddressId }, "SEEK");
 
@@ -887,9 +922,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("admin_edit_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("admin_edit_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -916,9 +949,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("admin_edit_log_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("admin_edit_log_detail");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -952,9 +983,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("admin_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("admin_log");
 
             entity.HasIndex(e => e.Username, "username");
 
@@ -993,9 +1022,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("admin_message")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("admin_message");
 
             entity.HasIndex(e => new { e.Id, e.Startdate, e.Enddate }, "message");
 
@@ -1033,9 +1060,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("admin_message_customer")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("admin_message_customer");
 
             entity.HasIndex(e => new { e.Id, e.Startdate, e.Enddate }, "message");
 
@@ -1079,9 +1104,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("alarm_description")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("alarm_description");
 
             entity.HasIndex(e => e.Alarm, "unique").IsUnique();
 
@@ -1098,9 +1121,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AlarmTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("alarm_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("alarm_type");
 
             entity.Property(e => e.AlarmTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -1126,9 +1147,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AlertProfileId).HasName("PRIMARY");
 
-            entity
-                .ToTable("alert_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("alert_profile");
 
             entity.HasIndex(e => e.ModuleId, "alert_profile_un").IsUnique();
 
@@ -1152,9 +1171,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("alert_profile_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("alert_profile_detail");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1195,9 +1212,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AlertTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("alert_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("alert_type");
 
             entity.Property(e => e.AlertTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -1212,9 +1227,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AmphurId).HasName("PRIMARY");
 
-            entity
-                .ToTable("amphur")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("amphur");
 
             entity.HasIndex(e => e.CountryId, "FK_amphur_country");
 
@@ -1250,9 +1263,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.WhatifId).HasName("PRIMARY");
 
-            entity
-                .ToTable("analytical_whatif")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("analytical_whatif");
 
             entity.Property(e => e.WhatifId)
                 .HasColumnType("int(10) unsigned")
@@ -1278,9 +1289,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("associated")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("associated");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1311,9 +1320,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("associated_monitoring")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("associated_monitoring");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1344,9 +1351,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AttachmentTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("attachment_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("attachment_type");
 
             entity.Property(e => e.AttachmentTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -1363,9 +1368,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("authentication_source")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("authentication_source");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1429,9 +1432,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("auto_report_setting")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("auto_report_setting");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1454,9 +1455,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.BooleanText).HasName("PRIMARY");
 
-            entity
-                .ToTable("boolean_translate")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("boolean_translate");
 
             entity.HasIndex(e => e.BooleanValue, "boolean_value");
 
@@ -1471,9 +1470,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("business_hour")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("business_hour");
 
             entity.HasIndex(e => e.ProfileId, "profile_id");
 
@@ -1510,9 +1507,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("business_hours_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("business_hours_profile");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1543,9 +1538,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("calendar")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("calendar");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1614,9 +1607,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("calendar_staff")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("calendar_staff");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1633,9 +1624,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CardId).HasName("PRIMARY");
 
-            entity
-                .ToTable("card")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("card");
 
             entity.Property(e => e.CardId)
                 .HasColumnType("int(10) unsigned")
@@ -1662,8 +1651,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("card_alarm_type")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("card_alarm_type");
 
             entity.Property(e => e.AlarmTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -1695,9 +1683,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_attachment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_attachment");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1720,9 +1706,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_category");
 
             entity.HasIndex(e => e.CaseTypeId, "case_type_id");
 
@@ -1750,9 +1734,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_id_format")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_id_format");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -1775,9 +1757,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseLogId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_log");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -1824,9 +1804,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseLogCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_log_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_log_category");
 
             entity.HasIndex(e => e.CaseLogCategoryTitle, "unique").IsUnique();
 
@@ -1846,9 +1824,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseLogId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_log_deleted")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_log_deleted");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -1892,9 +1868,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseLogTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_log_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_log_type");
 
             entity.HasIndex(e => e.CaseLogCategoryId, "FK_case_log_category");
 
@@ -1923,9 +1897,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseStatusId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_status")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_status");
 
             entity.Property(e => e.CaseStatusId)
                 .HasColumnType("int(10) unsigned")
@@ -1948,9 +1920,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseSubCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_sub_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_sub_category");
 
             entity.HasIndex(e => new { e.CaseSubCategoryTitle, e.CaseCategoryId }, "unique").IsUnique();
 
@@ -1975,9 +1945,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_type");
 
             entity.HasIndex(e => e.CaseTypeId, "case_type_id");
 
@@ -2014,9 +1982,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_type_custom")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_type_custom");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2039,9 +2005,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("case_type_custom_setup")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("case_type_custom_setup");
 
             entity.HasIndex(e => e.CaseTypeId, "case_type_id").IsUnique();
 
@@ -2065,9 +2029,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("category_icon")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("category_icon");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2088,9 +2050,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CauseById).HasName("PRIMARY");
 
-            entity
-                .ToTable("cause_by")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("cause_by");
 
             entity.Property(e => e.CauseById)
                 .HasColumnType("int(10) unsigned")
@@ -2115,8 +2075,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("change_password")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("change_password");
 
             entity.HasIndex(e => e.Date, "date");
 
@@ -2140,9 +2099,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("chat_copilot")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("chat_copilot");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2166,9 +2123,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ClosureTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("closure_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("closure_type");
 
             entity.HasIndex(e => e.ClosureTypeTitle, "unique").IsUnique();
 
@@ -2191,8 +2146,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("cms_switch_location_service")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("cms_switch_location_service");
 
             entity.HasIndex(e => e.Facility, "facility");
 
@@ -2246,9 +2200,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("collaboration")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("collaboration");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2276,9 +2228,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("compliant")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("compliant");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2299,9 +2249,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("config")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("config");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2396,9 +2344,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("config_alert_role")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("config_alert_role");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2420,9 +2366,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("config_alert_template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("config_alert_template");
 
             entity.HasIndex(e => new { e.ModuleId, e.CaseLogTypeId, e.CaseStatusId, e.AlertTypeId }, "config_alert_template_un").IsUnique();
 
@@ -2459,9 +2403,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("config_alert_template_role")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("config_alert_template_role");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2482,9 +2424,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ContactId).HasName("PRIMARY");
 
-            entity
-                .ToTable("contact")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contact");
 
             entity.HasIndex(e => e.CustomerId, "customer_id");
 
@@ -2565,9 +2505,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ContactChannelId).HasName("PRIMARY");
 
-            entity
-                .ToTable("contact_channel")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contact_channel");
 
             entity.Property(e => e.ContactChannelId)
                 .HasColumnType("int(10) unsigned")
@@ -2592,9 +2530,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contact_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contact_profile");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2627,9 +2563,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ContractId).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract");
 
             entity.HasIndex(e => e.EmailProfileId, "FK_contract_email_profile");
 
@@ -2684,9 +2618,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract_attachment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract_attachment");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2713,9 +2645,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract_attachment_old")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract_attachment_old");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2732,9 +2662,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract_custom_field")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract_custom_field");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2755,9 +2683,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract_custom_form")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract_custom_form");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2785,9 +2711,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("contract_log_attachment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("contract_log_attachment");
 
             entity.HasIndex(e => e.ContractId, "FK_contract_log_attachment_attachment_type");
 
@@ -2816,9 +2740,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("country")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("country");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2837,9 +2759,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("currency")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("currency");
 
             entity.HasIndex(e => e.CurrencyTitle, "unique").IsUnique();
 
@@ -2864,9 +2784,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("custom_form")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("custom_form");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -2898,9 +2816,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CustomFormId).HasName("PRIMARY");
 
-            entity
-                .ToTable("custom_form_field")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("custom_form_field");
 
             entity.Property(e => e.CustomFormId)
                 .HasColumnType("int(10) unsigned")
@@ -2991,9 +2907,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("custom_survey_result")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("custom_survey_result");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3019,9 +2933,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("custom_survey_value")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("custom_survey_value");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3042,9 +2954,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CustomerId).HasName("PRIMARY");
 
-            entity
-                .ToTable("customer")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("customer");
 
             entity.HasIndex(e => e.CustomerTypeId, "customer_type_id");
 
@@ -3082,9 +2992,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CustomerId).HasName("PRIMARY");
 
-            entity
-                .ToTable("customer_contact")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("customer_contact");
 
             entity.Property(e => e.CustomerId)
                 .ValueGeneratedNever()
@@ -3125,9 +3033,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CustomerTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("customer_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("customer_type");
 
             entity.HasIndex(e => e.CustomerTypeTitle, "unique").IsUnique();
 
@@ -3160,9 +3066,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("datasource_config")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("datasource_config");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3185,9 +3089,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.DepartmentId).HasName("PRIMARY");
 
-            entity
-                .ToTable("department")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("department");
 
             entity.HasIndex(e => e.DepartmentTitle, "unique").IsUnique();
 
@@ -3207,9 +3109,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_auto_incident_setup")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_auto_incident_setup");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3242,9 +3142,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.EmailProfileId).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_profile");
 
             entity.Property(e => e.EmailProfileId)
                 .HasColumnType("int(10) unsigned")
@@ -3266,9 +3164,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ProfileDetailId).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_profile_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_profile_detail");
 
             entity.Property(e => e.ProfileDetailId)
                 .HasColumnType("int(10) unsigned")
@@ -3299,9 +3195,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_sms_alert_temp")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_sms_alert_temp");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3347,8 +3241,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("email_sms_log")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("email_sms_log");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -3411,8 +3304,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("email_sms_log_temp")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("email_sms_log_temp");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -3455,9 +3347,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_template");
 
             entity.HasIndex(e => e.TemplateTypeId, "FK_email_template_email_template_type");
 
@@ -3492,9 +3382,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_template_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_template_type");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3508,9 +3396,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("email_template_variable")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("email_template_variable");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3543,9 +3429,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("faq_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("faq_category");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3568,9 +3452,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("faq_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("faq_detail");
 
             entity.HasIndex(e => e.CategoryId, "FK_faq_detail_category");
 
@@ -3619,9 +3501,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("faq_helpful_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("faq_helpful_log");
 
             entity.HasIndex(e => new { e.FaqId, e.Username }, "knowledgebase_helpful_log_un").IsUnique();
 
@@ -3647,9 +3527,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.FsId).HasName("PRIMARY");
 
-            entity
-                .ToTable("file_server")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("file_server");
 
             entity.Property(e => e.FsId)
                 .HasColumnType("int(10) unsigned")
@@ -3666,9 +3544,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.FspId).HasName("PRIMARY");
 
-            entity
-                .ToTable("file_server_priv")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("file_server_priv");
 
             entity.HasIndex(e => e.FsId, "fs_id");
 
@@ -3690,9 +3566,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("file_validation")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("file_validation");
 
             entity.HasIndex(e => new { e.FileExtension, e.DecSignature }, "ukey").IsUnique();
 
@@ -3723,9 +3597,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.FoundFaultById).HasName("PRIMARY");
 
-            entity
-                .ToTable("found_fault_by")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("found_fault_by");
 
             entity.Property(e => e.FoundFaultById)
                 .HasColumnType("int(10) unsigned")
@@ -3747,9 +3619,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("function_privilege")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("function_privilege");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -3811,9 +3681,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.GenderId).HasName("PRIMARY");
 
-            entity
-                .ToTable("gender")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("gender");
 
             entity.HasIndex(e => e.GenderTitle, "unique").IsUnique();
 
@@ -3833,8 +3701,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("general_choice")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("general_choice");
 
             entity.Property(e => e.Answer)
                 .HasColumnType("text")
@@ -3851,9 +3718,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.QuestionId).HasName("PRIMARY");
 
-            entity
-                .ToTable("general_question")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("general_question");
 
             entity.Property(e => e.QuestionId)
                 .HasColumnType("int(10) unsigned")
@@ -3870,9 +3735,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.GeoId).HasName("PRIMARY");
 
-            entity
-                .ToTable("geography")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("geography");
 
             entity.HasIndex(e => e.GeoName, "unique").IsUnique();
 
@@ -3891,9 +3754,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.HolidayId).HasName("PRIMARY");
 
-            entity
-                .ToTable("holiday")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("holiday");
 
             entity.HasIndex(e => e.ProfileId, "profile_id");
 
@@ -3930,9 +3791,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Hour1).HasName("PRIMARY");
 
-            entity
-                .ToTable("hour")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("hour");
 
             entity.Property(e => e.Hour1)
                 .HasMaxLength(10)
@@ -3944,8 +3803,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("im_log")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("im_log");
 
             entity.Property(e => e.CreateBy)
                 .HasMaxLength(45)
@@ -3965,9 +3823,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ImpactId).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact");
 
             entity.HasIndex(e => e.ImpactTitle, "unique").IsUnique();
 
@@ -3993,9 +3849,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_affected_parties")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_affected_parties");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4021,9 +3875,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_analysis")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_analysis");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -4046,9 +3898,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_cost")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_cost");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -4079,9 +3929,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_detail");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -4109,9 +3957,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_sow")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_sow");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4141,9 +3987,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("impact_time")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("impact_time");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4165,9 +4009,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident");
 
             entity.HasIndex(e => e.CaseCategoryId, "case_category_id");
 
@@ -4421,9 +4263,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_assignment_rule")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_assignment_rule");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4458,9 +4298,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseId).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_case_type_custom")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_case_type_custom");
 
             entity.HasIndex(e => e.CaseTypeId, "case_type_id");
 
@@ -4489,9 +4327,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_change")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_change");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4512,8 +4348,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("incident_circuit")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("incident_circuit");
 
             entity.Property(e => e.CaseId)
                 .HasColumnType("int(10) unsigned")
@@ -4528,8 +4363,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("incident_create_summary")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("incident_create_summary");
 
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Id)
@@ -4547,9 +4381,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_custom")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_custom");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4568,9 +4400,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_custom_field")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_custom_field");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4591,9 +4421,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_dashboard_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_dashboard_profile");
 
             entity.HasIndex(e => new { e.Name, e.StaffId }, "incident_dashboard_profile_un").IsUnique();
 
@@ -4641,9 +4469,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_deleted")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_deleted");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -4868,9 +4694,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_escalation_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_escalation_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10)")
@@ -4909,9 +4733,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_pending")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_pending");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -4943,8 +4765,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("incident_remain_summary")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("incident_remain_summary");
 
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Id)
@@ -4965,8 +4786,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("incident_resolution")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("incident_resolution");
 
             entity.Property(e => e.CaseCategoryTitle)
                 .HasMaxLength(45)
@@ -5046,8 +4866,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("incident_resolve_summary")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("incident_resolve_summary");
 
             entity.Property(e => e.Date).HasColumnName("date");
             entity.Property(e => e.Id)
@@ -5068,9 +4887,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseId).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_service_report")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_service_report");
 
             entity.Property(e => e.CaseId)
                 .HasColumnType("int(10) unsigned")
@@ -5090,9 +4907,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("incident_template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("incident_template");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5174,9 +4989,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("invoiceitems")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("invoiceitems");
 
             entity.HasIndex(e => new { e.Invoiceid, e.Itemseq }, "invoiceitems_idx");
 
@@ -5217,9 +5030,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("invoices")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("invoices");
 
             entity.HasIndex(e => new { e.Refdoctype, e.Refdocid }, "invoices_idx").IsUnique();
 
@@ -5280,9 +5091,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ItemStatusId).HasName("PRIMARY");
 
-            entity
-                .ToTable("item_status")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("item_status");
 
             entity.Property(e => e.ItemStatusId)
                 .HasColumnType("int(10) unsigned")
@@ -5306,9 +5115,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk");
 
             entity.HasIndex(e => e.KioskCode, "kiosk_temp_unique").IsUnique();
 
@@ -5487,9 +5294,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_consented")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_consented");
 
             entity.HasIndex(e => e.Idcard, "kiosk_consented_idcard_IDX");
 
@@ -5536,9 +5341,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_contract")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_contract");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5594,9 +5397,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_contract_attachment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_contract_attachment");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5624,9 +5425,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_control_command")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_control_command");
 
             entity.Property(e => e.Id)
                 .HasComment("Primary key")
@@ -5666,9 +5465,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_control_command_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_control_command_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5699,9 +5496,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_custom_field")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_custom_field");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5730,9 +5525,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_custom_field_value")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_custom_field_value");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5753,9 +5546,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_enrollment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_enrollment");
 
             entity.HasIndex(e => e.EnrolledAt, "idx_enrolled_at");
 
@@ -5836,9 +5627,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_health_status")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_health_status");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5864,9 +5653,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_heartbeat")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_heartbeat");
 
             entity.HasIndex(e => e.KioskId, "kiosk_heartbeat_unique").IsUnique();
 
@@ -5947,9 +5734,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_monitoring_pin")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_monitoring_pin");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -5966,9 +5751,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("kiosk_setup", tb => tb.HasComment("ตารางเก็บข้อมูล template สำหรับ setup kiosk script"))
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("kiosk_setup", tb => tb.HasComment("ตารางเก็บข้อมูล template สำหรับ setup kiosk script"));
 
             entity.HasIndex(e => e.Code, "code").IsUnique();
 
@@ -6164,9 +5947,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("level")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("level");
 
             entity.HasIndex(e => e.Level1, "level").IsUnique();
 
@@ -6183,9 +5964,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ProductKey).HasName("PRIMARY");
 
-            entity
-                .ToTable("license")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("license");
 
             entity.Property(e => e.ProductKey)
                 .HasMaxLength(512)
@@ -6218,9 +5997,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("line_notification")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("line_notification");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -6252,9 +6029,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.LineTemplateId).HasName("PRIMARY");
 
-            entity
-                .ToTable("line_template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("line_template");
 
             entity.Property(e => e.LineTemplateId)
                 .HasColumnType("int(10) unsigned")
@@ -6271,9 +6046,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.LocationId).HasName("PRIMARY");
 
-            entity
-                .ToTable("location")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("location");
 
             entity.Property(e => e.LocationId)
                 .HasColumnType("int(10) unsigned")
@@ -6330,9 +6103,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("login")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("login");
 
             entity.HasIndex(e => e.DateIn, "date_in");
 
@@ -6366,9 +6137,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("login_fail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("login_fail");
 
             entity.HasIndex(e => e.Username, "username");
 
@@ -6395,9 +6164,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("login_otp")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("login_otp");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -6420,8 +6187,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("login_spr")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("login_spr");
 
             entity.HasIndex(e => e.DateIn, "date_in");
 
@@ -6452,9 +6218,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("mandatory_field_config")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("mandatory_field_config");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -6495,9 +6259,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.MenuId).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu");
 
             entity.HasIndex(e => e.ParentMenuId, "FK_menu_menu");
 
@@ -6547,9 +6309,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_api_path")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_api_path");
 
             entity.HasIndex(e => e.ModuleId, "menu_api_path_fk");
 
@@ -6568,9 +6328,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_api_path_anonymous")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_api_path_anonymous");
 
             entity.HasIndex(e => e.Path, "menu_api_path_anonymous_unique").IsUnique();
 
@@ -6595,9 +6353,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_api_path_phase2")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_api_path_phase2");
 
             entity.HasIndex(e => e.ModuleId, "menu_api_path_fk");
 
@@ -6653,9 +6409,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.MenuGroupId).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_group")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_group");
 
             entity.HasIndex(e => e.MenuGroupParent, "FK_menu_group_menu_group");
 
@@ -6699,9 +6453,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_tutorial_mapping")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_tutorial_mapping");
 
             entity.HasIndex(e => e.MenuId, "FK_tutorial_menu_id");
 
@@ -6726,9 +6478,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("menu_user_routing")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("menu_user_routing");
 
             entity.HasIndex(e => e.MenuId, "FK_menu_id");
 
@@ -6751,8 +6501,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("message_customer_circuit")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("message_customer_circuit");
 
             entity.Property(e => e.CircuitId)
                 .HasColumnType("int(10) unsigned")
@@ -6766,8 +6515,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("message_customer_contact")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("message_customer_contact");
 
             entity.Property(e => e.ContactId)
                 .HasColumnType("int(10) unsigned")
@@ -6781,9 +6529,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("mobile_phone_regis_nsd")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("mobile_phone_regis_nsd");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -6811,9 +6557,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ModuleId).HasName("PRIMARY");
 
-            entity
-                .ToTable("module")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("module");
 
             entity.Property(e => e.ModuleId)
                 .HasColumnType("int(10) unsigned")
@@ -6945,9 +6689,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("module_dashboard_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("module_dashboard_profile");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -6987,9 +6729,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ModuleLookupId).HasName("PRIMARY");
 
-            entity
-                .ToTable("module_lookup")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("module_lookup");
 
             entity.Property(e => e.ModuleLookupId)
                 .HasColumnType("int(10) unsigned")
@@ -7042,9 +6782,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("module_role")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("module_role");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7131,9 +6869,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.NwsrvTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("network_service_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("network_service_type");
 
             entity.Property(e => e.NwsrvTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -7155,9 +6891,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nksfsrv_file_cabinet")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nksfsrv_file_cabinet");
 
             entity.HasIndex(e => e.Rng, "index_2");
 
@@ -7193,9 +6927,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.NodeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("node")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("node");
 
             entity.Property(e => e.NodeId)
                 .HasColumnType("int(10) unsigned")
@@ -7221,8 +6953,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("node_card")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("node_card");
 
             entity.HasIndex(e => e.CardId, "card_id");
 
@@ -7240,9 +6971,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("notification_task")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("notification_task");
 
             entity.HasIndex(e => e.AlertDate, "alert_date");
 
@@ -7287,9 +7016,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("notification_task_contact")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("notification_task_contact");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7327,9 +7054,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsd_function")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsd_function");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7347,9 +7072,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsd_import", tb => tb.HasComment("Mapping table with webpage"))
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsd_import", tb => tb.HasComment("Mapping table with webpage"));
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7370,9 +7093,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsdx_dashboard_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsdx_dashboard_profile");
 
             entity.HasIndex(e => new { e.Name, e.StaffId }, "nsdx_dashboard_profile_un").IsUnique();
 
@@ -7420,9 +7141,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsdx_error_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsdx_error_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7446,9 +7165,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.FileId).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsdx_file_attachment_ftp")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsdx_file_attachment_ftp");
 
             entity.Property(e => e.FileId)
                 .HasColumnType("int(10) unsigned")
@@ -7505,9 +7222,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.AttatchmentId).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsdx_file_attatchment")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsdx_file_attatchment");
 
             entity.Property(e => e.AttatchmentId)
                 .HasColumnType("int(10) unsigned")
@@ -7534,9 +7249,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("nsdx_reset_factory_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("nsdx_reset_factory_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7562,8 +7275,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("nsdx_system_log")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("nsdx_system_log");
 
             entity.Property(e => e.Adminsystemlogaction)
                 .HasMaxLength(6)
@@ -7598,9 +7310,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.OfficeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("office")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("office");
 
             entity.HasIndex(e => e.Amphur, "amphur");
 
@@ -7673,9 +7383,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.OlaId).HasName("PRIMARY");
 
-            entity
-                .ToTable("ola")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ola");
 
             entity.HasIndex(e => e.OlaTitle, "sla_title").IsUnique();
 
@@ -7697,9 +7405,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.OlaDetailId).HasName("PRIMARY");
 
-            entity
-                .ToTable("ola_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("ola_detail");
 
             entity.Property(e => e.OlaDetailId)
                 .HasColumnType("int(10) unsigned")
@@ -7735,8 +7441,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("page_product")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("page_product");
 
             entity.HasIndex(e => e.Page, "page").IsUnique();
 
@@ -7753,9 +7458,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("page_product_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("page_product_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7784,9 +7487,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Script).HasName("PRIMARY");
 
-            entity
-                .ToTable("part_code_script")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("part_code_script");
 
             entity.HasIndex(e => e.PartCode, "product");
 
@@ -7804,8 +7505,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("partner_project_register")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("partner_project_register");
 
             entity.Property(e => e.Email)
                 .HasMaxLength(45)
@@ -7822,9 +7522,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("planing_analysis")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("planing_analysis");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -7845,9 +7543,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.PositionId).HasName("PRIMARY");
 
-            entity
-                .ToTable("position")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("position");
 
             entity.HasIndex(e => e.PositionTitle, "unique").IsUnique();
 
@@ -7864,9 +7560,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.PrefixId).HasName("PRIMARY");
 
-            entity
-                .ToTable("prefix")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("prefix");
 
             entity.HasIndex(e => e.PrefixTitle, "unique").IsUnique();
 
@@ -7886,9 +7580,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.PriorityId).HasName("PRIMARY");
 
-            entity
-                .ToTable("priority")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("priority");
 
             entity.HasIndex(e => e.PriorityTitle, "unique").IsUnique();
 
@@ -7934,9 +7626,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("priority_level")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("priority_level");
 
             entity.HasIndex(e => e.ImpactId, "FK_priority_level_impact");
 
@@ -7985,9 +7675,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("privilege")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("privilege");
 
             entity.HasIndex(e => new { e.Level, e.MenuId }, "privilege_un").IsUnique();
 
@@ -8030,9 +7718,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("probability")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("probability");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8049,9 +7735,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("product_key_sale")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("product_key_sale");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8095,8 +7779,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("product_key_sale_detail")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("product_key_sale_detail");
 
             entity.HasIndex(e => new { e.RefId, e.ProductId }, "Index_1");
 
@@ -8117,9 +7800,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("product_key_trial")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("product_key_trial");
 
             entity.HasIndex(e => e.Country, "country");
 
@@ -8196,8 +7877,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("product_key_trial_detail")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("product_key_trial_detail");
 
             entity.HasIndex(e => e.ProductId, "product_id");
 
@@ -8220,9 +7900,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SysobjectId).HasName("PRIMARY");
 
-            entity
-                .ToTable("products_identity")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("products_identity");
 
             entity.HasIndex(e => e.ProductType, "product_type");
 
@@ -8275,9 +7953,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("project")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("project");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8295,9 +7971,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("property_control_filed")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("property_control_filed");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8316,9 +7990,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("property_field_config")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("property_field_config");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8384,9 +8056,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("property_field_value_master")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("property_field_value_master");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8420,9 +8090,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ProvinceId).HasName("PRIMARY");
 
-            entity
-                .ToTable("province")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("province");
 
             entity.HasIndex(e => e.CountryId, "FK_province_country");
 
@@ -8452,9 +8120,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RegionId).HasName("PRIMARY");
 
-            entity
-                .ToTable("region")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("region");
 
             entity.Property(e => e.RegionId)
                 .HasColumnType("int(10) unsigned")
@@ -8514,9 +8180,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("report_view_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("report_view_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8555,9 +8219,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("report_view_log_config")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("report_view_log_config");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8580,9 +8242,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ResolutionCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("resolution_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("resolution_category");
 
             entity.HasIndex(e => e.ResolutionCategoryId, "resolution_category_id");
 
@@ -8606,9 +8266,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ResolutionTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("resolution_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("resolution_type");
 
             entity.HasIndex(e => new { e.ResolutionTypeTitle, e.ResolutionCategoryId }, "unique").IsUnique();
 
@@ -8634,9 +8292,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RiskId).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk");
 
             entity.Property(e => e.RiskId)
                 .HasColumnType("int(10)")
@@ -8661,9 +8317,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk_analysis")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk_analysis");
 
             entity.HasIndex(e => e.CaseId, "case_id");
 
@@ -8686,9 +8340,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RiskCaseLogTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk_case_log_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk_case_log_type");
 
             entity.Property(e => e.RiskCaseLogTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -8709,9 +8361,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RiskCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk_category");
 
             entity.HasIndex(e => e.RiskCategoryTitle, "unique").IsUnique();
 
@@ -8730,9 +8380,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk_level")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk_level");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8760,9 +8408,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("risk_mitigation")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("risk_mitigation");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8783,9 +8429,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RoleId).HasName("PRIMARY");
 
-            entity
-                .ToTable("role")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("role");
 
             entity.HasIndex(e => e.RoleTitle, "unique").IsUnique();
 
@@ -8802,9 +8446,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("role_authorize")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("role_authorize");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8823,9 +8465,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.RootCauseId).HasName("PRIMARY");
 
-            entity
-                .ToTable("root_cause")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("root_cause");
 
             entity.Property(e => e.RootCauseId)
                 .HasColumnType("int(10) unsigned")
@@ -8850,9 +8490,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("saas_customer")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("saas_customer");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -8883,9 +8521,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SectionId).HasName("PRIMARY");
 
-            entity
-                .ToTable("section")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("section");
 
             entity.HasIndex(e => e.DepartmentId, "department_id");
 
@@ -8913,9 +8549,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SectorId).HasName("PRIMARY");
 
-            entity
-                .ToTable("sector")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("sector");
 
             entity.HasIndex(e => e.SectorTitle, "unique").IsUnique();
 
@@ -8935,9 +8569,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("select2_mapping")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("select2_mapping");
 
             entity.HasIndex(e => e.Name, "select2_mapping_unique").IsUnique();
 
@@ -8981,9 +8613,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("send_email_debug")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("send_email_debug");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9007,9 +8637,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("send_email_sms_error_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("send_email_sms_error_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9050,8 +8678,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("service_team")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("service_team");
 
             entity.Property(e => e.CaseTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -9065,9 +8692,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ServiceTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("service_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("service_type");
 
             entity.HasIndex(e => e.CaseIdFormat, "case_id_format");
 
@@ -9104,9 +8729,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Date).HasName("PRIMARY");
 
-            entity
-                .ToTable("shift")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("shift");
 
             entity.Property(e => e.Date)
                 .HasMaxLength(45)
@@ -9214,9 +8837,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SiteId).HasName("PRIMARY");
 
-            entity
-                .ToTable("site")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("site");
 
             entity.HasIndex(e => e.Amphur, "FK_site_amphur");
 
@@ -9313,9 +8934,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SiteId).HasName("PRIMARY");
 
-            entity
-                .ToTable("site_zone")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("site_zone");
 
             entity.Property(e => e.SiteId)
                 .HasColumnType("int(10) unsigned")
@@ -9333,9 +8952,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SkillId).HasName("PRIMARY");
 
-            entity
-                .ToTable("skill")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("skill");
 
             entity.HasIndex(e => e.CaseSubCategoryId, "case_sub_category_id");
 
@@ -9365,9 +8982,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SkillLevelId).HasName("PRIMARY");
 
-            entity
-                .ToTable("skill_level")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("skill_level");
 
             entity.HasIndex(e => e.SkillLevelTitle, "unique").IsUnique();
 
@@ -9387,9 +9002,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TrainingId).HasName("PRIMARY");
 
-            entity
-                .ToTable("skill_training")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("skill_training");
 
             entity.Property(e => e.TrainingId)
                 .HasColumnType("int(10) unsigned")
@@ -9414,9 +9027,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SlaId).HasName("PRIMARY");
 
-            entity
-                .ToTable("sla")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("sla");
 
             entity.HasIndex(e => e.SlaTitle, "sla_title").IsUnique();
 
@@ -9438,9 +9049,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SlaDetailId).HasName("PRIMARY");
 
-            entity
-                .ToTable("sla_detail")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("sla_detail");
 
             entity.HasIndex(e => e.PriorityId, "priority_id");
 
@@ -9480,9 +9089,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SmsTemplateId).HasName("PRIMARY");
 
-            entity
-                .ToTable("sms_template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("sms_template");
 
             entity.Property(e => e.SmsTemplateId)
                 .HasColumnType("int(10) unsigned")
@@ -9503,9 +9110,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SpareId).HasName("PRIMARY");
 
-            entity
-                .ToTable("spare")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("spare");
 
             entity.HasIndex(e => e.AssetSubCategoryId, "asset_catogory_id");
 
@@ -9569,9 +9174,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SpareLogId).HasName("PRIMARY");
 
-            entity
-                .ToTable("spare_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("spare_log");
 
             entity.HasIndex(e => e.ItemStatusId, "item_status_id");
 
@@ -9606,9 +9209,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.StaffId).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff");
 
             entity.HasIndex(e => e.DepartmentId, "department_id");
 
@@ -9714,9 +9315,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff_location")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff_location");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9741,9 +9340,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff_location_log")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff_location_log");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9775,9 +9372,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff_location_tracking")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff_location_tracking");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9808,9 +9403,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff_profile");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9843,9 +9436,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.StaffStatusId).HasName("PRIMARY");
 
-            entity
-                .ToTable("staff_status")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("staff_status");
 
             entity.HasIndex(e => e.StaffStatusTitle, "unique").IsUnique();
 
@@ -9862,9 +9453,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("status_mapping_sd_incident")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("status_mapping_sd_incident");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -9881,8 +9470,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("sub_category_team")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("sub_category_team");
 
             entity.Property(e => e.CaseSubCateogryId)
                 .HasColumnType("int(10) unsigned")
@@ -9896,9 +9484,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SupplierId).HasName("PRIMARY");
 
-            entity
-                .ToTable("supplier")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("supplier");
 
             entity.HasIndex(e => e.Amphur, "amphur");
 
@@ -9976,9 +9562,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SupplierContactId).HasName("PRIMARY");
 
-            entity
-                .ToTable("supplier_contact")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("supplier_contact");
 
             entity.HasIndex(e => e.Inactive, "inactive");
 
@@ -10023,9 +9607,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("supplier_contact_profile")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("supplier_contact_profile");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10058,9 +9640,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.SymptomTypeId).HasName("PRIMARY");
 
-            entity
-                .ToTable("symptom_type")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("symptom_type");
 
             entity.Property(e => e.SymptomTypeId)
                 .HasColumnType("int(10) unsigned")
@@ -10082,9 +9662,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TambolId).HasName("PRIMARY");
 
-            entity
-                .ToTable("tambol")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("tambol");
 
             entity.HasIndex(e => e.AmphurId, "FK_tambol_amphur");
 
@@ -10125,9 +9703,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TeamId).HasName("PRIMARY");
 
-            entity
-                .ToTable("team")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("team");
 
             entity.HasIndex(e => e.TeamTitle, "unique").IsUnique();
 
@@ -10151,9 +9727,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TemplateId).HasName("PRIMARY");
 
-            entity
-                .ToTable("template")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("template");
 
             entity.Property(e => e.TemplateId)
                 .HasColumnType("int(10) unsigned")
@@ -10186,9 +9760,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("test_start_finish")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("test_start_finish");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -10205,9 +9777,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TierId).HasName("PRIMARY");
 
-            entity
-                .ToTable("tier")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("tier");
 
             entity.HasIndex(e => e.TierTitle, "unique").IsUnique();
 
@@ -10233,9 +9803,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("translate")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("translate");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -10254,9 +9822,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("tutorial")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("tutorial");
 
             entity.HasIndex(e => new { e.Title, e.Description }, "title").HasAnnotation("MySql:FullTextIndex", true);
 
@@ -10275,9 +9841,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TypeOfServiceId).HasName("PRIMARY");
 
-            entity
-                .ToTable("type_of_service")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("type_of_service");
 
             entity.Property(e => e.TypeOfServiceId)
                 .HasColumnType("int(10) unsigned")
@@ -10303,9 +9867,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.UrgencyId).HasName("PRIMARY");
 
-            entity
-                .ToTable("urgency")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("urgency");
 
             entity.HasIndex(e => e.UrgencyTitle, "unique").IsUnique();
 
@@ -10340,9 +9902,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Username).HasName("PRIMARY");
 
-            entity
-                .ToTable("user")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("user");
 
             entity.Property(e => e.Username)
                 .HasMaxLength(32)
@@ -10492,9 +10052,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Username).HasName("PRIMARY");
 
-            entity
-                .ToTable("user_control")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("user_control");
 
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
@@ -10514,9 +10072,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Name).HasName("PRIMARY");
 
-            entity
-                .ToTable("variables")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("variables");
 
             entity.HasIndex(e => e.Category, "category");
 
@@ -10542,7 +10098,7 @@ public partial class DBContext : DbContext
                 .HasColumnType("int(10) unsigned")
                 .HasColumnName("order_num");
             entity.Property(e => e.Value)
-                .HasMaxLength(200)
+                .HasMaxLength(500)
                 .HasDefaultValueSql("''")
                 .HasColumnName("value");
         });
@@ -10551,9 +10107,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.VendorId).HasName("PRIMARY");
 
-            entity
-                .ToTable("vendor")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("vendor");
 
             entity.HasIndex(e => e.VendorName, "unique").IsUnique();
 
@@ -10574,9 +10128,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("watcher")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("watcher");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10605,9 +10157,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.TopicId).HasName("PRIMARY");
 
-            entity
-                .ToTable("webboard")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("webboard");
 
             entity.Property(e => e.TopicId)
                 .HasColumnType("int(10) unsigned")
@@ -10647,9 +10197,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("webboard_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("webboard_category");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10666,9 +10214,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.ReplyId).HasName("PRIMARY");
 
-            entity
-                .ToTable("webboard_reply")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("webboard_reply");
 
             entity.HasIndex(e => e.TopicId, "topic_id");
 
@@ -10709,9 +10255,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.WorkCategoryId).HasName("PRIMARY");
 
-            entity
-                .ToTable("work_category")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("work_category");
 
             entity.Property(e => e.WorkCategoryId)
                 .HasColumnType("int(10) unsigned")
@@ -10725,8 +10269,7 @@ public partial class DBContext : DbContext
         {
             entity
                 .HasNoKey()
-                .ToTable("work_day")
-                .UseCollation("utf8mb4_general_ci");
+                .ToTable("work_day");
 
             entity.Property(e => e.Friday)
                 .IsRequired()
@@ -10749,9 +10292,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("workflow_participate")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("workflow_participate");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10775,9 +10316,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("workflow_rule")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("workflow_rule");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10809,9 +10348,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity
-                .ToTable("workflow_rule_condition")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("workflow_rule_condition");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(10) unsigned")
@@ -10841,9 +10378,7 @@ public partial class DBContext : DbContext
         {
             entity.HasKey(e => e.CaseLogId).HasName("PRIMARY");
 
-            entity
-                .ToTable("working_log_deleted")
-                .UseCollation("utf8mb4_general_ci");
+            entity.ToTable("working_log_deleted");
 
             entity.HasIndex(e => new { e.CaseId, e.CaseLogTypeId }, "Index_couple");
 

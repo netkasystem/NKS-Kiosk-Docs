@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -39,3 +39,4 @@ public partial class Module
 
     public virtual ICollection<MenuApiPathAnonymous> MenuApiPathAnonymous { get; set; } = new List<MenuApiPathAnonymous>();
 }
+

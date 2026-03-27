@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -49,3 +49,4 @@ public partial class Site
 
     public virtual ICollection<Contact> Contact { get; set; } = new List<Contact>();
 }
+

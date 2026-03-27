@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -15,3 +15,4 @@ public partial class DatasourceConfig
 
     public string Port { get; set; } = null!;
 }
+

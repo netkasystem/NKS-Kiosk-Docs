@@ -140,7 +140,11 @@ builder.Services.AddCors(options =>
 // ======================
 // SignalR (+ Redis backplane สำหรับ multi-instance)
 // ======================
-var signalR = builder.Services.AddSignalR();
+var signalR = builder.Services.AddSignalR(options =>
+{
+    options.MaximumReceiveMessageSize = 256 * 1024; // 256 KB
+});
+
 if (useRedis)
     signalR.AddStackExchangeRedis(redisConn!, options =>
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -28,3 +28,4 @@ public partial class Invoiceitems
     /// </summary>
     public uint Itemtaxtype { get; set; }
 }
+

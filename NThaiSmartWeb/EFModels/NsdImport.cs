@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -16,3 +16,4 @@ public partial class NsdImport
 
     public string UniqueField { get; set; } = null!;
 }
+

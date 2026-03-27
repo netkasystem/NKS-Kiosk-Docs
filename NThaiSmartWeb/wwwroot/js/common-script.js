@@ -138,12 +138,12 @@ const setIntegrateNdpp = (c) => sessionStorage.setItem("IntegrateNdpp", JSON.str
 const getIntegrateNdpp = () => JSON.parse(sessionStorage.getItem("IntegrateNdpp") ?? null);
 const removeIntegrateNdpp = () => sessionStorage.removeItem("IntegrateNdpp");
 
-const setIntegrateNdppByKiosk = (c) => sessionStorage.setItem("IntegrateNdppByKiosk", JSON.stringify(c));
-const getIntegrateNdppByKiosk = () => JSON.parse(sessionStorage.getItem("IntegrateNdppByKiosk") ?? null);
-const removeIntegrateNdppByKiosk = () => sessionStorage.removeItem("IntegrateNdppByKiosk");
-
 const setCustomData = (customdata) => sessionStorage.setItem("CustomData", JSON.stringify(customdata));
 const getCustomData = () => sessionStorage.getItem("CustomData")
+
+const setReturningUser = (data) => sessionStorage.setItem("ReturningUser", JSON.stringify(data));
+const getReturningUser = () => JSON.parse(sessionStorage.getItem("ReturningUser") ?? null);
+const removeReturningUser = () => sessionStorage.removeItem("ReturningUser");
 
 //Local Storage
 window.SetKioskCode = (code) => localStorage.setItem('selectedKioskCode', code);

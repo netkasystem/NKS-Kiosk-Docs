@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -25,3 +25,4 @@ public partial class ProductKeySale
 
     public string? Email { get; set; }
 }
+

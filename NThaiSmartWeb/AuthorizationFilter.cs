@@ -12,6 +12,8 @@ public class AuthorizationFilter : IAuthorizationFilter
         "/api/kioskapi/getcustomform",
         "/api/KioskApi/DownloadFile",
         "/api/KioskApi/GetIntegrateNdppForm",
+        "/api/KioskApi/GetPrivacyNotice",
+        "/api/KioskApi/CheckReturningUser",
     }.Select(x => x.ToLower()).ToList();
 
     public List<string> AllowPageList = new List<string>{

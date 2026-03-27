@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -41,3 +41,4 @@ public partial class ProductKeyTrial
 
     public string Zip { get; set; } = null!;
 }
+

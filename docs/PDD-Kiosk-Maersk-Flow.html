@@ -385,16 +385,16 @@
 
   <!-- ========== 1. OVERVIEW ========== -->
   <h1 id="sec1">1. System Overview</h1>
-  <p>ระบบลงทะเบียนและจัดการความยินยอม (Consent Management) ผ่านตู้ Kiosk แบบ Self-Service สำหรับ Maersk โดยผู้ใช้สอดบัตรประชาชน ถ่ายภาพใบหน้า และให้ความยินยอม (Consent) ตามกฎหมาย PDPA ก่อนส่งข้อมูลไปยังระบบ Netka Intelligent</p>
+  <p>ระบบลงทะเบียนและจัดการความยินยอม (Consent Management) ผ่านตู้ Kiosk แบบ Self-Service สำหรับ Maersk โดยผู้ใช้สอดบัตรประชาชน ถ่ายภาพใบหน้า และให้ความยินยอม (Consent) ตามกฎหมาย PDPA ก่อนส่งข้อมูลไปยังระบบ Netka EnTelligence</p>
 
   <h3>Main Flow (New User)</h3>
   <p style="text-align:center; font-size:13px; color:#555;">
-    Welcome &rarr; Privacy Notice &rarr; Insert Card &rarr; Read Card &rarr; Face Capture &rarr; Confirm Data &rarr; <b>Consent Form</b> &rarr; Send to Netka Intelligent &rarr; Complete
+    Welcome &rarr; Privacy Notice &rarr; Insert Card &rarr; Read Card &rarr; Face Capture &rarr; Confirm Data &rarr; <b>Consent Form</b> &rarr; Send to Netka EnTelligence &rarr; Complete
   </p>
 
   <h3>Returning User Flow</h3>
   <p style="text-align:center; font-size:13px; color:#555;">
-    Welcome &rarr; Insert Card &rarr; Read Card &rarr; <b>Show Previous Consent</b> &rarr; Edit &amp; Re-submit &rarr; Send to Netka Intelligent &rarr; Complete
+    Welcome &rarr; Insert Card &rarr; Read Card &rarr; <b>Show Previous Consent</b> &rarr; Edit &amp; Re-submit &rarr; Send to Netka EnTelligence &rarr; Complete
   </p>
 
   <div class="note">
@@ -433,7 +433,7 @@
       <td>จัดเก็บไฟล์รูปภาพ (รูปบัตร, รูปใบหน้า)</td>
     </tr>
     <tr>
-      <td>Netka Intelligent (External)</td>
+      <td>Netka EnTelligence (External)</td>
       <td>ระบบปลายทางที่รับข้อมูลลงทะเบียน, ภาพถ่าย, และ Consent</td>
     </tr>
     <tr>
@@ -450,7 +450,7 @@
     <li>กล้อง / CCTV พร้อมใช้งาน</li>
     <li>ผู้ใช้มีบัตรประชาชนแบบ Smart Card</li>
     <li>File Server (nginx) พร้อมรับ upload</li>
-    <li>Netka Intelligent API พร้อมรับข้อมูล</li>
+    <li>Netka EnTelligence API พร้อมรับข้อมูล</li>
   </ul>
 
   <!-- ========== 4. FLOW DIAGRAM ========== -->
@@ -480,7 +480,7 @@
     <span class="flow-arrow">&darr;</span>
     <div class="flow-box consent">Consent Form<br><small>ให้ความยินยอม (PDPA)</small></div>
     <span class="flow-arrow">&darr;</span>
-    <div class="flow-box">Send to Netka Intelligent<br><small>ส่งข้อมูล + ภาพ + Consent</small></div>
+    <div class="flow-box">Send to Netka EnTelligence<br><small>ส่งข้อมูล + ภาพ + Consent</small></div>
     <span class="flow-arrow">&darr;</span>
     <div class="flow-box success" style="border-width:3px;">Complete<br><small>ลงทะเบียนสำเร็จ</small></div>
   </div>
@@ -497,7 +497,7 @@
     <span class="flow-arrow">&darr;</span>
     <div class="flow-box consent">Edit & Re-submit<br><small>แก้ไข + ส่งกลับ</small></div>
     <span class="flow-arrow">&darr;</span>
-    <div class="flow-box">Send to Netka Intelligent<br><small>ส่ง Consent ที่แก้ไข</small></div>
+    <div class="flow-box">Send to Netka EnTelligence<br><small>ส่ง Consent ที่แก้ไข</small></div>
     <span class="flow-arrow">&darr;</span>
     <div class="flow-box success" style="border-width:3px;">Complete<br><small>อัปเดตสำเร็จ</small></div>
   </div>
@@ -545,7 +545,7 @@
               <li>ข้อมูลจากบัตรประชาชน</li>
               <li>ภาพถ่ายใบหน้าจากกล้อง</li>
             </ul>
-            <p>ข้อมูลจะถูกส่งไปยังระบบ Netka Intelligent เพื่อดำเนินการตามวัตถุประสงค์ที่แจ้งไว้</p>
+            <p>ข้อมูลจะถูกส่งไปยังระบบ Netka EnTelligence เพื่อดำเนินการตามวัตถุประสงค์ที่แจ้งไว้</p>
           </div>
         </div>
         <div style="text-align:center; margin-top:15px;">
@@ -726,7 +726,7 @@
         <b>Face Detection:</b> ใช้ <b>face-api.js</b> (TinyFaceDetector) ตรวจจับใบหน้า real-time<br>
         <b>Auto-capture:</b> ถ่ายภาพอัตโนมัติเมื่อตรวจพบใบหน้าในกรอบ<br>
         <b>User Options:</b> "ถ่ายใหม่" (retake) / "ยืนยัน" (confirm)<br>
-        <b>Output:</b> Live Photo (base64) &rarr; ส่งไปยัง Netka Intelligent ในขั้นตอนถัดไป<br>
+        <b>Output:</b> Live Photo (base64) &rarr; ส่งไปยัง Netka EnTelligence ในขั้นตอนถัดไป<br>
         <b>Navigation:</b> ยืนยัน &rarr; Data Confirmation
       </div>
     </div>
@@ -824,7 +824,7 @@
         <b>Dynamic:</b> รายการ consent สามารถ config ได้จาก NDPP server<br>
         <b>On Submit:</b><br>
         &nbsp;&nbsp;1. บันทึก Consent Log (ใคร, อะไร, เมื่อไหร่, Kiosk ID)<br>
-        &nbsp;&nbsp;2. ส่งข้อมูล + ภาพถ่าย + Consent ไป Netka Intelligent<br>
+        &nbsp;&nbsp;2. ส่งข้อมูล + ภาพถ่าย + Consent ไป Netka EnTelligence<br>
         <b>Navigation:</b> ยืนยัน &rarr; Completion
       </div>
     </div>
@@ -870,11 +870,11 @@
         <b>Trigger:</b> ระบบส่งชื่อ-นามสกุลไป NDPP API (<code>GetCheckDsExistConsentForm</code>) แล้วพบว่าเคยลงทะเบียนแล้ว (return DS ID &gt; 0)<br>
         <b>Description:</b> แสดง consent ที่เคยให้ไว้ (ดึงจาก NDPP API) พร้อมสถานะปัจจุบันของแต่ละข้อ<br>
         <b>User Options:</b><br>
-        &nbsp;&nbsp;- แก้ไข checkbox แล้วกด "บันทึกการแก้ไข" &rarr; ส่ง consent ใหม่ไป Netka Intelligent<br>
+        &nbsp;&nbsp;- แก้ไข checkbox แล้วกด "บันทึกการแก้ไข" &rarr; ส่ง consent ใหม่ไป Netka EnTelligence<br>
         &nbsp;&nbsp;- กด "ไม่เปลี่ยนแปลง" &rarr; ข้ามไป Completion<br>
         <b>On Edit + Submit:</b><br>
         &nbsp;&nbsp;1. อัปเดต Consent Log (บันทึก revision ใหม่)<br>
-        &nbsp;&nbsp;2. ส่ง consent ที่แก้ไขไป Netka Intelligent<br>
+        &nbsp;&nbsp;2. ส่ง consent ที่แก้ไขไป Netka EnTelligence<br>
         <b>Navigation:</b> บันทึก &rarr; Completion / ไม่เปลี่ยนแปลง &rarr; Completion
       </div>
     </div>
@@ -898,8 +898,8 @@
         </div>
       </div>
       <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แจ้งว่าลงทะเบียนสำเร็จ + ข้อมูลถูกส่งไปยัง Netka Intelligent แล้ว<br>
-        <b>Data Sent to Netka Intelligent:</b><br>
+        <b>Description:</b> แจ้งว่าลงทะเบียนสำเร็จ + ข้อมูลถูกส่งไปยัง Netka EnTelligence แล้ว<br>
+        <b>Data Sent to Netka EnTelligence:</b><br>
         &nbsp;&nbsp;- ข้อมูลบัตรประชาชน<br>
         &nbsp;&nbsp;- ภาพถ่ายจากชิปบัตร<br>
         &nbsp;&nbsp;- ภาพถ่ายใบหน้า (Live Photo)<br>
@@ -960,13 +960,13 @@
     </tr>
     <tr>
       <td>Web Server</td>
-      <td><b>Netka Intelligent</b></td>
+      <td><b>Netka EnTelligence</b></td>
       <td>HTTP POST</td>
       <td>ข้อมูลบัตร + ภาพถ่าย + Consent + Kiosk ID + Timestamp</td>
     </tr>
   </table>
 
-  <h3>6.2 Payload to Netka Intelligent</h3>
+  <h3>6.2 Payload to Netka EnTelligence</h3>
   <div class="spec-box">
     <table>
       <tr>
@@ -1055,9 +1055,16 @@
       </tr>
       <tr>
         <td>purpose_option</td>
-        <td>array</td>
-        <td>รายการวัตถุประสงค์ที่ยินยอม</td>
-        <td>[{"purpose": "เก็บข้อมูลบัตร", "granted": true}]</td>
+        <td>array of object</td>
+        <td>รายการ purpose จาก NDPP Consent Form โดย field <code>selected</code> ถูก update ตาม <code>PurposeOptionDetail</code> ที่ผู้ใช้เลือก</td>
+        <td><pre style="margin:0; font-size:11px;">[{
+  "purpose_id": 1,
+  "purpose_th": "เก็บข้อมูลบัตร",
+  "purpose_en": "Collect ID data",
+  "purpose_type": "Standard",
+  "selected": true,
+  "is_required": true
+}]</pre></td>
       </tr>
       <tr>
         <td>service_id</td>
@@ -1089,8 +1096,22 @@
   "OrganizationUnitEn": "Security",
   "OrganizationUnitTh": "แผนกรักษาความปลอดภัย",
   "purpose_option": [
-    { "purpose": "เก็บข้อมูลบัตรประชาชน", "granted": true },
-    { "purpose": "บันทึกภาพใบหน้า", "granted": true }
+    {
+      "purpose_id": 1,
+      "purpose_th": "เก็บข้อมูลบัตรประชาชน",
+      "purpose_en": "Collect ID card data",
+      "purpose_type": "Standard",
+      "selected": true,
+      "is_required": true
+    },
+    {
+      "purpose_id": 2,
+      "purpose_th": "บันทึกภาพใบหน้า",
+      "purpose_en": "Capture face photo",
+      "purpose_type": "Standard",
+      "selected": true,
+      "is_required": false
+    }
   ],
   "service_id": 1,
   "version": "2"
@@ -1123,8 +1144,9 @@
     </tr>
     <tr>
       <td><b>Consent Callback</b></td>
-      <td><code>/api/AdminPreferenceConsentForm/ConsentCallback</code></td>
-      <td>Callback หลัง submit สำเร็จ — ส่ง payload (ข้อมูลบัตร + ภาพ + consent) ไป Netka Intelligent</td>
+      <td>ดึงจาก variable <code>kiosk_netka_entelligence_api</code> (Full URL)</td>
+      <td>Callback หลัง submit สำเร็จ — ส่ง payload (ข้อมูลบัตร + ภาพ + consent) ไป Netka EnTelligence<br>
+          URL เป็น Full API ไม่ต้องต่อ path เพิ่ม</td>
     </tr>
     <tr>
       <td><b>Returning User Check</b></td>
@@ -1165,6 +1187,43 @@
       <td>Base URL ของ NDPP API สำหรับสร้าง Consent Form URL</td>
       <td><code>https://&lt;NDPP_DOMAIN&gt;/admin/PreferenceConsentFormView</code></td>
     </tr>
+    <tr>
+      <td><code>kiosk_netka_entelligence_api</code></td>
+      <td>Full URL สำหรับ Consent Callback ไป Netka EnTelligence (ใช้ตรงๆ ไม่ต้องต่อ path)</td>
+      <td><code>https://kiosk.netkasystem.co.th/api/.....</code></td>
+    </tr>
+  </table>
+
+  <h3>6.5 Consent Log Table — <code>kiosk_integrate_ndpp_consented</code></h3>
+  <p>บันทึก consent ที่ส่งสำเร็จ เพื่อใช้ prefill เมื่อผู้ใช้กลับมาใหม่</p>
+  <table>
+    <tr>
+      <th>Column</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+    <tr><td><code>id</code></td><td>int unsigned PK</td><td>Auto increment</td></tr>
+    <tr><td><code>kiosk_id</code></td><td>int unsigned</td><td>FK — Kiosk ที่ทำรายการ</td></tr>
+    <tr><td><code>kiosk_integrate_ndpp_id</code></td><td>int unsigned</td><td>FK — service ที่ consent</td></tr>
+    <tr><td><code>citizen_id</code></td><td>varchar(20)</td><td>เลขบัตรประชาชน</td></tr>
+    <tr><td><code>fullname_th</code></td><td>varchar(255)</td><td>ชื่อ-นามสกุลภาษาไทย</td></tr>
+    <tr><td><code>fullname_en</code></td><td>varchar(255)</td><td>ชื่อ-นามสกุลภาษาอังกฤษ</td></tr>
+    <tr><td><code>email</code></td><td>varchar(255)</td><td>อีเมล</td></tr>
+    <tr><td><code>purpose_option_detail</code></td><td>JSON</td><td>รายละเอียด purpose ที่เลือก/ไม่เลือก</td></tr>
+    <tr><td><code>inactive</code></td><td>tinyint(4)</td><td>0 = active</td></tr>
+    <tr><td><code>created_date</code></td><td>datetime</td><td>วันที่สร้าง</td></tr>
+    <tr><td><code>created_by</code></td><td>varchar(100)</td><td>KioskCode ที่ทำรายการ</td></tr>
+  </table>
+
+  <h3>6.6 API — <code>GetNdppConsented</code></h3>
+  <p>ดึง consent ล่าสุดของผู้ใช้ เพื่อ prefill checkbox ใน Step17</p>
+  <table>
+    <tr><th>Item</th><th>Detail</th></tr>
+    <tr><td>Method</td><td><code>GET</code></td></tr>
+    <tr><td>URL</td><td><code>/api/KioskApi/GetNdppConsented?citizenId=XXX&amp;kioskCode=XXX</code></td></tr>
+    <tr><td>Response</td><td><code>{ kioskIntegrateNdppId, purposeOptionDetail (JSON string), email, createdDate }</code></td></tr>
+    <tr><td>Logic</td><td>ดึงจาก <code>kiosk_integrate_ndpp_consented</code> ตาม citizenId + kioskId, เอาล่าสุด (ORDER BY created_date DESC)</td></tr>
+    <tr><td>ใช้ใน</td><td>Step17 — prefill purpose checkbox + email จาก consent เดิม</td></tr>
   </table>
 
   <!-- ========== 7. CONSENT LOG ========== -->
@@ -1267,7 +1326,7 @@
       <ol>
         <li>Step5: Preload NDPP data (GetIntegrateNdpp, GetIntegrateNdppByKiosk, GetNdppPreferenceConsent)</li>
         <li>Step8: <b>ข้าม Face Capture (Step9-11)</b> ไปตรง Step17</li>
-        <li>Step17: Auto-submit consent ทุก service (select all purposes) &rarr; NDPP + Netka Intelligent &rarr; StepEnd</li>
+        <li>Step17: Auto-submit consent ทุก service (select all purposes) &rarr; NDPP + Netka EnTelligence &rarr; StepEnd</li>
       </ol>
     </li>
     <li><b>isReturning = false</b> &rarr; New User Flow (Step8 &rarr; Face Capture &rarr; Confirm &rarr; Consent &rarr; Complete)</li>
@@ -1278,27 +1337,31 @@
     สำหรับ NDPP ยังมี API <code>GetCheckDsExistConsentForm</code> ที่ใช้ <b>ชื่อ-นามสกุล</b> ผ่าน <code>FindDS()</code> ซึ่งสามารถใช้เสริมได้ในอนาคต
   </div>
 
-  <h3>8.2 Auto Re-submit (Returning User)</h3>
-  <p>Returning User <b>ไม่ต้องกรอกหรือแก้ไข consent</b> — ระบบจะ auto-submit ทั้งหมด:</p>
+  <h3>8.2 Returning User — Prefill Consent</h3>
+  <p>Returning User จะเห็น consent form ที่ <b>prefill จากข้อมูลเดิม</b> สามารถแก้ไขก่อน submit ได้:</p>
   <table>
     <tr>
       <th>Step</th>
       <th>System Behavior</th>
     </tr>
     <tr>
-      <td>1. ดึง Consent Form</td>
+      <td>1. ดึง Consent เดิม</td>
+      <td>เรียก <code>GetNdppConsented</code> ดึง purpose + email ที่เคย submit ล่าสุดจาก <code>kiosk_integrate_ndpp_consented</code></td>
+    </tr>
+    <tr>
+      <td>2. ดึง Consent Form</td>
       <td>เรียก <code>GetIntegrateNdppForm</code> สำหรับทุก service</td>
     </tr>
     <tr>
-      <td>2. Select All Purposes</td>
-      <td>เลือก purpose_option ทั้งหมดโดยอัตโนมัติ</td>
+      <td>3. Prefill</td>
+      <td>Checkbox purpose ติ๊กตามข้อมูลเดิม + กรอก email เดิมให้อัตโนมัติ (แก้ไขได้)</td>
     </tr>
     <tr>
-      <td>3. Submit</td>
-      <td>เรียก <code>SubmitIntegrateNdpp</code> &rarr; ส่ง consent ไป NDPP + Callback ไป Netka Intelligent</td>
+      <td>4. Submit</td>
+      <td>เรียก <code>SubmitIntegrateNdpp</code> &rarr; ส่ง consent ไป NDPP + Callback ไป Netka EnTelligence + บันทึกลง <code>kiosk_integrate_ndpp_consented</code></td>
     </tr>
     <tr>
-      <td>4. Complete</td>
+      <td>5. Complete</td>
       <td>ไป StepEnd</td>
     </tr>
   </table>
@@ -1344,7 +1407,7 @@
       <td>ดำเนินการต่อ</td>
     </tr>
     <tr>
-      <td>Netka Intelligent API ล้มเหลว</td>
+      <td>Netka EnTelligence API ล้มเหลว</td>
       <td>HTTP non-2xx / timeout</td>
       <td>Retry + แจ้ง error</td>
       <td>แสดง error, retry</td>

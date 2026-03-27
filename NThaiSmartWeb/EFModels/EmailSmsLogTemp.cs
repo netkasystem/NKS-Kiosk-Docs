@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -23,3 +23,4 @@ public partial class EmailSmsLogTemp
 
     public string Remark { get; set; } = null!;
 }
+

@@ -3,7 +3,13 @@
 # Usage: ./build-push.sh 1.0.0, latest.dev
 
 set -e
-trap handle_error ERR
+
+handle_error() {
+  echo "❌ เกิดข้อผิดพลาดที่บรรทัด $1"
+  read -p "กด Enter เพื่อปิดหน้าต่าง..."
+  exit 1
+}
+trap 'handle_error $LINENO' ERR
 
 # ตรวจสอบว่าให้ tag version มาหรือยัง ถ้ายังให้ใช้ default
 TAG=${1:-"latest.dev"}
@@ -14,7 +20,7 @@ if [ -z "$1" ]; then
 fi
 
 ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
-IMAGE_NAME=netkaofficialhub/nthaismartweb:$TAG
+IMAGE_NAME=netkaofficialhub/netka-kiosk-web-maersk:$TAG
 PROJECT_NAME="NThaiSmartWeb"
 
 # สร้างไฟล์ BuildVersion.cs (ถ้าต้องใช้)

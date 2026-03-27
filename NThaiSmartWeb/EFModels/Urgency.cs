@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -23,3 +23,4 @@ public partial class Urgency
 
     public virtual ICollection<PriorityLevel> PriorityLevel { get; set; } = new List<PriorityLevel>();
 }
+

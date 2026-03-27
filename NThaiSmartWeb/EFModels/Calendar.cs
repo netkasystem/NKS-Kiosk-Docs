@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NThaiSmartWeb.EFModels;
@@ -45,3 +45,4 @@ public partial class Calendar
 
     public uint ModuleId { get; set; }
 }
+
