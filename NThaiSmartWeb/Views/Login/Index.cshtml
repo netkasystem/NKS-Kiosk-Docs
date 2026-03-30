@@ -8,8 +8,14 @@
     <source src="/images/icons/Getty.webm">
 </video>
 
+<div class="lang-switch" style="z-index: 99; position: fixed; top: 2vh; left: 2vw; display: flex; align-items: center; gap: 6px;">
+    <button class="btn btn-sm btn-outline-light" id="lang-prev" style="font-size: 1.2rem; padding: 2px 10px;">‹</button>
+    <span id="lang-switch-btn" style="font-size: 0.9rem; color: white; min-width: 60px; text-align: center;">🌐</span>
+    <button class="btn btn-sm btn-outline-light" id="lang-next" style="font-size: 1.2rem; padding: 2px 10px;">›</button>
+</div>
+
 <div class="login-container">
-    <h4 class="text-center">ระบบยืนยันตัวตน</h4>
+    <h4 class="text-center" data-i18n="identity verification system">ระบบยืนยันตัวตน</h4>
 
     @if (ViewBag.Error != null)
     {
@@ -18,19 +24,19 @@
 
     <form id="loginForm" method="post" action="/api/auth/login">
         <div class="mb-3">
-            <label for="username" class="form-label_login">ชื่อผู้ใช้</label>
+            <label for="username" class="form-label_login" data-i18n="username">ชื่อผู้ใช้</label>
             <input type="text" class="form-control_login" id="username" name="username" required autofocus>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label_login">รหัสผ่าน</label>
+            <label for="password" class="form-label_login" data-i18n="password">รหัสผ่าน</label>
             <input type="password" class="form-control_login" id="password" name="password" required>
         </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
-            <label class="form-check-label_login" for="rememberMe">จดจำฉันไว้</label>
+            <label class="form-check-label_login" for="rememberMe" data-i18n="remember me">จดจำฉันไว้</label>
 @*             <a href="/Account/ForgotPassword" class="text-decoration-none">ลืมรหัสผ่าน?</a>
  *@        </div>
-        <button type="submit" class="login_button">เข้าสู่ระบบ</button>
+        <button type="submit" class="login_button" data-i18n="login">เข้าสู่ระบบ</button>
         <div class="text-center">
         </div>
     </form>

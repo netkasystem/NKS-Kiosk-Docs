@@ -10,11 +10,11 @@
         <div class="scan_fail">
             <img src="/images/icons/scan_pass.svg" class="scan_fail" />
         </div>
-        <h1 style ="margin-top:50px;">สแกนใบหน้าสำเร็จ</h1>
+        <h1 style ="margin-top:50px;" data-i18n="face scan successful">สแกนใบหน้าสำเร็จ</h1>
     </header>
     <div class="page-center">
         <img id="capturePhoto" src="/images/icons/Profile.jpg" class="id-card-scan-pass" />
-        <h2>
+        <h2 data-i18n="please keep id card inserted until complete">
             กรุณา
             <span class="expired-word">สอดบัตรประจำตัวประชาชน</span> ของท่านไว้<br>
             จนกว่าจะดำเนินการสำเร็จ
@@ -22,7 +22,7 @@
     </div>
     <form asp-controller="Step" asp-action="Step12" method="get" class="button-section" onsubmit="return handleScan(this)">
         <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px; width:50%;">
-            ยืนยันข้อมูล
+            <span data-i18n="confirm information">ยืนยันข้อมูล</span>
         </button>
     </form>
     <audio id="scan_card" src="/audio/Scan_face_Success.wav"></audio>

@@ -9,12 +9,12 @@
         <div class="scan_fail">
             <img src="/images/icons/scan_pass.svg" class="scan_fail" />
         </div>
-        <h1 style="margin-top:50px;">สแกนบัตรสำเร็จ</h1>
+        <h1 style="margin-top:50px;" data-i18n="card scan successful">สแกนบัตรสำเร็จ</h1>
     </header>
     <div class="page-center" style="margin-top:10%">
         <img src="/images/icons/Thai_id_pass.svg" class="id-card-image-pass" style="width:60%;"/>
      
-        <h2 style="margin-top:10%">
+        <h2 style="margin-top:10%" data-i18n="please keep id card inserted until verification complete">
             กรุณา
             <span class="expired-word">สอดบัตรประจำตัวประชาชน</span> ของท่านไว้<br>
             จนกว่าจะดำเนินการยืนยันตัวตนสำเร็จ
@@ -23,7 +23,7 @@
 
     <form asp-controller="Step" asp-action="Step9" method="get" class="button-section" onsubmit="return handleScan(this)">
         <button type="submit" class="scan-button" style="margin-top:54px; padding: 40px 0px; width:50%;">
-            ขั้นตอนต่อไป
+            <span data-i18n="next step">ขั้นตอนต่อไป</span>
         </button>
     </form>
     <audio id="scan_card" src="/audio/Scan_success.wav"></audio>

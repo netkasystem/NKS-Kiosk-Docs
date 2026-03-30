@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" href="~/favicon.png" />
 
     <link rel="stylesheet" href="~/css/_Layout.css" />
+    <link rel="stylesheet" href="~/lib/flag-icon-css/css/flag-icon.min.css">
 </head>
 <body class="body-login">
     <div id="loading" style="display:none;">
@@ -28,15 +29,28 @@
         @await Html.PartialAsync("_Footer")
     }
 
-    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/common-ajax.js"></script>
-
     <script src="~/lib/crypto-js/crypto-js.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/common-script.js"></script>
-
     <script src="~/js/login.js"></script>
+    <script>
+        (async function () {
+            await loadTranslate();
+            const prevBtn = document.getElementById("lang-prev");
+            const nextBtn = document.getElementById("lang-next");
+            function cycleLang(dir) {
+                if (!_i18n.langs.length) return;
+                const codes = _i18n.langs.map(l => l.code);
+                const idx = codes.indexOf(_i18n.current);
+                const next = (idx + dir + codes.length) % codes.length;
+                setLang(codes[next]);
+            }
+            if (prevBtn) prevBtn.addEventListener("click", () => cycleLang(-1));
+            if (nextBtn) nextBtn.addEventListener("click", () => cycleLang(1));
+            setLang(_i18n.current);
+        })();
+    </script>
 </body>
 </html>

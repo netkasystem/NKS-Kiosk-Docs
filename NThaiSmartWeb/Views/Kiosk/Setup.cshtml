@@ -4,10 +4,10 @@
 
 <div ng-controller="KioskSetupController" class="header" style="margin-top: 0%;">
     <div class="normal-container">
-        <h2> ขั้นตอน </h2>
+        <h2 data-i18n="steps"> ขั้นตอน </h2>
     </div>
     <div class="normal-container">
-        <h1> การติดตั้ง </h1>
+        <h1 data-i18n="installation"> การติดตั้ง </h1>
     </div>
     <div class="glass-step-vertical">
         @* <div class="glass-step-box"> *@
@@ -18,22 +18,22 @@
 
         <div class="glass-step-box">
             <div class="step-number">1</div>
-            <div class="step-label">ปฏิบัติตามไฟล์</div>
-            <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-manual')"><img src="/images/icons/download.svg" class="download_icon" />คู่มือการติดตั้ง</button>
+            <div class="step-label" data-i18n="follow the file">ปฏิบัติตามไฟล์</div>
+            <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-manual')"><img src="/images/icons/download.svg" class="download_icon" /><span data-i18n="installation manual">คู่มือการติดตั้ง</span></button>
         </div>
 
         <div class="glass-step-box">
             <div class="step-number">2</div>
-            <div class="step-label">ดาวน์โหลดไฟล์</div>
+            <div class="step-label" data-i18n="download file">ดาวน์โหลดไฟล์</div>
             <button type="button" class="script-button" ng-click="downloadFileSetup('setup-kiosk-config')"><img src="/images/icons/download.svg" class="download_icon" />Config</button>
         </div>
 
         <div class="glass-step-box">
             <div class="step-number">3</div>
-            <div class="step-label">ดาวน์โหลดไฟล์</div>
+            <div class="step-label" data-i18n="download file">ดาวน์โหลดไฟล์</div>
             <button type="submit" class="script-button" ng-click="downloadFileSetup('setup-kiosk-install')"><img src="/images/icons/download.svg" class="download_icon" />
                 <div>Setup</div>
-                <span>(กรณี เครื่องเปล่า)</span>
+                <span data-i18n="for blank machine">(กรณี เครื่องเปล่า)</span>
             </button>
         </div>
 
@@ -49,18 +49,18 @@
             <button class="close-btn" aria-label="ปิด" ng-click="closeZoneModal()">&times;</button>
 
             <div class="modal-text-header">
-                <h2 id="zoneModalTitle"> กรุณาดาวน์โหลด </h2>
+                <h2 id="zoneModalTitle" data-i18n="please download"> กรุณาดาวน์โหลด </h2>
             </div>
 
             <div class="modal-text-h1">
-                <h1 class="modal-text-h1"> ตาม Zone พื้นที่ที่ต้องการติดตั้ง </h1>
+                <h1 class="modal-text-h1" data-i18n="according to the installation zone"> ตาม Zone พื้นที่ที่ต้องการติดตั้ง </h1>
             </div>
 
             <div class="zone-buttons">
                 <div class="zone-card" ng-repeat="r in Regions" data-zone="{{r.RegionID}}">
                     <div class="zone-title">{{r.Title}}</div>
-                    <div class="zone-desc">สำหรับ <span class="highlight-yellow">{{r.RegionDescription}}</span></div>
-                    <button class="script-button small" ng-click="openKioskModal(r.RegionID)">ดาวน์โหลด</button>
+                    <div class="zone-desc" data-i18n="for zone">สำหรับ <span class="highlight-yellow">{{r.RegionDescription}}</span></div>
+                    <button class="script-button small" ng-click="openKioskModal(r.RegionID)" data-i18n="download">ดาวน์โหลด</button>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                 <button class="close-btn" aria-label="ปิด" data-bs-dismiss="modal">&times;</button>
 
                 <div class="modal-text-header">
-                    <h2 id="kioskModalLabel"> เลือก Kiosk  </h2>
+                    <h2 id="kioskModalLabel" data-i18n="select kiosk"> เลือก Kiosk  </h2>
                 </div>
 
                 <div class="modal-body">
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="script-button w-100" ng-click="downloadSelectedKiosk()">ดาวน์โหลดไฟล์</button>
+                    <button class="script-button w-100" ng-click="downloadSelectedKiosk()" data-i18n="download file">ดาวน์โหลดไฟล์</button>
                 </div>
 
             </div>
