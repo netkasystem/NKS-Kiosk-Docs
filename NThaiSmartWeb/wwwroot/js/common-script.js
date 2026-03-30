@@ -1,4 +1,45 @@
-﻿window.DownloadFile = async function (req) {
+﻿// ===================== i18n =====================
+window._i18n = { langs: [], words: {}, current: localStorage.getItem("lang") || "th" };
+
+window.loadTranslate = async function () {
+    try {
+        const res = await fetch("/api/KioskApi/GetTranslate");
+        if (!res.ok) return;
+        const list = await res.json();
+        _i18n.langs = list;
+        list.forEach(l => {
+            try { _i18n.words[l.code] = l.words ? JSON.parse(l.words) : {}; } catch { _i18n.words[l.code] = {}; }
+        });
+    } catch (e) { console.error("loadTranslate error:", e); }
+};
+
+window.t = function (key) {
+    return _i18n.words[_i18n.current]?.[key] ?? _i18n.words["en"]?.[key] ?? key;
+};
+
+window.setLang = function (code) {
+    _i18n.current = code;
+    localStorage.setItem("lang", code);
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.textContent = t(el.getAttribute("data-i18n"));
+    });
+    document.documentElement.lang = code;
+    const btn = document.getElementById("lang-switch-btn");
+    if (btn) {
+        const lang = _i18n.langs.find(l => l.code === code);
+        if (lang) btn.innerHTML = `<i class="${lang.icon}"></i>`;
+    }
+};
+
+window.applyTranslate = function () {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.textContent = t(el.getAttribute("data-i18n"));
+    });
+};
+
+// ===================== /i18n =====================
+
+window.DownloadFile = async function (req) {
     const response = await fetch(req.api, { method: req.method ?? "POST" });
 
     if (!response.ok) { alert("❌ ไม่สามารถดาวน์โหลดไฟล์ได้"); return; }

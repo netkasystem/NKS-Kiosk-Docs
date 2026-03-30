@@ -5,7 +5,7 @@
 <body class="green-background">
     <header class="page-header">
         <img src="/images/icons/scan_pass.svg" class="scan_fail" />
-        <h1 style="margin-top:30px;">สิ้นสุดกระบวนการ <br>ยืนยันตัวตน</h1>
+        <h1 style="margin-top:30px;" data-i18n="identity verification complete">สิ้นสุดกระบวนการ <br>ยืนยันตัวตน</h1>
     </header>
     <div class="mainCard-container">
         <div class="left-column">
@@ -23,7 +23,7 @@
             <div class="right-column-success" style="height:90%;">
             <div class="bottom-section" style="padding:0px;">
 
-                <h2>
+                <h2 data-i18n="thank you for using our service">
                     ขอบคุณที่ใช้บริการ
                 </h2>
             </div>
@@ -36,13 +36,13 @@
           
                 <div class="bottom-section" style="padding:0px;">
 
-                    <h2>
+                    <h2 data-i18n="please remove your id card">
                     กรุณา<br>
                     <span class="expired-word">ดึงบัตรประจำตัวประชาชนออก</span><br>
                     </h2>
                 </div>
                   <form asp-controller="Step" asp-action="Step1" method="get" class="button-section" onsubmit="return handleScan(this)">
-                <button type="submit" class="scan-button">เสร็จสิ้น</button>
+                <button type="submit" class="scan-button" data-i18n="done">เสร็จสิ้น</button>
             </form>
             </div>
 

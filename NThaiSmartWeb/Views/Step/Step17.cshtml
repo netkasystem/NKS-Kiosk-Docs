@@ -12,7 +12,7 @@
          
         <!-- NDPP Form Container -->
         <div id="ndpp-form-container" style="display:none; margin-top:20px;">
-            <button id="btn-back" class="btn btn-secondary mb-3">← ย้อนกลับ</button>
+            <button id="btn-back" class="btn btn-secondary mb-3" data-i18n="go back">← ย้อนกลับ</button>
 
              
             <form id="ndpp-form" class="p-3 border rounded shadow-sm">
@@ -22,18 +22,18 @@
                     <h3 id="activity-title" class="mb-4"></h3>
                 </div>
                 <div class="mb-4">
-                    <h5 class="pb-2 border-bottom text-primary">01 กรอกข้อมูลส่วนบุคคล</h5>
+                    <h5 class="pb-2 border-bottom text-primary" data-i18n="01 fill in personal information">01 กรอกข้อมูลส่วนบุคคล</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="firstname" class="form-label">ชื่อจริง<span class="text-danger">*</span></label>
+                            <label for="firstname" class="form-label" data-i18n="first name">ชื่อจริง<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="firstname" name="firstname" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="lastname" class="form-label">นามสกุล<span class="text-danger">*</span></label>
+                            <label for="lastname" class="form-label" data-i18n="last name">นามสกุล<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="lastname" name="lastname" required>
                         </div>
                         <div class="col-md-12">
-                            <label for="email" class="form-label">อีเมล</label>
+                            <label for="email" class="form-label" data-i18n="email">อีเมล</label>
                             <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </div>
@@ -41,7 +41,7 @@
 
                 <!-- Section 02 รายละเอียดและเงื่อนไขการยินยอม -->
                 <div class="mb-4">
-                    <h5 class="pb-2 border-bottom text-primary">02 รายละเอียดและเงื่อนไขในการยินยอม</h5>
+                    <h5 class="pb-2 border-bottom text-primary" data-i18n="02 consent details and conditions">02 รายละเอียดและเงื่อนไขในการยินยอม</h5>
 
                     <!-- content จาก API -->
                     <div id="activity-content" class="mb-3"></div>
@@ -51,7 +51,7 @@
                      
                 </div>
 
-                <button type="submit" class="btn btn-success px-4" id="submit-consent">ยืนยัน</button>
+                <button type="submit" class="btn btn-success px-4" id="submit-consent" data-i18n="confirm">ยืนยัน</button>
             </form>
         </div>
 

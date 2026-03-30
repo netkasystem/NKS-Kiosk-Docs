@@ -21,6 +21,13 @@ public class KioskApiController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("GetTranslate")]
+    public IActionResult GetTranslate()
+    {
+        var list = _context.Translate.Select(t => new { t.Code, t.Title, t.Icon, t.Words }).ToList();
+        return Ok(list);
+    }
+
     [HttpGet("GetKioskList")]
     public IActionResult GetKioskList()
     {
@@ -449,82 +456,6 @@ public class KioskApiController : ControllerBase
     private string ResolveNdppUrl(string url) =>
         string.IsNullOrEmpty(url) ? url : url.Replace("{{ndpp_url}}", GetNdppBaseUrl());
 
-    [HttpPost("register")]
-    public async Task<IActionResult> RegisterKiosk([FromBody] Kiosk dto)
-    {
-        // 1) ตรวจสอบ hardware ขั้นต้น
-        if (string.IsNullOrWhiteSpace(dto.SerialNumber) || string.IsNullOrWhiteSpace(dto.MacAddress))
-            return BadRequest(new { message = "serial_number and mac_address required" });
-
-        var clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "";
-
-        // 2) หา kiosk เดิมจาก serial หรือ MAC
-        var kiosk = await _context.Kiosk.FirstOrDefaultAsync(k => k.SerialNumber == dto.SerialNumber || k.MacAddress == dto.MacAddress);
-
-        // ถ้ายังไม่มี → สร้างใหม่
-        if (kiosk == null)
-        {
-            kiosk = new Kiosk
-            {
-                KioskCode = $"KIOSK-{Guid.NewGuid().ToString("N").Substring(0, 4).ToUpper()}",
-                SerialNumber = dto.SerialNumber,
-                MacAddress = dto.MacAddress,
-                HardwareHash = dto.HardwareHash,
-                FactoryImageVersion = dto.FactoryImageVersion,
-                RegisteredAt = DateTime.UtcNow,
-                RegisteredIp = clientIp,
-                FirstBoot = false,
-                ActivationStatus = false,
-                KioskToken = GenerateKioskToken(dto.HardwareHash),
-                TokenCreatedAt = DateTime.UtcNow
-            };
-
-            _context.Kiosk.Add(kiosk);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { status = "created", kiosk });
-        }
-
-        // 3) ถ้าเคยมีแล้ว → update hardware + token เดิม
-        kiosk.LastSeenAt = DateTime.UtcNow;
-        kiosk.RegisteredIp = clientIp;
-
-        // อัปเดต hardware เฉพาะตอน clone แล้วเพิ่ง boot ครั้งแรกจริงๆ
-        kiosk.SerialNumber = dto.SerialNumber;
-        kiosk.MacAddress = dto.MacAddress;
-        kiosk.HardwareHash = dto.HardwareHash;
-        kiosk.FactoryImageVersion = dto.FactoryImageVersion;
-
-        if (string.IsNullOrEmpty(kiosk.KioskToken))
-        {
-            kiosk.KioskToken = GenerateKioskToken(dto.HardwareHash);
-            kiosk.TokenCreatedAt = DateTime.UtcNow;
-        }
-
-        kiosk.FirstBoot = false;
-
-        await _context.SaveChangesAsync();
-
-        return Ok(new
-        {
-            status = "updated",
-            kiosk_id = kiosk.Id,
-            kiosk_code = kiosk.KioskCode,
-            token = kiosk.KioskToken,
-            first_boot = kiosk.FirstBoot
-        });
-    }
-
-    [HttpPost("enroll")]
-    public async Task<IActionResult> Enroll([FromBody] EnrollRequest req, CancellationToken ct)
-    {
-        if (req == null || string.IsNullOrWhiteSpace(req.DeviceId))
-            return BadRequest("device_id required");
-
-        await Task.Delay(10, ct);
-        return Ok(new { ok = true, enrolled_at = DateTime.UtcNow });
-    }
-
     [HttpGet("GetPrivacyNotice")]
     public async Task<IActionResult> GetPrivacyNotice()
     {
@@ -536,6 +467,7 @@ public class KioskApiController : ControllerBase
 
             if (string.IsNullOrEmpty(url))
                 return Ok(new { content = "", name = "" });
+
             Uri uri = new Uri(url);
             // DecryptToken ข้างใน NDPP ทำ UrlDecode เอง → ต้องส่ง encoded key
             string key = HttpUtility.ParseQueryString(uri.Query).Get("key");
@@ -609,14 +541,4 @@ public class KioskApiController : ControllerBase
         Console.WriteLine($"GetConsentURL Default API {default_api}");
         return Ok(new { url = default_api, integrateNdppId = integrateNdppId.ToString() });
     }
-
-    private static string RandomToken(int length = 64)
-    {
-        var bytes = new byte[length / 2];
-        RandomNumberGenerator.Fill(bytes);
-        return Convert.ToHexString(bytes).ToLower();
-    }
-
-    private static string GenerateKioskToken(string hardwareHash)
-        => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(hardwareHash + RandomToken(32)))).ToLower();
 }

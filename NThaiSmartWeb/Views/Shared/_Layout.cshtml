@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/select2/css/select2.css" />
     <link rel="stylesheet" href="~/lib/fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/flag-icon-css/css/flag-icon.min.css">
 
     <link rel="icon" type="image/png" href="~/favicon.png" />
 
@@ -103,11 +104,11 @@
         <div class="modal-dialog modal-dialog-centered text-center mw-100 align-content-center">
 
             <div class="modal-confirmation">
-                <p style="font-size:4rem; font-weight:900;">มีการดึงบัตรออก</p>
+                <p style="font-size:4rem; font-weight:900;" data-i18n="card has been removed">มีการดึงบัตรออก</p>
                 <img src="/images/icons/font_card_id.svg" class="congratulations-image" style="margin-bottom:40px; margin-top:40px;" />
 
                 <div class="modal-footer">
-                    <p>กำลังกลับสู่หน้าจอหลักใน <span id="countdown">5</span> วินาที</p>
+                    <p data-i18n="returning to home screen in seconds">กำลังกลับสู่หน้าจอหลักใน <span id="countdown">5</span> วินาที</p>
 
                 </div>
             </div>
@@ -122,6 +123,12 @@
                     <tspan>Dev Mode</tspan>
                     <span> ⏳ Time elapsed: <span id="timer">0</span> seconds</span>
                 }
+            </div>
+
+            <div class="lang-switch" style="z-index: 99; position: fixed; top: 2vh; left: 2vw; display: flex; align-items: center; gap: 6px;">
+                <button class="btn btn-sm btn-outline-secondary" id="lang-prev" style="font-size: 1.2rem; padding: 2px 10px;">‹</button>
+                <span id="lang-switch-btn" style="font-size: 0.9rem; color: white; min-width: 60px; text-align: center;">🌐</span>
+                <button class="btn btn-sm btn-outline-secondary" id="lang-next" style="font-size: 1.2rem; padding: 2px 10px;">›</button>
             </div>
 
             <div class="row-logout p-3 text-center" style="height: 7vh; width: 10vw; z-index: 99; position: fixed;top: 2vh;right: 2vw;">
@@ -232,6 +239,24 @@
     <script src="~/js/face-recognition.js" asp-append-version="true"></script>
     <script src="~/js/step-controller.js" asp-append-version="true"></script>
     <script src="~/js/kiosk_setup.js"></script>
+    <script>
+        (async function () {
+            await loadTranslate();
+            // ปุ่มซ้ายขวาเปลี่ยนภาษา
+            const prevBtn = document.getElementById("lang-prev");
+            const nextBtn = document.getElementById("lang-next");
+            function cycleLang(dir) {
+                if (!_i18n.langs.length) return;
+                const codes = _i18n.langs.map(l => l.code);
+                const idx = codes.indexOf(_i18n.current);
+                const next = (idx + dir + codes.length) % codes.length;
+                setLang(codes[next]);
+            }
+            if (prevBtn) prevBtn.addEventListener("click", () => cycleLang(-1));
+            if (nextBtn) nextBtn.addEventListener("click", () => cycleLang(1));
+            setLang(_i18n.current);
+        })();
+    </script>
 
 </body>
 </html>

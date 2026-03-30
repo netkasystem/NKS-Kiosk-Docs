@@ -368,7 +368,8 @@ window.Step17 = {
             if (citizenId && kioskCode) {
                 const res = await fetch(`/api/KioskApi/GetNdppConsented?citizenId=${encodeURIComponent(citizenId)}&kioskCode=${encodeURIComponent(kioskCode)}`);
                 if (res.ok) {
-                    previousConsent = await res.json();
+                    const text = await res.text();
+                    previousConsent = text ? JSON.parse(text) : null;
                     if (previousConsent?.purposeOptionDetail) {
                         previousConsent._parsed = JSON.parse(previousConsent.purposeOptionDetail);
                     }
