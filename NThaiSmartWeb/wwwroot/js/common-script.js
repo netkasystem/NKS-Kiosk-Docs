@@ -1,11 +1,23 @@
 ﻿// ===================== i18n =====================
 window._i18n = { langs: [], words: {}, current: localStorage.getItem("lang") || "th" };
 
-window.loadTranslate = async function () {
+window.loadTranslate = async function (forceRefresh = false) {
     try {
+        if (!forceRefresh) {
+            const cached = localStorage.getItem("_i18n_data");
+            if (cached) {
+                const list = JSON.parse(cached);
+                _i18n.langs = list;
+                list.forEach(l => {
+                    try { _i18n.words[l.code] = l.words ? JSON.parse(l.words) : {}; } catch { _i18n.words[l.code] = {}; }
+                });
+                return;
+            }
+        }
         const res = await fetch("/api/KioskApi/GetTranslate");
         if (!res.ok) return;
         const list = await res.json();
+        localStorage.setItem("_i18n_data", JSON.stringify(list));
         _i18n.langs = list;
         list.forEach(l => {
             try { _i18n.words[l.code] = l.words ? JSON.parse(l.words) : {}; } catch { _i18n.words[l.code] = {}; }
