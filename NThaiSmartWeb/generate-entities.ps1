@@ -13,7 +13,8 @@ Write-Host "Tables param: $Tables"
 $basePath = $PSScriptRoot
 
 # Connection String
-$NSDXConnectionString = "Server=10.1.8.59;Port=3306;Database=n_smart_kiosk;User=nkssdsk;Password=Ay2!BGur8;TreatTinyAsBoolean=true;Convert Zero Datetime=True;Connection Timeout=600;default command timeout=600;CharSet=utf8mb4"
+#$NSDXConnectionString = "Server=10.1.8.59;Port=3306;Database=n_smart_kiosk;User=nkssdsk;Password=Ay2!BGur8;TreatTinyAsBoolean=true;Convert Zero Datetime=True;Connection Timeout=600;default command timeout=600;CharSet=utf8mb4"
+$NSDXConnectionString = "Server=localhost;Port=3306;Database=n_smart_kiosk;User=root;Password=root;TreatTinyAsBoolean=true;Convert Zero Datetime=True;Connection Timeout=600;default command timeout=600;CharSet=utf8mb4"
 Write-Host " Data base : $NSDXConnectionString"
 
 # Default (ของจริง)
