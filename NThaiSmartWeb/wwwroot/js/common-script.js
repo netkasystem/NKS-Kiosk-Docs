@@ -41,6 +41,7 @@ window.setLang = function (code) {
         const lang = _i18n.langs.find(l => l.code === code);
         if (lang) btn.innerHTML = `<i class="${lang.icon}"></i>`;
     }
+    document.body.classList.add("i18n-ready");
 };
 
 window.applyTranslate = function () {

@@ -1,3 +1,14 @@
+/* i18n: hide content until translate ready, then fade in */
+body:not(.i18n-ready) main,
+body:not(.i18n-ready) .login-container {
+  opacity: 0;
+}
+body.i18n-ready main,
+body.i18n-ready .login-container {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+
 html {
   font-size: 14px;
 }
