@@ -363,23 +363,28 @@
       <li><a href="#sec3">3. Preconditions</a></li>
       <li><a href="#sec4">4. Process Flow Diagram</a></li>
       <li><a href="#sec5">5. Screen Mockup & Specifications</a></li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.1 Welcome &mdash; หน้าจอต้อนรับ</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.2 Privacy Notice &mdash; แจ้งเตือนสิทธิ</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.3 Insert Card &mdash; สอดบัตรประชาชน</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.4 Reading Card &mdash; อ่านข้อมูลบัตร</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.5 Card Error &mdash; บัตรอ่านไม่ได้</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.6 Card Expired &mdash; บัตรหมดอายุ</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.7 Face Capture Guide &mdash; คำแนะนำสแกนหน้า</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.8 Face Capture &mdash; ถ่ายภาพใบหน้า</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.9 Data Confirmation &mdash; ตรวจสอบข้อมูล</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.10 Consent Form &mdash; แบบฟอร์มความยินยอม (PDPA)</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.11 Returning User &mdash; ผู้ใช้ที่เคยลงทะเบียน</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.12 Completion &mdash; เสร็จสิ้น</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.0 Login &mdash; หน้าเข้าสู่ระบบ</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.1 Welcome (Step1) &mdash; หน้าจอต้อนรับ</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.2 Steps Overview (Step2) &mdash; แนะนำขั้นตอน</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.3 Terms and Conditions (Step3) &mdash; ข้อตกลงและเงื่อนไข</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.4 Insert Card (Step4) &mdash; สอดบัตรประชาชน</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.5 Reading Card (Step5) &mdash; อ่านข้อมูลบัตร</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.6 Card Error (Step6) &mdash; บัตรอ่านไม่ได้</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.7 Card Expired (Step7) &mdash; บัตรหมดอายุ</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.8 Card Scan Successful (Step8) &mdash; สแกนบัตรสำเร็จ</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.9 Face Scan Guide (Step9) &mdash; คำแนะนำสแกนหน้า</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.10 Face Scan (Step10) &mdash; สแกนใบหน้า</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.11 Face Scan Successful (Step11) &mdash; สแกนหน้าสำเร็จ</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.12 Data Confirmation (Step12) &mdash; ตรวจสอบข้อมูล</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.13 Custom Form (Step14) &mdash; แบบฟอร์มเพิ่มเติม</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.14 NDPP Consent (Step17) &mdash; ความยินยอม NDPP</li>
+      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.15 Completion (StepEnd) &mdash; เสร็จสิ้น</li>
       <li><a href="#sec6">6. Data Flow & Integration</a></li>
       <li><a href="#sec7">7. Consent Log Requirements</a></li>
       <li><a href="#sec8">8. Returning User Flow</a></li>
       <li><a href="#sec9">9. Exception Handling</a></li>
       <li><a href="#sec10">10. Security & PDPA Compliance</a></li>
+      <li><a href="#sec11">11. Internationalization (i18n)</a></li>
     </ul>
   </div>
 
@@ -502,413 +507,351 @@
     <div class="flow-box success" style="border-width:3px;">Complete<br><small>อัปเดตสำเร็จ</small></div>
   </div>
 
-  <!-- ========== 5. MOCKUPS ========== -->
-  <h1 id="sec5">5. Screen Mockup & Specifications</h1>
+  <!-- ========== 5. STEP SPECIFICATIONS ========== -->
+  <h1 id="sec5">5. Step Specifications</h1>
 
-  <!-- ===== 5.1 Welcome ===== -->
-  <div class="mockup-section">
-    <h2>5.1 Welcome &mdash; หน้าจอต้อนรับ</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">N-Kiosk</div>
-        <div style="text-align:center; margin:30px 0;">
-          <div class="icon">&#128079;</div>
-          <div style="font-size:20px; font-weight:bold; margin:20px 0;">ยินดีต้อนรับ</div>
-          <div style="color:#aaa; font-size:13px; line-height:1.6;">กรุณาแตะหน้าจอเพื่อ<br>เริ่มต้นลงทะเบียน</div>
-        </div>
-        <div style="text-align:center; margin-top:40px;">
-          <span class="btn btn-primary" style="width:70%; font-size:14px; padding:12px;">เริ่มต้นใช้งาน</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> หน้าจอแรกที่ผู้ใช้เห็นเมื่อเดินมาที่ตู้ Kiosk<br>
-        <b>Action:</b> แตะหน้าจอ หรือ กดปุ่ม "เริ่มต้นใช้งาน"<br>
-        <b>System:</b> Clear session storage ทั้งหมด เพื่อเริ่มรอบใหม่<br>
-        <b>Navigation:</b> &rarr; Privacy Notice<br>
-        <b>Auto-reset:</b> ถ้า idle เกินเวลาที่กำหนด จะ refresh กลับหน้านี้<br>
-      </div>
-    </div>
+  <div class="note-blue">
+    <b>i18n:</b> ทุกหน้าจอรองรับสองภาษา (ไทย/อังกฤษ) ผ่านระบบ Internationalization &mdash; ข้อความบน UI แปลอัตโนมัติตามภาษาที่เลือก โดยมีปุ่มสลับภาษาที่มุมบนซ้ายของหน้าจอ (ดูรายละเอียดใน <a href="#sec11">Section 11</a>)
   </div>
 
-  <!-- ===== 5.2 Privacy Notice ===== -->
-  <div class="mockup-section">
-    <h2>5.2 Privacy Notice &mdash; แจ้งเตือนสิทธิ</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">แจ้งเตือนสิทธิ</div>
-        <div class="screen-content">
-          <div style="font-size:12px; color:#42C0FB; font-weight:bold; margin-bottom:10px;">Privacy Notice</div>
-          <div style="font-size:11px; color:#ccc; line-height:1.6;">
-            <p>ตู้นี้มีการเก็บข้อมูลส่วนบุคคลและภาพถ่ายเพื่อใช้ในการลงทะเบียนและยืนยันตัวตน</p>
-            <p>ข้อมูลที่จัดเก็บ:</p>
-            <ul style="padding-left:15px; margin:5px 0;">
-              <li>ข้อมูลจากบัตรประชาชน</li>
-              <li>ภาพถ่ายใบหน้าจากกล้อง</li>
-            </ul>
-            <p>ข้อมูลจะถูกส่งไปยังระบบ Netka EnTelligence เพื่อดำเนินการตามวัตถุประสงค์ที่แจ้งไว้</p>
-          </div>
-        </div>
-        <div style="text-align:center; margin-top:15px;">
-          <span class="btn btn-primary" style="width:60%;">รับทราบ ดำเนินการต่อ</span><br>
-          <span class="btn btn-secondary" style="width:60%;">ยกเลิก</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แจ้งให้ผู้ใช้ทราบก่อนเริ่มกระบวนการว่าตู้นี้มีการเก็บข้อมูลอะไรบ้าง<br>
-        <b>Data Source:</b> ดึง Privacy Notice จาก NDPP ผ่าน <code>GetPrivacyNotice</code> proxy API<br>
-        &nbsp;&nbsp;- เรียก <code>GetPolicyOuByKey</code> ด้วย key จาก variable <code>kiosk_ndpp_privacy_notice</code><br>
-        &nbsp;&nbsp;- แสดง HTML content จาก NDPP / ถ้าไม่มีจะแสดง fallback content เดิม<br>
-        &nbsp;&nbsp;- แสดง Loading spinner ระหว่างรอ API &rarr; disable checkbox จนกว่าจะโหลดเสร็จ<br>
-        <b>PDPA Requirement:</b> ต้องแจ้งให้ทราบก่อนเก็บข้อมูล (Privacy Notice)<br>
-        <b>Action:</b> กด "รับทราบ" เพื่อดำเนินการต่อ<br>
-        <b>Navigation:</b> รับทราบ &rarr; Insert Card / ยกเลิก &rarr; Welcome<br>
-        <b>Notes:</b> หน้านี้แยกจาก Consent Form &mdash; เป็นการแจ้งให้ทราบ ไม่ใช่การขอความยินยอม
-      </div>
-    </div>
+  <!-- ===== 5.0 Login ===== -->
+  <h3>5.0 Login &mdash; หน้าเข้าสู่ระบบ</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Login.png" alt="Login" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> หน้าเข้าสู่ระบบสำหรับผู้ดูแล Kiosk เพื่อเลือก Kiosk ที่จะใช้งาน<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Header แสดง "Identity Verification System" บนพื้นหลังสีน้ำเงินเข้ม (gradient)<br>
+    &nbsp;&nbsp;- Input fields: Username, Password<br>
+    &nbsp;&nbsp;- Checkbox "Remember" สำหรับจดจำข้อมูลล็อกอิน<br>
+    &nbsp;&nbsp;- ปุ่ม "Login" สีน้ำเงินเข้ม<br>
+    <b>Action:</b> กรอก Username/Password &rarr; เลือก Kiosk Code &rarr; เข้าสู่หน้า Welcome<br>
+    <b>Storage:</b> บันทึก <code>LoginDetail</code> และ <code>selectedKioskCode</code> ลง localStorage<br>
+    <b>Navigation:</b> Login สำเร็จ &rarr; Welcome (Step1)
   </div>
 
-  <!-- ===== 5.3 Insert Card ===== -->
-  <div class="mockup-section">
-    <h2>5.3 Insert Card &mdash; สอดบัตรประชาชน</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">กรุณาสอดบัตรประชาชน</div>
-        <div style="text-align:center; margin:40px 0;">
-          <div class="icon">&#128179;</div>
-          <div style="font-size:14px; margin:15px 0;">สอดบัตรเข้าช่องอ่านบัตร</div>
-          <div style="color:#e67e22; font-size:12px; margin-top:20px;">&#9888; กรุณาสอดบัตรภายใน 30 วินาที</div>
-        </div>
-        <div style="text-align:center; margin-top:30px;">
-          <div style="width:100px; height:6px; background:#333; border-radius:3px; margin:0 auto;">
-            <div style="width:40%; height:100%; background:#42C0FB; border-radius:3px;"></div>
-          </div>
-          <div style="color:#aaa; font-size:11px; margin-top:8px;">กำลังรอ...</div>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Action:</b> ผู้ใช้สอดบัตรประชาชนเข้าช่อง Card Reader<br>
-        <b>System:</b> SignalR (<code>CardReaderHub</code>) รอ event จาก Card Reader<br>
-        <b>Timeout:</b> แจ้งเตือนหลัง 5 วินาทีถ้าไม่พบบัตร, auto-reset หลัง 30 วินาที<br>
-        <b>Navigation:</b> พบบัตร &rarr; Reading Card (auto)
-      </div>
-    </div>
+  <!-- ===== 5.1 Welcome (Step1) ===== -->
+  <h3>5.1 Welcome (Step1) &mdash; หน้าจอต้อนรับ</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step1.png" alt="Welcome (Step1)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> หน้าจอแรกที่ผู้ใช้เห็นเมื่อเดินมาที่ตู้ Kiosk แสดงข้อความ "Verify Identity with National ID Card" พร้อมภาพบัตรประชาชนตัวอย่างและ icon มือแตะ<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Top bar: โลโก้ "Netka-ThaiSmart" + เมนู navigation (Steps, Kiosk List, Setup Kiosk, Card Reader &amp; Identity, Logout)<br>
+    &nbsp;&nbsp;- ปุ่มสลับภาษา (EN/TH พร้อม flag icon) มุมบนซ้าย<br>
+    &nbsp;&nbsp;- ข้อความ "Verify Identity with National ID Card" ตรงกลาง<br>
+    &nbsp;&nbsp;- ภาพบัตรประชาชนตัวอย่างขนาดใหญ่ พร้อม icon มือแตะหน้าจอ<br>
+    &nbsp;&nbsp;- Footer: "&copy; 2025 Powered by Netka System" + Kiosk Code (KIOSK-0007)<br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีน้ำเงินเข้ม<br>
+    <b>Action:</b> แตะหน้าจอเพื่อเริ่มกระบวนการยืนยันตัวตน<br>
+    <b>System:</b> Clear session storage ทั้งหมด เพื่อเริ่มรอบใหม่<br>
+    <b>Navigation:</b> แตะหน้าจอ &rarr; Steps Overview (Step2)<br>
+    <b>Auto-reset:</b> ถ้า idle เกินเวลาที่กำหนด จะ refresh กลับหน้านี้
   </div>
 
-  <!-- ===== 5.4 Reading Card ===== -->
-  <div class="mockup-section">
-    <h2>5.4 Reading Card &mdash; อ่านข้อมูลบัตร</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">กำลังอ่านข้อมูลบัตร</div>
-        <div style="text-align:center; margin:50px 0;">
-          <div class="icon">&#9881;</div>
-          <div style="font-size:14px; margin:15px 0;">กรุณารอสักครู่...</div>
-          <div style="color:#e67e22; font-size:12px;">อย่าถอดบัตรออก</div>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Action:</b> ระบบอ่านข้อมูลจากชิปบัตรอัตโนมัติ<br>
-        <b>Data Read:</b><br>
-        &nbsp;&nbsp;- เลขบัตรประชาชน 13 หลัก<br>
-        &nbsp;&nbsp;- ชื่อ-นามสกุล (ไทย/อังกฤษ)<br>
-        &nbsp;&nbsp;- วันเกิด, ที่อยู่<br>
-        &nbsp;&nbsp;- รูปถ่ายจากชิปบัตร<br>
-        &nbsp;&nbsp;- วันหมดอายุ<br>
-        <b>Returning User Check:</b> ระบบตรวจสอบว่าเลขบัตรนี้เคยลงทะเบียนแล้วหรือไม่<br>
-        <b>Navigation:</b><br>
-        &nbsp;&nbsp;&#10003; สำเร็จ (New) &rarr; Face Capture Guide<br>
-        &nbsp;&nbsp;&#10003; สำเร็จ (Returning) &rarr; Previous Consent<br>
-        &nbsp;&nbsp;&#10007; อ่านไม่ได้ &rarr; Card Error<br>
-        &nbsp;&nbsp;&#10007; หมดอายุ &rarr; Card Expired
-      </div>
-    </div>
+  <!-- ===== 5.2 Steps Overview (Step2) ===== -->
+  <h3>5.2 Steps Overview (Step2) &mdash; แนะนำขั้นตอน</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step2.png" alt="Steps Overview (Step2)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงภาพรวมขั้นตอนการยืนยันตัวตน มี heading "Steps / Identity Verification" พร้อมแสดงขั้นตอนหลักด้วย circle number icons<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Heading: "Steps" (สีอ่อน) + "Identity Verification" (ตัวหนา)<br>
+    &nbsp;&nbsp;- ขั้นตอนที่ 1: "Insert your National ID Card into the card reader" (วงกลมเลข 1)<br>
+    &nbsp;&nbsp;- ขั้นตอนที่ 4: "Remove your National ID Card from the card reader" (วงกลมเลข 4)<br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีน้ำเงินเข้ม พร้อมลวดลาย wave ด้านล่าง<br>
+    <b>Action:</b> Auto-advance ไปหน้าถัดไปหลังแสดงครบ<br>
+    <b>Navigation:</b> auto &rarr; Terms and Conditions (Step3)
   </div>
 
-  <!-- ===== 5.5 Card Error ===== -->
-  <div class="mockup-section">
-    <h2>5.5 Card Error &mdash; บัตรอ่านไม่ได้</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title" style="color:#e74c3c;">บัตรอ่านไม่ได้</div>
-        <div style="text-align:center; margin:40px 0;">
-          <div class="icon" style="color:#e74c3c;">&#10060;</div>
-          <div style="font-size:14px; margin:15px 0; color:#e74c3c;">ไม่สามารถอ่านข้อมูลบัตรได้</div>
-          <div style="color:#aaa; font-size:12px;">บัตรอาจชำรุดหรือสอดไม่ถูกต้อง</div>
-        </div>
-        <div style="text-align:center; margin-top:30px;">
-          <span class="btn btn-primary" style="width:60%;">ลองใหม่</span><br>
-          <span class="btn btn-danger" style="width:60%;">ยกเลิก</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Trigger:</b> Card Reader อ่านข้อมูลไม่สำเร็จ<br>
-        <b>Action:</b> เลือก "ลองใหม่" หรือ "ยกเลิก"<br>
-        <b>Navigation:</b> ลองใหม่ &rarr; Insert Card / ยกเลิก &rarr; Welcome<br>
-        <b>Auto-reset:</b> ถ้าไม่กด &rarr; Welcome
-      </div>
-    </div>
+  <!-- ===== 5.3 Terms and Conditions (Step3) ===== -->
+  <h3>5.3 Terms and Conditions (Step3) &mdash; ข้อตกลงและเงื่อนไข</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step3.png" alt="Terms and Conditions (Step3)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงข้อตกลงและเงื่อนไขการใช้บริการ (Terms and Conditions) ในกรอบสีขาวบนพื้นหลังสีน้ำเงิน ผู้ใช้ต้องอ่านและยอมรับก่อนดำเนินการต่อ<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Heading: "Terms and Conditions" สีน้ำเงินเข้ม<br>
+    &nbsp;&nbsp;- กรอบสีขาวแสดงเนื้อหา Terms and Conditions of Use (scrollable)<br>
+    &nbsp;&nbsp;- หัวข้อย่อย: "Terms and Conditions of Use", "Reservation of Rights and Limitation of Liability"<br>
+    &nbsp;&nbsp;- Checkbox: "I accept the terms and conditions" (ต้องติ๊กก่อนกด Confirm)<br>
+    &nbsp;&nbsp;- ปุ่ม "Confirm" สีเทาเข้ม/น้ำเงิน ขนาดใหญ่ มุมโค้งมน<br>
+    <b>Data Source:</b> เนื้อหา Privacy Notice สามารถดึงจาก NDPP ผ่าน <code>GetPrivacyNotice</code> proxy API<br>
+    &nbsp;&nbsp;- เรียก <code>GetPolicyOuByKey</code> ด้วย key จาก variable <code>kiosk_ndpp_privacy_notice</code><br>
+    &nbsp;&nbsp;- แสดง HTML content จาก NDPP / ถ้าไม่มีจะแสดง fallback content เดิม<br>
+    <b>PDPA Requirement:</b> ต้องแจ้งให้ทราบก่อนเก็บข้อมูล (Privacy Notice)<br>
+    <b>Action:</b> ติ๊ก checkbox ยอมรับ &rarr; กดปุ่ม "Confirm"<br>
+    <b>Navigation:</b> Confirm &rarr; Insert Card (Step4) / ไม่ยอมรับ &rarr; ปุ่ม Confirm จะยังกดไม่ได้
   </div>
 
-  <!-- ===== 5.6 Card Expired ===== -->
-  <div class="mockup-section">
-    <h2>5.6 Card Expired &mdash; บัตรหมดอายุ</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title" style="color:#e74c3c;">บัตรหมดอายุ</div>
-        <div style="text-align:center; margin:40px 0;">
-          <div class="icon" style="color:#f39c12;">&#9888;</div>
-          <div style="font-size:14px; margin:15px 0; color:#e74c3c;">บัตรประชาชนของท่านหมดอายุแล้ว</div>
-          <div style="color:#aaa; font-size:12px;">กรุณาติดต่อเจ้าหน้าที่</div>
-        </div>
-        <div style="text-align:center; margin-top:30px;">
-          <span class="btn btn-danger" style="width:60%;">ยกเลิก</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Trigger:</b> วันหมดอายุบัตร &lt; วันปัจจุบัน<br>
-        <b>Navigation:</b> ยกเลิก &rarr; Welcome
-      </div>
-    </div>
+  <!-- ===== 5.4 Insert Card (Step4) ===== -->
+  <h3>5.4 Insert Card (Step4) &mdash; สอดบัตรประชาชน</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step4.png" alt="Insert Card (Step4)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงคำแนะนำการสอดบัตรประชาชน มี step number "1" ในวงกลม พร้อมหัวข้อ "Please insert your National ID Card"<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- วงกลมหมายเลข "1" ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Please insert your National ID Card"<br>
+    &nbsp;&nbsp;- ฝั่งซ้าย: animation มือสอดบัตรเข้าช่อง card reader (ช่องสีดำ)<br>
+    &nbsp;&nbsp;- ฝั่งขวา: ภาพบัตรประชาชนตัวอย่าง + คำแนะนำ 3 ข้อ<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;1. Prepare your National ID Card<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;2. Face the card up as shown and insert into the card reader<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;3. Do not remove the card until the process is complete<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่างสำหรับกลับหน้าแรก<br>
+    <b>System:</b> SignalR (<code>CardReaderHub</code>) รอ event จาก Card Reader<br>
+    <b>Timeout:</b> แจ้งเตือนหลัง 5 วินาทีถ้าไม่พบบัตร, auto-reset หลัง timeout<br>
+    <b>Navigation:</b> พบบัตร &rarr; Reading Card (Step5) (auto)
   </div>
 
-  <!-- ===== 5.7 Face Capture Guide ===== -->
-  <div class="mockup-section">
-    <h2>5.7 Face Capture Guide &mdash; คำแนะนำก่อนถ่ายภาพ</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">เตรียมถ่ายภาพใบหน้า</div>
-        <div class="screen-content" style="text-align:center;">
-          <div style="margin:12px 0;">
-            <div style="font-size:24px;">&#129485;</div>
-            <div style="font-size:12px;">ยืนตรง หันหน้าเข้ากล้อง</div>
-          </div>
-          <div style="margin:12px 0;">
-            <div style="font-size:24px;">&#128567;</div>
-            <div style="font-size:12px;">ถอดหน้ากากอนามัย / แว่นกันแดด</div>
-          </div>
-          <div style="margin:12px 0;">
-            <div style="font-size:24px;">&#128161;</div>
-            <div style="font-size:12px;">อยู่ในที่แสงสว่างเพียงพอ</div>
-          </div>
-        </div>
-        <div style="text-align:center; margin-top:15px;">
-          <span class="btn btn-primary" style="width:60%;">พร้อมแล้ว</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แสดงคำแนะนำเพื่อให้ได้ภาพถ่ายที่มีคุณภาพ<br>
-        <b>Action:</b> ผู้ใช้กด "พร้อมแล้ว"<br>
-        <b>Navigation:</b> &rarr; Face Capture
-      </div>
-    </div>
+  <!-- ===== 5.5 Reading Card (Step5) ===== -->
+  <h3>5.5 Reading Card (Step5) &mdash; อ่านข้อมูลบัตร</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step5.png" alt="Reading Card (Step5)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงสถานะกำลังอ่านข้อมูลจากชิปบัตร มี loading animation วงกลมหมุน พร้อมข้อความ "Reading Data" และ "Please Wait..."<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Loading spinner animation ด้านบน (วงกลมหมุน)<br>
+    &nbsp;&nbsp;- ข้อความ "Reading Data" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- ภาพบัตรประชาชนเอียงเล็กน้อย ตรงกลาง<br>
+    &nbsp;&nbsp;- ข้อความ "Please Wait..." สี cyan<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Data Read:</b><br>
+    &nbsp;&nbsp;- เลขบัตรประชาชน 13 หลัก<br>
+    &nbsp;&nbsp;- ชื่อ-นามสกุล (ไทย/อังกฤษ)<br>
+    &nbsp;&nbsp;- วันเกิด, ที่อยู่, เพศ<br>
+    &nbsp;&nbsp;- รูปถ่ายจากชิปบัตร<br>
+    &nbsp;&nbsp;- วันออกบัตร, วันหมดอายุ<br>
+    <b>Returning User Check:</b> ระบบตรวจสอบว่าเลขบัตรนี้เคยลงทะเบียนแล้วหรือไม่<br>
+    <b>Navigation:</b><br>
+    &nbsp;&nbsp;&#10003; สำเร็จ &rarr; Card Scan Successful (Step8)<br>
+    &nbsp;&nbsp;&#10007; อ่านไม่ได้ &rarr; Card Error (Step6)<br>
+    &nbsp;&nbsp;&#10007; หมดอายุ &rarr; Card Expired (Step7)
   </div>
 
-  <!-- ===== 5.8 Face Capture ===== -->
-  <div class="mockup-section">
-    <h2>5.8 Face Capture &mdash; ถ่ายภาพใบหน้า</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">ถ่ายภาพใบหน้า</div>
-        <div style="text-align:center;">
-          <div class="face-frame">
-            <span>&#128100;</span>
-          </div>
-          <div style="color:#42C0FB; font-size:11px;">กรุณาวางใบหน้าในกรอบ</div>
-          <div style="color:#aaa; font-size:10px; margin-top:5px;">ระบบจะถ่ายภาพอัตโนมัติเมื่อตรวจพบใบหน้า</div>
-        </div>
-        <div style="text-align:center; margin-top:15px;">
-          <span class="btn btn-secondary">ถ่ายใหม่</span>
-          <span class="btn btn-success">ยืนยัน</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> กล้อง live preview + กรอบวางตำแหน่งใบหน้า<br>
-        <b>Face Detection:</b> ใช้ <b>face-api.js</b> (TinyFaceDetector) ตรวจจับใบหน้า real-time<br>
-        <b>Auto-capture:</b> ถ่ายภาพอัตโนมัติเมื่อตรวจพบใบหน้าในกรอบ<br>
-        <b>User Options:</b> "ถ่ายใหม่" (retake) / "ยืนยัน" (confirm)<br>
-        <b>Output:</b> Live Photo (base64) &rarr; ส่งไปยัง Netka EnTelligence ในขั้นตอนถัดไป<br>
-        <b>Navigation:</b> ยืนยัน &rarr; Data Confirmation
-      </div>
-    </div>
+  <!-- ===== 5.6 Card Error (Step6) ===== -->
+  <h3>5.6 Card Error (Step6) &mdash; บัตรอ่านไม่ได้</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step6.png" alt="Card Error (Step6)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Trigger:</b> Card Reader อ่านข้อมูลไม่สำเร็จ<br>
+    <b>Description:</b> แสดงหน้าจอ error พื้นหลัง gradient สีแดง-ส้ม พร้อม icon กากบาทสีขาว หัวข้อ "Please Try Again" และ countdown สำหรับสอดบัตรใหม่<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- พื้นหลัง gradient แดง-ส้ม<br>
+    &nbsp;&nbsp;- Icon กากบาท (X) วงกลมขาว ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Please Try Again" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- ข้อความ "Reinsert card within ... seconds" (countdown)<br>
+    &nbsp;&nbsp;- ภาพบัตรประชาชนตัวอย่าง<br>
+    &nbsp;&nbsp;- ข้อความ "Your National ID Card may be damaged or defective"<br>
+    &nbsp;&nbsp;- คำอธิบาย 3 ข้อเกี่ยวกับสาเหตุและวิธีแก้ไข<br>
+    &nbsp;&nbsp;- ปุ่ม "Cancel Identity Verification" สีขาวตัวแดง มุมโค้งมน<br>
+    <b>Action:</b> สอดบัตรใหม่ภายในเวลาที่กำหนด หรือ กด "Cancel Identity Verification"<br>
+    <b>Navigation:</b> สอดบัตรใหม่ &rarr; Reading Card (Step5) / Cancel &rarr; Welcome (Step1)<br>
+    <b>Auto-reset:</b> ถ้าไม่กดและหมดเวลา &rarr; Welcome (Step1)
   </div>
 
-  <!-- ===== 5.9 Data Confirmation ===== -->
-  <div class="mockup-section">
-    <h2>5.9 Data Confirmation &mdash; ตรวจสอบข้อมูล</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title">ตรวจสอบข้อมูล</div>
-        <div class="card-preview">
-          <div style="display:flex; gap:10px; align-items:center;">
-            <div style="width:40px; height:50px; background:#42C0FB; border-radius:4px; display:flex; align-items:center; justify-content:center;">&#128100;</div>
-            <div>
-              <div style="font-size:12px; font-weight:bold;">นายทดสอบ ระบบ</div>
-              <div style="font-size:10px; color:#aaa;">Mr.Todsob Rabob</div>
-            </div>
-          </div>
-        </div>
-        <div class="card-preview">
-          <div style="font-size:10px;">
-            <div>เลขบัตร: <span style="color:#42C0FB;">*-****-***0*-**-*</span> <span style="font-size:9px; color:#f39c12;">&#128065;</span></div>
-            <div>วันเกิด: 01/01/2540</div>
-            <div>ที่อยู่: กรุงเทพมหานคร...</div>
-          </div>
-        </div>
-        <div class="card-preview">
-          <div style="font-size:10px; color:#42C0FB;">ภาพถ่ายใบหน้า</div>
-          <div style="width:50px; height:50px; background:rgba(66,192,251,0.2); border-radius:4px; margin-top:5px; display:flex; align-items:center; justify-content:center;">&#128247;</div>
-        </div>
-        <div style="text-align:center; margin-top:10px;">
-          <span class="btn btn-primary" style="width:70%;">ยืนยันข้อมูล</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แสดงข้อมูลบัตร + ภาพถ่ายใบหน้าให้ผู้ใช้ตรวจสอบก่อนดำเนินการต่อ<br>
-        <b>Data Masking:</b> เลขบัตรแสดงแบบ mask (unmask ได้ชั่วคราว)<br>
-        <b>Display:</b> ข้อมูลบัตร + ภาพจากชิป + ภาพใบหน้าที่ถ่าย<br>
-        <b>Backend on Confirm:</b><br>
-        &nbsp;&nbsp;1. บันทึก Enrollment ลง DB<br>
-        &nbsp;&nbsp;2. Upload รูปบัตร &rarr; File Server<br>
-        &nbsp;&nbsp;3. Upload รูปใบหน้า &rarr; File Server<br>
-        <b>Navigation:</b> ยืนยัน &rarr; Consent Form
-      </div>
-    </div>
+  <!-- ===== 5.7 Card Expired (Step7) ===== -->
+  <h3>5.7 Card Expired (Step7) &mdash; บัตรหมดอายุ</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step7.png" alt="Card Expired (Step7)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Trigger:</b> วันหมดอายุบัตร &lt; วันปัจจุบัน<br>
+    <b>Description:</b> แสดงหน้าจอ error พื้นหลัง gradient สีแดง-ส้ม พร้อม icon กากบาท หัวข้อ "Unable to Process" และข้อความ "Your National ID Card has expired"<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- พื้นหลัง gradient แดง-ส้ม (เช่นเดียวกับ Step6)<br>
+    &nbsp;&nbsp;- Icon กากบาท (X) วงกลมขาว ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Unable to Process" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- ภาพบัตรประชาชนตัวอย่าง<br>
+    &nbsp;&nbsp;- ข้อความ "Your National ID Card has expired" สีขาว<br>
+    &nbsp;&nbsp;- ปุ่ม "Cancel Identity Verification" สีขาวตัวแดง<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Navigation:</b> Cancel &rarr; Welcome (Step1)
   </div>
 
-  <!-- ===== 5.10 Consent Form ===== -->
-  <div class="mockup-section">
-    <h2>5.10 Consent Form &mdash; แบบฟอร์มความยินยอม (PDPA)</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title" style="color:#f39c12;">ให้ความยินยอม</div>
-        <div class="screen-content">
-          <div style="font-size:11px; color:#f39c12; font-weight:bold; margin-bottom:10px;">Consent Form (PDPA)</div>
-          <div style="font-size:10px; color:#ccc; margin-bottom:12px;">กรุณาพิจารณาและให้ความยินยอมในแต่ละรายการ</div>
-
-          <div class="divider"></div>
-
-          <div class="checkbox-row">
-            <span class="checkbox-box checked"></span>
-            <span>ยินยอมให้เก็บและประมวลผลข้อมูลจากบัตรประชาชน</span>
-          </div>
-          <div class="checkbox-row">
-            <span class="checkbox-box checked"></span>
-            <span>ยินยอมให้บันทึกภาพใบหน้าและข้อมูลจากกล้อง CCTV</span>
-          </div>
-          <div class="checkbox-row">
-            <span class="checkbox-box"></span>
-            <span>ยินยอมให้ใช้ข้อมูลเพื่อวัตถุประสงค์ทางการตลาด</span>
-          </div>
-
-          <div class="divider"></div>
-
-          <div style="font-size:10px; color:#aaa; margin-top:8px;">
-            * ท่านสามารถเลือกยินยอมหรือไม่ยินยอมแต่ละข้อได้อิสระ
-          </div>
-        </div>
-        <div style="text-align:center; margin-top:10px;">
-          <span class="btn btn-primary" style="width:70%;">ยืนยันรายการที่เลือก</span><br>
-          <span class="btn btn-secondary" style="width:70%;">ยินยอมทั้งหมด</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แบบฟอร์มความยินยอมแบบ Granular Consent (แยกรายข้อ)<br>
-        <b>PDPA Requirement:</b><br>
-        &nbsp;&nbsp;- แยกความยินยอมเป็นข้อๆ ไม่มัดรวม<br>
-        &nbsp;&nbsp;- ผู้ใช้เลือกยินยอม/ไม่ยินยอมแต่ละข้อได้อิสระ<br>
-        &nbsp;&nbsp;- มีทั้งปุ่ม "ยินยอมทั้งหมด" และ "ยืนยันรายการที่เลือก"<br>
-        <b>Consent Items (ตัวอย่าง):</b><br>
-        &nbsp;&nbsp;[ ] เก็บและประมวลผลข้อมูลจากบัตรประชาชน<br>
-        &nbsp;&nbsp;[ ] บันทึกภาพใบหน้าและข้อมูลจากกล้อง CCTV<br>
-        &nbsp;&nbsp;[ ] ใช้ข้อมูลเพื่อวัตถุประสงค์ทางการตลาด (optional)<br>
-        <b>Dynamic:</b> รายการ consent สามารถ config ได้จาก NDPP server<br>
-        <b>On Submit:</b><br>
-        &nbsp;&nbsp;1. บันทึก Consent Log (ใคร, อะไร, เมื่อไหร่, Kiosk ID)<br>
-        &nbsp;&nbsp;2. ส่งข้อมูล + ภาพถ่าย + Consent ไป Netka EnTelligence<br>
-        <b>Navigation:</b> ยืนยัน &rarr; Completion
-      </div>
-    </div>
+  <!-- ===== 5.8 Card Scan Successful (Step8) ===== -->
+  <h3>5.8 Card Scan Successful (Step8) &mdash; สแกนบัตรสำเร็จ</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step8.png" alt="Card Scan Successful (Step8)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงผลสำเร็จการสแกนบัตร พื้นหลัง gradient สีเขียว พร้อม icon ถูกต้อง (checkmark) หัวข้อ "Card Scan Successful"<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีเขียว (teal to green)<br>
+    &nbsp;&nbsp;- Icon เครื่องหมายถูก (checkmark) วงกลมขาว ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Card Scan Successful" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- ภาพ animation บัตรสอดอยู่ในช่อง card reader<br>
+    &nbsp;&nbsp;- ข้อความ "Please keep your National ID Card inserted until verification is complete"<br>
+    &nbsp;&nbsp;- ปุ่ม "Next Step" สีขาวตัวเขียว มุมโค้งมน<br>
+    <b>Action:</b> กดปุ่ม "Next Step" หรือ auto-advance<br>
+    <b>Navigation:</b> &rarr; Face Scan Guide (Step9)
   </div>
 
-  <!-- ===== 5.11 Returning User ===== -->
-  <div class="mockup-section">
-    <h2>5.11 Returning User &mdash; ผู้ใช้ที่เคยลงทะเบียนแล้ว</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title" style="color:#f39c12;">Consent ที่เคยให้ไว้</div>
-        <div class="screen-content">
-          <div style="font-size:11px; color:#42C0FB; margin-bottom:8px;">นายทดสอบ ระบบ</div>
-          <div style="font-size:10px; color:#aaa; margin-bottom:10px;">ลงทะเบียนเมื่อ: 15/03/2026 14:30</div>
-
-          <div class="divider"></div>
-
-          <div style="font-size:10px; color:#f39c12; margin-bottom:8px;">ความยินยอมปัจจุบัน:</div>
-
-          <div class="checkbox-row">
-            <span class="checkbox-box checked"></span>
-            <span>เก็บและประมวลผลข้อมูลจากบัตรประชาชน</span>
-          </div>
-          <div class="checkbox-row">
-            <span class="checkbox-box checked"></span>
-            <span>บันทึกภาพใบหน้าและข้อมูลจากกล้อง CCTV</span>
-          </div>
-          <div class="checkbox-row">
-            <span class="checkbox-box"></span>
-            <span>ใช้ข้อมูลเพื่อวัตถุประสงค์ทางการตลาด</span>
-          </div>
-
-          <div class="divider"></div>
-
-          <div style="font-size:10px; color:#aaa;">* ท่านสามารถแก้ไข consent ได้</div>
-        </div>
-        <div style="text-align:center; margin-top:10px;">
-          <span class="btn btn-primary" style="width:70%;">บันทึกการแก้ไข</span><br>
-          <span class="btn btn-secondary" style="width:70%;">ไม่เปลี่ยนแปลง</span>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Trigger:</b> ระบบส่งชื่อ-นามสกุลไป NDPP API (<code>GetCheckDsExistConsentForm</code>) แล้วพบว่าเคยลงทะเบียนแล้ว (return DS ID &gt; 0)<br>
-        <b>Description:</b> แสดง consent ที่เคยให้ไว้ (ดึงจาก NDPP API) พร้อมสถานะปัจจุบันของแต่ละข้อ<br>
-        <b>User Options:</b><br>
-        &nbsp;&nbsp;- แก้ไข checkbox แล้วกด "บันทึกการแก้ไข" &rarr; ส่ง consent ใหม่ไป Netka EnTelligence<br>
-        &nbsp;&nbsp;- กด "ไม่เปลี่ยนแปลง" &rarr; ข้ามไป Completion<br>
-        <b>On Edit + Submit:</b><br>
-        &nbsp;&nbsp;1. อัปเดต Consent Log (บันทึก revision ใหม่)<br>
-        &nbsp;&nbsp;2. ส่ง consent ที่แก้ไขไป Netka EnTelligence<br>
-        <b>Navigation:</b> บันทึก &rarr; Completion / ไม่เปลี่ยนแปลง &rarr; Completion
-      </div>
-    </div>
+  <!-- ===== 5.9 Face Scan Guide (Step9) ===== -->
+  <h3>5.9 Face Scan Guide (Step9) &mdash; คำแนะนำสแกนหน้า</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step9.png" alt="Face Scan Guide (Step9)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงคำแนะนำก่อนสแกนใบหน้า มี step number "2" ในวงกลม หัวข้อ "Face Scan" + "How to Scan Your Face"<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- วงกลมหมายเลข "2" ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Face Scan" ขนาดใหญ่ + subtitle "How to Scan Your Face"<br>
+    &nbsp;&nbsp;- คำแนะนำ 2 ข้อ พร้อม icon:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;1. "Please stand straight and look at the camera" (icon กล้อง/face scan)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;2. "If wearing a mask or face covering, please remove it" (icon หน้ากากมีเครื่องหมาย X)<br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีน้ำเงินเข้ม-ม่วง พร้อมลวดลาย wave ด้านล่าง<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Action:</b> Auto-advance ไปหน้าถ่ายภาพ<br>
+    <b>Navigation:</b> auto &rarr; Face Scan (Step10)
   </div>
 
-  <!-- ===== 5.12 Completion ===== -->
-  <div class="mockup-section">
-    <h2>5.12 Completion &mdash; เสร็จสิ้น</h2>
-    <div class="mockup-container">
-      <div class="mockup">
-        <div class="screen-title" style="color:#27ae60;">ลงทะเบียนสำเร็จ</div>
-        <div style="text-align:center; margin:40px 0;">
-          <div class="icon" style="color:#27ae60;">&#10004;</div>
-          <div style="font-size:16px; margin:15px 0; color:#27ae60;">ขอบคุณค่ะ</div>
-          <div style="color:#aaa; font-size:13px;">ข้อมูลถูกส่งไปยังระบบเรียบร้อยแล้ว</div>
-          <div style="color:#aaa; font-size:13px; margin-top:10px;">กรุณาดึงบัตรออก</div>
-        </div>
-        <div style="text-align:center; margin-top:20px;">
-          <div class="countdown">10</div>
-          <div style="color:#aaa; font-size:11px;">กลับหน้าแรกใน 10 วินาที</div>
-        </div>
-      </div>
-      <div class="spec-box" style="flex:1;">
-        <b>Description:</b> แจ้งว่าลงทะเบียนสำเร็จ + ข้อมูลถูกส่งไปยัง Netka EnTelligence แล้ว<br>
-        <b>Data Sent to Netka EnTelligence:</b><br>
-        &nbsp;&nbsp;- ข้อมูลบัตรประชาชน<br>
-        &nbsp;&nbsp;- ภาพถ่ายจากชิปบัตร<br>
-        &nbsp;&nbsp;- ภาพถ่ายใบหน้า (Live Photo)<br>
-        &nbsp;&nbsp;- Consent (รายข้อ + status)<br>
-        &nbsp;&nbsp;- Timestamp + Kiosk ID<br>
-        <b>Countdown:</b> auto-reset กลับ Welcome<br>
-        <b>Navigation:</b> &rarr; Welcome (auto)
-      </div>
-    </div>
+  <!-- ===== 5.10 Face Scan (Step10) ===== -->
+  <h3>5.10 Face Scan (Step10) &mdash; สแกนใบหน้า</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step10.png" alt="Face Scan (Step10)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> กล้อง live preview เต็มหน้าจอ พร้อมกรอบตรวจจับใบหน้าและ silhouette แนะนำตำแหน่ง พื้นหลังสีเทาเข้ม/ดำจากภาพกล้อง<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- ข้อความเตือน (สีแดง) ด้านบน เช่น "ไม่พบใบหน้า กรุณาอยู่ในกรอบกล้อง" เมื่อยังไม่ตรวจพบใบหน้า<br>
+    &nbsp;&nbsp;- กรอบสี่เหลี่ยมตรงกลางพร้อม silhouette รูปศีรษะและไหล่ แสดงตำแหน่งที่ควรวางใบหน้า<br>
+    &nbsp;&nbsp;- Icon กล้องอยู่ตรงกลาง silhouette<br>
+    &nbsp;&nbsp;- พื้นหลังบริเวณนอกกรอบมืดลง (overlay) เพื่อเน้นกรอบ face<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Face Detection:</b> ใช้ <b>face-api.js</b> (TinyFaceDetector) ตรวจจับใบหน้า real-time<br>
+    <b>Auto-capture:</b> ถ่ายภาพอัตโนมัติเมื่อตรวจพบใบหน้าในกรอบ<br>
+    <b>Output:</b> Live Photo (base64) &rarr; เก็บใน session storage<br>
+    <b>Navigation:</b> ถ่ายภาพสำเร็จ &rarr; Face Scan Successful (Step11)
+  </div>
+
+  <!-- ===== 5.11 Face Scan Successful (Step11) ===== -->
+  <h3>5.11 Face Scan Successful (Step11) &mdash; สแกนหน้าสำเร็จ</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step11.png" alt="Face Scan Successful (Step11)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงผลสำเร็จการสแกนหน้า พื้นหลัง gradient สีเขียว พร้อม icon ถูกต้อง หัวข้อ "Face Scan Successful" และภาพที่ถ่ายได้<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีเขียว (teal to green) เช่นเดียวกับ Step8<br>
+    &nbsp;&nbsp;- Icon เครื่องหมายถูก (checkmark) วงกลมขาว ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Face Scan Successful" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- ภาพใบหน้าที่ถ่ายได้ แสดงตรงกลาง<br>
+    &nbsp;&nbsp;- ข้อความ "Please keep your National ID Card inserted until the process is complete"<br>
+    &nbsp;&nbsp;- ปุ่ม "Confirm Information" สีขาวตัวเขียว มุมโค้งมน<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Action:</b> กดปุ่ม "Confirm Information" หรือ auto-advance<br>
+    <b>Navigation:</b> &rarr; Data Confirmation (Step12)
+  </div>
+
+  <!-- ===== 5.12 Data Confirmation (Step12) ===== -->
+  <h3>5.12 Data Confirmation (Step12) &mdash; ตรวจสอบข้อมูล</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step12.png" alt="Data Confirmation (Step12)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงข้อมูลบัตรประชาชนทั้งหมดในกรอบสีขาว หัวข้อ "Please Confirm Your Information" พร้อมภาพถ่ายจากชิปบัตรและภาพใบหน้าที่ถ่ายได้<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- Heading: "Please Confirm Your Information" สี cyan<br>
+    &nbsp;&nbsp;- กรอบ "National ID Card Information" พร้อม icon ตา (toggle mask/unmask)<br>
+    &nbsp;&nbsp;- ข้อมูลแบบ 2 คอลัมน์:<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Citizen ID Number | Date of Birth<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- First Name | Last Name<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- First Name (English) | Last Name (English)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Gender<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Address (เต็มความกว้าง)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Issue Date | Expiry Date<br>
+    &nbsp;&nbsp;- ภาพ 2 รูป: ID Card Photo + Face Scan Photo (กรอบสีน้ำเงิน)<br>
+    &nbsp;&nbsp;- ข้อมูลแสดงแบบ masked (xxxx) สามารถ unmask ได้ชั่วคราวด้วย icon ตา<br>
+    &nbsp;&nbsp;- ปุ่ม "Confirm Information" สีน้ำเงิน มุมโค้งมน<br>
+    <b>Data Masking:</b> เลขบัตร, ชื่อ, นามสกุล, วันที่ แสดงแบบ mask (unmask ได้ชั่วคราว)<br>
+    <b>Backend on Confirm:</b><br>
+    &nbsp;&nbsp;1. บันทึก Enrollment ลง DB<br>
+    &nbsp;&nbsp;2. Upload รูปบัตร &rarr; File Server<br>
+    &nbsp;&nbsp;3. Upload รูปใบหน้า &rarr; File Server<br>
+    <b>Navigation:</b> Confirm &rarr; Custom Form (Step14) ถ้ามี / NDPP Consent (Step17) / StepEnd
+  </div>
+
+  <!-- ===== 5.13 Custom Form (Step14) ===== -->
+  <h3>5.13 Custom Form (Step14) &mdash; แบบฟอร์มเพิ่มเติม</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step14.png" alt="Custom Form (Step14)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แบบฟอร์มเพิ่มเติมที่ config ได้จาก API (Custom Form) แสดงพื้นหลังสีม่วงอ่อน/ขาว<br>
+    <b>Condition:</b> แสดงเฉพาะเมื่อมี Custom Form config (เช็คจาก <code>getCustomForm()</code>)<br>
+    <b>UI Elements (ตัวอย่าง):</b><br>
+    &nbsp;&nbsp;- Section "ข้อมูลเพิ่มเติม" (About You):<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Select: ระดับการศึกษาสูงสุด *<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Select: คุณมาใช้งานบ่อยแค่ไหน<br>
+    &nbsp;&nbsp;- Section "คำแนะนำ | Recommendation":<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Textarea: ข้อคิดเห็นเพิ่มเติม | Additional Comments<br>
+    &nbsp;&nbsp;- Section "คะแนนความพึงพอใจ | Rating":<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Select: ระดับความพึงพอใจ<br>
+    &nbsp;&nbsp;- ปุ่ม "ส่งแบบฟอร์ม | Submit Form" สีน้ำเงิน มุมโค้งมน ขนาดใหญ่<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Dynamic:</b> รายการ fields สามารถ config ได้จาก API (text, textarea, select)<br>
+    <b>On Submit:</b> บันทึกข้อมูลผ่าน <code>save_consent</code> &rarr; <code>next_page()</code><br>
+    <b>Navigation:</b> Submit &rarr; NDPP Consent (Step17) หรือ StepEnd
+  </div>
+
+  <!-- ===== 5.14 NDPP Consent (Step17) ===== -->
+  <h3>5.14 NDPP Consent (Step17) &mdash; ความยินยอม NDPP</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_Step17.png" alt="NDPP Consent (Step17)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แบบฟอร์ม NDPP Consent ส่วนกลาง แสดงชื่อ service (เช่น "Tea-Tea") พร้อมข้อมูลส่วนบุคคลที่ prefill จากบัตรและรายการ consent<br>
+    <b>Condition:</b> แสดงเฉพาะเมื่อมีข้อมูล NDPP integrate ส่วนกลาง (เช็คจาก <code>getIntegrateNdpp()</code>)<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- กรอบสีฟ้าอ่อน แสดงชื่อ service ด้านบน<br>
+    &nbsp;&nbsp;- Section "01 Fill in Personal Information":<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- First Name, Last Name (prefill จากข้อมูลบัตร)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Email<br>
+    &nbsp;&nbsp;- Section "02 Consent Details and Conditions":<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;- Checkbox รายการ consent (เช่น สินค้าและผลิตภัณฑ์)<br>
+    &nbsp;&nbsp;- ปุ่ม 2 ปุ่มเรียงข้างกัน: "Edit Information" (สีน้ำเงิน) + "Confirm" (สีเขียว)<br>
+    &nbsp;&nbsp;- Icon บ้าน (home) ด้านล่าง<br>
+    <b>Prefill:</b> ชื่อ-นามสกุล จากข้อมูลบัตร, email/purpose จาก consent เดิม (Returning User)<br>
+    <b>Dynamic:</b> รายการ consent ดึงจาก NDPP API (<code>GetIntegrateNdppForm</code>)<br>
+    <b>On Submit:</b><br>
+    &nbsp;&nbsp;1. ส่ง consent ไป NDPP (<code>SubmitIntegrateNdpp</code>)<br>
+    &nbsp;&nbsp;2. Callback ไป Netka EnTelligence<br>
+    &nbsp;&nbsp;3. บันทึกลง <code>kiosk_integrate_ndpp_consented</code><br>
+    <b>Navigation:</b> Confirm &rarr; StepEnd (หรือ Step18 ถ้ามี NDPP by Kiosk)
+  </div>
+
+  <!-- ===== 5.15 Completion (StepEnd) ===== -->
+  <h3>5.15 Completion (StepEnd) &mdash; เสร็จสิ้น</h3>
+  <div style="text-align:center; margin:15px 0;">
+    <img src="screenshots/Step_StepEnd.png" alt="Completion (StepEnd)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+  </div>
+  <div class="spec-box">
+    <b>Description:</b> แสดงผลสำเร็จ พื้นหลัง gradient สีเขียว พร้อม icon ถูกต้อง หัวข้อ "Identity Verification Complete" และข้อความขอบคุณ<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- พื้นหลัง gradient สีเขียว (teal to green)<br>
+    &nbsp;&nbsp;- Icon เครื่องหมายถูก (checkmark) วงกลมขาว ด้านบน<br>
+    &nbsp;&nbsp;- ข้อความ "Identity Verification Complete" ขนาดใหญ่<br>
+    &nbsp;&nbsp;- Animation มือดึงบัตรออกจาก card reader (ฝั่งซ้าย) + ข้อความ "Thank You for Using Our Service" (ฝั่งขวา)<br>
+    &nbsp;&nbsp;- ข้อความ "Please Remove Your ID Card" ขนาดใหญ่ ตรงกลาง<br>
+    &nbsp;&nbsp;- ปุ่ม "Done" สีขาวตัวเขียว มุมโค้งมน<br>
+    &nbsp;&nbsp;- Icon บ้าน (home)<br>
+    &nbsp;&nbsp;- Footer: "&copy; 2025 Powered by Netka System" + Kiosk Code<br>
+    <b>Data Sent to Netka EnTelligence:</b><br>
+    &nbsp;&nbsp;- ข้อมูลบัตรประชาชน<br>
+    &nbsp;&nbsp;- ภาพถ่ายจากชิปบัตร<br>
+    &nbsp;&nbsp;- ภาพถ่ายใบหน้า (Live Photo)<br>
+    &nbsp;&nbsp;- Consent (รายข้อ + status)<br>
+    &nbsp;&nbsp;- Timestamp + Kiosk ID<br>
+    <b>Countdown:</b> auto-reset กลับ Welcome พร้อม countdown<br>
+    <b>Navigation:</b> Done / auto &rarr; Welcome (Step1)
   </div>
 
   <!-- ========== 6. DATA FLOW ========== -->
@@ -1515,13 +1458,102 @@
     </tr>
   </table>
 
+  <!-- ========== 11. i18n ========== -->
+  <h1 id="sec11">11. Internationalization (i18n)</h1>
+
+  <p>ระบบรองรับหลายภาษา (Multi-language) โดยปัจจุบันรองรับ 2 ภาษา: <b>ไทย (TH)</b> และ <b>อังกฤษ (EN)</b> ผู้ใช้สามารถสลับภาษาได้ทุกหน้าจอผ่านปุ่มที่มุมบนซ้าย</p>
+
+  <h3>11.1 Language Switch UI</h3>
+  <div class="spec-box">
+    <b>ตำแหน่ง:</b> มุมบนซ้ายของทุกหน้าจอ (fixed position)<br>
+    <b>UI Elements:</b><br>
+    &nbsp;&nbsp;- ปุ่ม <b>&lsaquo;</b> (Previous language) &mdash; สลับไปภาษาก่อนหน้า<br>
+    &nbsp;&nbsp;- <b>Flag icon</b> แสดงธงชาติของภาษาปัจจุบัน (ใช้ <code>flag-icon-css</code> library)<br>
+    &nbsp;&nbsp;- ปุ่ม <b>&rsaquo;</b> (Next language) &mdash; สลับไปภาษาถัดไป<br>
+    <b>ตัวอย่าง:</b> [ &lsaquo; ] &nbsp; &#127481;&#127469; &nbsp; [ &rsaquo; ] &nbsp;&rarr;&nbsp; [ &lsaquo; ] &nbsp; &#127468;&#127463; &nbsp; [ &rsaquo; ]
+  </div>
+
+  <h3>11.2 Translation Architecture</h3>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td><code>data-i18n</code> attribute</td>
+      <td>HTML elements ที่ต้องการแปลจะมี attribute <code>data-i18n="key"</code> ระบบจะแทนที่ <code>textContent</code> ด้วยคำแปลตาม key</td>
+    </tr>
+    <tr>
+      <td><code>window.t(key)</code></td>
+      <td>Function สำหรับแปลข้อความ &mdash; ค้นหาจาก <code>_i18n.words[currentLang][key]</code> ถ้าไม่พบจะ fallback เป็นภาษาอังกฤษ (EN) หรือแสดง key เดิม</td>
+    </tr>
+    <tr>
+      <td><code>window.setLang(code)</code></td>
+      <td>เปลี่ยนภาษาปัจจุบัน &rarr; update ทุก element ที่มี <code>data-i18n</code>, update flag icon, บันทึกลง <code>localStorage</code></td>
+    </tr>
+    <tr>
+      <td><code>window.loadTranslate()</code></td>
+      <td>โหลดข้อมูลภาษาจาก API (<code>/api/KioskApi/GetTranslate</code>) &mdash; cache ใน <code>localStorage</code> key <code>_i18n_data</code></td>
+    </tr>
+    <tr>
+      <td><code>window.applyTranslate()</code></td>
+      <td>Apply คำแปลให้ทุก element ที่มี <code>data-i18n</code> &mdash; เรียกหลังจากเปลี่ยนหน้าหรือ render dynamic content</td>
+    </tr>
+  </table>
+
+  <h3>11.3 Translation Data Flow</h3>
+  <div class="spec-box">
+    <b>API:</b> <code>GET /api/KioskApi/GetTranslate</code><br>
+    <b>Response:</b> Array of language objects<br>
+    <pre style="font-size:12px; margin:5px 0;">[
+  {
+    "code": "th",
+    "icon": "flag-icon flag-icon-th",
+    "words": "{\"welcome\":\"ยินดีต้อนรับ\", \"next\":\"ถัดไป\", ...}"
+  },
+  {
+    "code": "en",
+    "icon": "flag-icon flag-icon-gb",
+    "words": "{\"welcome\":\"Welcome\", \"next\":\"Next\", ...}"
+  }
+]</pre>
+    <b>Caching:</b> ข้อมูลภาษา cache ใน <code>localStorage</code> key <code>_i18n_data</code> &mdash; โหลดจาก cache ก่อน เรียก API เฉพาะเมื่อ <code>forceRefresh = true</code><br>
+    <b>Default Language:</b> ค่า default คือ <code>th</code> (ภาษาไทย) &mdash; เก็บภาษาที่เลือกใน <code>localStorage</code> key <code>lang</code>
+  </div>
+
+  <h3>11.4 Supported Languages</h3>
+  <table>
+    <tr>
+      <th>Code</th>
+      <th>Language</th>
+      <th>Flag Icon</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td><code>th</code></td>
+      <td>Thai (ภาษาไทย)</td>
+      <td><code>flag-icon flag-icon-th</code> (ธงชาติไทย)</td>
+      <td>Default</td>
+    </tr>
+    <tr>
+      <td><code>en</code></td>
+      <td>English</td>
+      <td><code>flag-icon flag-icon-gb</code> (ธงชาติอังกฤษ)</td>
+      <td>Supported</td>
+    </tr>
+  </table>
+
+  <div class="note-blue">
+    <b>Extensibility:</b> ระบบออกแบบให้รองรับหลายภาษาได้ &mdash; เพียงเพิ่ม language record ใน database ก็สามารถเพิ่มภาษาใหม่ได้โดยไม่ต้องแก้ code ฝั่ง frontend
+  </div>
+
   <br><br>
   <hr>
   <p style="text-align:center; color:#888; font-size:12px;">
-    N-Kiosk Registration & Consent Management &mdash; Process Design Document v1.0 &mdash; March 2026<br>
+    N-Kiosk Registration & Consent Management &mdash; Process Design Document v1.1 &mdash; March 2026<br>
     Customer: Maersk &mdash; Prepared by: Netka System
   </p>
 
 </body>
 
-</html><!-- updated Thu Mar 26 11:32:11 SEAST 2026 -->
+</html><!-- updated Sun Mar 30 2026 -->
