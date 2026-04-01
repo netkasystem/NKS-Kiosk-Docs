@@ -185,7 +185,7 @@ window.Step5 = {
         console.log("Step 5: Card found");
         setTimeout(() => {
             Step5.check();
-        }, 1000);
+        }, 10_000);
     },
     check: async () => {
         var _card = getCardData();
@@ -448,12 +448,11 @@ window.Step17 = {
         const step17Content = document.getElementById("step17-content");
         if (step17Content) step17Content.style.display = "";
 
-        // ผูก event submit + back ก่อน (ใช้ทั้ง 1 รายการและหลายรายการ)
-        const btnBack = document.getElementById("btn-back");
-        if (btnBack) {
-            btnBack.addEventListener("click", () => {
-                document.getElementById("ndpp-form-container").style.display = "none";
-                document.getElementById("ndpp-container").style.display = "flex";
+        // ปุ่มแก้ไขข้อมูล → กลับไปหน้า Step12
+        const btnEditInfo = document.getElementById("btn-edit-info");
+        if (btnEditInfo) {
+            btnEditInfo.addEventListener("click", () => {
+                next_page("/Step/Step12");
             });
         }
 
@@ -461,8 +460,8 @@ window.Step17 = {
         if (submitConsent) submitConsent.addEventListener("click", async (e) => {
             e.preventDefault();
             const firstname = document.getElementById("firstname").value.trim();
-            const lastname  = document.getElementById("lastname").value.trim();
-            const email     = document.getElementById("email").value.trim();
+            const lastname = document.getElementById("lastname").value.trim();
+            const email = document.getElementById("email").value.trim();
 
             const selectedPurposes = Array.from(
                 document.querySelectorAll("#ndpp-form input[name='purpose']:checked")
@@ -471,26 +470,26 @@ window.Step17 = {
             const purposeOptionDetail = Array.from(
                 document.querySelectorAll("#ndpp-form input[name='purpose']")
             ).map(input => ({
-                PurposeNameId:  input.value,
-                PurposeName:    input.nextElementSibling?.textContent?.trim() ?? "",
+                PurposeNameId: input.value,
+                PurposeName: input.nextElementSibling?.textContent?.trim() ?? "",
                 PurposeChecked: input.checked
             }));
 
             const payload = {
-                Firstname:           firstname || cardData.thaiPersonalInfo.firstName,
-                Lastname:            lastname  || cardData.thaiPersonalInfo.lastName,
-                Email:               email,
-                IntegrateNdppId:     Step17._ndppId,
-                IntegrateUrl:        Step17._url,
-                PurposeOption:       selectedPurposes,
+                Firstname: firstname || cardData.thaiPersonalInfo.firstName,
+                Lastname: lastname || cardData.thaiPersonalInfo.lastName,
+                Email: email,
+                IntegrateNdppId: Step17._ndppId,
+                IntegrateUrl: Step17._url,
+                PurposeOption: selectedPurposes,
                 PurposeOptionDetail: purposeOptionDetail,
-                NdppFormData:        JSON.stringify(Step17._ndppFormData),
-                citizenID:           cardData.citizenID        ?? "",
-                fullNameTH:          cardData.fullNameTH       ?? "",
-                fullNameEN:          cardData.fullNameEN       ?? "",
-                photo_path:          cardData.photo_path       ?? "",
-                face_capture_path:   cardData.face_capture_path ?? "",
-                KioskCode:           GetKioskCode()
+                NdppFormData: JSON.stringify(Step17._ndppFormData),
+                citizenID: cardData.citizenID ?? "",
+                fullNameTH: cardData.fullNameTH ?? "",
+                fullNameEN: cardData.fullNameEN ?? "",
+                photo_path: cardData.photo_path ?? "",
+                face_capture_path: cardData.face_capture_path ?? "",
+                KioskCode: GetKioskCode()
             };
             try {
                 const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
@@ -641,8 +640,8 @@ window.Step17 = {
 
         const prevEmail = Step17._previousConsent?.email ?? "";
         document.getElementById("firstname").value = cardData.thaiPersonalInfo.firstName || "";
-        document.getElementById("lastname").value  = cardData.thaiPersonalInfo.lastName || "";
-        document.getElementById("email").value     = prevEmail;
+        document.getElementById("lastname").value = cardData.thaiPersonalInfo.lastName || "";
+        document.getElementById("email").value = prevEmail;
 
         container.style.display = "block";
         document.getElementById("ndpp-container").style.display = "none";

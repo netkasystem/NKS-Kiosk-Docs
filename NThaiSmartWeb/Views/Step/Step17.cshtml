@@ -4,7 +4,7 @@
     ViewBag.HideFooter = true;
 }
 
-<body class="bg-light">
+<body class="bg-light hide-lang-switch">
     <div class="container py-4" id="step17-content" style="display:none">
 
         <!-- Card List -->
@@ -12,9 +12,6 @@
          
         <!-- NDPP Form Container -->
         <div id="ndpp-form-container" style="display:none; margin-top:20px;">
-            <button id="btn-back" class="btn btn-secondary mb-3" data-i18n="go back">← ย้อนกลับ</button>
-
-             
             <form id="ndpp-form" class="p-3 border rounded shadow-sm">
 
                 <!-- Section 01 ข้อมูลส่วนบุคคล -->
@@ -51,7 +48,10 @@
                      
                 </div>
 
-                <button type="submit" class="btn btn-success px-4" id="submit-consent" data-i18n="confirm">ยืนยัน</button>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" id="btn-edit-info" class="btn btn-secondary px-4" data-i18n="edit information">แก้ไขข้อมูล</button>
+                    <button type="submit" class="btn btn-success px-4" id="submit-consent" data-i18n="confirm">ยืนยัน</button>
+                </div>
             </form>
         </div>
 

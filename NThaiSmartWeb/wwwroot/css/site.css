@@ -1,3 +1,6 @@
+/* Hide lang switch on Step14, Step17 */
+body.hide-lang-switch .lang-switch { display: none !important; }
+
 /* i18n: hide content until translate ready, then fade in */
 body:not(.i18n-ready) main,
 body:not(.i18n-ready) .login-container {

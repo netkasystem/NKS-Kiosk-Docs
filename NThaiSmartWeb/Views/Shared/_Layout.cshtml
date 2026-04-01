@@ -19,6 +19,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <html lang="th">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,13 +30,14 @@
     <link rel="stylesheet" href="~/lib/fortawesome/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="~/lib/flag-icon-css/css/flag-icon.min.css">
 
-    <link rel="icon" type="image/png" href="~/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/master.css" asp-append-version="true" />
 
 </head>
+
 <body>
 
     @* @if (!(ViewBag.HideHeader is true)) *@
@@ -90,8 +92,6 @@
                             <li class="nav-item">
                                 <a href="#" id="logout" class="nav-link">👋 Logout</a>
                             </li>
-
-                            <!-- เพิ่มเมนูอื่น ๆ ตามต้องการ -->
                         </ul>
                     </div>
                 </div>
@@ -115,8 +115,8 @@
         </div>
     </div>
 
-    <div class="container mt-4">
-        <main ng-app="main" role="main" class="pb-5">
+    <div class="container" style="margin-top: 5vh;">
+        <main ng-app="main" role="main">
             <div class="timer" style="background-color: slategray;display: block !important;width: fit-content;padding-right: 10px;">
                 @if (env.IsDevelopment())
                 {
@@ -126,12 +126,12 @@
             </div>
 @*             <div class="lang-switch-container">
                 <button class="lang-nav-btn" id="lang-prev">‹</button>
-    
+
                 <div class="lang-display" id="lang-switch-btn">
                     <img src="/images/icons/flag-th.png" class="flag-icon" alt="TH">
                     <span class="lang-label">TH</span>
                 </div>
-    
+
                 <button class="lang-nav-btn" id="lang-next">›</button>
             </div> *@
             <div class="row-logout p-3 text-center" style="height: 7vh; width: 10vw; z-index: 99; position: fixed;top: 2vh;right: 2vw;">
@@ -158,7 +158,7 @@
     }
 
     <script>
-           document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const backButton = document.getElementById('back-button');
             const refreshButton = document.getElementById('refresh-button');
             const settingButton = document.getElementById('setting-button');
@@ -205,11 +205,11 @@
                 }
             });
 
-            document.addEventListener('wheel', function(e) {
-            if (e.ctrlKey) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+            document.addEventListener('wheel', function (e) {
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
         });
     </script>
 
@@ -262,4 +262,5 @@
     </script>
 
 </body>
+
 </html>
