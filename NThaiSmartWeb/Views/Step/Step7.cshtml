@@ -3,7 +3,7 @@
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
 }
-<body class="red-background">
+@* <body class="red-background">
 
     <header class="page-header">
         <div class="scan_fail" style="margin-bottom:40px;">
@@ -40,4 +40,67 @@
             }
         });
     </script>
-</body>
+</body> *@
+
+
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th-danger">บัตรหมดอายุ</h1>
+            <div class="divider-danger"></div>
+        </div>
+
+
+        <div class="page-center-maersk">
+            <img src="/images/icons/scan_danger.svg" class="id-card-image-fail-icon" / style="width:27%;">
+
+            <div class="bottom-section" style="justify-content:left;">
+                <ol class="instruction-list-maersk" style="font-size: 2.3em;">
+                    <li data-i18n ="your id card has expired">
+                        บัตรประจำตัวประชาชนของท่าน หมดอายุการใช้งาน</li>
+                    <li>กรุณาติดต่อเจ้าหน้าที่ หรือหน่วยงานที่เกี่ยวข้อง</li>
+                </ol>
+            </div>
+
+        </div>
+        <div class="kiosk-action-bar style-modern">
+
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" data-i18n="cancel identity verification">
+                ยกเลิกการยืนยันตัวตน
+            </a>
+
+
+        </div>
+    </div>
+
+    <audio id="scan_card" src="/audio/expire_card.wav"></audio>
+    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const audio = document.getElementById("scan_card");
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(err => {
+                    console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+                });
+            }
+        });
+    </script>
+    </body>

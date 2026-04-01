@@ -124,13 +124,16 @@
                     <span> ⏳ Time elapsed: <span id="timer">0</span> seconds</span>
                 }
             </div>
-
-            <div class="lang-switch" style="z-index: 99; position: fixed; top: 2vh; left: 2vw; display: flex; align-items: center; gap: 6px;">
-                <button class="btn btn-sm btn-outline-secondary" id="lang-prev" style="font-size: 1.2rem; padding: 2px 10px;">‹</button>
-                <span id="lang-switch-btn" style="font-size: 0.9rem; color: white; min-width: 60px; text-align: center;">🌐</span>
-                <button class="btn btn-sm btn-outline-secondary" id="lang-next" style="font-size: 1.2rem; padding: 2px 10px;">›</button>
-            </div>
-
+@*             <div class="lang-switch-container">
+                <button class="lang-nav-btn" id="lang-prev">‹</button>
+    
+                <div class="lang-display" id="lang-switch-btn">
+                    <img src="/images/icons/flag-th.png" class="flag-icon" alt="TH">
+                    <span class="lang-label">TH</span>
+                </div>
+    
+                <button class="lang-nav-btn" id="lang-next">›</button>
+            </div> *@
             <div class="row-logout p-3 text-center" style="height: 7vh; width: 10vw; z-index: 99; position: fixed;top: 2vh;right: 2vw;">
                 <i class="fas fa-sign-out-alt fa-2x" title="Logout" id="icon-logout" style="color:white; display:none"></i>
             </div>
@@ -142,11 +145,11 @@
 
     @if (!(ViewBag.HideButton is true))
     {
-        <footer>
+       @*  <footer>
             <button class="footer-button" id="back-button">
                 <img src="/images/icons/back_icon.svg" class="footer_icon">
             </button>
-        </footer>
+        </footer> *@
     }
 
     @if (!(ViewBag.HideFooter is true))

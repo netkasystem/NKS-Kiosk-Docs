@@ -4,26 +4,54 @@
 
 }
 
-<div class="header">
-    <div class="normal-container">
-        <h2 data-i18n="verify identity with">
-            ยืนยันตัวตนด้วย
-        </h2>
+<body class="kiosk-body" >
+
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top"></div>
+        <div class="bg-gradient-bottom"></div>
     </div>
-    <div class="normal-container">
-        <h1 data-i18n="national id card">
-            บัตรประจำตัวประชาชน
-        </h1>
-    </div>
-</div>
-<a asp-controller="Step" asp-action="Step2" class="card-link" style="text-decoration: none;" id="cardLink">
-    <div class="card_thai">
-        <img id="font_thai_id" src="/images/icons/Thai_id.svg" style="width:88%; height:100%; " class="thai_id_icon" />
-        <div class="interac">
-            <img id="interac" src="/images/icons/Interac.svg" style="width:50%; height:auto; " class="interac_icon" />
-            <div class="ping-center"></div>
+
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+                <div class="logo-container">
+                    <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+                </div>
+
+                <div class="lang-toggle-group">
+                    <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                    <div class="lang-separator"></div>
+                    <button class="lang-btn" onclick="setLang('en')">EN</button>
+                </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th">ยินดีต้อนรับ</h1>
+            <div class="divider"></div>
+            <p class="subtitle">
+                ระบบลงทะเบียน และจัดการความยินยอม <br>
+            </p>
+          @*   <span class="sub-text">ข้อมูลของคุณถูกคุ้มครองตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)</span> *@
         </div>
+
+        <div class="instruction-container">
+            <img src="/images/icons/id_card_grid_no_shadow.png" style="margin-bottom: 0%; margin-top: 0%; width: 195%;">
+            <div class="shield-float s-1">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" /></svg>
+            </div>
+            <div class="shield-float s-2">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.55 7.7-6 8.83-3.45-1.13-6-4.82-6-8.83v-4.7l6-2.25 6 2.25v4.7z" /></svg>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+        <div class="cta-container">
+            <a asp-controller="Step" asp-action="Step2" class="btn-start-maersk animate-pulse-soft" style="text-decoration: none;">
+                <span class="btn-content">
+                    <span class="btn-text-th">เริ่มลงทะเบียน</span>
+                </span>
+            </a>
+        </div>
+   
     </div>
-</a>
-<audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+</body>
 

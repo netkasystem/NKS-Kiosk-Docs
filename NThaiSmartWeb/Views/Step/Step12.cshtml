@@ -4,140 +4,205 @@
     ViewBag.HideFooter = true;
     ViewBag.HideButton = true;
 }
-<body>
-    <header class="page-header" style="margin-bottom: 0px;">
-        <h1 data-i18n="please confirm your information">กรุณายืนยันข้อมูล</h1>
-    </header>
+<body class="kiosk-body">
+ 
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+    <div class="kiosk-content z-10">
 
-    <div class="row">
-        <div class="grid-item top-box">
-            <div class="info-header d-flex justify-content-between align-items-center">
-                <h2 data-i18n="id card information">ข้อมูลบัตรประจำตัวประชาชน</h2>
-                <div class="action-buttons">
-                    <button class="icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th" data-i18n="please confirm your information">กรุณายืนยันข้อมูล</h1>
+            <div class="divider"></div>
+        </div>
+
+        <div class="spacer"></div>
+
+    @*     <div class="id-card">
+
+            <div class="id-card-header">
+                <div class="id-title">
+                    <p>Consent Detail</p>
                 </div>
             </div>
 
-            <div class="row g-4">
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="citizen id number">เลขบัตรประจำตัวประชาชน</label>
-                    <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
-                    <button class="local-icon-button w-100">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
+            <div class="id-card-body">
+                <div class="row">
 
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="date of birth">วันเกิด</label>
-                    <div class="info-value" data-field-name="dateOfBirth" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="first name">ชื่อ</label>
-                    <div class="info-value" data-field-name="firstNameTH" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="last name">นามสกุล</label>
-                    <div class="info-value" data-field-name="lastNameTH" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="first name english">ชื่อ (ภาษาอังกฤษ)</label>
-                    <div class="info-value" data-field-name="firstNameEN" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="last name english">นามสกุล (ภาษาอังกฤษ)</label>
-                    <div class="info-value" data-field-name="lastNameEN" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 info-field">
-                    <label data-i18n="gender">เพศ</label>
-                    <div class="info-value" data-field-name="sex" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 info-field">
-                    <label data-i18n="address">ที่อยู่</label>
-                    <div class="info-value" data-field-name="address" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="issue date">วันออกบัตร</label>
-                    <div class="info-value" data-field-name="issueDate" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-12 col-md-6 info-field">
-                    <label data-i18n="expiry date">วันหมดอายุบัตร</label>
-                    <div class="info-value" data-field-name="expireDate" data-full-value=""></div>
-                    <button class="local-icon-button">
-                        <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                    </button>
-                </div>
-
-                <div class="col-6">
-                    <div class="grid-item bottom-left-1">
-                        <div class="id-card-box">
-                            <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
+                    <div class="col-md-12">
+                        <div class="data-field">
+                            <label class="data-label">Service Date</label>
+                            <div class="data-value">{{Information.ConsentedDate}}</div>
                         </div>
-                        <h3 data-i18n="id card photo">รูปบัตรประจำตัวประชาชน</h3>
+                        <div class="data-field">
+                            <label class="data-label">Identification Number</label>
+                            <div class="data-value">{{Information.citizenID}}</div>
+                        </div>
+                        <div class="data-field">
+                            <label class="data-label">Name</label>
+                            <div class="data-value">
+                                {{Information.thaiPersonalInfo.prefix}} {{Information.thaiPersonalInfo.firstName}} {{Information.thaiPersonalInfo.lastName}} /
+                                {{Information.englishPersonalInfo.prefix}} {{Information.englishPersonalInfo.firstName}} {{Information.englishPersonalInfo.lastName}}
+                            </div>
+                        </div>
+                        <div class="data-field">
+                            <label class="data-label">Date of Birth</label>
+                            <div class="data-value">{{Information.dateOfBirth}}</div>
+                        </div>
+                        <div class="data-field">
+                            <label class="data-label">Address</label>
+                            <div class="data-value">
+                                {{Information.addressInfo.houseNo}} {{Information.addressInfo.villageNo}} {{Information.addressInfo.lane}} {{Information.addressInfo.road}}
+                                {{Information.addressInfo.subDistrict}} {{Information.addressInfo.district}} {{Information.addressInfo.province}}
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <div class="data-field">
+                                    <label class="data-label"> Date of Issue</label>
+                                    <div class="data-value">{{Information.issueDate}}</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="data-field">
+                                    <label class="data-label">Date of Expiry</label>
+                                    <div class="data-value">{{Information.expireDate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div> *@
+
+        <div class="row">
+            <div class="grid-item top-box">
+                <div class="info-header d-flex justify-content-between align-items-center">
+                    <h2 data-i18n="id card information">ข้อมูลบัตรประจำตัวประชาชน</h2>
+                    <div class="action-buttons">
+                        <button class="icon-button">
+                            <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
+                        </button>
                     </div>
                 </div>
 
-                <div class="col-6">
-                    <div class="grid-item bottom-left-2">
-                        <div class="crop-box">
-                            <img id="capturePhoto" src="/images/icons/Profile.jpg" alt="รูปโปรไฟล์ที่ถ่าย" class="crop-box" />
-                        </div>
-                        <h3 data-i18n="face scan photo">รูปจากการแสกนใบหน้า</h3>
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="citizen id number">เลขบัตรประจำตัวประชาชน</label>
+                        <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
+                     
                     </div>
-                </div>
 
-                <div class="offset-6 col-3">
-                    @* <button type="submit" class="edit-button w-100 py-4">แก้ไขข้อมูล</button> *@
-                </div>
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="date of birth">วันเกิด</label>
+                        <div class="info-value" data-field-name="dateOfBirth" data-full-value=""></div>
+                        
+                    </div>
 
-                <div class="offset-6 col-6">
-                    @* <button type="button" class="confirm-button w-100 py-4" id="confirm-btn">ยืนยันข้อมูล</button> *@
-                </div>
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="first name">ชื่อ</label>
+                        <div class="info-value" data-field-name="firstNameTH" data-full-value=""></div>
+                     
+                    </div>
 
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="last name">นามสกุล</label>
+                        <div class="info-value" data-field-name="lastNameTH" data-full-value=""></div>
+                 
+                    </div>
+
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="first name english">ชื่อ (ภาษาอังกฤษ)</label>
+                        <div class="info-value" data-field-name="firstNameEN" data-full-value=""></div>
+                     
+                    </div>
+
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="last name english">นามสกุล (ภาษาอังกฤษ)</label>
+                        <div class="info-value" data-field-name="lastNameEN" data-full-value=""></div>
+                  
+                    </div>
+
+                    <div class="col-12 info-field">
+                        <label data-i18n="gender">เพศ</label>
+                        <div class="info-value" data-field-name="sex" data-full-value=""></div>
+               
+                    </div>
+
+                    <div class="col-12 info-field">
+                        <label data-i18n="address">ที่อยู่</label>
+                        <div class="info-value" data-field-name="address" data-full-value=""></div>
+                      
+                    </div>
+
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="issue date">วันออกบัตร</label>
+                        <div class="info-value" data-field-name="issueDate" data-full-value=""></div>
+                      
+                    </div>
+
+                    <div class="col-12 col-md-6 info-field">
+                        <label data-i18n="expiry date">วันหมดอายุบัตร</label>
+                        <div class="info-value" data-field-name="expireDate" data-full-value=""></div>
+                         
+                    </div>
+
+                    <div class="col-6">
+                        <div class="grid-item bottom-left-1">
+                            <div class="id-card-box">
+                                <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="รูปโปรไฟล์จากบัตรประชาชน" />
+                            </div>
+                            <h3 data-i18n="id card photo">รูปบัตรประจำตัวประชาชน</h3>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="grid-item bottom-left-2">
+                            <div class="crop-box">
+                                <img id="capturePhoto" src="/images/icons/Profile.jpg" alt="รูปโปรไฟล์ที่ถ่าย" class="crop-box" />
+                            </div>
+                            <h3 data-i18n="face scan photo">รูปจากการแสกนใบหน้า</h3>
+                        </div>
+                    </div>
+
+                    <div class="offset-6 col-6">
+                        @* <button type="button" class="confirm-button w-100 py-4" id="confirm-btn">ยืนยันข้อมูล</button> *@
+                    </div>
+
+                </div>
             </div>
         </div>
+
+        <div class="kiosk-action-bar style-modern">
+            <a asp-controller="Step" asp-action="Step14" class="kiosk-btn btn-solid">
+                ยืนยันข้อมูล
+            </a>
+        </div>
+
     </div>
 
+  
     <div class="row pt-5">
         <div class="offset-3 col-6">
             <button type="button" class="confirm-button w-100 py-4" id="confirm-btn" data-i18n="confirm information">ยืนยันข้อมูล</button>
         </div>
     </div>
 
-    <div id="edit-modal" class="modal-overlay">
+   @*  <div id="edit-modal" class="modal-overlay">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -183,10 +248,10 @@
                         <input type="text" id="input-sex" data-source-field="sex">
                     </div>
 
-                    @*<div class="form-field">
+                    <div class="form-field">
                         <label for="input-religion">ศาสนา</label>
                         <input type="text" id="input-religion" data-source-field="religion">
-                    </div> *@
+                    </div>
 
                     <div class="form-field full-width">
                         <label for="input-address" data-i18n="address">ที่อยู่</label>
@@ -223,7 +288,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 
 
     <script>

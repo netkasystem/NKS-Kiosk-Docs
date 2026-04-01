@@ -34,14 +34,14 @@ window.Step1 = {
     }
 };
 
-window.Step2 = {
+/*window.Step2 = {
     init: () => {
         console.log("Step 2 read me");
         var read_sec = getKioskReadStepSec(); //from variable [kiosk_read_step_sec]
         next_page("/Step/Step3", read_sec);
         setCountTimer(0);
     }
-};
+};*/
 
 window.Step3 = {
     init: async () => {
@@ -113,11 +113,70 @@ window.Step3 = {
 window.Step4 = {
     init: () => {
         console.log("Step 4 connected =>", window.GetKioskCode());
-        setTimeout(() => {
+
+        // ❌ เอา setTimeout แบบเก่าออกไปได้เลย เพราะเราจะไปคุมเวลาที่ตัวนับถอยหลังแทน
+        /* setTimeout(() => {
             var alert_card = document.getElementById("alert-notfound-card");
             if (alert_card != null)
                 alert_card.style.setProperty("display", "block", "important");
-        }, 5_000);
+        }, 15_000); 
+        */
+
+        const audio = document.getElementById("scan_card");
+        if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(err => console.warn("Sound error:", err));
+        }
+
+        Step4.start_count_down();
+    },
+
+    start_count_down: () => {
+        let timeLeft = 30;
+        const totalTime = 30;
+        const progressBar = document.getElementById("progressBar");
+        const countdownText = document.getElementById("countdownText");
+
+        const alert_card = document.getElementById("alert-notfound-card");
+
+        if (window.step4Timer) clearInterval(window.step4Timer);
+
+        window.step4Timer = setInterval(() => {
+            timeLeft--;
+
+            if (countdownText) countdownText.innerText = timeLeft;
+
+            if (progressBar) {
+                const widthPercentage = (timeLeft / totalTime) * 100;
+                progressBar.style.width = widthPercentage + "%";
+
+                if (timeLeft <= 15 && timeLeft > 5) {
+                    progressBar.classList.add("warning");
+                    if (countdownText) countdownText.style.color = "#f59e0b";
+
+                    if (alert_card) {
+                        alert_card.classList.remove("d-none");
+                        alert_card.style.setProperty("display", "block", "important"); 
+                        alert_card.style.color = "#f59e0b";
+                    }
+
+                } else if (timeLeft <= 5) {
+                    progressBar.classList.add("danger");
+                    if (countdownText) countdownText.style.color = "#ef4444";
+
+                    if (alert_card) {
+                        alert_card.style.color = "#ef4444";
+                        alert_card.style.fontWeight = "bold";
+                    }
+                }
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(window.step4Timer);
+                console.log("Step 4: Timeout, returning to Step 1");
+                next_page("/Step/Step1");
+            }
+        }, 1000);
     }
 };
 

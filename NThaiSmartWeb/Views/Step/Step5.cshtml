@@ -4,7 +4,7 @@
     ViewBag.HideFooter = true;
 }
 
-<div class="page-container">
+@* <div class="page-container">
 
     <header class="page-header top-header">
         <div class="loader"></div>
@@ -21,4 +21,45 @@
         <h2 data-i18n="please wait">กรุณารอสักครู่</h2>
     </header>
 
-</div>
+</div> *@
+
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th"  data-i18n="reading data">กำลังอ่านข้อมูล</h1>
+            <div class="divider"></div>
+        </div>
+
+        <div class="kiosk-scan-screen-premium">
+            <div class="scanner-corporate-container">
+                <img src="/images/icons/font_card_id.svg" class="scan-image-maersk image-a active" />
+
+                <div class="corp-laser-glow"></div>
+            </div>
+
+            <div class="corp-status-panel">
+                <div class="corp-warning-box">
+                    <div class="corp-warning-dot"></div>
+                    กรุณาอย่าถอดบัตรออก
+                    <div class="corp-warning-dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
