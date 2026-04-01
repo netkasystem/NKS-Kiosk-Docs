@@ -342,21 +342,21 @@ body, html {
 }
 
 .step-number {
-    width: 150px;
-    height: 150px;
-    background-color: #FFFFFF;
-    color: #000000;
-    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    background-color: #42b0d5;
+    color: #ffffff;
+    border-radius: 71%;
     font-size: 64px;
     font-weight: 500;
     flex-shrink: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 20px;
+    /*margin-right: 20px;*/
 }
 
-.step-text {
+    .step-text {
     font-size: 50px;
     font-weight: 400;
     color: #ffff;
@@ -3334,7 +3334,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 50px;
+    margin-right: 40px;
     box-shadow: inset 2px 2px 5px rgba(66, 176, 213, 0.1);
     position: relative;
 }
@@ -3585,3 +3585,288 @@ html, body {
         margin-left: auto;
         margin-right: auto;
     }
+
+.kiosk-vertical-container {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    width: 100%;
+    max-width: 100%;
+    padding: 50px;
+}
+
+.kiosk-step-card {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 45px 55px;
+    position: relative;
+    border: 1px solid rgba(66, 176, 213, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 4px 6px -2px rgba(66, 176, 213, 0.03), 0 20px 40px -10px rgba(66, 176, 213, 0.15);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: cardFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.step-visual-box {
+    position: relative;
+    margin-right: 50px;
+    min-width: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-main-number {
+    width: 100px;
+    height: 100px;
+    background: #42b0d5;
+    color: white;
+    border-radius: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36.8px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 12px 25px rgba(66, 176, 213, 0.3);
+}
+
+.content-holder {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+}
+
+.step-instruction-text {
+    font-size: 36.8px;
+    color: #1e293b;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.step-info-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(255, 71, 87, 0.08);
+    color: #ff4757;
+    padding: 6px 16px;
+    border-radius: 12px;
+    font-size: 30px;
+    font-weight: 400;
+    width: fit-content;
+    border: 1px solid rgba(255, 71, 87, 0.2);
+}
+
+.kiosk-step-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.kiosk-step-card:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.kiosk-step-card:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+.kiosk-step-card:nth-child(4) {
+    animation-delay: 0.7s;
+}
+
+@keyframes cardFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.v-kiosk-display-wrapper {
+}
+
+.v-kiosk-main-card {
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 45px;
+    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 20px 40px -10px rgba(66, 176, 213, 0.1);
+    border: 1px solid rgba(66, 176, 213, 0.1);
+}
+
+.v-kiosk-header-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #f0f9ff;
+}
+
+.v-kiosk-title {
+    font-size: 32px;
+    color: #42b0d5;
+    margin: 0;
+    font-weight: 600;
+}
+
+.icon-button {
+    background: #afd0eb;
+    border: none;
+    border: 1px solid #42b0d5;
+    border-radius: 12px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .icon-button img {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+    }
+
+.v-kiosk-name-zone {
+    text-align: center;
+    margin-bottom: 40px;
+    background: #fdfeff;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.v-kiosk-name-th {
+    font-size: 44px;
+    font-weight: 600;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.v-kiosk-data-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.v-kiosk-label {
+    font-size: 30px;
+    color: #021b79;
+    flex: 1;
+}
+
+.info-value {
+    font-size: 32px;
+    text-align: right;
+    flex: 1;
+    min-height: 30px;
+}
+
+.v-kiosk-photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.v-kiosk-photo-item {
+    text-align: center;
+}
+
+.v-kiosk-photo-frame {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #f8fdff;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 1px solid rgba(66, 176, 213, 0.1);
+    margin-bottom: 12px;
+}
+
+    .v-kiosk-photo-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.confirm-button {
+    background: #42b0d5;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 22px;
+    font-size: 30px;
+    width: 100%;
+    margin-top: 35px;
+    font-weight: 600;
+    box-shadow: 0 10px 20px rgba(66, 176, 213, 0.2);
+}
+.v-kiosk-profile-horizontal {
+    justify-content: flex-start; 
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 0px 0px;
+    background: #f8fdff;
+    border-radius: 35px;
+    border: 1px solid rgba(66, 176, 213, 0.1);
+    min-height: 230px;
+}
+
+.v-kiosk-avatar-wrapper {
+    flex-shrink: 0; 
+    width: 160px;
+    height: 180px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 4px solid #ffffff;
+    box-shadow: 0 8px 20px rgba(66, 176, 213, 0.12);
+}
+
+    .v-kiosk-avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.v-kiosk-name-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    overflow: hidden; 
+}
+
+.v-kiosk-name-th {
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+}
+.v-kiosk-name-en {
+    color: #42b0d5;
+    font-weight: 400;
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 6px 10px;
+    letter-spacing: 0.5px;
+}
+
+.v-kiosk-name-stack .info-value {
+    display: inline-block;
+    text-align: left;
+    flex: none; 
+    white-space: nowrap;
+}
+
+.info-value:empty {
+    display: none;
+}
+.info-value {
+    display: inline-block;
+}

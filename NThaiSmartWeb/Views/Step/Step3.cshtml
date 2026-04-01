@@ -4,74 +4,179 @@
     ViewBag.HideFooter = true;
     ViewBag.HideButton = true;
 }
-<body>
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
     <div class="terms-page-wrapper">
         <div class="terms-white-box">
-            <header class="page-header" style="padding-top:120px; padding-bottom:120px;">
-                <h1 data-i18n="terms and conditions">ข้อตกลงและเงื่อนไข</h1>
-            </header>
-            <div class="scroll-anime">
-                <img src="/images/icons/interac_icon_scroll.svg" class="interac_icon_scroll" />
-                <div class="ping-scroll"></div>
-            </div>
-            <div class="terms-content-box">
-                <!-- Loading -->
-                <div id="privacy-notice-loading" style="display:flex; align-items:center; justify-content:center; min-height:56vh; width:89vw;">
-                    <div style="text-align:center;">
-                        <div style="display:inline-block; width:48px; height:48px; border:4px solid #e0e0e0; border-top:4px solid #007bff; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
-                        <p style="margin-top:16px; color:#888; font-size:1.1rem;" data-i18n="loading terms and conditions">กำลังโหลดข้อตกลงและเงื่อนไข...</p>
+
+            <div class="kiosk-content z-10">
+
+                <header class="kiosk-header" style="padding: 0px 70px;">
+                    <div class="logo-container">
+                        <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+                    </div>
+
+                    <div class="lang-toggle-group">
+                        <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                        <div class="lang-separator"></div>
+                        <button class="lang-btn" onclick="setLang('en')">EN</button>
+                    </div>
+                </header>
+
+                <div class="welcome-text-section" style="margin:20px 0px 0px 0px;">
+                    <h1 class="title-th">แจ้งเตือนสิทธิ</h1>
+                    <div class="divider"></div>
+                </div>
+                <div class="scroll-anime">
+                    <img src="/images/icons/interac_icon_scroll.svg" class="interac_icon_scroll" />
+                    <div class="ping-scroll"></div>
+                </div>
+                <div class="terms-content-box">
+                    <div id="privacy-notice-loading" style="display:flex; align-items:center; justify-content:center; min-height:56vh; width:89vw;">
+                        <div style="text-align:center;">
+                            <div style="display:inline-block; width:48px; height:48px; border:4px solid #e0e0e0; border-top:4px solid #007bff; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+                            <p style="margin-top:16px; color:#888; font-size:1.1rem;" data-i18n="loading terms and conditions">กำลังโหลดข้อตกลงและเงื่อนไข...</p>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Notice จาก NDPP -->
+                    <div id="privacy-notice-content" style="display:none;">
+                        <section class="policy-box">
+                            <h2 class="terms-title" id="privacy-notice-title"></h2>
+                            <div class="policy-text" id="privacy-notice-body" style="overflow-x:hidden; word-break:break-word;"></div>
+                        </section>
+                    </div>
+                 @*    <section class="policy-box">
+                        <h2 class="terms-title" data-i18n="terms and conditions of use">
+                            แจ้งเตือนสิทธิ
+                        </h2>
+                        <p class="policy-text" data-i18n="terms body paragraph 1">
+                            ตู้นี้มีการเก็บข้อมูลส่วนบุคคลและภาพถ่ายเพื่อใช้ในการลงทะเบียนและยืนยันตัวตนของผู้เข้าพื้นที่
+                            ข้อมูลที่จัดเก็บ:
+                            • ข้อมูลส่วนบุคคลจาก บัตรประชาชน(ชื่อ-นามสกุล, เลขประจำตัวประชาชน)
+                            ภาพถ่ายใบหน้า จากกล้องประมวลผล ณ จุดลงทะเบียน
+
+                            ข้อมูลทั้งหมดจะถูกส่งไปยังระบบ Netka Intelligent เพื่อดำเนินการประมวลผล ตรวจสอบ และยืนยันตัวตนตามวัตถุประสงค์ด้านความปลอดภัยที่ได้แจ้งไว้ข้างต้นอย่างเคร่งครัด
+                    </section> *@
+                    <!-- Fallback: แสดงเมื่อไม่มี content จาก NDPP -->
+                    <div id="privacy-notice-fallback" style="display:none;">
+                        <section class="policy-box">
+                            <h2 class="terms-title" data-i18n="terms and conditions of use">
+                                ข้อตกลงและเงื่อนไขการใช้งาน
+                            </h2>
+                            <p class="policy-text" data-i18n="terms body paragraph 1">
+                                ข้าพเจ้าขอขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตน พิสูจน์ตัวตน ณ จุดรับลงทะเบียนที่กรมการปกครองกำหนด เพื่อขอใช้บริการส่งแทนเอกลักษณ์ดิจิทัล ของกรมการปกครอง กระทรวงมหาดไทย โดยมีวัตถุประสงค์ ในการทำธุรกรรมทางดิจิทัล กับหน่วยงานที่ได้รับอนุญาตจากกรมการปกครอง เพื่อตรวจสอบยืนยันตัวตน
+
+                                ทั้งนี้ในการกระทำใด ๆ ที่ดำเนินการโดยใช้สิ่งแทนเอกลักษณ์ดิจิทัลนี้ ข้าพเจ้าให้ถือว่า ข้าพเจ้าเป็นผู้ดำเนินการด้วยตนเอง
+
+                                ข้อตกลงและเงื่อนไขการใช้งานนี้อยู่ภายใต้บทบังคับแห่งกฎหมายตามที่กฎหมายบัญญัติไว้
+                            </p>
+                        </section>
+                      
+                        <section class="policy-box">
+                            <h2 class="terms-title" data-i18n="reservation of rights and limitation of liability">
+                                ข้อสงวนสิทธิและข้อจำกัดความรับผิด
+                            </h2>
+                            <p class="policy-text" data-i18n="terms body paragraph 2">
+                                กรมการปกครองไม่อาจรับรองได้ว่าค่าการใช้งานจะเป็นไปโดยปราศจากความล่าช้าและข้อผิดพลาดใด ๆ ทั้งนี้ ไม่ว่าความบกพร่องดังกล่าวจะเกิดขึ้นจากบุคคล หรือความขัดข้องทางเทคนิค หรือเหตุสุดวิสัยอย่างอื่น ข้าพเจ้ารับทราบเงื่อนไขดังกล่าว และตกลงว่าในกรณีที่ความบกพร่องใด ๆ เกิดขึ้น กรมการปกครองจะไม่รับผิดชอบในความสูญเสีย ความเสียหาย ค่าสินไหมทดแทน ค่าใช้จ่าย หรือค่าเสียหายใด ๆ
+                            </p>
+                        </section>
+                        <section class="policy-box">
+                            <h2 class="terms-title" data-i18n="disclaimer">ข้อจำกัดความรับผิดชอบ</h2>
+                            <p class="policy-text" data-i18n="terms body paragraph 3">
+                                ระบบจะดำเนินการยืนยันตัวตนตามข้อมูลที่ได้รับจากผู้ใช้โดยสุจริต และจะไม่รับผิดชอบต่อความเสียหายใด ๆ ที่เกิดขึ้นจากการให้ข้อมูลอันเป็นเท็จหรือไม่ถูกต้องโดยผู้ใช้ รวมถึงความเสียหายที่เกิดจากการละเมิดสิทธิส่วนบุคคลของผู้อื่นอันเนื่องมาจากการใช้ข้อมูลปลอม หรือการแอบอ้างบุคคลอื่นในการยืนยันตัวตน
+                            </p>
+                        </section>
                     </div>
                 </div>
 
 
-                <!-- Privacy Notice จาก NDPP -->
-                <div id="privacy-notice-content" style="display:none;">
-                    <section class="policy-box">
-                        <h2 class="terms-title" id="privacy-notice-title"></h2>
-                        <div class="policy-text" id="privacy-notice-body" style="overflow-x:hidden; word-break:break-word;"></div>
-                    </section>
+                <div class="terms-footer-fixed">
+                  @*   <label class="terms-checkbox-group" id="acceptCheckboxLabel" style="pointer-events:none; opacity:0.5;">
+                        <input type="checkbox" id="acceptCheckbox" disabled>
+                        <span class="custom-checkbox"></span>  <span data-i18n="i accept the terms and conditions">ข้าพเจ้ายอมรับข้อตกลงเงื่อนไข</span>
+                    </label>
+                    <button class="terms-submit-button" id="submitButton" disabled data-i18n="confirm">ยืนยัน</button> *@
+
+                    <div class="kiosk-action-bar style-modern" style="margin-top:0px; padding:10px;">
+                        <a asp-controller="Step" asp-action="Step4" id="submitButton" class="kiosk-btn btn-solid">
+                            ยอมรับและดำเนินการต่อ
+                        </a>
+                        <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px;">
+                            ยกเลิก
+                        </a>
+
+                    </div>
                 </div>
-                <!-- Fallback: แสดงเมื่อไม่มี content จาก NDPP -->
-                <div id="privacy-notice-fallback" style="display:none;">
-                    <section class="policy-box">
-                        <h2 class="terms-title" data-i18n="terms and conditions of use">
-                            ข้อตกลงและเงื่อนไขการใช้งาน
-                        </h2>
-                        <p class="policy-text" data-i18n="terms body paragraph 1">
-                            ข้าพเจ้าขอขอยืนยันว่าเป็นบุคคลตามหมายเลขประจำตัวประชาชนและได้แสดงตน พิสูจน์ตัวตน ณ จุดรับลงทะเบียนที่กรมการปกครองกำหนด เพื่อขอใช้บริการส่งแทนเอกลักษณ์ดิจิทัล ของกรมการปกครอง กระทรวงมหาดไทย โดยมีวัตถุประสงค์ ในการทำธุรกรรมทางดิจิทัล กับหน่วยงานที่ได้รับอนุญาตจากกรมการปกครอง เพื่อตรวจสอบยืนยันตัวตน
 
-                            ทั้งนี้ในการกระทำใด ๆ ที่ดำเนินการโดยใช้สิ่งแทนเอกลักษณ์ดิจิทัลนี้ ข้าพเจ้าให้ถือว่า ข้าพเจ้าเป็นผู้ดำเนินการด้วยตนเอง
-
-                            ข้อตกลงและเงื่อนไขการใช้งานนี้อยู่ภายใต้บทบังคับแห่งกฎหมายตามที่กฎหมายบัญญัติไว้
-                        </p>
-                    </section>
-                    <section class="policy-box">
-                        <h2 class="terms-title" data-i18n="reservation of rights and limitation of liability">
-                            ข้อสงวนสิทธิและข้อจำกัดความรับผิด
-                        </h2>
-                        <p class="policy-text" data-i18n="terms body paragraph 2">
-                            กรมการปกครองไม่อาจรับรองได้ว่าค่าการใช้งานจะเป็นไปโดยปราศจากความล่าช้าและข้อผิดพลาดใด ๆ ทั้งนี้ ไม่ว่าความบกพร่องดังกล่าวจะเกิดขึ้นจากบุคคล หรือความขัดข้องทางเทคนิค หรือเหตุสุดวิสัยอย่างอื่น ข้าพเจ้ารับทราบเงื่อนไขดังกล่าว และตกลงว่าในกรณีที่ความบกพร่องใด ๆ เกิดขึ้น กรมการปกครองจะไม่รับผิดชอบในความสูญเสีย ความเสียหาย ค่าสินไหมทดแทน ค่าใช้จ่าย หรือค่าเสียหายใด ๆ
-                        </p>
-                    </section>
-                    <section class="policy-box">
-                        <h2 class="terms-title" data-i18n="disclaimer">ข้อจำกัดความรับผิดชอบ</h2>
-                        <p class="policy-text" data-i18n="terms body paragraph 3">
-                            ระบบจะดำเนินการยืนยันตัวตนตามข้อมูลที่ได้รับจากผู้ใช้โดยสุจริต และจะไม่รับผิดชอบต่อความเสียหายใด ๆ ที่เกิดขึ้นจากการให้ข้อมูลอันเป็นเท็จหรือไม่ถูกต้องโดยผู้ใช้ รวมถึงความเสียหายที่เกิดจากการละเมิดสิทธิส่วนบุคคลของผู้อื่นอันเนื่องมาจากการใช้ข้อมูลปลอม หรือการแอบอ้างบุคคลอื่นในการยืนยันตัวตน
-                        </p>
-                    </section>
-                </div>
             </div>
-
-
-            <div class="terms-footer-fixed">
-                <label class="terms-checkbox-group" id="acceptCheckboxLabel" style="pointer-events:none; opacity:0.5;">
-                    <input type="checkbox" id="acceptCheckbox" disabled>
-                    <span class="custom-checkbox"></span>  <span data-i18n="i accept the terms and conditions">ข้าพเจ้ายอมรับข้อตกลงเงื่อนไข</span>
-                </label>
-                <button class="terms-submit-button" id="submitButton" disabled data-i18n="confirm">ยืนยัน</button>
-            </div>
+           
         </div>
     </div>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
 
 </body>
+@* <body class="kiosk-body">
+
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+
+    <div class="kiosk-content z-10">
+
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th">แจ้งเตือนสิทธิ</h1>
+            <div class="divider"></div>
+        </div>
+        <div class="privacy-container-single">
+            <div class="privacy-notice-box">
+                <div class="notice-body">
+
+                    <div class="details-section">
+                        <p class="transmission-text">
+                            ตู้นี้มีการเก็บข้อมูลส่วนบุคคลและภาพถ่ายเพื่อใช้ในการลงทะเบียนและยืนยันตัวตนของผู้เข้าพื้นที่
+                        </p>
+                        <h4 class="section-title">ข้อมูลที่จัดเก็บ:</h4>
+                        <p class="detail-item">• ข้อมูลส่วนบุคคลจาก<strong> บัตรประชาชน</strong> (ชื่อ-นามสกุล, เลขประจำตัวประชาชน)</p>
+                        <p class="detail-item">• <strong>ภาพถ่ายใบหน้า </strong>จากกล้องประมวลผล ณ จุดลงทะเบียน</p>
+                        <p class="transmission-text">
+                            ข้อมูลทั้งหมดจะถูกส่งไปยังระบบ <strong>Netka Intelligent</strong> เพื่อดำเนินการประมวลผล ตรวจสอบ และยืนยันตัวตนตามวัตถุประสงค์ด้านความปลอดภัยที่ได้แจ้งไว้ข้างต้นอย่างเคร่งครัด
+                        </p>
+                    </div>
+                    <div class="scroll-spacer"></div>
+                </div>
+
+                <div class="bubble bubble-single"></div>
+            </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="kiosk-action-bar style-modern">
+            <a asp-controller="Step" asp-action="Step4" class="kiosk-btn btn-solid" id="submitButton">
+                ยอมรับและดำเนินการต่อ
+            </a>
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline">
+                ยกเลิก
+            </a>
+        </div>
+
+    </div>
+    <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
+</body> *@

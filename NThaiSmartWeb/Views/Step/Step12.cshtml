@@ -24,7 +24,7 @@
             </div>
         </header>
 
-        <div class="welcome-text-section">
+        <div class="welcome-text-section" style="margin:20px 0px 0px 0px;">
             <h1 class="title-th" data-i18n="please confirm your information">กรุณายืนยันข้อมูล</h1>
             <div class="divider"></div>
         </div>
@@ -89,7 +89,7 @@
             </div>
         </div> *@
 
-        <div class="row">
+    @*     <div class="row">
             <div class="grid-item top-box">
                 <div class="info-header d-flex justify-content-between align-items-center">
                     <h2 data-i18n="id card information">ข้อมูลบัตรประจำตัวประชาชน</h2>
@@ -180,13 +180,94 @@
                     </div>
 
                     <div class="offset-6 col-6">
-                        @* <button type="button" class="confirm-button w-100 py-4" id="confirm-btn">ยืนยันข้อมูล</button> *@
+                        <button type="button" class="confirm-button w-100 py-4" id="confirm-btn">ยืนยันข้อมูล</button>
                     </div>
 
                 </div>
             </div>
-        </div>
+        </div> *@
+       <div class="v-kiosk-display-wrapper">
+            <div class="v-kiosk-main-card">
+        
+                        <div class="v-kiosk-header-group">
+                            <h2 data-i18n="id card information" class="v-kiosk-title">ข้อมูลบัตรประจำตัวประชาชน</h2>
+                            <button class="icon-button" id="toggle-vision-btn">
+                                <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
+                            </button>
+                        </div>
 
+                        <div class="v-kiosk-profile-horizontal">
+
+                            <div class="v-kiosk-avatar-wrapper">
+                                <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="ID Card Photo">
+                            </div>
+
+                            <div class="v-kiosk-name-stack">
+                                <div class="v-kiosk-name-th">
+                                    <div class="info-value" data-field-name="prefixTH"></div>
+                                    <div class="info-value" data-field-name="firstNameTH"></div>
+                                    <div class="info-value" data-field-name="middleNameTH"></div>
+                                    <div class="info-value" data-field-name="lastNameTH"></div>
+                                </div>
+
+                                <div class="v-kiosk-name-en">
+                                    <div class="info-value" data-field-name="prefixEN"></div>
+                                    <div class="info-value" data-field-name="firstNameEN"></div>
+                                    <div class="info-value" data-field-name="middleNameEN"></div> <div class="info-value" data-field-name="lastNameEN"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="v-kiosk-data-list">
+                            <div class="v-kiosk-data-row">
+                                <label class="v-kiosk-label" data-i18n="citizen id number">เลขบัตรประจำตัวประชาชน</label>
+                                <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
+                            </div>
+            
+                            <div class="v-kiosk-data-row">
+                                <label class="v-kiosk-label" data-i18n="date of birth">วันเกิด</label>
+                                <div class="info-value" data-field-name="dateOfBirth" data-full-value=""></div>
+                            </div>
+
+                            <div class="v-kiosk-data-row">
+                                <label class="v-kiosk-label" data-i18n="gender">เพศ</label>
+                                <div class="info-value" data-field-name="sex" data-full-value=""></div>
+                            </div>
+
+                            <div class="v-kiosk-data-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                                <label class="v-kiosk-label" data-i18n="address">ที่อยู่</label>
+                                <div class="info-value" data-field-name="address" data-full-value="" style="width: 100%;"></div>
+                            </div>
+
+                            <div class="v-kiosk-data-row">
+                                <label class="v-kiosk-label" data-i18n="issue date">วันออกบัตร</label>
+                                <div class="info-value" data-field-name="issueDate" data-full-value=""></div>
+                            </div>
+
+                            <div class="v-kiosk-data-row">
+                                <label class="v-kiosk-label" data-i18n="expiry date">วันหมดอายุบัตร</label>
+                                <div class="info-value" data-field-name="expireDate" data-full-value=""></div>
+                            </div>
+                        </div>
+
+                          @*   <div class="v-kiosk-photo-item">
+                                <div class="v-kiosk-photo-frame">
+                                    <img id="idCardPhoto" src="/images/icons/Profile_id.svg" />
+                                </div>
+                                <span data-i18n="id card photo" style="font-size: 18px; color: #94a3b8;">รูปบัตรประชาชน</span>
+                            </div> *@
+                            <div class="v-kiosk-photo-item">
+                                <div class="v-kiosk-photo-frame">
+                                    <img id="capturePhoto" src="/images/icons/Profile.jpg" />
+                                </div>
+                                <span data-i18n="face scan photo" style="font-size: 18px; color: #94a3b8;">รูปจากเครื่องสแกน</span>
+                            </div>
+
+
+                        <button type="button" class="confirm-button" id="confirm-btn">ยืนยันข้อมูลถูกต้อง</button>
+                    </div>
+        </div>
         <div class="kiosk-action-bar style-modern">
             <a asp-controller="Step" asp-action="Step14" class="kiosk-btn btn-solid">
                 ยืนยันข้อมูล
@@ -292,262 +373,128 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+              document.addEventListener("DOMContentLoaded", function () {
             let cardData = getCardData();
-
-            // ---  ควบคุมปุ่มแสดงผลทั้งหมด (ใน Header) ---
-            const mainToggleButton = document.querySelector(".info-header .icon-button");
+            const mainToggleButton = document.getElementById("toggle-vision-btn");
             const allInfoValues = document.querySelectorAll(".info-value");
 
             if (mainToggleButton) {
-                const mainEyeIcon = mainToggleButton.querySelector("img");
                 let isAllDataVisible = false;
 
                 mainToggleButton.addEventListener("click", function () {
                     isAllDataVisible = !isAllDataVisible;
 
                     allInfoValues.forEach((element) => {
-                        const fullValue = element.dataset.fullValue;
-                        const maskedValueKey = "data-masked-value";
+                        const fullValue = element.getAttribute("data-full-value");
+                        const maskedValue = element.getAttribute("data-mask-value");
 
                         if (isAllDataVisible) {
-                            if (!element.hasAttribute(maskedValueKey)) {
-                                element.setAttribute(maskedValueKey, element.textContent);
-                            }
-                            element.textContent = fullValue;
+                            element.textContent = fullValue || element.textContent;
                         } else {
-                            if (element.hasAttribute(maskedValueKey)) {
-                                element.textContent = element.getAttribute(maskedValueKey);
-                            }
+                            element.textContent = maskedValue || element.textContent;
                         }
                     });
 
-                    // อัปเดตไอคอนของปุ่มทั้งหมดและปุ่มแยกให้อยู่ในสถานะเดียวกัน
                     updateAllIcons(isAllDataVisible);
                 });
             }
 
-            // ---  ควบคุมปุ่มแสดงผลแยกแต่ละช่อง ---
-            const localToggleButtons = document.querySelectorAll(".local-icon-button");
-
-            localToggleButtons.forEach((button) => {
-                const infoField = button.closest(".info-field");
-                let isDataVisible = false; // สถานะของแต่ละปุ่ม
-
-                button.addEventListener("click", function () {
-                  isDataVisible = !isDataVisible;
-
-                  const infoValueElement = this.parentElement.querySelector(".info-value");
-                  const eyeIcon = button.querySelector("img");
-                  const fullValue = infoValueElement.dataset.fullValue;
-                  const maskedValue = infoValueElement.dataset.maskValue;
-
-                  if (isDataVisible) {
-                    infoValueElement.textContent = fullValue;
-                    eyeIcon.src = "/images/icons/eye.svg";
-                    eyeIcon.alt = "ซ่อนข้อมูล";
-                  } else {
-                    infoValueElement.textContent = maskedValue;
-                    eyeIcon.src = "/images/icons/vision.svg";
-                    eyeIcon.alt = "ดูข้อมูล";
-                  }
-                });
-            });
-
-            // --- ฟังก์ชันเสริม: อัปเดตไอคอนทั้งหมด ---
             function updateAllIcons(isVisible) {
-                const allIcons = document.querySelectorAll(".icon-button img, .local-icon-button img");
-                allIcons.forEach((icon) => {
+                const mainIcon = document.querySelector("#toggle-vision-btn img");
+                if (mainIcon) {
                     if (isVisible) {
-                        icon.src = "/images/icons/eye.svg";
-                        icon.alt = "ซ่อนข้อมูล";
+                        mainIcon.src = "/images/icons/eye.svg"; 
+                        mainIcon.alt = "ซ่อนข้อมูล";
                     } else {
-                        icon.src = "/images/icons/vision.svg";
-                        icon.alt = "ดูข้อมูล";
+                        mainIcon.src = "/images/icons/vision.svg"; 
+                        mainIcon.alt = "ดูข้อมูล";
                     }
-                });
+                }
             }
 
-            // --- 3. ควบคุมการทำงานของ Modal แก้ไขข้อมูล  ---
-            const editButton = document.querySelector(".edit-button");
-            const editModal = document.getElementById("edit-modal");
-            const confirmModal = document.getElementById("confirmation-modal");
-
-            if (editModal && confirmModal) {
-                const closeEditModalButton = editModal.querySelector(".close-button");
-                const cancelEditButton = editModal.querySelector(".cancel-button");
-                const editForm = document.getElementById("edit-form");
-                const infoValuesOnPage = document.querySelectorAll(".info-value");
-                const confirmSaveBtn = document.getElementById("confirm-save-button");
-                const cancelConfirmBtn = document.getElementById("cancel-confirm-button");
-
-                function openEditModal() {
-                  infoValuesOnPage.forEach((infoDiv) => {
-                    const fieldName = infoDiv.dataset.fieldName;
-                    const fullValue = infoDiv.dataset.fullValue;
-                    const inputTarget = editModal.querySelector(`[data-source-field="${fieldName}"]`);
-                    if (inputTarget) {
-                      const wrapper = inputTarget.closest(".input-wrapper");
-                      if (wrapper) {
-                        const placeholderTarget = wrapper.querySelector(".old-data-placeholder");
-                        if (placeholderTarget) {
-                          placeholderTarget.textContent = fullValue;
-                        }
-                      }
-                      inputTarget.value = fullValue;
-                    }
-                  });
-                  editModal.style.display = "flex";
-                }
-
-                function closeEditModal() {
-                  editModal.style.display = "none";
-                }
-
-                function closeConfirmModal() {
-                  confirmModal.style.display = "none";
-                }
-
-                function saveChanges() {
-                  const updatedData = {};
-                  editForm.querySelectorAll("[data-source-field]").forEach((input) => {
-                    const fieldName = input.dataset.sourceField;
-                    updatedData[fieldName] = input.value;
-                  });
-
-                  console.log("ข้อมูลที่จะส่งไปบันทึก:", updatedData);
-                  cardData.updatedData = updatedData;
-
-                  // ✅ Save กลับ sessionStorage
-                  setCardData(cardData);
-
-                  infoValuesOnPage.forEach((infoDiv) => {
-                    const fieldName = infoDiv.dataset.fieldName;
-                    if (updatedData[fieldName]) {
-                      infoDiv.dataset.fullValue = updatedData[fieldName];
-                    }
-                  });
-                  populateCardData(cardData);
-                  closeEditModal();
-                  closeConfirmModal();
-                }
-
-                editForm.addEventListener("submit", function (event) {
-                  event.preventDefault();
-                  confirmModal.style.display = "flex";
-                });
-
-                if (editButton) editButton.addEventListener("click", openEditModal);
-                if (closeEditModalButton) closeEditModalButton.addEventListener("click", closeEditModal);
-                if (cancelEditButton) cancelEditButton.addEventListener("click", closeEditModal);
-                if (cancelConfirmBtn) cancelConfirmBtn.addEventListener("click", closeConfirmModal);
-                if (confirmSaveBtn) confirmSaveBtn.addEventListener("click", saveChanges);
-            }
-
-            // ฟังก์ชันช่วย
             function formatDateTH(dateStr) {
+                if (!dateStr) return "";
                 const monthTH = ["", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
                 const d = new Date(dateStr);
-                const day = d.getDate();
-                const month = monthTH[d.getMonth() + 1];
-                const year = d.getFullYear() + 543;
-                return `${day} ${month} ${year}`;
-            }
-
-            const maskText = (text, visible) => hideLastN(text, visible);
-
-            function maskTextFront(text, visible = 3) {
-                if (!text || text.length <= visible) return "*".repeat(text.length);
-                const hidden = "x".repeat(text.length - visible);
-                return hidden + text.slice(-visible);
-            }
-
-            function maskTextBack(text, visible = 3) {
-                if (!text || text.length <= visible) return "*".repeat(text.length);
-                const shown = text.slice(0, visible);              // เหลือไว้ด้านหน้า
-                const hidden = "x".repeat(text.length - visible);  // ซ่อนไว้ด้านหลัง
-                return shown + hidden;
+                return `${d.getDate()} ${monthTH[d.getMonth() + 1]} ${d.getFullYear() + 543}`;
             }
 
             function hideLastN(text, count = 4) {
-                if (!text || text.length <= count) return "x".repeat(text.length);
-                return text.slice(0, -count) + "x".repeat(count);
+                if (!text) return "";
+                const str = String(text);
+                if (str.length <= count) return "x".repeat(str.length);
+                return str.slice(0, -count) + "x".repeat(count);
             }
 
+            const maskText = (text) => hideLastN(text, 4);
+
             function getsexText(code) {
-                return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "xxx";
+                return code === "1" ? "ชาย" : code === "2" ? "หญิง" : "ไม่ระบุ";
             }
 
             function getAddress(addr) {
-                return `${addr.houseNo} ${addr.road} ${addr.subDistrict} ${addr.district} ${addr.province} ${addr.postalCode ?? ""}`;
+                if (!addr) return "";
+                return `${addr.houseNo || ''} ${addr.road || ''} ${addr.subDistrict || ''} ${addr.district || ''} ${addr.province || ''} ${addr.postalCode || ""}`.trim();
             }
 
-              // 🎯 ใส่ข้อมูลทั้งหมดลง DOM
             function populateCardData(data) {
+                if (!data || !data.updatedData) return;
                 const fields = data.updatedData;
 
                 if (data.photo?.startsWith("data:image")) {
-                  const photoImg = document.getElementById("idCardPhoto");
-                  if (photoImg) {
-                    photoImg.src = data.photo;
-                  }
+                    const photoImg = document.getElementById("idCardPhoto");
+                    if (photoImg) photoImg.src = data.photo;
                 }
 
-                const ignoreMask = ["sex"];
+                const ignoreMask = ["sex", "prefixTH", "prefixEN"];
+
                 Object.entries(fields).forEach(([key, value]) => {
-                  const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
-                  if (el) {
-                    var maskVal = maskText(value);
+                    const el = document.querySelector(`.info-value[data-field-name="${key}"]`);
+                    if (el) {
+                        const cleanValue = value || "";
+                        let maskVal = maskText(cleanValue);
 
-                    if(ignoreMask.includes(key)) maskVal = value;
+                        if (ignoreMask.includes(key)) maskVal = cleanValue;
 
-                    el.setAttribute("data-full-value", value);
-                    el.setAttribute("data-mask-value", maskVal);
-                    el.textContent = maskVal;
-                  }
+                        el.setAttribute("data-full-value", cleanValue);
+                        el.setAttribute("data-mask-value", maskVal);
+
+                        el.textContent = maskVal;
+                    }
                 });
             }
 
-            var capture = getCapture();
+            var capture = typeof getCapture === "function" ? getCapture() : null;
             if (capture) {
                 const captureImg = document.getElementById("capturePhoto");
-                if (captureImg) {
-                  captureImg.src = capture;
-                }
+                if (captureImg) captureImg.src = capture;
             }
 
             if (cardData) {
-                 const fields = {
-                  citizenID: cardData.citizenID,
-                  dateOfBirth: formatDateTH(cardData.dateOfBirth),
-                  firstNameTH: cardData.thaiPersonalInfo.firstName,
-                  lastNameTH: cardData.thaiPersonalInfo.lastName,
-                  firstNameEN: cardData.englishPersonalInfo.firstName,
-                  lastNameEN: cardData.englishPersonalInfo.lastName,
-                  sex: getsexText(cardData.sex),
-                  religion: "xxx", // ยังไม่มีใน object
-                  address: getAddress(cardData.addressInfo),
-                  issueDate: formatDateTH(cardData.issueDate),
-                  expireDate: formatDateTH(cardData.expireDate),
+                const fields = {
+                    citizenID: cardData.citizenID,
+                    dateOfBirth: formatDateTH(cardData.dateOfBirth),
+                    prefixTH: cardData.thaiPersonalInfo?.prefix || "",
+                    firstNameTH: cardData.thaiPersonalInfo?.firstName || "",
+                    lastNameTH: cardData.thaiPersonalInfo?.lastName || "",
+                    middleNameTH: cardData.thaiPersonalInfo?.middleName || "",
+                    prefixEN: cardData.englishPersonalInfo?.prefix || "",
+                    firstNameEN: cardData.englishPersonalInfo?.firstName || "",
+                    middleNameEN: cardData.englishPersonalInfo?.middleName || "",
+                    lastNameEN: cardData.englishPersonalInfo?.lastName || "",
+                    sex: getsexText(cardData.sex),
+                    address: getAddress(cardData.addressInfo),
+                    issueDate: formatDateTH(cardData.issueDate),
+                    expireDate: formatDateTH(cardData.expireDate),
                 };
                 cardData.updatedData = fields;
                 populateCardData(cardData);
             }
+
             const ConfirmBtn = document.getElementById("confirm-btn");
-            if (ConfirmBtn) ConfirmBtn.addEventListener("click", ConfirmData);
-
-            function ConfirmData() {
-                const getCustomfieldRaw = getCustomForm();
-                if(getCustomfieldRaw == "") window.Step14.save_consent();
-                else{
-                    const getCustomfield = JSON.parse(getCustomfieldRaw);
-                    if (getCustomfield != null) window.location.href = "/Step/Step14";
-                    else {
-                        window.Step14.save_consent();
-                    }
-                }
-
-            }
+            if (ConfirmBtn) ConfirmBtn.addEventListener("click", function() {
+                if (typeof ConfirmData === "function") ConfirmData();
+            });
         });
     </script>
 

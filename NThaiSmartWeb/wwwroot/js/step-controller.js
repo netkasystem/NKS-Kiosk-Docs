@@ -278,7 +278,7 @@ window.Step7 = {
     }
 };
 
-window.Step8 = {
+/*window.Step8 = {
     init: () => {
         console.log("Step 8: Read card successful");
         const returning = getReturningUser();
@@ -297,7 +297,7 @@ window.Step9 = {
         var read_sec = getKioskReadStepScanSec(); //from variable [kiosk_read_step_scan_sec]
         next_page("/Step/Step10", read_sec);
     }
-};
+};*/
 
 window.Step10 = {
     init: () => {
