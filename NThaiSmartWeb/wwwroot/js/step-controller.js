@@ -220,11 +220,16 @@ window.Step5 = {
                 // Returning user → preload NDPP data (ปกติโหลดใน Step12 ที่จะถูกข้าม)
                 if (isReturning) {
                     try {
-                        const ndppRes = await fetch('/api/KioskApi/GetIntegrateNdpp', { headers: { "Content-Type": "application/json" } });
+                        const ndppRes = await fetch('/api/KioskApi/GetIntegrateNdpp', {
+                            headers: { "Content-Type": "application/json" }
+                        });
                         if (ndppRes.ok) setIntegrateNdpp(await ndppRes.json());
                     } catch (err) {
                         console.error("Preload NDPP error:", err);
                     }
+
+                    next_page("/Step/Step17", 1);
+                    return;
                 }
 
                 next_page("/Step/Step8", 1);
@@ -415,19 +420,68 @@ window.Step17 = {
     _ndppFormData: null,
     _previousConsent: null,
 
+    getReturningUserPhoto: () => {
+
+        const capture = typeof getCapture === "function" ? getCapture() : null;
+
+        if (capture) {
+            return capture;
+        }
+
+        return "/images/icons/Profile_id.svg";
+    },
+
+    getReturningUserPhoto: () => {
+        const captureImg = document.getElementById("capturePhoto");
+
+        if (captureImg && captureImg.src) {
+            return captureImg.src;
+        }
+
+        return "/images/icons/Profile_id.svg";
+    },
+
+    renderReturningUserNotice: (returningUser, cardData) => {
+        const notice = document.getElementById("returning-user-notice");
+        const nameEl = document.getElementById("returning-user-name");
+        const photoEl = document.getElementById("returning-user-photo");
+
+        if (!notice) return;
+
+        const firstName = cardData?.thaiPersonalInfo?.firstName || "";
+        const lastName = cardData?.thaiPersonalInfo?.lastName || "";
+        const fullName = `${firstName} ${lastName}`.trim() || "-";
+
+        if (nameEl) nameEl.textContent = fullName;
+
+        if (photoEl) {
+            const capture = typeof getCapture === "function" ? getCapture() : null;
+
+            if (capture) {
+                photoEl.src = capture;
+            } else {
+                photoEl.src = "/images/icons/Profile_id.svg";
+            }
+        }
+
+        notice.style.display = "block";
+    },
+
     init: async () => {
         const cardData = getCardData();
         const returningUser = getReturningUser();
         const selectAllPurposes = document.getElementById("select-all-purposes");
-        if (selectAllPurposes) {
+
+        if (selectAllPurposes && !selectAllPurposes.dataset.bound) {
             selectAllPurposes.addEventListener("change", function (e) {
                 const isChecked = e.target.checked;
                 const checkboxes = document.querySelectorAll("#purpose-options input[type='checkbox']");
                 checkboxes.forEach(cb => {
                     cb.checked = isChecked;
-                    cb.dispatchEvent(new Event('change', { bubbles: true }));
+                    cb.dispatchEvent(new Event("change", { bubbles: true }));
                 });
             });
+            selectAllPurposes.dataset.bound = "true";
         }
 
         let getIntegrateNdppData = await getIntegrateNdpp();
@@ -459,19 +513,11 @@ window.Step17 = {
 
         if (returningUser && returningUser.isReturning) {
             console.log("Returning user — show consent form for editing");
-            removeReturningUser();
+            Step17.renderReturningUserNotice(returningUser, cardData);
         }
 
         const step17Content = document.getElementById("step17-content");
         if (step17Content) step17Content.style.display = "";
-
-        const btnEditInfo = document.getElementById("btn-edit-info");
-        if (btnEditInfo && !btnEditInfo.dataset.bound) {
-            btnEditInfo.addEventListener("click", () => {
-                next_page("/Step/Step12");
-            });
-            btnEditInfo.dataset.bound = "true";
-        }
 
         const form = document.getElementById("ndpp-form-new");
         if (form && !form.dataset.bound) {

@@ -67,9 +67,9 @@
                             <label class="v-kiosk-label" data-i18n="gender">เพศ</label>
                             <div class="info-value" data-field-name="sex" data-full-value=""></div>
                         </div>
-                        <div class="v-kiosk-data-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                        <div class="v-kiosk-data-row v-kiosk-data-row--address">
                             <label class="v-kiosk-label" data-i18n="address">ที่อยู่</label>
-                            <div class="info-value" data-field-name="address" data-full-value="" style="width: 100%; text-align: right;"></div>
+                            <div class="info-value" data-field-name="address" data-full-value=""></div>
                         </div>
                         <div class="v-kiosk-data-row">
                             <label class="v-kiosk-label" data-i18n="issue date">วันออกบัตร</label>
@@ -95,11 +95,11 @@
             </div>
         </div>
 
-        <div class="kiosk-action-bar style-modern" id="confirm-btn" style="margin-top:20px;">
-            <a asp-controller="Step" asp-action="Step17" class="kiosk-btn btn-solid" style="font-size: 35px;">
+        <div class="kiosk-action-bar style-modern kiosk-action-bar--compact" id="confirm-btn">
+            <a asp-controller="Step" asp-action="Step17" class="kiosk-btn btn-solid">
                 ยืนยันข้อมูล
             </a>
-            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px; font-size:35px;">
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline">
                 ข้อมูลไม่ถูกต้องและยกเลิก
             </a>
         </div>

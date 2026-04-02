@@ -4,7 +4,6 @@
     ViewBag.HideFooter = true;
 }
 
-<a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;" id="cardLink">
 
     @* <section class="main">
         <div class="header">
@@ -67,6 +66,7 @@
                 <h1 class="title-th">ขั้นตอนการยืนยันตัวตน</h1>
                 <div class="divider"></div>
             </div>
+            <a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;" id="cardLink">
 
             <div class="kiosk-vertical-container">
                 <div class="kiosk-step-card">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-
+        </a>
             <div class="kiosk-action-bar style-modern">
                 <a asp-controller="Step" asp-action="Step3" class="kiosk-btn btn-solid">
                     พร้อมแล้ว
@@ -115,4 +115,4 @@
         </div>
     </body>
 
-</a>
+

@@ -14,7 +14,7 @@
 
             <div class="kiosk-content z-10">
 
-                <header class="kiosk-header" style="padding: 0px 70px;">
+                <header class="kiosk-header">
                     <div class="logo-container">
                         <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
                     </div>
@@ -26,7 +26,7 @@
                     </div>
                 </header>
 
-                <div class="welcome-text-section" style="margin:20px 0px 0px 0px;">
+                <div class="welcome-text-section welcome-text-section--compact">
                     <h1 class="title-th">แจ้งเตือนสิทธิ</h1>
                     <div class="divider"></div>
                 </div>
@@ -101,11 +101,11 @@
                     </label>
                     <button class="terms-submit-button" id="submitButton" disabled data-i18n="confirm">ยืนยัน</button> *@
 
-                    <div class="kiosk-action-bar style-modern" style="margin-top:0px; padding:10px;">
+                    <div class="kiosk-action-bar style-modern">
                         <a asp-controller="Step" asp-action="Step4" id="submitButton" class="kiosk-btn btn-solid">
                             ยอมรับและดำเนินการต่อ
                         </a>
-                        <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px;">
+                        <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline">
                             ยกเลิก
                         </a>
                     </div>

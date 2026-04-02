@@ -20,6 +20,38 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* =====================================================
+ * Maersk Color Tokens
+ * ===================================================== */
+:root {
+  /* Brand — Primary */
+  --maersk-cyan:           #42b0d5;
+  --maersk-cyan-rgb:       66, 176, 213;
+  --maersk-navy:           #021B79;
+  --maersk-navy-rgb:       2, 27, 121;
+  --maersk-navy-mid:       #3852A3;
+  --maersk-navy-dark:      #002f86;
+  --maersk-blue:           #0073CF;
+
+  /* Status */
+  --maersk-danger:         #dc3545;
+  --maersk-danger-alt:     #e74c3c;
+  --maersk-success:        #32BB71;
+  --maersk-success-dark:   #2A9D8F;
+  --maersk-warning:        #F59E0B;
+
+  /* Text */
+  --maersk-text-dark:      #1e293b;
+  --maersk-text-body:      #4b5563;
+  --maersk-text-muted:     #6b7280;
+
+  /* Surface & Border */
+  --maersk-surface:        #f1f5f9;
+  --maersk-surface-cyan:   #f0f9ff;
+  --maersk-border:         #e2e8f0;
+}
+
 /* การลงทะเบียน */
 
 @-webkit-keyframes pulsate-bck {
@@ -147,7 +179,7 @@ body, html {
     height: 106%;
     margin: 0;
     padding: 0;
-    background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, #021B79 20%, #3852A3 81%);
+    background-image: url('/images/icons/backgroud.svg'), linear-gradient(to bottom, var(--maersk-navy) 20%, var(--maersk-navy-mid) 81%);
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: contain;
@@ -344,7 +376,7 @@ body, html {
 .step-number {
     width: 90px;
     height: 90px;
-    background-color: #42b0d5;
+    background-color: var(--maersk-cyan);
     color: #ffffff;
     border-radius: 71%;
     font-size: 64px;
@@ -527,8 +559,8 @@ body, html {
     }
 
 .terms-checkbox-group input:checked + .custom-checkbox {
-    background-color: #021B79;
-    border-color: #021B79;
+    background-color: var(--maersk-navy);
+    border-color: var(--maersk-navy);
 }
 
     .terms-checkbox-group input:checked + .custom-checkbox::after {
@@ -536,7 +568,7 @@ body, html {
     }
 
 .terms-submit-button {
-    background-color: #002f86;
+    background-color: var(--maersk-navy-dark);
     color: #ffffff;
     font-size: 48px;
     border: none;
@@ -554,8 +586,8 @@ body, html {
 
     .terms-submit-button:active:not(:disabled) {
         box-shadow: 0 4px 8px rgba(0, 47, 134, 0.2);
-        background-color: #002f86a8;
-        color: #002f86;
+        background-color: var(--maersk-navy-dark)a8;
+        color: var(--maersk-navy-dark);
     }
 
 .touch-effect {
@@ -839,7 +871,7 @@ body, html {
 }
 
 .instruction-list-maersk {
-    font-size: 2rem;
+    font-size: 2.3rem;
     line-height: 1.5;
     padding-left: 40px;
     color: #000;
@@ -877,7 +909,7 @@ body, html {
 
     .instruction-list-maersk li.Alert {
         list-style: none;
-        color: #dc3545;
+        color: var(--maersk-danger);
         font-weight: bold;
         margin-left: 29px;
         animation: blinktext 3s infinite;
@@ -885,7 +917,7 @@ body, html {
 
 .instruction-list-maersk-alert {
     list-style: none;
-    color: #dc3545;
+    color: var(--maersk-danger);
     font-weight: bold;
     animation: blinktext 3s infinite;
     font-size: 2.3em;
@@ -900,7 +932,7 @@ body, html {
 
 .scan-button {
     background-color: white;
-    color: #021B79;
+    color: var(--maersk-navy);
     font-size: 1.8rem;
     font-weight: 700;
     padding: 30px 60px;
@@ -916,7 +948,7 @@ body, html {
 
     .scan-button:hover {
         background-color: white;
-        color: #021B79;
+        color: var(--maersk-navy);
         font-size: 1.8rem;
         font-weight: 700;
         padding: 30px 60px;
@@ -1102,7 +1134,7 @@ body, html {
     padding: 50px;
     border-radius: 50px;
     width: 100%;
-    border: 3px solid #f1f5f9;
+    border: 3px solid var(--maersk-surface);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
 }
 
@@ -1150,11 +1182,11 @@ body, html {
 
 .cancel-button-fail {
     background-color: #FFFFFF;
-    color: #e74c3c;
+    color: var(--maersk-danger-alt);
 }
 
     .cancel-button-fail:hover {
-        background-color: #e74c3c;
+        background-color: var(--maersk-danger-alt);
         color: #FFFFFF;
     }
 
@@ -1386,12 +1418,12 @@ h2 {
     transition: all 0.3s ease;
     text-align: center;
     background-color: white;
-    color: #e74c3c;
+    color: var(--maersk-danger-alt);
     border: none;
 }
 
     .edit-button:hover {
-        background-color: #e74c3c;
+        background-color: var(--maersk-danger-alt);
         color: white;
         transform: translateY(-3px);
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -1407,13 +1439,13 @@ h2 {
     transition: all 0.3s ease;
     text-align: center;
     background-color: #FFFFFF;
-    color: #021B79;
+    color: var(--maersk-navy);
     border: none;
     height: 100%;
 }
 
     .confirm-button:hover {
-        background-color: #021B79;
+        background-color: var(--maersk-navy);
         transform: translateY(-3px);
         box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         color: white;
@@ -1618,7 +1650,7 @@ h2 {
 }
 
 .save-button {
-    background-color: #002f86;
+    background-color: var(--maersk-navy-dark);
     color: white;
 }
 
@@ -1893,11 +1925,11 @@ footer {
 }
 
 .form-header {
-    background: linear-gradient(135deg, #021B79 0%, #3852A3 100%);
+    background: linear-gradient(135deg, var(--maersk-navy) 0%, var(--maersk-navy-mid) 100%);
     color: white;
     text-align: center;
     padding: 20px 25px;
-    border-bottom: 5px solid #3852A3;
+    border-bottom: 5px solid var(--maersk-navy-mid);
 }
 
     .form-header h4 {
@@ -1941,7 +1973,7 @@ footer {
     }
 
     .form-scroll-area::-webkit-scrollbar-thumb {
-        background: rgba(2, 27, 121, 0.41);
+        background: rgba(var(--maersk-navy-rgb), 0.41);
         border-radius: 10px;
     }
 
@@ -1999,7 +2031,7 @@ footer {
         font-size: 3rem;
         font-weight: 700;
         margin: 0;
-        color: #021b79;
+        color: var(--maersk-navy);
     }
 
 /* --- Form Elements --- */
@@ -2165,7 +2197,7 @@ textarea {
     font-size: 2rem;
     font-weight: 600;
     color: white;
-    background: linear-gradient(135deg, #021B79, #021B79);
+    background: linear-gradient(135deg, var(--maersk-navy), var(--maersk-navy));
     border: none;
     border-radius: 15px;
     cursor: pointer;
@@ -2255,7 +2287,7 @@ textarea {
 
 .script-button {
     background-color: #ffffff;
-    color: #021b79;
+    color: var(--maersk-navy);
     border: none;
     padding: 1.3rem 2rem;
     font-size: 2rem;
@@ -2267,7 +2299,7 @@ textarea {
 }
 
     .script-button:hover {
-        background-color: #021b79;
+        background-color: var(--maersk-navy);
         color: #ffffff;
         border: none;
         padding: 0.5rem 2rem;
@@ -2308,13 +2340,13 @@ textarea {
     position: relative;
     max-width: 900px;
     margin: 4rem auto;
-    background: #021b7900;
+    background: var(--maersk-navy)00;
     padding: 6rem 4rem;
     border-radius: 20px;
     color: #fff;
     backdrop-filter: blur(90px);
     border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 20px 60px #021b7940;
+    box-shadow: 0 20px 60px var(--maersk-navy)40;
 }
 
 .close-btn {
@@ -2414,7 +2446,7 @@ html, body {
     top: 0;
     width: 100%;
     height: 33.33%;
-    background: linear-gradient(to bottom, rgba(66, 176, 213, 0.2), transparent);
+    background: linear-gradient(to bottom, rgba(var(--maersk-cyan-rgb), 0.2), transparent);
 }
 
 .bg-gradient-top-notice {
@@ -2422,7 +2454,7 @@ html, body {
     top: 0;
     width: 100%;
     height: 93.33%;
-    background: linear-gradient(to bottom, rgba(66, 176, 213, 0.2), transparent);
+    background: linear-gradient(to bottom, rgba(var(--maersk-cyan-rgb), 0.2), transparent);
 }
 
 .bg-gradient-bottom {
@@ -2430,7 +2462,7 @@ html, body {
     bottom: 0;
     width: 100%;
     height: 33.33%;
-    background: linear-gradient(to top, rgba(66, 176, 213, 0.1), transparent);
+    background: linear-gradient(to top, rgba(var(--maersk-cyan-rgb), 0.1), transparent);
 }
 
 .kiosk-content {
@@ -2469,27 +2501,27 @@ html, body {
 .title-th {
     font-size: 55px;
     font-weight: 700;
-    color: #021b79;
+    color: var(--maersk-navy);
     margin: 0 0 20px 0;
 }
 .title-th-danger {
     font-size: 55px;
     font-weight: 700;
-    color: #dc3545;
+    color: var(--maersk-danger);
     margin: 0 0 20px 0;
 }
 
 .title-en {
     font-size: 55px;
     font-weight: 500;
-    color: #4b5563;
+    color: var(--maersk-text-body);
     margin: 0;
 }
 
 .divider {
     width: 100px;
     height: 8px;
-    background-color: #42b0d5;
+    background-color: var(--maersk-cyan);
     margin: 40px auto;
     border-radius: 10px;
 }
@@ -2497,7 +2529,7 @@ html, body {
 .divider-danger {
     width: 100px;
     height: 8px;
-    background-color: #dc3545;
+    background-color: var(--maersk-danger);
     margin: 40px auto;
     border-radius: 10px;
 }
@@ -2510,7 +2542,7 @@ html, body {
 
 .subtitle-en {
     font-size: 40px;
-    color: #6b7280;
+    color: var(--maersk-text-muted);
 }
 
 .instruction-container {
@@ -2536,9 +2568,9 @@ html, body {
 
 .shield-float {
     position: absolute;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     z-index: 3;
-    filter: drop-shadow(0 10px 20px rgba(66, 176, 213, 0.3));
+    filter: drop-shadow(0 10px 20px rgba(var(--maersk-cyan-rgb), 0.3));
     opacity: 0.8;
 }
 
@@ -2574,7 +2606,7 @@ html, body {
 
 .instruction-text {
     font-size: 28px;
-    color: #4b5563;
+    color: var(--maersk-text-body);
     margin-top: 25px;
     font-weight: 500;
 }
@@ -2586,7 +2618,7 @@ html, body {
 }
 
 .btn-start-maersk {
-    background-color: #42b0d5; 
+    background-color: var(--maersk-cyan); 
     color: #ffffff;
     border: none;
     padding: 35px 80px;
@@ -2597,7 +2629,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 20px 40px rgba(66, 176, 213, 0.3);
+    box-shadow: 0 20px 40px rgba(var(--maersk-cyan-rgb), 0.3);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
@@ -2606,7 +2638,7 @@ html, body {
     .btn-start-maersk:active {
         background-color: #358da8;
         transform: translateY(2px) scale(0.98);
-        box-shadow: 0 10px 20px rgba(66, 176, 213, 0.2);
+        box-shadow: 0 10px 20px rgba(var(--maersk-cyan-rgb), 0.2);
     }
 
 .btn-content {
@@ -2639,12 +2671,12 @@ html, body {
 @keyframes pulse-soft {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 20px 40px rgba(66, 176, 213, 0.3);
+        box-shadow: 0 20px 40px rgba(var(--maersk-cyan-rgb), 0.3);
     }
 
     50% {
         transform: scale(1.03);
-        box-shadow: 0 25px 50px rgba(66, 176, 213, 0.5);
+        box-shadow: 0 25px 50px rgba(var(--maersk-cyan-rgb), 0.5);
     }
 }
 
@@ -2662,7 +2694,7 @@ html, body {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: #6b7280;
+    color: var(--maersk-text-muted);
 }
 
     .footer-left svg {
@@ -2682,18 +2714,18 @@ html, body {
 
 .footer-brand {
     font-weight: 600;
-    color: #4b5563;
+    color: var(--maersk-text-body);
 }
 
 @keyframes pulse-soft {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 20px 60px rgba(66, 176, 213, 0.4);
+        box-shadow: 0 20px 60px rgba(var(--maersk-cyan-rgb), 0.4);
     }
 
     50% {
         transform: scale(1.03);
-        box-shadow: 0 30px 80px rgba(66, 176, 213, 0.6);
+        box-shadow: 0 30px 80px rgba(var(--maersk-cyan-rgb), 0.6);
     }
 }
 
@@ -2739,10 +2771,10 @@ html, body {
     display: inline-flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.9);
-    border: 3px solid #42b0d5;
+    border: 3px solid var(--maersk-cyan);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(66, 176, 213, 0.15);
+    box-shadow: 0 10px 30px rgba(var(--maersk-cyan-rgb), 0.15);
 }
 
 .lang-btn {
@@ -2751,14 +2783,14 @@ html, body {
     padding: 25px 45px;
     font-size: 20px; 
     font-weight: 700;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     cursor: pointer;
     transition: all 0.3s;
     min-width: 97px;
 }
 
     .lang-btn.active {
-        background-color: #42b0d5;
+        background-color: var(--maersk-cyan);
         color: #ffffff;
     }
 
@@ -2771,7 +2803,7 @@ html, body {
 .lang-separator {
     width: 2px;
     height: 60px;
-    background-color: rgba(66, 176, 213, 0.3);
+    background-color: rgba(var(--maersk-cyan-rgb), 0.3);
 }
 
 .kiosk-content {
@@ -2794,7 +2826,7 @@ html, body {
 .s-shield-privacy {
     position: relative;
     margin-bottom: 20px;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
 }
 
     .s-shield-privacy svg {
@@ -2811,7 +2843,7 @@ html, body {
 
 .subtitle-privacy {
     font-size: 35px;
-    color: #6b7280;
+    color: var(--maersk-text-muted);
 }
 
 /* Card Style */
@@ -2842,12 +2874,12 @@ html, body {
         align-items: flex-start;
         margin-bottom: 45px;
         font-size: 38px;
-        color: #4b5563;
+        color: var(--maersk-text-body);
     }
 
 .icon-dot {
     width: 60px;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     margin-top: 5px;
     flex-shrink: 0;
 }
@@ -2871,7 +2903,7 @@ html, body {
 }
 
 .btn-confirm {
-    background-color: #42b0d5;
+    background-color: var(--maersk-cyan);
     color: white;
     padding: 40px 60px;
     border-radius: 100px;
@@ -2880,12 +2912,12 @@ html, body {
     text-decoration: none;
     flex: 2;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(66, 176, 213, 0.3);
+    box-shadow: 0 20px 40px rgba(var(--maersk-cyan-rgb), 0.3);
 }
 
 .btn-cancel {
     background-color: #f3f4f6;
-    color: #6b7280;
+    color: var(--maersk-text-muted);
     padding: 40px 60px;
     border-radius: 100px;
     font-size: 45px;
@@ -2908,13 +2940,13 @@ html, body {
     border-radius: 50px;
     padding: 60px 60px 0 60px;
     width: 100%;
-    border: 3px solid #f1f5f9;
+    border: 3px solid var(--maersk-surface);
     box-shadow: 0 30px 60px rgba(0,0,0,0.05);
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: #b1b1b169 #f1f5f9;
+    scrollbar-color: #b1b1b169 var(--maersk-surface);
 }
 
     .privacy-notice-box::-webkit-scrollbar {
@@ -2938,7 +2970,7 @@ html, body {
 .highlight-text {
     font-size: 44px;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     line-height: 1.5;
     margin-bottom: 30px;
     text-align: center;
@@ -2947,13 +2979,13 @@ html, body {
 .content-divider {
     width: 100%;
     height: 2px;
-    background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+    background: linear-gradient(to right, transparent, var(--maersk-border), transparent);
     margin: 40px 0;
 }
 
 .section-title {
     font-size: 2.5em;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     margin-bottom: 20px;
     font-weight: 700;
 }
@@ -2988,7 +3020,7 @@ html, body {
     position: absolute;
     width: 60px;
     height: 60px;
-    background: rgba(66, 176, 213, 0.05);
+    background: rgba(var(--maersk-cyan-rgb), 0.05);
     border-radius: 50%;
     bottom: -20px;
     right: -20px;
@@ -3023,18 +3055,18 @@ html, body {
 
 .style-modern .btn-outline {
     background-color: #fff;
-    color: #e74c3c;
+    color: var(--maersk-danger-alt);
     width: 100%;
-    margin-top: 40px;
-    border: 2px solid #e74c3c;
+    margin-top: 20px;
+    border: 2px solid var(--maersk-danger-alt);
 }
 
     .style-modern .btn-outline:active {
-        background-color: #f1f5f9;
+        background-color: var(--maersk-surface);
     }
 
 .style-modern .btn-solid {
-    background-color: #42b0d5;
+    background-color: var(--maersk-cyan);
     color: #ffffff;
     width: 100%;
 }
@@ -3054,7 +3086,7 @@ html, body {
 .progress-bar-bg {
     width: 100%;
     height: 16px;
-    background-color: #e2e8f0;
+    background-color: var(--maersk-border);
     border-radius: 20px;
     overflow: hidden;
     margin-bottom: 30px;
@@ -3087,7 +3119,7 @@ html, body {
 
 .time-highlight {
     font-weight: 700;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     transition: color 0.3s ease;
 }
 
@@ -3120,20 +3152,20 @@ html, body {
 
 .corp-card-bg {
     fill: #ffffff; 
-    stroke: #e2e8f0; 
+    stroke: var(--maersk-border); 
     stroke-width: 3;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .corp-element, .corp-chip {
     fill: none;
-    stroke: #42b0d5;
+    stroke: var(--maersk-cyan);
     stroke-width: 4;
     stroke-linecap: round;
 }
 
 .corp-chip-line {
-    stroke: #42b0d5;
+    stroke: var(--maersk-cyan);
     stroke-width: 2.5;
     opacity: 0.5;
 }
@@ -3161,7 +3193,7 @@ html, body {
     left: 20px;
     width: 560px; 
     height: 100px; 
-    background: linear-gradient(to bottom, rgba(66, 176, 213, 0.2) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(var(--maersk-cyan-rgb), 0.2) 0%, transparent 100%);
     border-radius: 16px;
     clip-path: inset(0 0 0 0 round 16px);
     pointer-events: none;
@@ -3189,7 +3221,7 @@ html, body {
 
     .corp-dots::after {
         content: '...';
-        color: #42b0d5;
+        color: var(--maersk-cyan);
         animation: corpDots 1.5s steps(4, end) infinite;
         display: inline-block;
         width: 40px;
@@ -3203,7 +3235,7 @@ html, body {
     background-color: #fef2f2;
     padding: 18px 45px;
     border-radius: 50px;
-    border: 1px solid #dc3545;
+    border: 1px solid var(--maersk-danger);
     box-shadow: 0 4px 15px rgba(239, 68, 68, 0.05);
     margin-top: 50px;
     font-size: 2.3em;
@@ -3225,7 +3257,7 @@ html, body {
 
     100% {
         opacity: 1;
-        stroke: #42b0d5;
+        stroke: var(--maersk-cyan);
     }
 }
 
@@ -3322,8 +3354,8 @@ html, body {
     padding: 45px 40px;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 35px;
-    border: 1px solid rgba(66, 176, 213, 0.2);
-    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 4px 6px -2px rgba(66, 176, 213, 0.03), 0 20px 40px -10px rgba(66, 176, 213, 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.2);
+    box-shadow: 0 10px 15px -3px rgba(var(--maersk-cyan-rgb), 0.05), 0 4px 6px -2px rgba(var(--maersk-cyan-rgb), 0.03), 0 20px 40px -10px rgba(var(--maersk-cyan-rgb), 0.1);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -3336,14 +3368,14 @@ html, body {
     align-items: center;
     justify-content: center;
     margin-right: 40px;
-    box-shadow: inset 2px 2px 5px rgba(66, 176, 213, 0.1);
+    box-shadow: inset 2px 2px 5px rgba(var(--maersk-cyan-rgb), 0.1);
     position: relative;
 }
 
 .svg-icon-dynamic {
     width: 75px;
     height: 75px;
-    filter: drop-shadow(0 4px 6px rgba(66, 176, 213, 0.2));
+    filter: drop-shadow(0 4px 6px rgba(var(--maersk-cyan-rgb), 0.2));
 }
 
 .content-container {
@@ -3362,7 +3394,7 @@ html, body {
     width: 100px;
     height: 100px;
     border: 2px solid transparent;
-    border-top: 2px solid #42b0d5;
+    border-top: 2px solid var(--maersk-cyan);
     border-radius: 50%;
     animation: spin 2s linear infinite;
 }
@@ -3396,7 +3428,7 @@ html, body {
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+        background-image: radial-gradient(circle, var(--maersk-border) 1px, transparent 1px);
         background-size: 30px 30px;
         opacity: 0.4;
         pointer-events: none;
@@ -3432,11 +3464,11 @@ html, body {
 
 @keyframes swapColorsSecondary {
     0%, 100% {
-        fill: #f1f5f9;
+        fill: var(--maersk-surface);
     }
 
     50% {
-        fill: #e2e8f0;
+        fill: var(--maersk-border);
     }
 }
 
@@ -3444,7 +3476,7 @@ html, body {
     position: absolute;
     width: 65%;
     height: 7.5px;
-    background: linear-gradient(to right, #42b0d5, #38bdf8, #fff, #38bdf8, transparent);
+    background: linear-gradient(to right, var(--maersk-cyan), #38bdf8, #fff, #38bdf8, transparent);
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
     z-index: 10;
     border-radius: 10px;
@@ -3483,7 +3515,7 @@ html, body {
     position: absolute;
     width: 220px;
     height: 220px;
-    background: #f0f9ff;
+    background: var(--maersk-surface-cyan);
     filter: blur(60px);
     opacity: 0.5;
     border-radius: 50%;
@@ -3507,7 +3539,7 @@ html, body {
 }
 
 .id-card-header {
-    background-image: linear-gradient(135deg, #002575 0%, #3852A3 100%);
+    background-image: linear-gradient(135deg, #002575 0%, var(--maersk-navy-mid) 100%);
     padding: 15px 20px;
     margin-bottom: 0px;
     border-bottom: none;
@@ -3603,8 +3635,8 @@ html, body {
     border-radius: 40px;
     padding: 45px 55px;
     position: relative;
-    border: 1px solid rgba(66, 176, 213, 0.1);
-    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 4px 6px -2px rgba(66, 176, 213, 0.03), 0 20px 40px -10px rgba(66, 176, 213, 0.15);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
+    box-shadow: 0 10px 15px -3px rgba(var(--maersk-cyan-rgb), 0.05), 0 4px 6px -2px rgba(var(--maersk-cyan-rgb), 0.03), 0 20px 40px -10px rgba(var(--maersk-cyan-rgb), 0.15);
     opacity: 0;
     transform: translateY(30px);
     animation: cardFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -3622,7 +3654,7 @@ html, body {
 .step-main-number {
     width: 100px;
     height: 100px;
-    background: #42b0d5;
+    background: var(--maersk-cyan);
     color: white;
     border-radius: 60px;
     display: flex;
@@ -3631,7 +3663,7 @@ html, body {
     font-size: 36.8px;
     font-weight: 600;
     z-index: 2;
-    box-shadow: 0 12px 25px rgba(66, 176, 213, 0.3);
+    box-shadow: 0 12px 25px rgba(var(--maersk-cyan-rgb), 0.3);
 }
 
 .content-holder {
@@ -3642,7 +3674,7 @@ html, body {
 
 .step-instruction-text {
     font-size: 36.8px;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     font-weight: 500;
     line-height: 1.2;
     margin: 0;
@@ -3690,8 +3722,8 @@ html, body {
     background: #ffffff;
     border-radius: 40px;
     padding: 45px 45px 5px 45px;
-    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 20px 40px -10px rgba(66, 176, 213, 0.1);
-    border: 1px solid rgba(66, 176, 213, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(var(--maersk-cyan-rgb), 0.05), 0 20px 40px -10px rgba(var(--maersk-cyan-rgb), 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
 }
 
 .v-kiosk-header-group {
@@ -3699,12 +3731,12 @@ html, body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    border-bottom: 2px solid #f0f9ff;
+    border-bottom: 2px solid var(--maersk-surface-cyan);
 }
 
 .v-kiosk-title {
     font-size: 32px;
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     margin: 0;
     font-weight: 600;
 }
@@ -3712,7 +3744,7 @@ html, body {
 .icon-button {
     background: #afd0eb;
     border: none;
-    border: 1px solid #42b0d5;
+    border: 1px solid var(--maersk-cyan);
     border-radius: 12px;
     width: 60px;
     height: 60px;
@@ -3748,12 +3780,12 @@ html, body {
     display: flex;
     justify-content: space-between;
     padding: 18px 18px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--maersk-surface);
 }
 
 .v-kiosk-label {
     font-size: 30px;
-    color: #021b79;
+    color: var(--maersk-navy);
     flex: 1;
 }
 
@@ -3781,7 +3813,7 @@ html, body {
     background: #f8fdff;
     border-radius: 25px;
     overflow: hidden;
-    border: 1px solid rgba(66, 176, 213, 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
     margin-bottom: 12px;
 }
 
@@ -3792,7 +3824,7 @@ html, body {
     }
 
 .confirm-button {
-    background: #42b0d5;
+    background: var(--maersk-cyan);
     color: white;
     border: none;
     border-radius: 20px;
@@ -3801,7 +3833,7 @@ html, body {
     width: 100%;
     margin-top: 35px;
     font-weight: 600;
-    box-shadow: 0 10px 20px rgba(66, 176, 213, 0.2);
+    box-shadow: 0 10px 20px rgba(var(--maersk-cyan-rgb), 0.2);
 }
 .v-kiosk-profile-horizontal {
     justify-content: flex-start; 
@@ -3811,7 +3843,7 @@ html, body {
     padding: 0px 0px;
     background: #f8fdff;
     border-radius: 35px;
-    border: 1px solid rgba(66, 176, 213, 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
     min-height: 230px;
 }
 
@@ -3823,7 +3855,7 @@ html, body {
     overflow: hidden;
     background: #ffffff;
     border: 4px solid #ffffff;
-    box-shadow: 0 8px 20px rgba(66, 176, 213, 0.12);
+    box-shadow: 0 8px 20px rgba(var(--maersk-cyan-rgb), 0.12);
 }
 
     .v-kiosk-avatar-wrapper img {
@@ -3842,7 +3874,7 @@ html, body {
 
 .v-kiosk-name-th {
     font-weight: 600;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     display: flex;
     flex-wrap: wrap;
     gap: 8px 12px;
@@ -3850,7 +3882,7 @@ html, body {
     line-height: 1.2;
 }
 .v-kiosk-name-en {
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     font-weight: 400;
     display: flex;
     flex-wrap: wrap; 
@@ -3885,7 +3917,7 @@ html, body {
     width: 160px;
     height: 180px;
     position: relative;
-    background: linear-gradient(135deg, rgba(66, 176, 213, 0.1), transparent);
+    background: linear-gradient(135deg, rgba(var(--maersk-cyan-rgb), 0.1), transparent);
     border-radius: 15px;
     margin-bottom: 20px;
 }
@@ -3895,8 +3927,8 @@ html, body {
     height: 100%;
     border-radius: 15px;
     overflow: hidden;
-    background: #f0f9ff;
-    box-shadow: inset 0 0 20px rgba(66, 176, 213, 0.1);
+    background: var(--maersk-surface-cyan);
+    box-shadow: inset 0 0 20px rgba(var(--maersk-cyan-rgb), 0.1);
 }
 
     .v-kiosk-capture-img-wrapper img {
@@ -3908,7 +3940,7 @@ html, body {
 
 .v-kiosk-capture-label {
     font-size: 30px;
-    color: #021b79;
+    color: var(--maersk-navy);
     font-weight: 400;
     letter-spacing: 0.5px;
     display: flex;
@@ -3919,7 +3951,7 @@ html, body {
         content: "";
         width: 12px;
         height: 12px;
-        background-color: #42b0d5;
+        background-color: var(--maersk-cyan);
         border-radius: 50%;
         display: inline-block;
         animation: pulseBlue 2s infinite;
@@ -3928,17 +3960,17 @@ html, body {
 @keyframes pulseBlue {
     0% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(66, 176, 213, 0.7);
+        box-shadow: 0 0 0 0 rgba(var(--maersk-cyan-rgb), 0.7);
     }
 
     70% {
         transform: scale(1);
-        box-shadow: 0 0 0 10px rgba(66, 176, 213, 0);
+        box-shadow: 0 0 0 10px rgba(var(--maersk-cyan-rgb), 0);
     }
 
     100% {
         transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(66, 176, 213, 0);
+        box-shadow: 0 0 0 0 rgba(var(--maersk-cyan-rgb), 0);
     }
 }
 
@@ -3946,24 +3978,24 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #dc35451c;
+    background: var(--maersk-danger)1c;
     padding: 20px 35px;
     border-radius: 20px;
     margin: 20px 0;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid rgba(66, 176, 213, 0.2);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.2);
 }
 
     .v-kiosk-expand-control span {
         font-size: 30px;
-        color: #dc3545;
+        color: var(--maersk-danger);
         font-weight: 500;
     }
 
 .v-kiosk-chevron {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #dc3545;
+    color: var(--maersk-danger);
 }
 
 .v-kiosk-collapsible-content {
@@ -3992,8 +4024,8 @@ html, body {
     background: #ffffff;
     border-radius: 40px;
     padding: 45px;
-    box-shadow: 0 10px 15px -3px rgba(66, 176, 213, 0.05), 0 20px 40px -10px rgba(66, 176, 213, 0.1);
-    border: 1px solid rgba(66, 176, 213, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(var(--maersk-cyan-rgb), 0.05), 0 20px 40px -10px rgba(var(--maersk-cyan-rgb), 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
 }
 
 .v-ndpp-section-title {
@@ -4002,13 +4034,13 @@ html, body {
     gap: 15px;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #f0f9ff;
+    border-bottom: 2px solid var(--maersk-surface-cyan);
 }
 
 .v-ndpp-number {
     width: 45px;
     height: 45px;
-    background: #42b0d5;
+    background: var(--maersk-cyan);
     color: white;
     border-radius: 12px;
     display: flex;
@@ -4020,7 +4052,7 @@ html, body {
 
 .v-ndpp-section-title h5 {
     font-size: 28px;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     margin: 0;
     font-weight: 500;
 }
@@ -4041,24 +4073,24 @@ html, body {
     padding: 18px 25px;
     font-size: 26px;
     border-radius: 20px;
-    border: 2px solid #f1f5f9;
+    border: 2px solid var(--maersk-surface);
     background-color: #f8fdff;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
     .v-ndpp-form-control:focus {
         outline: none;
-        border-color: #42b0d5;
+        border-color: var(--maersk-cyan);
         background-color: #ffffff;
-        box-shadow: 0 0 0 5px rgba(66, 176, 213, 0.1);
+        box-shadow: 0 0 0 5px rgba(var(--maersk-cyan-rgb), 0.1);
     }
 
 #activity-content {
     border-radius: 25px;
     padding: 30px 0px;
-    border: 1px solid rgba(66, 176, 213, 0.1);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.1);
     max-height: 400px;
     overflow-y: auto;
     font-size: 22px;
@@ -4085,14 +4117,14 @@ html, body {
 }
 
 .v-ndpp-btn-secondary {
-    background: #f1f5f9;
+    background: var(--maersk-surface);
     color: #64748b;
 }
 
 .v-ndpp-btn-primary {
-    background: #42b0d5;
+    background: var(--maersk-cyan);
     color: white;
-    box-shadow: 0 10px 20px rgba(66, 176, 213, 0.2);
+    box-shadow: 0 10px 20px rgba(var(--maersk-cyan-rgb), 0.2);
 }
 
 .v-ndpp-btn:active {
@@ -4200,7 +4232,7 @@ html, body {
 }
 
 .id-card-image-pass {
-    filter: drop-shadow(0 0 25px rgba(66, 176, 213, 0.4));
+    filter: drop-shadow(0 0 25px rgba(var(--maersk-cyan-rgb), 0.4));
     animation: imgPulse 2.5s infinite ease-in-out;
 }
 
@@ -4214,7 +4246,7 @@ html, body {
     }
 }
 .coundown-th {
-    color: #42b0d5;
+    color: var(--maersk-cyan);
     padding: 15px 40px;
     border-radius: 50px;
     font-size: 30px;
@@ -4230,13 +4262,9 @@ html, body {
 
     .coundown-th:active {
         transform: scale(0.95);
-        background: #42b0d5;
+        background: var(--maersk-cyan);
         color: #ffffff;
     }
-
-#step17-content {
-    color: #1e293b;
-}
 
 .v-ndpp-white-card {
     background: #ffffff;
@@ -4249,7 +4277,7 @@ html, body {
 .v-text-title {
     font-size: 45px !important;
     font-weight: 600;
-    color: #42b0d5;;
+    color: var(--maersk-cyan);;
     line-height: 1.3;
     margin-bottom: 50px;
 }
@@ -4257,7 +4285,7 @@ html, body {
 .title-line {
     width: 100px;
     height: 6px;
-    background: #42b0d5;
+    background: var(--maersk-cyan);
     margin: 0 auto 50px;
     border-radius: 10px;
 }
@@ -4283,14 +4311,14 @@ html, body {
     border-radius: 30px;
     max-height: 500px;
     overflow-y: auto;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--maersk-border);
 }
 
 #purpose-options label {
     display: flex !important;
     align-items: flex-start !important;
     background: #ffffff !important;
-    border: 3px solid #f1f5f9 !important;
+    border: 3px solid var(--maersk-surface) !important;
     border-radius: 30px !important;
     padding: 40px !important;
     gap: 30px !important;
@@ -4300,16 +4328,19 @@ html, body {
 }
 
     #purpose-options label:has(input:checked) {
-        border-color: #42b0d5 !important;
-        background: #f0f9ff !important;
+        border-color: var(--maersk-cyan) !important;
+        background: var(--maersk-surface-cyan) !important;
     }
 
 #purpose-options input[type="checkbox"] {
     width: 50px !important;
     height: 50px !important;
-    accent-color: #42b0d5;
+    accent-color: var(--maersk-cyan);
     margin-top: 10px;
     flex-shrink: 0;
+    border: none;
+    border-radius: 15px;
+    border: 3px solid #0dcaf0;
 }
 
 .v-btn-submit-kiosk {
@@ -4325,7 +4356,7 @@ html, body {
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: #42b0d5;
+    background-color: var(--maersk-cyan);
     color: #ffffff;
     width: 100%;
     border-radius: 60px;
@@ -4345,17 +4376,16 @@ html, body {
 }
 
 .v-select-all-pill {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: #f0f9ff;
-    padding: 15px 35px;
-    border-radius: 100px;
-    color: #42b0d5;
-    font-size: 30px; 
-    cursor: pointer;
-    border: 2px solid rgba(66, 176, 213, 0.3);
-    transition: all 0.2s ease;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #ffffff !important;
+    padding: 20px 0px !important;
+    gap: 20px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    /* box-shadow: 0 10px 20px rgba(var(--maersk-cyan-rgb), undefined); */
+    border: none;
 }
 
     .v-select-all-pill:has(input:checked) {
@@ -4364,7 +4394,7 @@ html, body {
     .v-select-all-pill input {
         width: 35px;
         height: 35px;
-        accent-color: #42b0d5;
+        accent-color: var(--maersk-cyan);
     }
 
 #purpose-options {
@@ -4389,7 +4419,7 @@ html, body {
     -webkit-appearance: none;
     width: 55px !important;
     height: 55px !important;
-    border: 4px solid #42b0d5;
+    border: 4px solid var(--maersk-cyan);
     border-radius: 12px; 
     background-color: #ffffff;
     cursor: pointer;
@@ -4398,7 +4428,7 @@ html, body {
 }
 
     .form-check-input:checked {
-        background-color: #42b0d5;
+        background-color: var(--maersk-cyan);
     }
 
         .form-check-input:checked::after {
@@ -4416,7 +4446,7 @@ html, body {
 
 .form-check-label {
     font-size: 40px !important;
-    color: #1e293b;
+    color: var(--maersk-text-dark);
     font-weight: 500;
     line-height: 1.4;
     cursor: pointer;
@@ -4433,11 +4463,11 @@ html, body {
     align-items: center !important;
     justify-content: center !important;
     background: #ffffff !important;
-    padding: 20px 45px !important;
+    padding: 20px 0px !important;
     gap: 20px !important;
     cursor: pointer !important;
     transition: all 0.3s ease !important;
-    box-shadow: 0 10px 20px rgba(66, 176, 213, 0.1);
+    border: none;
 }
 
     .v-select-all-pill:has(input:checked) {
@@ -4449,7 +4479,7 @@ html, body {
         -webkit-appearance: none;
         width: 45px !important; 
         height: 45px !important;
-        border: 3px solid #42b0d5;
+        border: 3px solid var(--maersk-cyan);
         border-radius: 10px;
         background: #fff;
         position: relative;
@@ -4479,3 +4509,183 @@ html, body {
         font-weight: 600 !important;
         line-height: 1 !important;
     }
+
+.v-returning-user-notice {
+    width: 100%;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.v-returning-user-card {
+    background: #ffffff;
+    padding: 50px 50px;
+    border-radius: 40px;
+    box-shadow: 0 10px 15px -3px rgba(var(--maersk-cyan-rgb), 0.08),
+                0 4px 6px -2px rgba(var(--maersk-cyan-rgb), 0.04),
+                0 20px 40px -10px rgba(var(--maersk-cyan-rgb), 0.18);
+    border-left: 6px solid var(--maersk-cyan);
+    border-top: 1px solid rgba(var(--maersk-cyan-rgb), 0.15);
+    border-right: 1px solid rgba(var(--maersk-cyan-rgb), 0.15);
+    border-bottom: 1px solid rgba(var(--maersk-cyan-rgb), 0.15);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.v-returning-user-image-wrap {
+    flex-shrink: 0;
+}
+
+.v-returning-user-avatar-ring {
+    width: 170px;
+    height: 190px;
+    border-radius: 18px;
+    padding: 4px;
+    animation: avatarPulseRing 3s ease-in-out infinite;
+}
+
+@keyframes avatarPulseRing {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--maersk-cyan-rgb), 0.4); }
+    50%       { box-shadow: 0 0 0 10px rgba(var(--maersk-cyan-rgb), 0); }
+}
+
+#returning-user-photo {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    object-fit: cover;
+    background: var(--maersk-surface-cyan);
+    display: block;
+}
+
+.v-returning-user-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+}
+
+.v-returning-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(var(--maersk-cyan-rgb), 0.1);
+    color: var(--maersk-blue);
+    border: 1px solid rgba(var(--maersk-cyan-rgb), 0.3);
+    border-radius: 12px;
+    padding: 8px 20px;
+    font-size: 28px;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.v-returning-user-badge svg {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+}
+
+.v-returning-user-text {
+    margin: 0;
+    font-size: 36px;
+    color: #1e3a5f;
+    line-height: 1.4;
+}
+
+#returning-user-name {
+    color: var(--maersk-navy);
+    font-weight: 700;
+}
+
+.v-returning-user-hint {
+    margin: 0;
+    font-size: 30px;
+    color: var(--maersk-cyan);
+    font-weight: 500;
+}
+
+.v-returning-user-title {
+    margin: 0;
+    font-size: 1.3rem;
+    color: var(--maersk-cyan);
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.v-returning-user-notice {
+    animation: returningUserSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes returningUserSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.terms-white-box .kiosk-header {
+    padding: 0 70px;
+}
+
+.welcome-text-section--compact {
+    margin: 20px 0 0 0;
+}
+
+.terms-footer-fixed .kiosk-action-bar {
+    margin-top: 0;
+    padding: 10px 70px;
+}
+
+.bottom-section--left {
+    justify-content: flex-start;
+}
+
+.v-kiosk-data-row--address {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.v-kiosk-data-row--address .info-value {
+    width: 100%;
+    text-align: right;
+}
+
+.id-card-image-pass--sm {
+    width: 25%;
+}
+
+.kiosk-action-bar--compact {
+    margin-top: 20px;
+}
+
+.instruction-block--card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 0;
+    justify-content: flex-start;
+}
+
+.instruction-block--card .instruction-list-maersk {
+    color: var(--maersk-text-dark);
+    margin-bottom: 0;
+}
