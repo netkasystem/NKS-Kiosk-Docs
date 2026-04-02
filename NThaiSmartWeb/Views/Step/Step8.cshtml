@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step8";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 @* <body class="green-background">
 
@@ -39,15 +40,10 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
-            <h1 class="title-th">อ่านข้อมูลสำเร็จ</h1>
+            <h1 class="title-th" data-i18n="data read successful">อ่านข้อมูลสำเร็จ</h1>
             <div class="divider"></div>
         </div>
 
@@ -59,14 +55,14 @@
            
             <div class="bottom-section" style="justify-content:left; margin-bottom:0px;">
                 <ol class="instruction-list-maersk" style="font-size: 2.3em; margin-bottom:0px;"> 
-                    <li>กรุณา<strong> สอดบัตรประจำตัวประชาชน </strong>ของท่านไว้จนกว่าจะดำเนินการยืนยันตัวตนสำเร็จ</li>
-                    <li>เตรียมตัวสำหรับ<strong> การแสกนใบหน้า </strong>เพื่อยืนยันตัวตน</li>
+                    <li data-i18n="please keep id card inserted until verification complete">กรุณา<strong> สอดบัตรประจำตัวประชาชน </strong>ของท่านไว้จนกว่าจะดำเนินการยืนยันตัวตนสำเร็จ</li>
+                    <li data-i18n="prepare for face scan to verify identity">เตรียมตัวสำหรับ<strong> การแสกนใบหน้า </strong>เพื่อยืนยันตัวตน</li>
                 </ol>
             </div>
 
         </div>
         <div class="kiosk-action-bar style-modern">
-            <a asp-controller="Step" asp-action="Step9" class="kiosk-btn btn-solid">
+            <a asp-controller="Step" asp-action="Step9" class="kiosk-btn btn-solid" data-i18n="next step">
                ขั้นตอนต่อไป
             </a>
            

@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step5";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 
 @* <div class="page-container">
@@ -34,11 +35,6 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
@@ -56,7 +52,7 @@
             <div class="corp-status-panel">
                 <div class="corp-warning-box">
                     <div class="corp-warning-dot"></div>
-                    กรุณาอย่าถอดบัตรออก
+                    <span data-i18n="please do not remove the card">กรุณาอย่าถอดบัตรออก</span>
                     <div class="corp-warning-dot"></div>
                 </div>
             </div>

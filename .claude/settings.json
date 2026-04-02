@@ -11,7 +11,10 @@
       "Bash(do)",
       "Read(//c/Project/N-Kiosk-Web/**)",
       "Bash(sed -i 's/^services:/version: \"\"3.3\"\"\\\\n\\\\nservices:/' \"$f\")",
-      "Bash(echo \"✅ $f\")"
+      "Bash(echo \"✅ $f\")",
+      "Bash(git push:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
     ],
     "additionalDirectories": [
       "c:\\Project\\N-Kiosk-Web\\NThaiSmartWeb\\Views\\Step"

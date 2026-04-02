@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Step1";
     ViewBag.HideHeader = true;
-
+    ViewBag.ShowLangToggle = true;
 }
 
 <body class="kiosk-body" >
@@ -17,17 +17,12 @@
                     <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
                 </div>
 
-                <div class="lang-toggle-group">
-                    <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                    <div class="lang-separator"></div>
-                    <button class="lang-btn" onclick="setLang('en')">EN</button>
-                </div>
         </header>
 
         <div class="welcome-text-section">
-            <h1 class="title-th">ยินดีต้อนรับ</h1>
+            <h1 class="title-th" data-i18n="welcome">ยินดีต้อนรับ</h1>
             <div class="divider"></div>
-            <p class="subtitle">
+            <p class="subtitle" data-i18n="registration and consent management system">
                 ระบบลงทะเบียน และจัดการความยินยอม <br>
             </p>
           @*   <span class="sub-text">ข้อมูลของคุณถูกคุ้มครองตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล (PDPA)</span> *@
@@ -47,7 +42,7 @@
         <div class="cta-container">
             <a asp-controller="Step" asp-action="Step2" class="btn-start-maersk animate-pulse-soft" style="text-decoration: none;">
                 <span class="btn-content">
-                    <span class="btn-text-th">เริ่มลงทะเบียน</span>
+                    <span class="btn-text-th" data-i18n="start registration">เริ่มลงทะเบียน</span>
                 </span>
             </a>
         </div>

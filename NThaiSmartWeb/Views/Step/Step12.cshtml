@@ -3,6 +3,7 @@
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
     ViewBag.HideButton = true;
+    ViewBag.ShowLangToggle = true;
 }
 <body class="kiosk-body">
     <div class="bg-decoration z-0">
@@ -16,11 +17,6 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="v-kiosk-display-wrapper">
@@ -96,10 +92,10 @@
         </div>
 
         <div class="kiosk-action-bar style-modern" id="confirm-btn" style="margin-top:20px;">
-            <a asp-controller="Step" asp-action="Step17" class="kiosk-btn btn-solid" style="font-size: 35px;">
+            <a asp-controller="Step" asp-action="Step17" class="kiosk-btn btn-solid" style="font-size: 35px;" data-i18n="confirm information">
                 ยืนยันข้อมูล
             </a>
-            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px; font-size:35px;">
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px; font-size:35px;" data-i18n="incorrect data and cancel">
                 ข้อมูลไม่ถูกต้องและยกเลิก
             </a>
         </div>

@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step9";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
  @*    <section class="main">
         <div class="header" style="margin-top:0px;">
@@ -54,15 +55,10 @@
                     <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
                 </div>
 
-                <div class="lang-toggle-group">
-                    <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                    <div class="lang-separator"></div>
-                    <button class="lang-btn" onclick="setLang('en')">EN</button>
-                </div>
             </header>
 
             <div class="welcome-text-section">
-                <h1 class="title-th">เตรียมถ่ายภาพใบหน้า</h1>
+                <h1 class="title-th" data-i18n="prepare for face photo">เตรียมถ่ายภาพใบหน้า</h1>
                 <div class="divider"></div>
             </div>
 
@@ -139,7 +135,7 @@
                     </svg>
                 </div>
                 <div class="content-container">
-                    <h2 class="face-scan-text">
+                    <h2 class="face-scan-text" data-i18n="stand straight face the camera">
                         ยืนตรง หันหน้าเข้ากล้อง
                     </h2>
                 </div>
@@ -169,7 +165,7 @@
 
                 </div>
                 <div class="content-container">
-                    <h2 class="face-scan-text">
+                    <h2 class="face-scan-text" data-i18n="remove mask and sunglasses">
                         ถอดหน้ากากอนามัย / แว่นกันแดด
                     </h2>
                 </div>
@@ -198,7 +194,7 @@
 
                 </div>
                 <div class="content-container">
-                    <h2 class="face-scan-text">
+                    <h2 class="face-scan-text" data-i18n="ensure adequate lighting">
                        อยู่ในที่แสงสว่างเพียงพอ
                     </h2>
                 </div>
@@ -220,7 +216,7 @@
         </div>
 
             <div class="kiosk-action-bar style-modern">
-                <a asp-controller="Step" asp-action="Step10" class="kiosk-btn btn-solid">
+                <a asp-controller="Step" asp-action="Step10" class="kiosk-btn btn-solid" data-i18n="ready">
                     พร้อมแล้ว
                 </a>
             </div>

@@ -3,6 +3,7 @@
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
     ViewBag.HideButton = true;
+    ViewBag.ShowLangToggle = true;
 }
 <body class="kiosk-body">
     <div class="bg-decoration z-0">
@@ -19,15 +20,10 @@
                         <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
                     </div>
 
-                    <div class="lang-toggle-group">
-                        <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                        <div class="lang-separator"></div>
-                        <button class="lang-btn" onclick="setLang('en')">EN</button>
-                    </div>
                 </header>
 
                 <div class="welcome-text-section" style="margin:20px 0px 0px 0px;">
-                    <h1 class="title-th">แจ้งเตือนสิทธิ</h1>
+                    <h1 class="title-th" data-i18n="rights notification">แจ้งเตือนสิทธิ</h1>
                     <div class="divider"></div>
                 </div>
                 <div class="scroll-anime">
@@ -102,10 +98,10 @@
                     <button class="terms-submit-button" id="submitButton" disabled data-i18n="confirm">ยืนยัน</button> *@
 
                     <div class="kiosk-action-bar style-modern" style="margin-top:0px; padding:10px;">
-                        <a asp-controller="Step" asp-action="Step4" id="submitButton" class="kiosk-btn btn-solid">
+                        <a asp-controller="Step" asp-action="Step4" id="submitButton" class="kiosk-btn btn-solid" data-i18n="accept and continue">
                             ยอมรับและดำเนินการต่อ
                         </a>
-                        <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px;">
+                        <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px;" data-i18n="cancel">
                             ยกเลิก
                         </a>
                     </div>
