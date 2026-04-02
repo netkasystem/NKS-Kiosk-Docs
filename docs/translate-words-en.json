@@ -141,5 +141,12 @@
   "confirm consent data": "Confirm Consent Data",
   "please remove your id card from reader": "Please remove your ID card from the reader",
   "you can change consent anytime": "You can change your consent at any time by reinserting your ID card at this service point",
-  "return to home in": "Return to home in"
+  "return to home in": "Return to home in",
+  "notice of rights": "Notice of Rights",
+  "accept and continue": "Accept and Continue",
+  "incorrect information and cancel": "Incorrect Information and Cancel",
+  "returning user": "Returning User",
+  "returning user prefix": "",
+  "already registered and consented": "has already registered and given consent",
+  "can edit consent immediately": "Consent can be edited immediately"
 }
