@@ -506,6 +506,40 @@ body, html {
     margin-bottom: 40px;
 }
 
+/* Privacy Notice จาก NDPP API — ให้ทุก element ใน body ใช้ style เดียวกับ .policy-text */
+#privacy-notice-body {
+    text-align: justify;
+    line-height: 1.6;
+}
+
+#privacy-notice-body p {
+    text-indent: 3.5em;
+    margin-bottom: 40px;
+}
+
+#privacy-notice-body h1,
+#privacy-notice-body h2,
+#privacy-notice-body h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
+    padding: 0;
+    margin-left: 0;
+    text-indent: 0;
+}
+
+#privacy-notice-body ul,
+#privacy-notice-body ol {
+    padding-left: 2em;
+    margin-bottom: 40px;
+}
+
+#privacy-notice-body li {
+    text-indent: 0;
+    margin-bottom: 12px;
+}
+
 .terms-footer-fixed {
     position: fixed;
     bottom: 0px;
@@ -2769,8 +2803,8 @@ html, body {
 
 .lang-toggle-fixed {
     position: fixed;
-    top: 30px;
-    right: 40px;
+    top: 123px;
+    right: 86px;
     z-index: 1000;
 }
 
