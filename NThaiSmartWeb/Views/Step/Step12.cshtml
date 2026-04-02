@@ -12,7 +12,7 @@
     </div>
     <div class="kiosk-content z-10">
 
-        <header class="kiosk-header">
+     @*    <header class="kiosk-header">
             <div class="logo-container">
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
@@ -28,7 +28,7 @@
             <h1 class="title-th" data-i18n="please confirm your information">กรุณายืนยันข้อมูล</h1>
             <div class="divider"></div>
         </div>
-
+ *@
         <div class="spacer"></div>
 
     @*     <div class="id-card">
@@ -187,102 +187,174 @@
             </div>
         </div> *@
        <div class="v-kiosk-display-wrapper">
+
             <div class="v-kiosk-main-card">
-        
-                        <div class="v-kiosk-header-group">
-                            <h2 data-i18n="id card information" class="v-kiosk-title">ข้อมูลบัตรประจำตัวประชาชน</h2>
-                            <button class="icon-button" id="toggle-vision-btn">
-                                <img src="/images/icons/vision.svg" alt="ดูข้อมูล" />
-                            </button>
-                        </div>
 
-                        <div class="v-kiosk-profile-horizontal">
+                <div class="v-kiosk-header-group">
+                    <h2 data-i18n="id card information" class="v-kiosk-title">ข้อมูลบัตรประจำตัวประชาชน</h2>
+                    <button class="icon-button" id="toggle-vision-btn">
+                        <img src="/images/icons/vision.svg" alt="Toggle Vision" />
+                    </button>
+                </div>
 
-                            <div class="v-kiosk-avatar-wrapper">
-                                <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="ID Card Photo">
-                            </div>
-
-                            <div class="v-kiosk-name-stack">
-                                <div class="v-kiosk-name-th">
-                                    <div class="info-value" data-field-name="prefixTH"></div>
-                                    <div class="info-value" data-field-name="firstNameTH"></div>
-                                    <div class="info-value" data-field-name="middleNameTH"></div>
-                                    <div class="info-value" data-field-name="lastNameTH"></div>
-                                </div>
-
-                                <div class="v-kiosk-name-en">
-                                    <div class="info-value" data-field-name="prefixEN"></div>
-                                    <div class="info-value" data-field-name="firstNameEN"></div>
-                                    <div class="info-value" data-field-name="middleNameEN"></div> <div class="info-value" data-field-name="lastNameEN"></div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="v-kiosk-data-list">
-                            <div class="v-kiosk-data-row">
-                                <label class="v-kiosk-label" data-i18n="citizen id number">เลขบัตรประจำตัวประชาชน</label>
-                                <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
-                            </div>
-            
-                            <div class="v-kiosk-data-row">
-                                <label class="v-kiosk-label" data-i18n="date of birth">วันเกิด</label>
-                                <div class="info-value" data-field-name="dateOfBirth" data-full-value=""></div>
-                            </div>
-
-                            <div class="v-kiosk-data-row">
-                                <label class="v-kiosk-label" data-i18n="gender">เพศ</label>
-                                <div class="info-value" data-field-name="sex" data-full-value=""></div>
-                            </div>
-
-                            <div class="v-kiosk-data-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                                <label class="v-kiosk-label" data-i18n="address">ที่อยู่</label>
-                                <div class="info-value" data-field-name="address" data-full-value="" style="width: 100%;"></div>
-                            </div>
-
-                            <div class="v-kiosk-data-row">
-                                <label class="v-kiosk-label" data-i18n="issue date">วันออกบัตร</label>
-                                <div class="info-value" data-field-name="issueDate" data-full-value=""></div>
-                            </div>
-
-                            <div class="v-kiosk-data-row">
-                                <label class="v-kiosk-label" data-i18n="expiry date">วันหมดอายุบัตร</label>
-                                <div class="info-value" data-field-name="expireDate" data-full-value=""></div>
-                            </div>
-                        </div>
-
-                          @*   <div class="v-kiosk-photo-item">
-                                <div class="v-kiosk-photo-frame">
-                                    <img id="idCardPhoto" src="/images/icons/Profile_id.svg" />
-                                </div>
-                                <span data-i18n="id card photo" style="font-size: 18px; color: #94a3b8;">รูปบัตรประชาชน</span>
-                            </div> *@
-                            <div class="v-kiosk-photo-item">
-                                <div class="v-kiosk-photo-frame">
-                                    <img id="capturePhoto" src="/images/icons/Profile.jpg" />
-                                </div>
-                                <span data-i18n="face scan photo" style="font-size: 18px; color: #94a3b8;">รูปจากเครื่องสแกน</span>
-                            </div>
-
-
-                        <button type="button" class="confirm-button" id="confirm-btn">ยืนยันข้อมูลถูกต้อง</button>
+                <div class="v-kiosk-profile-horizontal">
+                    <div class="v-kiosk-avatar-wrapper">
+                        <img id="idCardPhoto" src="/images/icons/Profile_id.svg" alt="ID Photo">
                     </div>
+                    <div class="v-kiosk-name-stack">
+                        <div class="v-kiosk-name-th">
+                            <div class="info-value" data-field-name="prefixTH"></div>
+                            <div class="info-value" data-field-name="firstNameTH"></div>
+                            <div class="info-value" data-field-name="middleNameTH"></div>
+                            <div class="info-value" data-field-name="lastNameTH"></div>
+                        </div>
+                        <div class="v-kiosk-name-en">
+                            <div class="info-value" data-field-name="prefixEN"></div>
+                            <div class="info-value" data-field-name="firstNameEN"></div>
+                            <div class="info-value" data-field-name="middleNameEN"></div>
+                            <div class="info-value" data-field-name="lastNameEN"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="v-kiosk-expand-control" id="data-list-toggle">
+                    <span >รายละเอียดข้อมูลบัตร</span>
+                    <div class="v-kiosk-chevron">
+                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </div>
+
+                <div class="v-kiosk-collapsible-content" id="collapsible-list">
+                    <div class="v-kiosk-data-list">
+                        <div class="v-kiosk-data-row">
+                            <label class="v-kiosk-label" data-i18n="citizen id number">เลขบัตรประจำตัวประชาชน</label>
+                            <div class="info-value" data-field-name="citizenID" data-full-value=""></div>
+                        </div>
+                        <div class="v-kiosk-data-row">
+                            <label class="v-kiosk-label" data-i18n="date of birth">วันเกิด</label>
+                            <div class="info-value" data-field-name="dateOfBirth" data-full-value=""></div>
+                        </div>
+                        <div class="v-kiosk-data-row">
+                            <label class="v-kiosk-label" data-i18n="gender">เพศ</label>
+                            <div class="info-value" data-field-name="sex" data-full-value=""></div>
+                        </div>
+                        <div class="v-kiosk-data-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                            <label class="v-kiosk-label" data-i18n="address">ที่อยู่</label>
+                            <div class="info-value" data-field-name="address" data-full-value="" style="width: 100%; text-align: right;"></div>
+                        </div>
+                        <div class="v-kiosk-data-row">
+                            <label class="v-kiosk-label" data-i18n="issue date">วันออกบัตร</label>
+                            <div class="info-value" data-field-name="issueDate" data-full-value=""></div>
+                        </div>
+                        <div class="v-kiosk-data-row">
+                            <label class="v-kiosk-label" data-i18n="expiry date">วันหมดอายุบัตร</label>
+                            <div class="info-value" data-field-name="expireDate" data-full-value=""></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="v-kiosk-capture-area">
+                    <span class="v-kiosk-capture-label" data-i18n="face scan photo">
+                        ภาพถ่ายยืนยันตัวตนจากเครื่องสแกน
+                    </span>
+                    <div class="v-kiosk-capture-frame">
+                        <div class="v-kiosk-capture-img-wrapper">
+                            <img id="capturePhoto" src="/images/icons/Profile.jpg" alt="Capture Photo" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <div class="container py-4" id="step12-ndpp-content" style="display:none;">
+
+            <div id="ndpp-container" class="row g-3"></div>
+
+            <div id="ndpp-form-container" style="display:none; margin-top:20px;">
+                <div class="v-ndpp-kiosk-card">
+
+                    <div class="mb-3">
+                        <h3 id="activity-title" style="text-align: center;"></h3>
+                    </div>
+
+                    <div class="v-ndpp-content-box">
+                        <div id="activity-content"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="v-purpose-header-group">
+                            <span class="v-purpose-header-text">รายการความยินยอม</span>
+
+                            <label class="v-select-all-btn">
+                                <input type="checkbox" id="select-all-purposes">
+                                <span>ยินยอมทั้งหมด</span>
+                            </label>
+                        </div>
+
+                        <div id="purpose-options"></div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" form="ndpp-form" class="v-btn-confirm-ndpp" id="submit-consent">
+                            ยืนยันข้อมูลความยินยอม
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="kiosk-action-bar style-modern">
+      @*   <div id="ndpp-modal" class="v-modal-overlay" style="display:none;">
+            <div class="v-modal-content">
+                <div class="v-modal-header">
+                    <h1 id="activity-title">ข้อมูลความยินยอม</h1>
+                    <button type="button" class="v-modal-close" id="close-ndpp-modal">&times;</button>
+                </div>
+
+                <div class="v-modal-body">
+
+                    <div class="v-ndpp-content-box">
+                        <div id="activity-content"></div>
+                    </div>
+
+                    <div class="v-purpose-section">
+                        <div class="v-purpose-header">
+                            <span data-i18n="select purposes">รายการความยินยอม</span>
+                            <label class="v-select-all-btn">
+                                <input type="checkbox" id="select-all-purposes">
+                                <span data-i18n="select all">ยินยอมทั้งหมด</span>
+                            </label>
+                        </div>
+
+                        <div id="purpose-options">
+                            <label class="form-check">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="v-modal-footer">
+                    <button type="submit" form="ndpp-form" class="v-btn-confirm-modal" id="submit-consent">
+                        ยืนยันข้อมูลความยินยอม
+                    </button>
+                </div>
+            </div>
+        </div> *@
+
+      @*   <div class="kiosk-action-bar style-modern" style="margin-top:20px;" id="confirm-btn">
             <a asp-controller="Step" asp-action="Step14" class="kiosk-btn btn-solid">
                 ยืนยันข้อมูล
             </a>
+            <button type="button" class="kiosk-btn btn-solid" id="open-consent-modal">
+                ยืนยันข้อมูลและจัดการความยินยอม
+            </button>
+        </div> *@
+
+        <div class="kiosk-action-bar style-modern">
+            <button type="button" class="kiosk-btn btn-solid" id="open-consent-modal">
+                ยืนยันข้อมูลและจัดการความยินยอม
+            </button>
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" style="margin-top: 20px;">
+                ข้อมูลไม่ถูกต้องและยกเลิก
+            </a>
         </div>
-
-    </div>
-
-  
-    <div class="row pt-5">
-        <div class="offset-3 col-6">
-            <button type="button" class="confirm-button w-100 py-4" id="confirm-btn" data-i18n="confirm information">ยืนยันข้อมูล</button>
-        </div>
-    </div>
-
    @*  <div id="edit-modal" class="modal-overlay">
         <div class="modal-content">
 
@@ -377,6 +449,20 @@
             let cardData = getCardData();
             const mainToggleButton = document.getElementById("toggle-vision-btn");
             const allInfoValues = document.querySelectorAll(".info-value");
+            const toggleBtn = document.getElementById('data-list-toggle');
+            const content = document.getElementById('collapsible-list');
+
+            if (toggleBtn && content) {
+                toggleBtn.addEventListener('click', function() {
+                    content.classList.toggle('is-expanded');
+                    toggleBtn.classList.toggle('is-active');
+
+                    const label = toggleBtn.querySelector('span');
+                    if (content.classList.contains('is-expanded')) {
+                    } else {
+                    }
+                });
+            }
 
             if (mainToggleButton) {
                 let isAllDataVisible = false;
@@ -500,4 +586,5 @@
 
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
 
+    </div>
 </body>

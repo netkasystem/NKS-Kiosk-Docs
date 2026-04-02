@@ -3,7 +3,7 @@
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
 }
-<body class="green-background">
+@* <body class="green-background">
 
     <header class="page-header">
         <div class="scan_fail">
@@ -26,6 +26,52 @@
             <span data-i18n="next step">ขั้นตอนต่อไป</span>
         </button>
     </form>
+
+</body> *@
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th">อ่านข้อมูลสำเร็จ</h1>
+            <div class="divider"></div>
+        </div>
+
+
+        <div class="page-center-maersk">
+            <img src="/images/icons/scan_pass.svg" class="id-card-image-pass" style="width:25%;" />
+           @*  <img src="/images/icons/scan_success.svg" class="id-card-image-pass" style="width:40%;" /> *@
+            @* <img src="/images/icons/font_card_id.svg" class="id-card-image-fail" style="margin-bottom: 0%; margin-top: 0%;" /> *@
+           
+            <div class="bottom-section" style="justify-content:left; margin-bottom:0px;">
+                <ol class="instruction-list-maersk" style="font-size: 2.3em; margin-bottom:0px;"> 
+                    <li>กรุณา<strong> สอดบัตรประจำตัวประชาชน </strong>ของท่านไว้จนกว่าจะดำเนินการยืนยันตัวตนสำเร็จ</li>
+                    <li>เตรียมตัวสำหรับ<strong> การแสกนใบหน้า </strong>เพื่อยืนยันตัวตน</li>
+                </ol>
+            </div>
+
+        </div>
+        <div class="kiosk-action-bar style-modern">
+            <a asp-controller="Step" asp-action="Step9" class="kiosk-btn btn-solid">
+               ขั้นตอนต่อไป
+            </a>
+           
+        </div>
+    </div>
     <audio id="scan_card" src="/audio/Scan_success.wav"></audio>
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
     <script>

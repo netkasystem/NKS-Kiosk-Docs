@@ -2,7 +2,8 @@
     ViewData["Title"] = "StepEnd";
     ViewBag.HideHeader = true;
 }
-<body class="green-background">
+
+@* <body class="green-background">
     <header class="page-header">
         <img src="/images/icons/scan_pass.svg" class="scan_fail" />
         <h1 style="margin-top:30px;" data-i18n="identity verification complete">สิ้นสุดกระบวนการ <br>ยืนยันตัวตน</h1>
@@ -47,21 +48,100 @@
             </div>
 
     </div>
+ 
+</body> *@
+
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
+    </div>
+
+    <div id="fireworks-overlay"></div>
+
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
+
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
+
+        <div class="welcome-text-section">
+            <h1 class="title-th">สิ้นสุดกระบวนการยืนยันตัวตน</h1>
+            <div class="divider"></div>
+        </div>
+
+        <div class="page-center-maersk">
+            <img src="/images/icons/scan_success.svg" class="id-card-image-pass" style="width:45%;" /> <div class="bottom-section" style="justify-content:left; margin-bottom:0px; background: rgba(255,255,255,0.8); padding: 25px; border-radius: 20px;">
+                <ol class="instruction-list-maersk" style="font-size: 2.3em; margin-bottom:0px; color: #1e293b;">
+                    <li>กรุณา <strong>ดึงบัตรประจำตัวประชาชนออก</strong> จากช่องอ่านบัตร</li>
+                    <li>ท่านสามารถเปลี่ยนแปลงการให้ความยินยอมได้ทุกเมื่อ เพียงเสียบบัตรประจำตัวประชาชน ณ จุดให้บริการนี้</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="kiosk-action-bar style-modern">
+            <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-solid">
+                สิ้นสุด
+            </a>
+            <div class="coundown-th" id="countdown-btn">กลับสู่หน้าแรกใน 15</div>
+        </div>
+
+    </div>
+
     <audio id="click-sound" src="/audio/normal_click.wav" preload="auto"></audio>
     <audio id="scan_card" src="/audio/All_done.wav"></audio>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const audio = document.getElementById("scan_card");
-            if (audio) {
-                audio.currentTime = 0;
-                audio.play().catch(err => {
-                    console.warn("ไม่สามารถเล่นเสียงอัตโนมัติได้:", err);
+            const scanAudio = document.getElementById("scan_card");
+            if (scanAudio) {
+                scanAudio.currentTime = 0;
+                scanAudio.play().catch(err => console.warn("Audio play blocked", err));
+            }
+
+            let timeLeft = 15;
+            const countdownEl = document.getElementById("countdown-btn");
+
+            const homeUrl = "/Step/Step1";
+
+            const timer = setInterval(function() {
+                timeLeft--;
+
+                if (countdownEl) {
+                    countdownEl.innerText = `กลับสู่หน้าแรกใน ${timeLeft}`;
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = homeUrl; 
+                }
+            }, 1000);
+
+            if (countdownEl) {
+                countdownEl.style.cursor = "pointer"; 
+                countdownEl.addEventListener("click", function() {
+                    window.location.href = homeUrl;
                 });
+            }
+
+            const fireworksOverlay = document.getElementById('fireworks-overlay');
+            if (fireworksOverlay) {
+                for (let i = 0; i < 5; i++) {
+                    const fw = document.createElement('div');
+                    fw.className = 'v-firework';
+                    fireworksOverlay.appendChild(fw);
+                }
+                setTimeout(() => {
+                    if(fireworksOverlay.parentNode) fireworksOverlay.remove();
+                }, 5000);
             }
         });
     </script>
 </body>
-
-
-
-
