@@ -117,7 +117,7 @@
   "start registration": "Start Registration",
   "identity verification steps": "Identity Verification Steps",
   "insert id card into reader": "Insert your ID card into the reader",
-  "skip to step 3 if already verified": "If already verified, the system will skip to step 3",
+  "skip to step 4 if already verified": "If already verified, the system will skip to step 4",
   "review id card data and confirm consent": "Review ID card data and select consent confirmation",
   "retrieve id card from reader": "Retrieve your ID card from the reader",
   "ready": "Ready",
@@ -148,5 +148,7 @@
   "returning user": "Returning User",
   "returning user prefix": "",
   "already registered and consented": "has already registered and given consent",
-  "can edit consent immediately": "Consent can be edited immediately"
+  "can edit consent immediately": "Consent can be edited immediately",
+  "review id card data": "Review ID Card Information",
+  "select and confirm consent": "Select and Confirm Consent"
 }

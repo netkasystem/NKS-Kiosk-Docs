@@ -117,7 +117,7 @@
   "start registration": "เริ่มลงทะเบียน",
   "identity verification steps": "ขั้นตอนการยืนยันตัวตน",
   "insert id card into reader": "สอดบัตรประจำตัวประชาชนเข้าช่องอ่าน",
-  "skip to step 3 if already verified": "หากเคยยืนยันตัวตนแล้ว ระบบจะข้ามไปขั้นตอนที่ 3",
+  "skip to step 4 if already verified": "หากเคยยืนยันตัวตนแล้ว ระบบจะข้ามไปขั้นตอนที่ 4",
   "review id card data and confirm consent": "ตรวจสอบข้อมูลจากบัตรประจำตัวประชาชนและเลือกยืนยันการให้ความยินยอม",
   "retrieve id card from reader": "รับบัตรประจำตัวประชาชนคืนจากช่องอ่าน",
   "ready": "พร้อมแล้ว",
@@ -148,5 +148,7 @@
   "returning user": "ผู้ใช้เดิม",
   "returning user prefix": "คุณ",
   "already registered and consented": "เคยลงทะเบียนและให้ความยินยอมแล้ว",
-  "can edit consent immediately": "สามารถแก้ไขความยินยอมได้ทันที"
+  "can edit consent immediately": "สามารถแก้ไขความยินยอมได้ทันที",
+  "review id card data": "ตรวจสอบข้อมูลจากบัตรประจำตัวประชาชน",
+  "select and confirm consent": "เลือกยืนยันการให้ความยินยอม"
 }
