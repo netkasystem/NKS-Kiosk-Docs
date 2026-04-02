@@ -4,59 +4,64 @@
     ViewBag.HideFooter = true;
 }
 
-<body class="bg-light hide-lang-switch">
-    <div class="container py-4" id="step17-content" style="display:none">
-
-        <!-- Card List -->
-        <div id="ndpp-container" class="row g-3"></div>
-         
-        <!-- NDPP Form Container -->
-        <div id="ndpp-form-container" style="display:none; margin-top:20px;">
-            <form id="ndpp-form" class="p-3 border rounded shadow-sm">
-
-                <!-- Section 01 ข้อมูลส่วนบุคคล -->
-                <div class="mb-12">
-                    <h3 id="activity-title" class="mb-4"></h3>
-                </div>
-                <div class="mb-4">
-                    <h5 class="pb-2 border-bottom text-primary" data-i18n="01 fill in personal information">01 กรอกข้อมูลส่วนบุคคล</h5>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="firstname" class="form-label" data-i18n="first name">ชื่อจริง<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="firstname" name="firstname" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="lastname" class="form-label" data-i18n="last name">นามสกุล<span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="lastname" name="lastname" required>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="email" class="form-label" data-i18n="email">อีเมล</label>
-                            <input type="email" class="form-control" id="email" name="email">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section 02 รายละเอียดและเงื่อนไขการยินยอม -->
-                <div class="mb-4">
-                    <h5 class="pb-2 border-bottom text-primary" data-i18n="02 consent details and conditions">02 รายละเอียดและเงื่อนไขในการยินยอม</h5>
-
-                    <!-- content จาก API -->
-                    <div id="activity-content" class="mb-3"></div>
-
-                    <!-- purpose options -->
-                    <div id="purpose-options" class="mb-3"></div>
-                     
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" id="btn-edit-info" class="btn btn-secondary px-4" data-i18n="edit information">แก้ไขข้อมูล</button>
-                    <button type="submit" class="btn btn-success px-4" id="submit-consent" data-i18n="confirm">ยืนยัน</button>
-                </div>
-            </form>
-        </div>
-
+<body class="kiosk-body">
+    <div class="bg-decoration z-0">
+        <div class="bg-gradient-top-notice"></div>
+        <div class="bg-gradient-bottom"></div>
     </div>
+    <div class="kiosk-content z-10">
+        <header class="kiosk-header">
+            <div class="logo-container">
+                <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
+            </div>
 
-    <!-- Logic ย้ายไป step-controller.js → window.Step17 -->
+            <div class="lang-toggle-group">
+                <button class="lang-btn active" onclick="setLang('th')">TH</button>
+                <div class="lang-separator"></div>
+                <button class="lang-btn" onclick="setLang('en')">EN</button>
+            </div>
+        </header>
 
+        <div class="welcome-text-section">
+            <h1 class="title-th">ยืนยันการยินยอม</h1>
+            <div class="divider"></div>
+        </div>
+        <div class="container-fluid py-5" id="step17-content" >
+            <div id="ndpp-container" class="row g-4 justify-content-center"></div>
+
+            <div id="ndpp-form-container" style="display:none; margin-top:30px;">
+                <div class="v-ndpp-white-card">
+                    <form id="ndpp-form-new">
+
+                        <div class="header-section">
+                            <h3 id="activity-title" class="v-text-title"></h3>
+                        </div>
+
+                        <div class="content-section">
+                            <h5 class="v-text-subtitle">รายละเอียดและเงื่อนไขในการยินยอม</h5>
+
+                            <div id="activity-content" class="v-text-body mb-5"></div>
+
+                            <div class="v-purpose-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
+                                <h5 class="v-text-subtitle" style="margin-bottom:0px;">รายการความยินยอม</h5>
+
+                                <label class="v-select-all-pill">
+                                    <input type="checkbox" id="select-all-purposes">
+                                    <span>ยินยอมทั้งหมด</span>
+                                </label>
+                            </div>
+
+                            <div id="purpose-options" class="v-options-group"></div>
+                        </div>
+
+                        <div class="footer-section mt-5">
+                            <button type="submit" class="v-btn-submit-kiosk" id="submit-consent">
+                                ยืนยันข้อมูลความยินยอม
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>

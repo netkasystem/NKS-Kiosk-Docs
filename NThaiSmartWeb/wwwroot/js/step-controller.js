@@ -1,27 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     const audio = document.getElementById("click-sound");
     const cardLink = document.getElementById("cardLink");
-        const openBtn = document.getElementById("open-consent-modal");
-        const closeBtn = document.getElementById("close-ndpp-modal");
-        const modal = document.getElementById("ndpp-modal");
-
-        if (openBtn) {
-            openBtn.addEventListener("click", async function () {
-                Step12.openConsentModal(); // 👈 ไม่ต้อง await ก็ได้
-            });
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener("click", function () {
-                Step12.closeConsentModal();
-            });
-        }
-
-        if (modal) {
-            modal.addEventListener("click", function (e) {
-                if (e.target === modal) Step12.closeConsentModal();
-            });
-        }
+ 
     if (cardLink && audio) {
         cardLink.addEventListener("click", function (e) {
             e.preventDefault();
@@ -349,359 +329,35 @@ window.Step11 = {
 };
 
 window.Step12 = {
-    _ndppId: 0,
-    _url: "",
-    _ndppFormData: null,
-    _previousConsent: null,
-
-    init: async () => {
+    init: () => {
         console.log("Step 12: Editing card data and confirmation");
-
+        //get customform
         try {
-            const customRes = await fetch('/api/KioskApi/GetCustomForm', {
+            const response = fetch('/api/KioskApi/GetCustomForm', {
                 method: 'GET',
-                headers: { "Content-Type": "application/json" }
-            });
-            if (!customRes.ok) throw new Error("GetCustomForm error: " + customRes.status);
-            const customData = await customRes.json();
-            setCustomForm(customData);
+                headers: { "Content-Type": "application/json", }
+            }).then(response => {
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                return response.json();
+            }).then(data => {
+                setCustomForm(data);
+            })
         } catch (error) {
-            console.error("GetCustomForm error:", error);
+            alert(error.message);
         }
-
+        //get integrate ndpp
         try {
-            const ndppRes = await fetch('/api/KioskApi/GetIntegrateNdpp', {
+            const response = fetch('/api/KioskApi/GetIntegrateNdpp', {
                 method: 'GET',
-                headers: { "Content-Type": "application/json" }
-            });
-            if (!ndppRes.ok) throw new Error("GetIntegrateNdpp error: " + ndppRes.status);
-            const ndppData = await ndppRes.json();
-            setIntegrateNdpp(ndppData);
+                headers: { "Content-Type": "application/json", }
+            }).then(response => {
+                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+                return response.json();
+            }).then(data => {
+                setIntegrateNdpp(data);
+            })
         } catch (error) {
-            console.error("GetIntegrateNdpp error:", error);
-        }
-
-        Step12.bindEvents();
-        await Step12.initInlineConsent();
-    },
-
-    bindEvents: () => {
-        const submitBtn = document.getElementById("submit-consent");
-        if (submitBtn && !submitBtn.dataset.bound) {
-            submitBtn.addEventListener("click", async (e) => {
-                e.preventDefault();
-                await Step12.submitConsent();
-            });
-            submitBtn.dataset.bound = "true";
-        }
-    },
-
-    initInlineConsent: async () => {
-        const step12Content = document.getElementById("step12-ndpp-content");
-        const cardData = getCardData();
-
-        let ndppList = [];
-        try {
-            ndppList = await getIntegrateNdpp();
-        } catch (err) {
-            console.error("getIntegrateNdpp error:", err);
-            return;
-        }
-
-        if (!ndppList || !ndppList.length) {
-            return;
-        }
-
-        if (step12Content) step12Content.style.display = "";
-
-        await Step12.loadPreviousConsent(cardData);
-
-        if (ndppList.length === 1) {
-            try {
-                await Step12.loadSingleServiceForm(ndppList[0], cardData);
-            } catch (err) {
-                console.error("loadSingleServiceForm error:", err);
-            }
-            return;
-        }
-
-        Step12.renderServiceCards(ndppList, cardData);
-    },
-
-    loadPreviousConsent: async (cardData) => {
-        Step12._previousConsent = null;
-
-        try {
-            const citizenId = cardData?.citizenID ?? "";
-            const kioskCode = GetKioskCode();
-
-            if (!citizenId || !kioskCode) return;
-
-            const res = await fetch(`/api/KioskApi/GetNdppConsented?citizenId=${encodeURIComponent(citizenId)}&kioskCode=${encodeURIComponent(kioskCode)}`);
-            if (!res.ok) return;
-
-            const text = await res.text();
-            Step12._previousConsent = text ? JSON.parse(text) : null;
-
-            if (Step12._previousConsent?.purposeOptionDetail) {
-                Step12._previousConsent._parsed = JSON.parse(Step12._previousConsent.purposeOptionDetail);
-            }
-        } catch (err) {
-            console.warn("โหลด consent เดิมไม่สำเร็จ:", err);
-        }
-    },
-
-    loadSingleServiceForm: async (item, cardData) => {
-        Step12._ndppId = item.id;
-        Step12._url = item.ndppPreferenceUrl;
-
-        const encrypCardData = encrypt({
-            Firstname: cardData?.thaiPersonalInfo?.firstName || "",
-            Lastname: cardData?.thaiPersonalInfo?.lastName || "",
-            IntegrateNdppId: item.id
-        });
-
-        const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
-        });
-
-        if (!response.ok) {
-            throw new Error("โหลด form ไม่สำเร็จ: " + response.status);
-        }
-
-        const data = await response.json();
-        if (!data) {
-            throw new Error("ไม่พบข้อมูล form");
-        }
-
-        Step12._ndppFormData = data;
-        Step12.showInlineNdppForm(data);
-    },
-
-    renderServiceCards: (list, cardData) => {
-        const container = document.getElementById("ndpp-container");
-        if (!container) return;
-
-        container.innerHTML = "";
-
-        list.forEach(item => {
-            const col = document.createElement("div");
-            col.className = "col-12 col-sm-6 col-lg-4";
-
-            const imgSrc = item.serviceImage ? `data:image/png;base64,${item.serviceImage}` : '';
-
-            col.innerHTML = `
-                <div class="card h-100 shadow-sm">
-                    ${imgSrc ? `<img src="${imgSrc}" class="card-img-top" alt="${item.serviceName}">` : ''}
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${item.serviceName}</h5>
-                        <p class="card-text text-truncate" style="max-height:3.6em;">${item.serviceDescription || ""}</p>
-                        <p class="mb-1"><small>เริ่ม: ${item.serviceStartDate ? new Date(item.serviceStartDate).toLocaleString() : "-"}</small></p>
-                        <p class="mb-2"><small>สิ้นสุด: ${item.serviceStopDate ? new Date(item.serviceStopDate).toLocaleString() : "-"}</small></p>
-                        <button type="button" class="btn btn-primary mt-auto btn-open"
-                                data-id="${item.id}"
-                                data-url="${item.ndppPreferenceUrl}">
-                            เปิดดู
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            container.appendChild(col);
-        });
-
-        if (!container.dataset.bound) {
-            container.addEventListener("click", async (e) => {
-                const btn = e.target.closest(".btn-open");
-                if (!btn) return;
-
-                try {
-                    const id = btn.getAttribute("data-id");
-                    const url = btn.getAttribute("data-url");
-
-                    Step12._ndppId = id;
-                    Step12._url = url;
-
-                    const encrypCardData = encrypt({
-                        Firstname: cardData?.thaiPersonalInfo?.firstName || "",
-                        Lastname: cardData?.thaiPersonalInfo?.lastName || "",
-                        IntegrateNdppId: id
-                    });
-
-                    const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
-                        method: 'POST',
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error("เกิดข้อผิดพลาด: " + response.status);
-                    }
-
-                    const data = await response.json();
-                    if (!data) {
-                        alert("ไม่พบแบบฟอร์มความยินยอม");
-                        return;
-                    }
-
-                    Step12._ndppFormData = data;
-                    Step12.showInlineNdppForm(data);
-                } catch (err) {
-                    console.error("load service form error:", err);
-                    alert("โหลดข้อมูลความยินยอมไม่สำเร็จ");
-                }
-            });
-
-            container.dataset.bound = "true";
-        }
-    },
-
-    showInlineNdppForm: (data) => {
-        const title = document.getElementById("activity-title");
-        const activityContent = document.getElementById("activity-content");
-        const purposeOptions = document.getElementById("purpose-options");
-        const selectAll = document.getElementById("select-all-purposes");
-        const formContainer = document.getElementById("ndpp-form-container");
-        const ndppContainer = document.getElementById("ndpp-container");
-
-        if (title) {
-            title.textContent = data.ActivityNameTh || data.ServiceNameTh || "ข้อมูลความยินยอม";
-        }
-
-        if (activityContent) {
-            const rawContent = data.content || "";
-            const cleanContent = rawContent
-                .replaceAll("{PurposeOption}", "")
-                .replaceAll("{SubPurposeOption}", "")
-                .trim();
-
-            activityContent.innerHTML = cleanContent || "<p>ไม่มีรายละเอียดเพิ่มเติม</p>";
-        }
-
-        if (purposeOptions) {
-            purposeOptions.innerHTML = "";
-            const prev = Step12._previousConsent?._parsed ?? [];
-
-            (data.purpose_option || []).forEach(purpose => {
-                const prevItem = prev.find(p => String(p.PurposeNameId) === String(purpose.purpose_id));
-                const isChecked = prevItem ? prevItem.PurposeChecked : purpose.selected;
-
-                const item = document.createElement("label");
-                item.className = "v-purpose-item";
-                item.innerHTML = `
-                    <input type="checkbox"
-                           name="purpose"
-                           value="${purpose.purpose_id}"
-                           ${isChecked ? "checked" : ""}
-                           ${purpose.is_required ? "required" : ""}>
-                    <span>${purpose.purpose_th || purpose.purpose_en}</span>
-                `;
-                purposeOptions.appendChild(item);
-            });
-        }
-
-        if (selectAll) {
-            const refreshSelectAllState = () => {
-                const boxes = Array.from(document.querySelectorAll('#purpose-options input[name="purpose"]'));
-                const optionalBoxes = boxes.filter(x => !x.required);
-
-                if (!optionalBoxes.length) {
-                    selectAll.checked = boxes.length > 0 && boxes.every(x => x.checked);
-                    return;
-                }
-
-                selectAll.checked = optionalBoxes.every(x => x.checked);
-            };
-
-            selectAll.checked = false;
-            selectAll.onchange = function () {
-                const boxes = document.querySelectorAll('#purpose-options input[name="purpose"]');
-                boxes.forEach(box => {
-                    if (!box.required) {
-                        box.checked = selectAll.checked;
-                    } else if (selectAll.checked) {
-                        box.checked = true;
-                    }
-                });
-                refreshSelectAllState();
-            };
-
-            document.querySelectorAll('#purpose-options input[name="purpose"]').forEach(box => {
-                box.addEventListener("change", refreshSelectAllState);
-            });
-
-            refreshSelectAllState();
-        }
-
-        if (formContainer) formContainer.style.display = "block";
-        if (ndppContainer) ndppContainer.style.display = "none";
-    },
-
-    submitConsent: async () => {
-        console.log("submitConsent called");
-
-        const cardData = getCardData();
-        if (!cardData) {
-            alert("ไม่พบข้อมูลบัตรประชาชน");
-            return;
-        }
-
-        if (!Step12._ndppId || !Step12._ndppFormData) {
-            alert("ไม่พบข้อมูลความยินยอม");
-            return;
-        }
-
-        const firstname = cardData?.thaiPersonalInfo?.firstName || "";
-        const lastname = cardData?.thaiPersonalInfo?.lastName || "";
-        const email = Step12._previousConsent?.email || "";
-
-        const selectedPurposes = Array.from(
-            document.querySelectorAll('#purpose-options input[name="purpose"]:checked')
-        ).map(input => parseInt(input.value));
-
-        const purposeOptionDetail = Array.from(
-            document.querySelectorAll('#purpose-options input[name="purpose"]')
-        ).map(input => ({
-            PurposeNameId: input.value,
-            PurposeName: input.nextElementSibling?.textContent?.trim() ?? "",
-            PurposeChecked: input.checked
-        }));
-
-        const payload = {
-            Firstname: firstname,
-            Lastname: lastname,
-            Email: email,
-            IntegrateNdppId: Step12._ndppId,
-            IntegrateUrl: Step12._url,
-            PurposeOption: selectedPurposes,
-            PurposeOptionDetail: purposeOptionDetail,
-            NdppFormData: JSON.stringify(Step12._ndppFormData),
-            citizenID: cardData.citizenID ?? "",
-            fullNameTH: cardData.fullNameTH ?? "",
-            fullNameEN: cardData.fullNameEN ?? "",
-            photo_path: cardData.photo_path ?? "",
-            face_capture_path: cardData.face_capture_path ?? "",
-            KioskCode: GetKioskCode()
-        };
-
-        try {
-            const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ EncryptedINDPPString: encrypt(payload) })
-            });
-
-            if (!response.ok) {
-                throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
-            }
-
-            await response.json();
-            window.location.href = "/Step/StepEnd";
-        } catch (err) {
-            console.error("submitConsent error:", err);
-            alert("เกิดข้อผิดพลาดในการบันทึก");
+            alert(error.message);
         }
     }
 };
@@ -754,17 +410,36 @@ window.Step14 = {
 };
 
 window.Step17 = {
+    _ndppId: 0,
+    _url: "",
+    _ndppFormData: null,
+    _previousConsent: null,
+
     init: async () => {
         const cardData = getCardData();
         const returningUser = getReturningUser();
+        const selectAllPurposes = document.getElementById("select-all-purposes");
+        if (selectAllPurposes) {
+            selectAllPurposes.addEventListener("change", function (e) {
+                const isChecked = e.target.checked;
+                const checkboxes = document.querySelectorAll("#purpose-options input[type='checkbox']");
+                checkboxes.forEach(cb => {
+                    cb.checked = isChecked;
+                    cb.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+            });
+        }
 
         let getIntegrateNdppData = await getIntegrateNdpp();
 
-        if (!getIntegrateNdppData?.length) { next_page(); return; }
+        if (!getIntegrateNdppData?.length) {
+            next_page();
+            return;
+        }
 
         let previousConsent = null;
         try {
-            const citizenId = cardData.citizenID ?? "";
+            const citizenId = cardData?.citizenID ?? "";
             const kioskCode = GetKioskCode();
             if (citizenId && kioskCode) {
                 const res = await fetch(`/api/KioskApi/GetNdppConsented?citizenId=${encodeURIComponent(citizenId)}&kioskCode=${encodeURIComponent(kioskCode)}`);
@@ -779,6 +454,7 @@ window.Step17 = {
         } catch (err) {
             console.error("GetNdppConsented error:", err);
         }
+
         Step17._previousConsent = previousConsent;
 
         if (returningUser && returningUser.isReturning) {
@@ -790,71 +466,30 @@ window.Step17 = {
         if (step17Content) step17Content.style.display = "";
 
         const btnEditInfo = document.getElementById("btn-edit-info");
-        if (btnEditInfo) {
+        if (btnEditInfo && !btnEditInfo.dataset.bound) {
             btnEditInfo.addEventListener("click", () => {
                 next_page("/Step/Step12");
             });
+            btnEditInfo.dataset.bound = "true";
         }
 
-        const submitConsent = document.getElementById("submit-consent");
-        if (submitConsent) submitConsent.addEventListener("click", async (e) => {
-            e.preventDefault();
-            const firstname = document.getElementById("firstname").value.trim();
-            const lastname = document.getElementById("lastname").value.trim();
-            const email = document.getElementById("email").value.trim();
+        const form = document.getElementById("ndpp-form-new");
+        if (form && !form.dataset.bound) {
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                await Step17.submitConsent(cardData);
+            });
+            form.dataset.bound = "true";
+        }
 
-            const selectedPurposes = Array.from(
-                document.querySelectorAll("#ndpp-form input[name='purpose']:checked")
-            ).map(input => parseInt(input.value));
-
-            const purposeOptionDetail = Array.from(
-                document.querySelectorAll("#ndpp-form input[name='purpose']")
-            ).map(input => ({
-                PurposeNameId: input.value,
-                PurposeName: input.nextElementSibling?.textContent?.trim() ?? "",
-                PurposeChecked: input.checked
-            }));
-
-            const payload = {
-                Firstname: firstname || cardData.thaiPersonalInfo.firstName,
-                Lastname: lastname || cardData.thaiPersonalInfo.lastName,
-                Email: email,
-                IntegrateNdppId: Step17._ndppId,
-                IntegrateUrl: Step17._url,
-                PurposeOption: selectedPurposes,
-                PurposeOptionDetail: purposeOptionDetail,
-                NdppFormData: JSON.stringify(Step17._ndppFormData),
-                citizenID: cardData.citizenID ?? "",
-                fullNameTH: cardData.fullNameTH ?? "",
-                fullNameEN: cardData.fullNameEN ?? "",
-                photo_path: cardData.photo_path ?? "",
-                face_capture_path: cardData.face_capture_path ?? "",
-                KioskCode: GetKioskCode()
-            };
-            try {
-                const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ EncryptedINDPPString: encrypt(payload) })
-                });
-                if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
-                await response.json();
-                window.location.href = "/Step/StepEnd";
-            } catch (err) {
-                console.error(err);
-                alert("เกิดข้อผิดพลาดในการบันทึก");
-            }
-        });
-
-        // ถ้ามี 1 รายการ → เปิด consent form เลย
         if (getIntegrateNdppData.length === 1) {
             const item = getIntegrateNdppData[0];
             Step17._ndppId = item.id;
             Step17._url = item.ndppPreferenceUrl;
 
             const encrypCardData = encrypt({
-                Firstname: cardData.thaiPersonalInfo.firstName,
-                Lastname: cardData.thaiPersonalInfo.lastName,
+                Firstname: cardData?.thaiPersonalInfo?.firstName || "",
+                Lastname: cardData?.thaiPersonalInfo?.lastName || "",
                 IntegrateNdppId: item.id
             });
 
@@ -864,11 +499,12 @@ window.Step17 = {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
                 });
+
                 if (response.ok) {
                     const data = await response.json();
                     if (data) {
                         Step17._ndppFormData = data;
-                        Step17.showNdppForm(data, cardData);
+                        Step17.showNdppForm(data);
                         return;
                     }
                 }
@@ -877,114 +513,171 @@ window.Step17 = {
             }
         }
 
-        // หลายรายการ → สร้าง card list
         const container = document.getElementById("ndpp-container");
+        if (!container) return;
+
         container.innerHTML = "";
+
         getIntegrateNdppData.forEach(item => {
             const col = document.createElement("div");
             col.className = "col-12 col-sm-6 col-lg-4";
             const imgSrc = item.serviceImage ? `data:image/png;base64,${item.serviceImage}` : '';
+
             col.innerHTML = `
                 <div class="card h-100 shadow-sm">
                     ${imgSrc ? `<img src="${imgSrc}" class="card-img-top" alt="${item.serviceName}">` : ''}
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">${item.serviceName}</h5>
-                        <p class="card-text text-truncate" style="max-height:3.6em;">${item.serviceDescription}</p>
-                        <p class="mb-1"><small>เริ่ม: ${new Date(item.serviceStartDate).toLocaleString()}</small></p>
-                        <p class="mb-2"><small>สิ้นสุด: ${new Date(item.serviceStopDate).toLocaleString()}</small></p>
+                        <p class="card-text text-truncate" style="max-height:3.6em;">${item.serviceDescription || ""}</p>
+                        <p class="mb-1"><small>เริ่ม: ${item.serviceStartDate ? new Date(item.serviceStartDate).toLocaleString() : "-"}</small></p>
+                        <p class="mb-2"><small>สิ้นสุด: ${item.serviceStopDate ? new Date(item.serviceStopDate).toLocaleString() : "-"}</small></p>
                         <button class="btn btn-primary mt-auto btn-open"
                                 data-url="${item.ndppPreferenceUrl}"
-                                data-id="${item.id}">เปิดดู</button>
+                                data-id="${item.id}">
+                            เปิดดู
+                        </button>
                     </div>
                 </div>`;
             container.appendChild(col);
         });
 
-        // กดเลือก service
-        container.addEventListener("click", async (e) => {
-            if (!e.target.classList.contains("btn-open")) return;
-            Step17._ndppId = e.target.getAttribute("data-id");
-            Step17._url = e.target.getAttribute("data-url");
+        if (!container.dataset.bound) {
+            container.addEventListener("click", async (e) => {
+                const btn = e.target.closest(".btn-open");
+                if (!btn) return;
 
-            const encrypCardData = encrypt({
-                Firstname: cardData.thaiPersonalInfo.firstName,
-                Lastname: cardData.thaiPersonalInfo.lastName,
-                IntegrateNdppId: Step17._ndppId
-            });
-            try {
-                const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
+                Step17._ndppId = btn.getAttribute("data-id");
+                Step17._url = btn.getAttribute("data-url");
+
+                const encrypCardData = encrypt({
+                    Firstname: cardData?.thaiPersonalInfo?.firstName || "",
+                    Lastname: cardData?.thaiPersonalInfo?.lastName || "",
+                    IntegrateNdppId: Step17._ndppId
                 });
-                if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
-                const data = await response.json();
-                if (data) {
-                    Step17._ndppFormData = data;
-                    Step17.showNdppForm(data, cardData);
-                } else {
-                    alert("ไม่พบ URL ของ NDPP");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("โหลดข้อมูลไม่สำเร็จ");
-            }
-        });
 
+                try {
+                    const response = await fetch('/api/KioskApi/GetIntegrateNdppForm', {
+                        method: 'POST',
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ EncryptedINDPPString: encrypCardData })
+                    });
+
+                    if (!response.ok) throw new Error("เกิดข้อผิดพลาด: " + response.status);
+
+                    const data = await response.json();
+                    if (data) {
+                        Step17._ndppFormData = data;
+                        Step17.showNdppForm(data);
+                    } else {
+                        alert("ไม่พบ URL ของ NDPP");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("โหลดข้อมูลไม่สำเร็จ");
+                }
+            });
+
+            container.dataset.bound = "true";
+        }
     },
 
-    _ndppId: 0,
-    _url: "",
-    _ndppFormData: null,
-
-    showNdppForm: (data, cardData) => {
+    showNdppForm: (data) => {
         const container = document.getElementById("ndpp-form-container");
         const title = document.getElementById("activity-title");
         const activityContent = document.getElementById("activity-content");
+        const purposeOptions = document.getElementById("purpose-options");
+        const ndppContainer = document.getElementById("ndpp-container");
 
-        title.textContent = data.ActivityNameTh || data.ServiceNameTh || "NDPP Form";
+        if (title) {
+            title.textContent = data.ActivityNameTh || data.ServiceNameTh || "NDPP Form";
+        }
 
-        const replacedContent = data.content
-            .replace("{PurposeOption}", '<div id="purpose-placeholder"></div>')
-            .replace("{SubPurposeOption}", '<div id="sub-purpose-placeholder"></div>');
-        activityContent.innerHTML = replacedContent;
+        if (activityContent) {
+            const cleanContent = (data.content || "")
+                .replaceAll("{PurposeOption}", "")
+                .replaceAll("{SubPurposeOption}", "")
+                .trim();
 
-        const placeholder = document.getElementById("purpose-placeholder");
-        const subplaceholder = document.getElementById("sub-purpose-placeholder");
+            activityContent.innerHTML = cleanContent || "<p>ไม่มีรายละเอียดเพิ่มเติม</p>";
+        }
 
-        // ดึง consent เดิมมา prefill
-        const prev = Step17._previousConsent?._parsed ?? [];
+        if (purposeOptions) {
+            purposeOptions.innerHTML = "";
+            const prev = Step17._previousConsent?._parsed ?? [];
 
-        data.purpose_option.forEach(purpose => {
-            const prevItem = prev.find(p => String(p.PurposeNameId) === String(purpose.purpose_id));
-            const isChecked = prevItem ? prevItem.PurposeChecked : purpose.selected;
+            (data.purpose_option || []).forEach(purpose => {
+                const prevItem = prev.find(p => String(p.PurposeNameId) === String(purpose.purpose_id));
+                const isChecked = prevItem ? prevItem.PurposeChecked : purpose.selected;
 
-            const div = document.createElement("div");
-            div.classList.add("form-check");
-            div.innerHTML = `
-                <input class="form-check-input" type="checkbox"
-                       id="purpose-${purpose.purpose_id}"
-                       name="purpose"
-                       value="${purpose.purpose_id}"
-                       ${isChecked ? "checked" : ""}
-                       ${purpose.is_required ? "required" : ""}>
-                <label class="form-check-label" for="purpose-${purpose.purpose_id}">
-                    ${purpose.purpose_th || purpose.purpose_en}
-                </label>`;
-            if (purpose.purpose_type == "Standard") {
-                placeholder.appendChild(div);
-            } else {
-                subplaceholder.appendChild(div);
-            }
-        });
+                const div = document.createElement("div");
+                div.classList.add("form-check");
+                div.innerHTML = `
+                    <input class="form-check-input" type="checkbox"
+                           id="purpose-${purpose.purpose_id}"
+                           name="purpose"
+                           value="${purpose.purpose_id}"
+                           ${isChecked ? "checked" : ""}
+                           ${purpose.is_required ? "required" : ""}>
+                    <label class="form-check-label" for="purpose-${purpose.purpose_id}">
+                        ${purpose.purpose_th || purpose.purpose_en}
+                    </label>`;
+                purposeOptions.appendChild(div);
+            });
+        }
 
-        const prevEmail = Step17._previousConsent?.email ?? "";
-        document.getElementById("firstname").value = cardData.thaiPersonalInfo.firstName || "";
-        document.getElementById("lastname").value = cardData.thaiPersonalInfo.lastName || "";
-        document.getElementById("email").value = prevEmail;
+        if (container) container.style.display = "block";
+        if (ndppContainer) ndppContainer.style.display = "none";
+    },
 
-        container.style.display = "block";
-        document.getElementById("ndpp-container").style.display = "none";
+    submitConsent: async (cardData) => {
+        const firstname = cardData?.thaiPersonalInfo?.firstName || "";
+        const lastname = cardData?.thaiPersonalInfo?.lastName || "";
+        const email = Step17._previousConsent?.email || "";
+
+        const selectedPurposes = Array.from(
+            document.querySelectorAll("#ndpp-form-new input[name='purpose']:checked")
+        ).map(input => parseInt(input.value));
+
+        const purposeOptionDetail = Array.from(
+            document.querySelectorAll("#ndpp-form-new input[name='purpose']")
+        ).map(input => ({
+            PurposeNameId: input.value,
+            PurposeName: input.nextElementSibling?.textContent?.trim() ?? "",
+            PurposeChecked: input.checked
+        }));
+
+        const payload = {
+            Firstname: firstname,
+            Lastname: lastname,
+            Email: email,
+            IntegrateNdppId: Step17._ndppId,
+            IntegrateUrl: Step17._url,
+            PurposeOption: selectedPurposes,
+            PurposeOptionDetail: purposeOptionDetail,
+            NdppFormData: JSON.stringify(Step17._ndppFormData),
+            citizenID: cardData?.citizenID ?? "",
+            fullNameTH: cardData?.fullNameTH ?? "",
+            fullNameEN: cardData?.fullNameEN ?? "",
+            photo_path: cardData?.photo_path ?? "",
+            face_capture_path: cardData?.face_capture_path ?? "",
+            KioskCode: GetKioskCode()
+        };
+
+        try {
+            const response = await fetch("/api/KioskApi/SubmitIntegrateNdpp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ EncryptedINDPPString: encrypt(payload) })
+            });
+
+            if (!response.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ " + response.status);
+
+            await response.json();
+            window.location.href = "/Step/StepEnd";
+        } catch (err) {
+            console.error(err);
+            alert("เกิดข้อผิดพลาดในการบันทึก");
+        }
     }
 };
 
