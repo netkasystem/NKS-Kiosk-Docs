@@ -2,6 +2,7 @@
     ViewData["Title"] = "Integrate NDPP";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 
 <body class="kiosk-body">
@@ -15,15 +16,10 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
-            <h1 class="title-th">ยืนยันการยินยอม</h1>
+            <h1 class="title-th" data-i18n="confirm consent">ยืนยันการยินยอม</h1>
             <div class="divider"></div>
         </div>
         <div class="container-fluid" id="step17-content" >
@@ -38,16 +34,16 @@
                         </div>
 
                         <div class="content-section">
-                            <h5 class="v-text-subtitle">รายละเอียดและเงื่อนไขในการยินยอม</h5>
+                            <h5 class="v-text-subtitle" data-i18n="consent details and conditions">รายละเอียดและเงื่อนไขในการยินยอม</h5>
 
                             <div id="activity-content" class="v-text-body mb-5"></div>
 
                             <div class="v-purpose-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
-                                <h5 class="v-text-subtitle" style="margin-bottom:0px;">รายการความยินยอม</h5>
+                                <h5 class="v-text-subtitle" style="margin-bottom:0px;" data-i18n="consent list">รายการความยินยอม</h5>
 
                                 <label class="v-select-all-pill">
                                     <input type="checkbox" id="select-all-purposes">
-                                    <span>ยินยอมทั้งหมด</span>
+                                    <span data-i18n="consent all">ยินยอมทั้งหมด</span>
                                 </label>
                             </div>
 
@@ -56,7 +52,7 @@
 
                         <div class="footer-section mt-5">
                             <button type="submit" class="v-btn-submit-kiosk" id="submit-consent">
-                                ยืนยันข้อมูลความยินยอม
+                                <span data-i18n="confirm consent data">ยืนยันข้อมูลความยินยอม</span>
                             </button>
                         </div>
                     </form>

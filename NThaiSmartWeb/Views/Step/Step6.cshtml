@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step7";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 @* <body class="red-background">
 
@@ -48,15 +49,10 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
-            <h1 class="title-th-danger">อ่านข้อมูลไม่สำเร็จ</h1>
+            <h1 class="title-th-danger" data-i18n="data read failed">อ่านข้อมูลไม่สำเร็จ</h1>
             <div class="divider-danger"></div>
         </div>
 
@@ -66,17 +62,17 @@
 
             @* <img src="/images/icons/font_card_id.svg" class="id-card-image-fail" style="margin-bottom: 0%; margin-top: 0%;" /> *@
            
-            <div class="bottom-section bottom-section--left">
-                <ol class="instruction-list-maersk">
-                    <li>ระบบไม่สามารถอ่านข้อมูลจากบัตรประจำตัวประชาชนของท่านได้อย่างสมบูรณ์</li>
-                    <li>อาจเกิดจากบัตรมีรอยขีดข่วน ชิพเสื่อมสภาพ หรืออุปกรณ์อ่านบัตรทำงานผิดปกติ</li>
-                    <li>กรุณาลองถอดและสอดบัตรใหม่อีกครั้งอย่างระมัดระวัง หรือใช้บัตรประจำตัวประชาชนใบอื่น</li>
+            <div class="bottom-section" style="justify-content:left;">
+                <ol class="instruction-list-maersk" style="font-size: 2.3em;"> 
+                    <li data-i18n="cannot read id card data">ระบบไม่สามารถอ่านข้อมูลจากบัตรประจำตัวประชาชนของท่านได้อย่างสมบูรณ์</li>
+                    <li data-i18n="card may be scratched or chip damaged">อาจเกิดจากบัตรมีรอยขีดข่วน ชิพเสื่อมสภาพ หรืออุปกรณ์อ่านบัตรทำงานผิดปกติ</li>
+                    <li data-i18n="please reinsert card carefully">กรุณาลองถอดและสอดบัตรใหม่อีกครั้งอย่างระมัดระวัง หรือใช้บัตรประจำตัวประชาชนใบอื่น</li>
                 </ol>
             </div>
 
         </div>
         <div class="kiosk-action-bar style-modern">
-            <a asp-controller="Step" asp-action="Step4" class="kiosk-btn btn-solid">
+            <a asp-controller="Step" asp-action="Step4" class="kiosk-btn btn-solid" data-i18n="try again">
                 ลองใหม่อีกครั้ง
             </a>
             <a asp-controller="Step" asp-action="Step1" class="kiosk-btn btn-outline" data-i18n="cancel identity verification">

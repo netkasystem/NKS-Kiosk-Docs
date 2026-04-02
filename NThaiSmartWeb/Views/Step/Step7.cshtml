@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step7";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 @* <body class="red-background">
 
@@ -54,15 +55,10 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
-            <h1 class="title-th-danger">บัตรหมดอายุ</h1>
+            <h1 class="title-th-danger" data-i18n="card expired">บัตรหมดอายุ</h1>
             <div class="divider-danger"></div>
         </div>
 
@@ -74,7 +70,7 @@
                 <ol class="instruction-list-maersk">
                     <li data-i18n ="your id card has expired">
                         บัตรประจำตัวประชาชนของท่าน หมดอายุการใช้งาน</li>
-                    <li>กรุณาติดต่อเจ้าหน้าที่ หรือหน่วยงานที่เกี่ยวข้อง</li>
+                    <li data-i18n="please contact staff or relevant agency">กรุณาติดต่อเจ้าหน้าที่ หรือหน่วยงานที่เกี่ยวข้อง</li>
                 </ol>
             </div>
 

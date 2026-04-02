@@ -138,6 +138,17 @@
                 <i class="fas fa-sign-out-alt fa-2x" title="Logout" id="icon-logout" style="color:white; display:none"></i>
             </div>
 
+            @if (ViewBag.ShowLangToggle is true)
+            {
+                <div class="lang-toggle-fixed">
+                    <div class="lang-toggle-group">
+                        <button class="lang-btn">TH</button>
+                        <div class="lang-separator"></div>
+                        <button class="lang-btn">EN</button>
+                    </div>
+                </div>
+            }
+
             @RenderBody()
 
         </main>

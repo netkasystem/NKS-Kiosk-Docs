@@ -2,7 +2,27 @@
   "permissions": {
     "allow": [
       "Bash(xxd \"c:/Project/N-ThaiSmart/NThaiSmartWeb/ApiControllers/KioskApiController.cs\")",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(git stash:*)",
+      "Bash(\"c:/Project/N-Kiosk-Web/deploy/multi-server/web/.env.example\":*)",
+      "Bash(dotnet tool:*)",
+      "Bash(libman restore:*)",
+      "Bash(xxd c:/Project/N-Kiosk-Web/NThaiSmartWeb/Views/Step/Step2.cshtml)",
+      "Bash(rm -f c:/Project/N-Kiosk-Web/NThaiSmartWeb/wwwroot/fonts/Noto_Sans_Thai/static/*.ttf)",
+      "Bash(mkdir -p c:/Project/N-Kiosk-Web/NThaiSmartWeb/wwwroot/fonts/Noto_Sans_Thai/static)",
+      "Bash(curl -sL -o NotoSansThai-Regular.ttf \"https://github.com/google/fonts/raw/main/ofl/notosansthai/static/NotoSansThai-Regular.ttf\")",
+      "Bash(curl -sL -o NotoSansThai-ExtraBold.ttf \"https://github.com/google/fonts/raw/main/ofl/notosansthai/static/NotoSansThai-ExtraBold.ttf\")",
+      "Bash(ls -la *.ttf)",
+      "Bash(curl -sL -o NotoSansThai-Regular.ttf \"https://github.com/google/fonts/raw/refs/heads/main/ofl/notosansthai/static/NotoSansThai-Regular.ttf\")",
+      "Bash(curl -sL -o NotoSansThai-ExtraBold.ttf \"https://github.com/google/fonts/raw/refs/heads/main/ofl/notosansthai/static/NotoSansThai-ExtraBold.ttf\")",
+      "Bash(file *.ttf)",
+      "Bash(curl -sL -A \"Mozilla/5.0\" -o NotoSansThai-Regular.ttf \"https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1vu-KaQ.ttf\")",
+      "Bash(curl -sL -A \"Mozilla/5.0\" -o NotoSansThai-ExtraBold.ttf \"https://fonts.gstatic.com/s/notosansthai/v25/iJWnBXeUZi_OHPqn4wq6hQ2_hbJ1IAy-aQ.ttf\")",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri ''https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansThai/NotoSansThai-Regular.ttf'' -OutFile ''NotoSansThai-Regular.ttf''; Invoke-WebRequest -Uri ''https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansThai/NotoSansThai-ExtraBold.ttf'' -OutFile ''NotoSansThai-ExtraBold.ttf''\")",
+      "Read(//c/Users/kwanchai/Downloads/**)",
+      "Bash(find /c/Users/kwanchai/Downloads -name *.png -newer /c/Users/kwanchai/Downloads -maxdepth 1)",
+      "Bash(ls -lt /c/Users/kwanchai/Downloads/*.png)",
+      "Bash(ls c:/Project/N-Kiosk-Web/NThaiSmartWeb/wwwroot/images/icons/*.svg)"
     ]
   }
 }

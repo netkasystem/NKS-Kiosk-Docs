@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step4";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 <body class="kiosk-body">
     <div class="bg-decoration z-0">
@@ -14,11 +15,6 @@
                 <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
             </div>
 
-            <div class="lang-toggle-group">
-                <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                <div class="lang-separator"></div>
-                <button class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
         </header>
 
         <div class="welcome-text-section">
@@ -56,7 +52,7 @@
                 <div class="progress-bar-fill" id="progressBar"></div>
             </div>
             <p class="timeout-text">
-                กรุณาสอดบัตรภายใน <span id="countdownText" class="time-highlight">30</span> วินาที
+                <span data-i18n="please insert card within">กรุณาสอดบัตรภายใน</span> <span id="countdownText" class="time-highlight">30</span> <span data-i18n="seconds">วินาที</span>
             </p>
             <div class="instruction-list-maersk-alert d-none" id="alert-notfound-card" data-i18n="id card not detected">ระบบยังไม่พบบัตรประจำตัวประชาชน</div>
 

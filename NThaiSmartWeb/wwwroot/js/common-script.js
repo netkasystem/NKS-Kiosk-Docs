@@ -41,8 +41,28 @@ window.setLang = function (code) {
         const lang = _i18n.langs.find(l => l.code === code);
         if (lang) btn.innerHTML = `<i class="${lang.icon}"></i>`;
     }
+    // Update lang-toggle-group: slide highlight + active class
+    document.querySelectorAll(".lang-toggle-group").forEach(group => {
+        group.classList.remove("lang-th", "lang-en");
+        group.classList.add("lang-" + code);
+        group.querySelectorAll(".lang-btn").forEach(b => {
+            b.classList.toggle("active", b.textContent.trim().toLowerCase() === code.toLowerCase());
+        });
+    });
     document.body.classList.add("i18n-ready");
 };
+
+// Auto-bind click on .lang-toggle-group (event delegation)
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".lang-toggle-group").forEach(group => {
+        group.addEventListener("click", function (e) {
+            const btn = e.target.closest(".lang-btn");
+            if (!btn) return;
+            const code = btn.textContent.trim().toLowerCase();
+            setLang(code);
+        });
+    });
+});
 
 window.applyTranslate = function () {
     document.querySelectorAll("[data-i18n]").forEach(el => {

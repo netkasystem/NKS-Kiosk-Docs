@@ -2767,6 +2767,13 @@ html, body {
     justify-content: center;
 }
 
+.lang-toggle-fixed {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 1000;
+}
+
 .lang-toggle-group {
     display: inline-flex;
     align-items: center;
@@ -2777,16 +2784,36 @@ html, body {
     box-shadow: 0 10px 30px rgba(var(--maersk-cyan-rgb), 0.15);
 }
 
+/* sliding highlight behind active button */
+.lang-toggle-group::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #42b0d5 0%, #358da8 100%);
+    border-radius: 16px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+
+.lang-toggle-group.lang-en::before {
+    transform: translateX(100%);
+}
+
 .lang-btn {
     background: none;
     border: none;
     padding: 25px 45px;
-    font-size: 20px; 
+    font-size: 20px;
     font-weight: 700;
     color: var(--maersk-cyan);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     min-width: 97px;
+    position: relative;
+    z-index: 1;
 }
 
     .lang-btn.active {
@@ -2795,8 +2822,6 @@ html, body {
     }
 
     .lang-btn:active {
-        background-color: #358da8;
-        color: #ffffff;
         transform: scale(0.95);
     }
 

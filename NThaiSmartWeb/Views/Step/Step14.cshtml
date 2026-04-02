@@ -87,7 +87,7 @@
                             // เพิ่ม default option
                             const defaultOption = document.createElement("option");
                             defaultOption.value = "";
-                            defaultOption.textContent = "-- โปรดเลือก --";
+                            defaultOption.textContent = t("please select") || "-- โปรดเลือก --";
                             select.appendChild(defaultOption);
 
                             field.options.forEach((opt, i) => {
@@ -157,7 +157,8 @@
                 const submitBtn = document.createElement("button");
                 submitBtn.type = "submit";
                 submitBtn.className = "submit-button";
-                submitBtn.textContent = "ส่งแบบฟอร์ม | Submit Form";
+                submitBtn.textContent = t("submit form") || "ส่งแบบฟอร์ม | Submit Form";
+                submitBtn.setAttribute("data-i18n", "submit form");
 
                 submitWrapper.appendChild(submitBtn);
                 container.appendChild(submitWrapper);
@@ -204,7 +205,7 @@
                 });
 
                 if (hasError) {
-                    alert("กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น (required)");
+                    alert(t("please fill in all required fields") || "กรุณากรอกข้อมูลให้ครบทุกช่องที่จำเป็น (required)");
                     return;
                 }
 

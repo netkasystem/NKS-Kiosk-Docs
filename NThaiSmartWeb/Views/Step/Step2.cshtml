@@ -2,6 +2,7 @@
     ViewData["Title"] = "Step2";
     ViewBag.HideHeader = true;
     ViewBag.HideFooter = true;
+    ViewBag.ShowLangToggle = true;
 }
 
 
@@ -55,15 +56,10 @@
                     <img id="photo" src="/images/icons/maersk.png" alt="Maersk Logo" class="maersk-img" />
                 </div>
 
-                <div class="lang-toggle-group">
-                    <button class="lang-btn active" onclick="setLang('th')">TH</button>
-                    <div class="lang-separator"></div>
-                    <button class="lang-btn" onclick="setLang('en')">EN</button>
-                </div>
             </header>
 
             <div class="welcome-text-section">
-                <h1 class="title-th">ขั้นตอนการยืนยันตัวตน</h1>
+                <h1 class="title-th" data-i18n="identity verification steps">ขั้นตอนการยืนยันตัวตน</h1>
                 <div class="divider"></div>
             </div>
             <a asp-controller="Step" asp-action="Step3" class="card-link" style="text-decoration: none;" id="cardLink">
@@ -74,7 +70,7 @@
                         <div class="step-main-number">1</div>
                     </div>
                     <div class="content-holder">
-                        <h2 class="step-instruction-text">สอดบัตรประจำตัวประชาชนเข้าช่องอ่าน</h2>
+                        <h2 class="step-instruction-text" data-i18n="insert id card into reader">สอดบัตรประจำตัวประชาชนเข้าช่องอ่าน</h2>
                     </div>
                 </div>
 
@@ -83,8 +79,8 @@
                         <div class="step-main-number">2</div>
                     </div>
                     <div class="content-holder">
-                        <h2 class="step-instruction-text">สแกนใบหน้าเพื่อยืนยันตัวตน</h2>
-                        <div class="step-info-tag">หากเคยยืนยันตัวตนแล้ว ระบบจะข้ามไปขั้นตอนที่ 3</div>
+                        <h2 class="step-instruction-text" data-i18n="scan face to verify identity">สแกนใบหน้าเพื่อยืนยันตัวตน</h2>
+                        <div class="step-info-tag" data-i18n="skip to step 3 if already verified">หากเคยยืนยันตัวตนแล้ว ระบบจะข้ามไปขั้นตอนที่ 3</div>
                     </div>
                 </div>
 
@@ -93,7 +89,7 @@
                         <div class="step-main-number">3</div>
                     </div>
                     <div class="content-holder">
-                        <h2 class="step-instruction-text">ตรวจสอบข้อมูลจากบัตรประจำตัวประชาชนและเลือกยืนยันการให้ความยินยอม</h2>
+                        <h2 class="step-instruction-text" data-i18n="review id card data and confirm consent">ตรวจสอบข้อมูลจากบัตรประจำตัวประชาชนและเลือกยืนยันการให้ความยินยอม</h2>
                     </div>
                 </div>
 
@@ -102,13 +98,13 @@
                         <div class="step-main-number">4</div>
                     </div>
                     <div class="content-holder">
-                        <h2 class="step-instruction-text">รับบัตรประจำตัวประชาชนคืนจากช่องอ่าน</h2>
+                        <h2 class="step-instruction-text" data-i18n="retrieve id card from reader">รับบัตรประจำตัวประชาชนคืนจากช่องอ่าน</h2>
                     </div>
                 </div>
             </div>
         </a>
             <div class="kiosk-action-bar style-modern">
-                <a asp-controller="Step" asp-action="Step3" class="kiosk-btn btn-solid">
+                <a asp-controller="Step" asp-action="Step3" class="kiosk-btn btn-solid" data-i18n="ready">
                     พร้อมแล้ว
                 </a>
             </div>
