@@ -21,9 +21,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-/* =====================================================
- * Maersk Color Tokens
- * ===================================================== */
+
 :root {
   /* Brand — Primary */
   --maersk-cyan:           #42b0d5;
@@ -52,7 +50,6 @@
   --maersk-border:         #e2e8f0;
 }
 
-/* การลงทะเบียน */
 
 @-webkit-keyframes pulsate-bck {
     0% {
@@ -2462,6 +2459,7 @@ html, body {
 
 .kiosk-body {
     background-color: #f9fafb;
+    background-image: none;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -2804,7 +2802,7 @@ html, body {
 .lang-toggle-fixed {
     position: fixed;
     top: 123px;
-    right: 86px;
+    right: 70px;
     z-index: 1000;
 }
 
@@ -4747,4 +4745,45 @@ html, body {
 .instruction-block--card .instruction-list-maersk {
     color: var(--maersk-text-dark);
     margin-bottom: 0;
+}
+
+.kiosk-content,
+.kiosk-btn,
+.title-th,
+.title-th-danger,
+.instruction-list-maersk,
+.coundown-th,
+.terms-title,
+.policy-text,
+.v-kiosk-label,
+.v-returning-user-text,
+.v-returning-user-hint {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+html[lang="en"] .title-th,
+html[lang="en"] .title-th-danger {
+    font-size: 46px;
+}
+
+html[lang="en"] .instruction-list-maersk {
+    font-size: 1.9rem;
+}
+
+html[lang="en"] .kiosk-btn {
+    font-size: 34px;
+    padding: 28px 36px;
+}
+
+html[lang="en"] .coundown-th {
+    font-size: 26px;
+}
+
+html[lang="en"] .terms-title {
+    font-size: 1.1em;
+}
+
+html[lang="en"] .v-returning-user-text {
+    font-size: 0.85em;
 }
