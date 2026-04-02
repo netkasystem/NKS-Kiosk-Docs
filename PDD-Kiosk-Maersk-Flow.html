@@ -511,7 +511,7 @@
   <h1 id="sec5">5. Step Specifications</h1>
 
   <div class="note-blue">
-    <b>i18n:</b> ทุกหน้าจอรองรับสองภาษา (ไทย/อังกฤษ) ผ่านระบบ Internationalization &mdash; ข้อความบน UI แปลอัตโนมัติตามภาษาที่เลือก โดยมีปุ่มสลับภาษาที่มุมบนซ้ายของหน้าจอ (ดูรายละเอียดใน <a href="#sec11">Section 11</a>)
+    <b>i18n:</b> ทุกหน้าจอรองรับสองภาษา (ไทย/อังกฤษ) ผ่านระบบ Internationalization &mdash; ข้อความบน UI แปลอัตโนมัติตามภาษาที่เลือก โดยมีปุ่มสลับภาษา TH | EN แบบ toggle ที่มุมบนขวาของหน้าจอ (ดูรายละเอียดใน <a href="#sec11">Section 11</a>)
   </div>
 
   <!-- ===== 5.0 Login ===== -->
@@ -773,9 +773,8 @@
     &nbsp;&nbsp;- ปุ่ม "Confirm Information" สีน้ำเงิน มุมโค้งมน<br>
     <b>Data Masking:</b> เลขบัตร, ชื่อ, นามสกุล, วันที่ แสดงแบบ mask (unmask ได้ชั่วคราว)<br>
     <b>Backend on Confirm:</b><br>
-    &nbsp;&nbsp;1. บันทึก Enrollment ลง DB<br>
-    &nbsp;&nbsp;2. Upload รูปบัตร &rarr; File Server<br>
-    &nbsp;&nbsp;3. Upload รูปใบหน้า &rarr; File Server<br>
+    &nbsp;&nbsp;1. Upload รูปบัตร &rarr; File Server<br>
+    &nbsp;&nbsp;2. Upload รูปใบหน้า &rarr; File Server<br>
     <b>Navigation:</b> Confirm &rarr; Custom Form (Step14) ถ้ามี / NDPP Consent (Step17) / StepEnd
   </div>
 
@@ -882,12 +881,6 @@
       <td>N-Kiosk Web Server</td>
       <td>HTTPS + AES-ECB</td>
       <td>Encrypted payload (card data, face, consent)</td>
-    </tr>
-    <tr>
-      <td>Web Server</td>
-      <td>Database (SQL)</td>
-      <td>Entity Framework</td>
-      <td>Enrollment, Consent Log</td>
     </tr>
     <tr>
       <td>Web Server</td>
@@ -1000,14 +993,16 @@
         <td>purpose_option</td>
         <td>array of object</td>
         <td>รายการ purpose จาก NDPP Consent Form โดย field <code>selected</code> ถูก update ตาม <code>PurposeOptionDetail</code> ที่ผู้ใช้เลือก</td>
-        <td><pre style="margin:0; font-size:11px;">[{
+        <td>
+          <pre style="margin:0; font-size:11px;">[{
   "purpose_id": 1,
   "purpose_th": "เก็บข้อมูลบัตร",
   "purpose_en": "Collect ID data",
   "purpose_type": "Standard",
   "selected": true,
   "is_required": true
-}]</pre></td>
+}]</pre>
+        </td>
       </tr>
       <tr>
         <td>service_id</td>
@@ -1073,7 +1068,7 @@
       <td><b>Privacy Notice (Proxy)</b></td>
       <td><code>/api/AdminPrivacyPolicyOu/GetPolicyOuByKey</code></td>
       <td>ดึง Privacy Notice HTML content จาก NDPP (เรียกผ่าน <code>GetPrivacyNotice</code> proxy ฝั่ง Kiosk)<br>
-          Config: variable <code>kiosk_ndpp_privacy_notice</code> เก็บ URL + key</td>
+        Config: variable <code>kiosk_ndpp_privacy_notice</code> เก็บ URL + key</td>
     </tr>
     <tr>
       <td><b>Consent Form</b></td>
@@ -1089,7 +1084,7 @@
       <td><b>Consent Callback</b></td>
       <td>ดึงจาก variable <code>kiosk_netka_entelligence_api</code> (Full URL)</td>
       <td>Callback หลัง submit สำเร็จ — ส่ง payload (ข้อมูลบัตร + ภาพ + consent) ไป Netka EnTelligence<br>
-          URL เป็น Full API ไม่ต้องต่อ path เพิ่ม</td>
+        URL เป็น Full API ไม่ต้องต่อ path เพิ่ม</td>
     </tr>
     <tr>
       <td><b>Returning User Check</b></td>
@@ -1098,75 +1093,33 @@
     </tr>
   </table>
 
-  <h3>6.4 DB Variables สำหรับ NDPP Integration</h3>
-  <table>
-    <tr>
-      <th>Variable Name</th>
-      <th>Description</th>
-      <th>Example Value</th>
-    </tr>
-    <tr>
-      <td><code>kiosk_ndpp_privacy_notice</code></td>
-      <td>URL ของ Privacy Notice จาก NDPP — ระบบจะ parse key แล้ว proxy เรียก <code>GetPolicyOuByKey</code> ดึง HTML content มาแสดงใน Step3</td>
-      <td><code>https://&lt;NDPP_DOMAIN&gt;/policy/policyview?type=policyou&amp;key=XXX</code></td>
-    </tr>
-    <tr>
-      <td><code>kiosk_ndpp_preference_consent</code></td>
-      <td>URL ของ Consent Form จาก NDPP — ถ้ามีค่า จะใช้แทน <code>kiosk_integrate_ndpp</code> table ใน Step17</td>
-      <td><code>https://&lt;NDPP_DOMAIN&gt;/admin/PreferenceConsentFormView?key=XXX</code></td>
-    </tr>
-    <tr>
-      <td><code>kiosk_ndpp_integrate</code></td>
-      <td>Flag เปิด/ปิด NDPP Integrate ส่วนกลาง (0=ปิด)</td>
-      <td><code>1</code></td>
-    </tr>
-    <tr>
-      <td><code>kiosk_ndpp_integrate_by_kiosk</code></td>
-      <td>Flag เปิด/ปิด NDPP Integrate เฉพาะ Kiosk (0=ปิด)</td>
-      <td><code>1</code></td>
-    </tr>
-    <tr>
-      <td><code>kiosk_ndpp_integrate_api</code></td>
-      <td>Base URL ของ NDPP API สำหรับสร้าง Consent Form URL</td>
-      <td><code>https://&lt;NDPP_DOMAIN&gt;/admin/PreferenceConsentFormView</code></td>
-    </tr>
-    <tr>
-      <td><code>kiosk_netka_entelligence_api</code></td>
-      <td>Full URL สำหรับ Consent Callback ไป Netka EnTelligence (ใช้ตรงๆ ไม่ต้องต่อ path)</td>
-      <td><code>https://kiosk.netkasystem.co.th/api/.....</code></td>
-    </tr>
-  </table>
-
-  <h3>6.5 Consent Log Table — <code>kiosk_integrate_ndpp_consented</code></h3>
-  <p>บันทึก consent ที่ส่งสำเร็จ เพื่อใช้ prefill เมื่อผู้ใช้กลับมาใหม่</p>
-  <table>
-    <tr>
-      <th>Column</th>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-    <tr><td><code>id</code></td><td>int unsigned PK</td><td>Auto increment</td></tr>
-    <tr><td><code>kiosk_id</code></td><td>int unsigned</td><td>FK — Kiosk ที่ทำรายการ</td></tr>
-    <tr><td><code>kiosk_integrate_ndpp_id</code></td><td>int unsigned</td><td>FK — service ที่ consent</td></tr>
-    <tr><td><code>citizen_id</code></td><td>varchar(20)</td><td>เลขบัตรประชาชน</td></tr>
-    <tr><td><code>fullname_th</code></td><td>varchar(255)</td><td>ชื่อ-นามสกุลภาษาไทย</td></tr>
-    <tr><td><code>fullname_en</code></td><td>varchar(255)</td><td>ชื่อ-นามสกุลภาษาอังกฤษ</td></tr>
-    <tr><td><code>email</code></td><td>varchar(255)</td><td>อีเมล</td></tr>
-    <tr><td><code>purpose_option_detail</code></td><td>JSON</td><td>รายละเอียด purpose ที่เลือก/ไม่เลือก</td></tr>
-    <tr><td><code>inactive</code></td><td>tinyint(4)</td><td>0 = active</td></tr>
-    <tr><td><code>created_date</code></td><td>datetime</td><td>วันที่สร้าง</td></tr>
-    <tr><td><code>created_by</code></td><td>varchar(100)</td><td>KioskCode ที่ทำรายการ</td></tr>
-  </table>
-
-  <h3>6.6 API — <code>GetNdppConsented</code></h3>
+  <h3>6.4 API — <code>GetNdppConsented</code></h3>
   <p>ดึง consent ล่าสุดของผู้ใช้ เพื่อ prefill checkbox ใน Step17</p>
   <table>
-    <tr><th>Item</th><th>Detail</th></tr>
-    <tr><td>Method</td><td><code>GET</code></td></tr>
-    <tr><td>URL</td><td><code>/api/KioskApi/GetNdppConsented?citizenId=XXX&amp;kioskCode=XXX</code></td></tr>
-    <tr><td>Response</td><td><code>{ kioskIntegrateNdppId, purposeOptionDetail (JSON string), email, createdDate }</code></td></tr>
-    <tr><td>Logic</td><td>ดึงจาก <code>kiosk_integrate_ndpp_consented</code> ตาม citizenId + kioskId, เอาล่าสุด (ORDER BY created_date DESC)</td></tr>
-    <tr><td>ใช้ใน</td><td>Step17 — prefill purpose checkbox + email จาก consent เดิม</td></tr>
+    <tr>
+      <th>Item</th>
+      <th>Detail</th>
+    </tr>
+    <tr>
+      <td>Method</td>
+      <td><code>GET</code></td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td><code>/api/KioskApi/GetNdppConsented?citizenId=XXX&amp;kioskCode=XXX</code></td>
+    </tr>
+    <tr>
+      <td>Response</td>
+      <td><code>{ kioskIntegrateNdppId, purposeOptionDetail (JSON string), email, createdDate }</code></td>
+    </tr>
+    <tr>
+      <td>Logic</td>
+      <td>ดึงจาก <code>kiosk_integrate_ndpp_consented</code> ตาม citizenId + kioskId, เอาล่าสุด (ORDER BY created_date DESC)</td>
+    </tr>
+    <tr>
+      <td>ใช้ใน</td>
+      <td>Step17 — prefill purpose checkbox + email จาก consent เดิม</td>
+    </tr>
   </table>
 
   <!-- ========== 7. CONSENT LOG ========== -->
@@ -1184,7 +1137,7 @@
     </tr>
     <tr>
       <td>Consent ID</td>
-      <td>ID เฉพาะของ consent record</td>
+      <td>ID เฉพาะของ consent</td>
       <td>UUID</td>
     </tr>
     <tr>
@@ -1236,8 +1189,8 @@
     <b>Requirement:</b> หากผู้ที่เคยลงทะเบียนแล้ว เวลาเสียบบัตรเข้าไป ให้ขึ้นหน้า Consent ที่เคยให้ความยินยอมไว้ แล้วสามารถแก้ไขและส่งกลับไปอีกครั้งได้
   </div>
 
-  <h3>8.1 Detection (Local DB)</h3>
-  <p>หลังจากอ่านบัตรสำเร็จ (Step5) ระบบเรียก <code>CheckReturningUser</code> API โดยส่ง <b>เลขบัตรประชาชน (idcard)</b> เพื่อค้นหาใน table <code>kiosk_consented</code>:</p>
+  <h3>8.1 Detection</h3>
+  <p>หลังจากอ่านบัตรสำเร็จ (Step5) ระบบเรียก <code>CheckReturningUser</code> API โดยส่ง <b>เลขบัตรประชาชน (idcard)</b>:</p>
 
   <h4>API: <code>GET /api/KioskApi/CheckReturningUser?idcard=XXX</code></h4>
   <table>
@@ -1249,12 +1202,12 @@
     <tr>
       <td>isReturning</td>
       <td>boolean</td>
-      <td>พบเลขบัตรใน kiosk_consented หรือไม่</td>
+      <td>พบเลขบัตรในระบบหรือไม่</td>
     </tr>
     <tr>
       <td>consentedId</td>
       <td>uint</td>
-      <td>ID ของ record ล่าสุด (เมื่อ isReturning = true)</td>
+      <td>ID ของ consent ล่าสุด (เมื่อ isReturning = true)</td>
     </tr>
     <tr>
       <td>consentedDate</td>
@@ -1276,7 +1229,7 @@
   </ul>
 
   <div class="note">
-    <b>หมายเหตุ:</b> Returning User detection ใช้ <b>เลขบัตรประชาชน (idcard)</b> เช็คจาก <code>kiosk_consented</code> table ใน local DB<br>
+    <b>หมายเหตุ:</b> Returning User detection ใช้ <b>เลขบัตรประชาชน (idcard)</b> ตรวจสอบผ่าน API<br>
     สำหรับ NDPP ยังมี API <code>GetCheckDsExistConsentForm</code> ที่ใช้ <b>ชื่อ-นามสกุล</b> ผ่าน <code>FindDS()</code> ซึ่งสามารถใช้เสริมได้ในอนาคต
   </div>
 
@@ -1289,7 +1242,7 @@
     </tr>
     <tr>
       <td>1. ดึง Consent เดิม</td>
-      <td>เรียก <code>GetNdppConsented</code> ดึง purpose + email ที่เคย submit ล่าสุดจาก <code>kiosk_integrate_ndpp_consented</code></td>
+      <td>เรียก <code>GetNdppConsented</code> ดึง purpose + email ที่เคย submit ล่าสุด</td>
     </tr>
     <tr>
       <td>2. ดึง Consent Form</td>
@@ -1301,7 +1254,7 @@
     </tr>
     <tr>
       <td>4. Submit</td>
-      <td>เรียก <code>SubmitIntegrateNdpp</code> &rarr; ส่ง consent ไป NDPP + Callback ไป Netka EnTelligence + บันทึกลง <code>kiosk_integrate_ndpp_consented</code></td>
+      <td>เรียก <code>SubmitIntegrateNdpp</code> &rarr; ส่ง consent ไป NDPP + Callback ไป Netka EnTelligence</td>
     </tr>
     <tr>
       <td>5. Complete</td>
@@ -1410,7 +1363,7 @@
     </tr>
     <tr>
       <td>Citizen ID Encryption</td>
-      <td>เลขบัตรเข้ารหัสก่อนเก็บใน DB</td>
+      <td>เลขบัตรเข้ารหัสก่อนจัดเก็บ</td>
     </tr>
   </table>
 
@@ -1461,99 +1414,18 @@
   <!-- ========== 11. i18n ========== -->
   <h1 id="sec11">11. Internationalization (i18n)</h1>
 
-  <p>ระบบรองรับหลายภาษา (Multi-language) โดยปัจจุบันรองรับ 2 ภาษา: <b>ไทย (TH)</b> และ <b>อังกฤษ (EN)</b> ผู้ใช้สามารถสลับภาษาได้ทุกหน้าจอผ่านปุ่มที่มุมบนซ้าย</p>
-
-  <h3>11.1 Language Switch UI</h3>
   <div class="spec-box">
-    <b>ตำแหน่ง:</b> มุมบนซ้ายของทุกหน้าจอ (fixed position)<br>
-    <b>UI Elements:</b><br>
-    &nbsp;&nbsp;- ปุ่ม <b>&lsaquo;</b> (Previous language) &mdash; สลับไปภาษาก่อนหน้า<br>
-    &nbsp;&nbsp;- <b>Flag icon</b> แสดงธงชาติของภาษาปัจจุบัน (ใช้ <code>flag-icon-css</code> library)<br>
-    &nbsp;&nbsp;- ปุ่ม <b>&rsaquo;</b> (Next language) &mdash; สลับไปภาษาถัดไป<br>
-    <b>ตัวอย่าง:</b> [ &lsaquo; ] &nbsp; &#127481;&#127469; &nbsp; [ &rsaquo; ] &nbsp;&rarr;&nbsp; [ &lsaquo; ] &nbsp; &#127468;&#127463; &nbsp; [ &rsaquo; ]
-  </div>
-
-  <h3>11.2 Translation Architecture</h3>
-  <table>
-    <tr>
-      <th>Component</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td><code>data-i18n</code> attribute</td>
-      <td>HTML elements ที่ต้องการแปลจะมี attribute <code>data-i18n="key"</code> ระบบจะแทนที่ <code>textContent</code> ด้วยคำแปลตาม key</td>
-    </tr>
-    <tr>
-      <td><code>window.t(key)</code></td>
-      <td>Function สำหรับแปลข้อความ &mdash; ค้นหาจาก <code>_i18n.words[currentLang][key]</code> ถ้าไม่พบจะ fallback เป็นภาษาอังกฤษ (EN) หรือแสดง key เดิม</td>
-    </tr>
-    <tr>
-      <td><code>window.setLang(code)</code></td>
-      <td>เปลี่ยนภาษาปัจจุบัน &rarr; update ทุก element ที่มี <code>data-i18n</code>, update flag icon, บันทึกลง <code>localStorage</code></td>
-    </tr>
-    <tr>
-      <td><code>window.loadTranslate()</code></td>
-      <td>โหลดข้อมูลภาษาจาก API (<code>/api/KioskApi/GetTranslate</code>) &mdash; cache ใน <code>localStorage</code> key <code>_i18n_data</code></td>
-    </tr>
-    <tr>
-      <td><code>window.applyTranslate()</code></td>
-      <td>Apply คำแปลให้ทุก element ที่มี <code>data-i18n</code> &mdash; เรียกหลังจากเปลี่ยนหน้าหรือ render dynamic content</td>
-    </tr>
-  </table>
-
-  <h3>11.3 Translation Data Flow</h3>
-  <div class="spec-box">
-    <b>API:</b> <code>GET /api/KioskApi/GetTranslate</code><br>
-    <b>Response:</b> Array of language objects<br>
-    <pre style="font-size:12px; margin:5px 0;">[
-  {
-    "code": "th",
-    "icon": "flag-icon flag-icon-th",
-    "words": "{\"welcome\":\"ยินดีต้อนรับ\", \"next\":\"ถัดไป\", ...}"
-  },
-  {
-    "code": "en",
-    "icon": "flag-icon flag-icon-gb",
-    "words": "{\"welcome\":\"Welcome\", \"next\":\"Next\", ...}"
-  }
-]</pre>
-    <b>Caching:</b> ข้อมูลภาษา cache ใน <code>localStorage</code> key <code>_i18n_data</code> &mdash; โหลดจาก cache ก่อน เรียก API เฉพาะเมื่อ <code>forceRefresh = true</code><br>
-    <b>Default Language:</b> ค่า default คือ <code>th</code> (ภาษาไทย) &mdash; เก็บภาษาที่เลือกใน <code>localStorage</code> key <code>lang</code>
-  </div>
-
-  <h3>11.4 Supported Languages</h3>
-  <table>
-    <tr>
-      <th>Code</th>
-      <th>Language</th>
-      <th>Flag Icon</th>
-      <th>Status</th>
-    </tr>
-    <tr>
-      <td><code>th</code></td>
-      <td>Thai (ภาษาไทย)</td>
-      <td><code>flag-icon flag-icon-th</code> (ธงชาติไทย)</td>
-      <td>Default</td>
-    </tr>
-    <tr>
-      <td><code>en</code></td>
-      <td>English</td>
-      <td><code>flag-icon flag-icon-gb</code> (ธงชาติอังกฤษ)</td>
-      <td>Supported</td>
-    </tr>
-  </table>
-
-  <div class="note-blue">
-    <b>Extensibility:</b> ระบบออกแบบให้รองรับหลายภาษาได้ &mdash; เพียงเพิ่ม language record ใน database ก็สามารถเพิ่มภาษาใหม่ได้โดยไม่ต้องแก้ code ฝั่ง frontend
+    ระบบรองรับ 2 ภาษา: <b>ไทย (TH)</b> และ <b>อังกฤษ (EN)</b> สลับภาษาได้ทุกหน้าจอผ่านปุ่ม toggle <b>TH | EN</b> มุมบนขวา (fixed) มี sliding highlight animation<br>
+    เพิ่มภาษาใหม่ได้โดยเพิ่มข้อมูลภาษาผ่าน API ไม่ต้องแก้ code frontend
   </div>
 
   <br><br>
   <hr>
   <p style="text-align:center; color:#888; font-size:12px;">
-    N-Kiosk Registration & Consent Management &mdash; Process Design Document v1.1 &mdash; March 2026<br>
+    N-Kiosk Registration & Consent Management &mdash; Process Design Document v1.2 &mdash; April 2026<br>
     Customer: Maersk &mdash; Prepared by: Netka System
   </p>
 
 </body>
 
-</html><!-- updated Sun Mar 30 2026 -->
+</html><!-- updated Wed Apr 02 2026 -->
