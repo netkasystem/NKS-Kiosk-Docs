@@ -376,7 +376,7 @@
       <li>&nbsp;&nbsp;&nbsp;&nbsp;5.10 Face Scan (Step10) &mdash; สแกนใบหน้า</li>
       <li>&nbsp;&nbsp;&nbsp;&nbsp;5.11 Face Scan Successful (Step11) &mdash; สแกนหน้าสำเร็จ</li>
       <li>&nbsp;&nbsp;&nbsp;&nbsp;5.12 Data Confirmation (Step12) &mdash; ตรวจสอบข้อมูล</li>
-      <li>&nbsp;&nbsp;&nbsp;&nbsp;5.13 Custom Form (Step14) &mdash; แบบฟอร์มเพิ่มเติม</li>
+      <!-- <li>&nbsp;&nbsp;&nbsp;&nbsp;5.13 Custom Form (Step14) &mdash; แบบฟอร์มเพิ่มเติม</li> -->
       <li>&nbsp;&nbsp;&nbsp;&nbsp;5.14 NDPP Consent (Step17) &mdash; ความยินยอม NDPP</li>
       <li>&nbsp;&nbsp;&nbsp;&nbsp;5.15 Completion (StepEnd) &mdash; เสร็จสิ้น</li>
       <li><a href="#sec6">6. Data Flow & Integration</a></li>
@@ -775,10 +775,10 @@
     <b>Backend on Confirm:</b><br>
     &nbsp;&nbsp;1. Upload รูปบัตร &rarr; File Server<br>
     &nbsp;&nbsp;2. Upload รูปใบหน้า &rarr; File Server<br>
-    <b>Navigation:</b> Confirm &rarr; Custom Form (Step14) ถ้ามี / NDPP Consent (Step17) / StepEnd
+    <b>Navigation:</b> Confirm (SaveNationalCardData) &rarr; NDPP Consent (Step17) / StepEnd
   </div>
 
-  <!-- ===== 5.13 Custom Form (Step14) ===== -->
+  <!-- ===== 5.13 Custom Form (Step14) — ซ่อนไว้ก่อน =====
   <h3>5.13 Custom Form (Step14) &mdash; แบบฟอร์มเพิ่มเติม</h3>
   <div style="text-align:center; margin:15px 0;">
     <img src="screenshots/Step_Step14.png" alt="Custom Form (Step14)" style="max-width:300px; border:1px solid #ddd; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -800,6 +800,7 @@
     <b>On Submit:</b> บันทึกข้อมูลผ่าน <code>save_consent</code> &rarr; <code>next_page()</code><br>
     <b>Navigation:</b> Submit &rarr; NDPP Consent (Step17) หรือ StepEnd
   </div>
+  ===== end hidden ===== -->
 
   <!-- ===== 5.14 NDPP Consent (Step17) ===== -->
   <h3>5.14 NDPP Consent (Step17) &mdash; ความยินยอม NDPP</h3>
@@ -930,67 +931,70 @@
         <td>"1234567890123"</td>
       </tr>
       <tr>
-        <td>fullNameTH</td>
+        <td colspan="4" style="background:#f0f4ff; font-weight:bold;">metadata_kiosk (object) — ข้อมูล metadata จาก Kiosk</td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;fullNameTH</td>
         <td>string</td>
         <td>ชื่อ-นามสกุล ภาษาไทย</td>
         <td>"นายทดสอบ ระบบ"</td>
       </tr>
       <tr>
-        <td>fullNameEN</td>
+        <td>&nbsp;&nbsp;fullNameEN</td>
         <td>string</td>
         <td>ชื่อ-นามสกุล ภาษาอังกฤษ</td>
         <td>"Mr.Todsob Rabob"</td>
       </tr>
       <tr>
-        <td>ActivityNameEn</td>
+        <td>&nbsp;&nbsp;ActivityNameEn</td>
         <td>string</td>
         <td>ชื่อกิจกรรม (EN)</td>
         <td>"Data Collection"</td>
       </tr>
       <tr>
-        <td>ActivityNameTh</td>
+        <td>&nbsp;&nbsp;ActivityNameTh</td>
         <td>string</td>
         <td>ชื่อกิจกรรม (TH)</td>
         <td>"การเก็บข้อมูล"</td>
       </tr>
       <tr>
-        <td>BusinessProcessEn</td>
+        <td>&nbsp;&nbsp;BusinessProcessEn</td>
         <td>string</td>
         <td>กระบวนการทางธุรกิจ (EN)</td>
         <td>"Visitor Registration"</td>
       </tr>
       <tr>
-        <td>BusinessProcessTh</td>
+        <td>&nbsp;&nbsp;BusinessProcessTh</td>
         <td>string</td>
         <td>กระบวนการทางธุรกิจ (TH)</td>
         <td>"ลงทะเบียนผู้มาติดต่อ"</td>
       </tr>
       <tr>
-        <td>EntityEn</td>
+        <td>&nbsp;&nbsp;EntityEn</td>
         <td>string</td>
         <td>หน่วยงาน (EN)</td>
         <td>"Maersk Thailand"</td>
       </tr>
       <tr>
-        <td>EntityTh</td>
+        <td>&nbsp;&nbsp;EntityTh</td>
         <td>string</td>
         <td>หน่วยงาน (TH)</td>
         <td>"เมอร์สก ประเทศไทย"</td>
       </tr>
       <tr>
-        <td>OrganizationUnitEn</td>
+        <td>&nbsp;&nbsp;OrganizationUnitEn</td>
         <td>string</td>
         <td>แผนก/หน่วยย่อย (EN)</td>
         <td>"Security"</td>
       </tr>
       <tr>
-        <td>OrganizationUnitTh</td>
+        <td>&nbsp;&nbsp;OrganizationUnitTh</td>
         <td>string</td>
         <td>แผนก/หน่วยย่อย (TH)</td>
         <td>"แผนกรักษาความปลอดภัย"</td>
       </tr>
       <tr>
-        <td>purpose_option</td>
+        <td>&nbsp;&nbsp;purpose_option</td>
         <td>array of object</td>
         <td>รายการ purpose จาก NDPP Consent Form โดย field <code>selected</code> ถูก update ตาม <code>PurposeOptionDetail</code> ที่ผู้ใช้เลือก</td>
         <td>
@@ -1005,13 +1009,13 @@
         </td>
       </tr>
       <tr>
-        <td>service_id</td>
+        <td>&nbsp;&nbsp;service_id</td>
         <td>int</td>
         <td>รหัสบริการ NDPP</td>
         <td>1</td>
       </tr>
       <tr>
-        <td>version</td>
+        <td>&nbsp;&nbsp;version</td>
         <td>string</td>
         <td>เวอร์ชันของ payload</td>
         <td>"2"</td>
@@ -1023,36 +1027,38 @@
   "photo": "data:image/jpeg;base64,/9j/4AAQ...",
   "face_capture": "data:image/jpeg;base64,/9j/4AAQ...",
   "idcard": "1234567890123",
-  "fullNameTH": "นายทดสอบ ระบบ",
-  "fullNameEN": "Mr.Todsob Rabob",
-  "ActivityNameEn": "Data Collection",
-  "ActivityNameTh": "การเก็บข้อมูล",
-  "BusinessProcessEn": "Visitor Registration",
-  "BusinessProcessTh": "ลงทะเบียนผู้มาติดต่อ",
-  "EntityEn": "Maersk Thailand",
-  "EntityTh": "เมอร์สก ประเทศไทย",
-  "OrganizationUnitEn": "Security",
-  "OrganizationUnitTh": "แผนกรักษาความปลอดภัย",
-  "purpose_option": [
-    {
-      "purpose_id": 1,
-      "purpose_th": "เก็บข้อมูลบัตรประชาชน",
-      "purpose_en": "Collect ID card data",
-      "purpose_type": "Standard",
-      "selected": true,
-      "is_required": true
-    },
-    {
-      "purpose_id": 2,
-      "purpose_th": "บันทึกภาพใบหน้า",
-      "purpose_en": "Capture face photo",
-      "purpose_type": "Standard",
-      "selected": true,
-      "is_required": false
-    }
-  ],
-  "service_id": 1,
-  "version": "2"
+  "metadata_kiosk": {
+    "fullNameTH": "นายทดสอบ ระบบ",
+    "fullNameEN": "Mr.Todsob Rabob",
+    "ActivityNameEn": "Data Collection",
+    "ActivityNameTh": "การเก็บข้อมูล",
+    "BusinessProcessEn": "Visitor Registration",
+    "BusinessProcessTh": "ลงทะเบียนผู้มาติดต่อ",
+    "EntityEn": "Maersk Thailand",
+    "EntityTh": "เมอร์สก ประเทศไทย",
+    "OrganizationUnitEn": "Security",
+    "OrganizationUnitTh": "แผนกรักษาความปลอดภัย",
+    "purpose_option": [
+      {
+        "purpose_id": 1,
+        "purpose_th": "เก็บข้อมูลบัตรประชาชน",
+        "purpose_en": "Collect ID card data",
+        "purpose_type": "Standard",
+        "selected": true,
+        "is_required": true
+      },
+      {
+        "purpose_id": 2,
+        "purpose_th": "บันทึกภาพใบหน้า",
+        "purpose_en": "Capture face photo",
+        "purpose_type": "Standard",
+        "selected": true,
+        "is_required": false
+      }
+    ],
+    "service_id": 1,
+    "version": "2"
+  }
 }</pre>
   </div>
 
